@@ -42,4 +42,4 @@ if ! gh release view "$TAG" --repo "$REPOSITORY" >/dev/null 2>&1; then
 fi
 [[ $(gh release view "$TAG" --repo "$REPOSITORY" --json isDraft --jq .isDraft) == true ]] || { echo 'La release ya está publicada; no se reemplazan assets.'; exit 1; }
 gh release upload "$TAG" "$ASSETS"/* --repo "$REPOSITORY"
-echo 'Release borrador cargada. Comparar assets remotos, publicar la release y después activar la web informativa.'
+echo 'Release borrador cargada. Comparar assets remotos, publicar la release y habilitar los enlaces GitHub de la web informativa.'

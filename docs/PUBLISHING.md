@@ -2,7 +2,8 @@
 
 Repositorio previsto: `Transcendenceia/La-Aguja`. No crear repositorios con historia
 de operación privada ni subir imágenes personalizadas. La release 0.9.0 es una
-candidata hasta verificar los assets y activar la web.
+candidata hasta verificar y publicar los assets. La web informativa puede abrirse
+antes, con las descargas explícitamente pendientes.
 
 ## Código, licencias y comprobaciones
 
@@ -65,7 +66,14 @@ está bajo GPL ni confiar en enlaces genéricos a ramas cambiantes.
 
 Crear el repositorio público, subir el código revisado, etiquetar `v0.9.0`, crear
 release borrador y cargar assets. Verificar sumas/descarga **sin sesión**; después
-publicar la release y finalmente activar el sitio informativo.
+publicar la release y habilitar los enlaces del sitio informativo.
+
+Mientras GitHub no esté publicado, arrancar con `AGUJA_GITHUB_PUBLISHED=false`:
+portada, documentación y privacidad siguen públicas sin cuenta; los enlaces
+GitHub quedan deshabilitados y catálogo/releases devuelven 503 con explicación.
+Tras verificar los archivos públicos, retirar ese ajuste o cambiarlo a `true`
+y reiniciar el servicio. `AGUJA_QA_BASE_URL=https://tu-dominio` permite probar el
+dominio real con `node server/tests/public-ui-qa.mjs` desde la raíz del proyecto.
 
 Servidor `server/index.mjs`: Node >=22, solo loopback, `AGUJA_PORT=8787`.
 No necesita base de cuentas, tokens, CORS remoto ni un relay. `/account`, `/auth`,

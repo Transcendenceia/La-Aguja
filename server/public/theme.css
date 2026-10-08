@@ -179,3 +179,8 @@ footer { max-width: 1320px; margin: auto; padding: 24px 40px; border-top: 1px so
   header nav { width: 100%; padding-left: 46px; justify-content: flex-start; }
   .brand small { font-size: 7px; letter-spacing: .1em; }
 }
+
+.release-notice { padding: 18px 22px; margin-bottom: 36px; border: 1px solid var(--line); border-radius: 14px; line-height: 1.7; background: var(--surface); font-size: 14px; }
+.release-notice strong { display:block; margin-bottom:4px; }
+.download-pending { color: var(--muted); cursor: default; }
+.installer-links .download-pending { display:inline-flex; max-width:100%; padding:10px 14px; margin:4px 0; border:1px solid var(--line); border-radius:9px; font-size:13px; line-height:1.5; }

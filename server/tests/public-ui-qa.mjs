@@ -7,9 +7,9 @@ import {createSite} from '../app.mjs';
 
 const output=process.env.AGUJA_QA_ROOT||fs.mkdtempSync(path.join(os.tmpdir(),'aguja-public-web-'));
 fs.mkdirSync(output,{recursive:true});
-const site=createSite();
-await new Promise(resolve=>site.server.listen(0,'127.0.0.1',resolve));
-const base='http://127.0.0.1:'+site.server.address().port;
+const site=process.env.AGUJA_QA_BASE_URL?null:createSite({downloadsPublished:process.env.AGUJA_QA_PENDING_RELEASE!=='1'});
+if(site)await new Promise(resolve=>site.server.listen(0,'127.0.0.1',resolve));
+const base=process.env.AGUJA_QA_BASE_URL||'http://127.0.0.1:'+site.server.address().port;
 let browser;const errors=[],failed=[];let images=0;
 try{
  browser=await chromium.launch({headless:true,executablePath:process.env.AGUJA_QA_BROWSER||'/usr/bin/chromium'});
@@ -22,7 +22,7 @@ try{
    assert.equal(response.headers()['set-cookie'],undefined);
    if(route==='/'){
     assert(await page.locator('h1').isVisible());
-    for(const link of await page.locator('#application .installer-links a').all()){
+    for(const link of await page.locator('#application .installer-links a, #application .installer-links [aria-disabled="true"]').all()){
      await link.scrollIntoViewIfNeeded();const box=await link.boundingBox();
      assert(box&&box.width>0&&box.height>0);assert(box.x>=0&&box.x+box.width<=width+1);
     }
@@ -40,4 +40,4 @@ try{
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);
  const result={ok:true,widths:[1440,375,320],routes:3,decodedImages:images,accountForms:0,cookies:0,jsErrors:errors,failedLocalResponses:failed,githubDownloadsNotClicked:true};
  fs.writeFileSync(path.join(output,'public-ui-result.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
-}finally{await browser?.close();await site.close();}
+}finally{await browser?.close();if(site)await site.close();}

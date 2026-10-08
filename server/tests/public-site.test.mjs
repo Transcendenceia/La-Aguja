@@ -1,7 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createSite} from '../app.mjs';
-async function fixture(run){const site=createSite();await new Promise(r=>site.server.listen(0,'127.0.0.1',r));try{await run('http://127.0.0.1:'+site.server.address().port);}finally{await site.close();}}
+async function fixture(run,options={}){const site=createSite(options);await new Promise(r=>site.server.listen(0,'127.0.0.1',r));try{await run('http://127.0.0.1:'+site.server.address().port);}finally{await site.close();}}
+test('opening the informational site does not require unpublished GitHub assets or accounts',()=>fixture(async base=>{
+ const r=await fetch(base+'/');assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store');assert.equal(r.headers.get('set-cookie'),null);
+ const html=await r.text();assert(html.includes('Web pública, sin cuenta.'));assert(html.includes('aria-disabled="true"'));assert(!/href="https:\/\/github.com\/Transcendenceia\/La-Aguja/.test(html));
+ assert.equal((await fetch(base+'/docs')).status,200);assert.equal((await fetch(base+'/v1/catalog',{redirect:'manual'})).status,503);assert.equal((await fetch(base+'/releases/SHA256SUMS',{redirect:'manual'})).status,503);
+}, {downloadsPublished:false}));
 test('homepage/manual/assets/health are anonymous and never set account cookies',()=>fixture(async base=>{for(const route of ['/','/docs','/privacy','/assets/docs.css','/assets/docs/agujita.png','/health']){const r=await fetch(base+route);assert.equal(r.status,200,route);assert.equal(r.headers.get('set-cookie'),null);assert(!r.headers.has('www-authenticate'));await r.arrayBuffer();}}));
 test('retired account, relay and console endpoints cannot establish sessions',()=>fixture(async base=>{for(const route of ['/account','/auth/login','/connect/fixture','/v1/devices','/v1/account/tunnels']){const r=await fetch(base+route);assert.equal(r.status,410);assert.equal(r.headers.get('set-cookie'),null);}assert.equal((await fetch(base+'/v1/devices',{method:'POST'})).status,405);}));
 test('legacy downloads redirect to GitHub, not a local private release store',()=>fixture(async base=>{for(const [route,end] of [['/releases/SHA256SUMS','SHA256SUMS'],['/v1/catalog','catalog.json']]){const r=await fetch(base+route,{redirect:'manual'});assert.equal(r.status,302);assert.equal(r.headers.get('location'),'https://github.com/Transcendenceia/La-Aguja/releases/latest/download/'+end);}}));

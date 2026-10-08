@@ -45,7 +45,7 @@ function verifyManifest(envelope, pin) {
   return manifest.releases.map(r=>{
     if (!/^[0-9]+\.[0-9]+\.[0-9]+(?:[-.][a-z0-9]+)*$/.test(r.version) || !Number.isSafeInteger(r.bytes) || r.bytes<1048576 || r.bytes>64*1024**3) fail('Información de versión no válida.');
     sha(r.sha256);
-    const asset=value=>{const u=httpsURL(value);if(pin.repository&&(u.hostname!=='github.com'||!u.pathname.startsWith('/'+pin.repository+'/releases/download/')))fail('El catálogo debe descargar desde el repositorio oficial de GitHub.');return u.href;};
+    const asset=value=>{const u=httpsURL(value),github=pin.repository&&u.hostname==='github.com'&&u.pathname.startsWith('/'+pin.repository+'/releases/download/');const base=pin.image_base_url?httpsURL(pin.image_base_url):null,website=base&&u.origin===base.origin&&u.pathname.startsWith(base.pathname)&&!u.pathname.slice(base.pathname.length).includes('/');if((pin.repository||base)&&!github&&!website)fail('El catálogo debe descargar desde GitHub o la web oficial de LA AGUJA.');return u.href;};
     let parts;
     if(r.parts!==undefined){
       if(!Array.isArray(r.parts)||r.parts.length<1||r.parts.length>64)fail('Partes de imagen no válidas.');

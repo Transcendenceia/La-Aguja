@@ -6,7 +6,7 @@
 conecta Ethernet por DHCP o Wi-Fi guardado/asistido, activa SSH listo para usar y ofrece
 **Codex CLI y OpenCode**, preinstalados, e integración opcional con Claude Code y Antigravity, sin escritorio de ventanas.
 
-Estado: **Versión pública 0.9.0 en preparación · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/docs) · [VALIDATION.md](docs/VALIDATION.md). Una imagen construida no significa compatibilidad de todo el hardware.
+Estado: **Imager público 0.9.1 · imagen de rescate 0.9.0 · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/docs) · [VALIDATION.md](docs/VALIDATION.md). Una imagen construida no significa compatibilidad de todo el hardware.
 
 ## Flash Imager Windows/Linux → tu Rescue Disk → tu tailnet
 
@@ -18,7 +18,7 @@ El acceso remoto nuevo usa **Tailscale o Headscale propios**. Habilita la opció
 
 La identidad vive en RAM: cada reinicio necesita reinscripción, una clave de un uso no garantiza repetir. Usa una reutilizable, vigente y limitada cuando necesites varios arranques, y retira nodos/claves al terminar. Cifra la cápsula del USB; esto no cifra todo AGUJA_DATA ni protege secretos frente a root después del desbloqueo. Las imágenes antiguas sin `tailscale-profile-v1` se rechazan antes de prepararse con esta opción.
 
-No hay cuenta de LA AGUJA: las descargas son públicas en GitHub. Las cuentas IA y la administración de la tailnet son independientes.
+No hay cuenta de LA AGUJA: las imágenes son públicas en nuestra web y el Imager y el código están en GitHub. Las cuentas IA y la administración de la tailnet son independientes.
 
 **Mini navegador OAuth local:** `aguja login codex|claude|antigravity` conserva el callback oficial y la misma PTY mientras muestra Chromium normal con sandbox. Si copias un código, toma foco la consola y tú pegas explícitamente con Ctrl+Shift+V. Cerrar devuelve al terminal original. OpenCode usa su login nativo; SSH/serie/sin pantalla conserva URL/método nativo. El nuevo recorrido no usa QR y no autoriza cuentas de IA automáticamente.
 
@@ -243,4 +243,4 @@ npm ci
 npm test
 ```
 
-La web no ejecuta terminales remotos ni almacena cuentas. Las descargas del sitio y del Imager van directamente a GitHub Releases; el catálogo conserva firma Ed25519 y cada imagen se verifica antes de prepararse.
+La web no ejecuta terminales remotos ni almacena cuentas. Las imágenes y el catálogo firmado se sirven desde la web oficial; el Imager y las fuentes están en GitHub Releases; el catálogo conserva firma Ed25519 y cada imagen se verifica antes de prepararse.

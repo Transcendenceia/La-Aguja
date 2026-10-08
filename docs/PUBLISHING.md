@@ -78,7 +78,7 @@ dominio real con `node server/tests/public-ui-qa.mjs` desde la raíz del proyect
 Servidor `server/index.mjs`: Node >=22, solo loopback, `AGUJA_PORT=8787`.
 No necesita base de cuentas, tokens, CORS remoto ni un relay. `/account`, `/auth`,
 `/connect` y las antiguas API devuelven 410; no crean sesiones. La compatibilidad
-`/v1/catalog` y `/releases/*` redirige a GitHub y no sirve archivos locales.
+El servidor Node redirige `/v1/catalog` y `/releases/*` a GitHub por defecto. En producción, Caddy intercepta solo el catálogo y los cuatro nombres de imagen aprobados para servirlos desde el directorio público de descargas; ninguna cuenta ni state privado se sirve.
 
 Para sustituir el despliegue antiguo, respaldar código/estado/configuración
 con permisos privados, validar el proxy y cambiar únicamente el host de LA AGUJA.
@@ -86,3 +86,9 @@ Conservar datos de cuentas previas fuera de la raíz pública como rollback, no
 publicarlos. No cambiar Tailscale/Headscale del propietario. Verificar HTTP
 público sin Basic Auth, todas las imágenes/documentos y downloads GitHub, y que
 WebSocket/POST no pueden recrear sesiones de relay.
+
+## Distribución vigente desde 0.9.1
+
+El Imager 0.9.1 incorpora el catálogo HTTPS de `https://aguja.transcendenceia.net/v1/catalog` y admite imágenes solo bajo el prefijo fijado `https://aguja.transcendenceia.net/releases/`, además del repositorio oficial de GitHub. Se conserva firma Ed25519, SHA-256 por parte y total, sin cookies ni credenciales de descarga. La imagen probada sigue siendo 0.9.0; no se ha reconstruido el sistema de rescate en esta actualización.
+
+ISO, IMG.zst y dos partes IMG se alojan en la web propia. Código, Imagers, manual, catálogo y sumas están en GitHub v0.9.1. No publicar el borrador v0.9.0 incompleto ni reescribir su etiqueta; queda como preparación previa. Verificar las cuatro imágenes en origen y descargas HTTP Range desde el dominio real antes de activar enlaces. Caddy debe usar nombres exactos, no directory browse ni un root de cuentas/state.

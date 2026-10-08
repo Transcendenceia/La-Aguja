@@ -33,7 +33,7 @@ export function createSite({publicDir=path.join(HERE,'public'),repository='Trans
    if(path.extname(target)==='.html'){
     let html=await fs.promises.readFile(target,'utf8');
     if(!downloadsPublished){
-     html=html.replace(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g,(link,href,label)=>href===github||href.startsWith(github+'/')?'<span class="download-pending" role="link" aria-disabled="true" title="Publicación en GitHub pendiente">'+label+'</span>':link);
+     html=html.replace(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g,(link,href,label)=>href===github||href.startsWith(github+'/')||href.startsWith('/releases/')?'<span class="download-pending" role="link" aria-disabled="true" title="Publicación en GitHub pendiente">'+label+'</span>':link);
      html=html.replace('<main>','<main><section role="status" class="release-notice"><strong>Web pública, sin cuenta.</strong> El código y los archivos de descarga se están preparando para GitHub. Las descargas estarán disponibles cuando se publique la release; el manual ya puede consultarse aquí.</section>');
      html=html.replace('Las descargas se realizan directamente en GitHub Releases.','Cuando estén publicadas, las descargas se realizarán directamente en GitHub Releases.');
     }

@@ -17,7 +17,7 @@ async function main(){
    const name=base+'.part'+String(index).padStart(2,'0'),bytes=Math.min(max,size-start),destination=path.join(folder,name);
    const output=await fs.promises.open(destination,'wx',0o644),hash=crypto.createHash('sha256');
    try{let copied=0;const buffer=Buffer.alloc(4*1024**2);while(copied<bytes){const read=await file.read(buffer,0,Math.min(buffer.length,bytes-copied),start+copied);if(!read.bytesRead)throw Error('Imagen incompleta');const data=buffer.subarray(0,read.bytesRead);hash.update(data);let written=0;while(written<data.length){written+=(await output.write(data,written,data.length-written)).bytesWritten;}copied+=read.bytesRead;}await output.sync();}finally{await output.close();}
-   parts.push({url:`https://github.com/${pin.repository}/releases/download/v${version}/${name}`,bytes,sha256:hash.digest('hex')});
+   parts.push({url:pin.image_base_url?new URL(name,pin.image_base_url).href:`https://github.com/${pin.repository}/releases/download/v${version}/${name}`,bytes,sha256:hash.digest('hex')});
   }
  }finally{await file.close();}
  const payload=Buffer.from(JSON.stringify({schema:1,expires_at:new Date(Date.now()+365*86400000).toISOString(),releases:[{version,bytes:size,sha256:await digest(image),parts,notes:'Versión pública sin cuentas de LA AGUJA. SSH por tu LAN/Tailscale/Headscale.'}]}));

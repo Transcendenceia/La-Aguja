@@ -1,0 +1,11 @@
+[Unit]
+Description=LA AGUJA bounded DHCP DNS health and local gateway recovery
+After=aguja-boot.service NetworkManager.service
+Requires=aguja-boot.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/lib/aguja/network_health.py
+TimeoutStartSec=45
+UMask=0077
+

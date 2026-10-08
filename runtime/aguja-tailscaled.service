@@ -1,0 +1,20 @@
+[Unit]
+Description=LA AGUJA private volatile Tailscale daemon
+After=NetworkManager.service
+ConditionPathExists=/run/aguja-tailnet-private/config.json
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/tailscaled --state=/run/aguja-tailscale/tailscaled.state --socket=/run/aguja-tailscale/tailscaled.sock --port=41641 --no-logs-no-support
+ExecStopPost=/usr/sbin/tailscaled --cleanup
+RuntimeDirectory=aguja-tailscale
+# LocalAPI authenticates Unix peer credentials; public socket permits status
+# reads by the console. Node state is created 0600 under a root-owned directory.
+RuntimeDirectoryMode=0755
+# Preserve identity for daemon restarts in this boot only, never across reboot.
+RuntimeDirectoryPreserve=restart
+Restart=on-failure
+RestartSec=5
+UMask=0077
+StandardOutput=null
+StandardError=null

@@ -1,0 +1,294 @@
+#!/usr/bin/python3
+"""LA AGUJA Rescue Disk cockpit and rescue helpers. Secrets are never included in status."""
+import argparse
+import json
+import os
+import shutil
+import shlex
+import subprocess
+import sys
+from pathlib import Path
+sys.path.insert(0, "/usr/lib/aguja")
+os.environ["PATH"] = "/usr/local/sbin:/usr/sbin:/sbin:" + os.environ.get("PATH", os.defpath)
+from config import load
+from profile import locale_environment
+os.environ.update(locale_environment())
+import cockpit
+import network
+import activity
+
+
+def call(*args):
+    return subprocess.call(args)
+
+
+def status(args=()):
+    current = network.state()
+    if "--json" in args:
+        current["version"] = cockpit.version()
+        print(json.dumps(current, ensure_ascii=False))
+        return 0
+    cockpit.banner(current, compact=True)
+    if "--disks" in args:
+        call("lsblk", "-o", "NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS")
+    if Path("/run/aguja-hostkey.pub").exists():
+        call("ssh-keygen", "-lf", "/run/aguja-hostkey.pub")
+    print("Datos: /data/workspace · Config: /config/aguja.conf")
+
+
+def doctor(args=()):
+    if os.geteuid() != 0:
+        return call("sudo", "-n", "/usr/local/bin/aguja", "doctor", *args)
+    conf = Path("/config/aguja.conf")
+    if not conf.exists():
+        conf = Path("/etc/aguja/aguja.conf")
+    try:
+        c = load(conf)
+        from config import ssh_access
+        auth = ssh_access(c)[1]
+    except Exception:
+        print(json.dumps({'healthy':False,'configuration_valid':False}) if '--json' in args else "Configuración: inválida (no se muestran valores privados)")
+        return 1
+    tools = {binary:bool(shutil.which(binary)) for binary in ("codex", "agy", "claude", "opencode", "sudo", "nmcli", "nmtui-connect", "zsh", "avahi-browse", "ddrescue", "cryptsetup")}
+    services = {}
+    for name in ("NetworkManager", "ssh", "aguja-boot", "avahi-daemon", "aguja-activity"):
+        p=subprocess.run(['systemctl','is-active',name],capture_output=True,text=True,timeout=5)
+        services[name]=p.returncode==0
+    import network_health
+    dns_ok = network_health.resolves()
+    connected = network.state()['connected']
+    result={'healthy':all(available for binary,available in tools.items() if binary not in ('claude','agy')) and all(services.values()),'configuration_valid':True,
+            'ssh_auth_mode':auth,'tools':tools,'services':services,
+            'usb_configuration_mounted':os.path.ismount('/config'),'network_connected':connected,
+            'dns_ok':dns_ok}
+    result['healthy'] = result['healthy'] and (dns_ok or not connected)
+    if '--json' in args:
+        print(json.dumps(result))
+    else:
+        print('Configuración: válida · acceso SSH: '+auth)
+        for binary,available in tools.items(): print(f"{binary}: {'OK' if available else 'FALTA'}")
+        for name,active in services.items(): print(f"{name}: {'activo' if active else 'REVISAR'}")
+        print('Red: '+('conectada' if result['network_connected'] else 'sin IP; usa aguja wifi'))
+        print('DNS: '+('resuelve' if dns_ok else 'sin resolución; revisar red'))
+        print('Resultado: '+('correcto' if result['healthy'] else 'hay comprobaciones pendientes'))
+    return 0 if result['healthy'] else 1
+
+
+def run_task(args):
+    if len(args)<4 or args[0]!='--label' or args[2]!='--' or not args[1].strip():
+        raise ValueError('run --label "Nombre de tarea" -- comando [argumentos]')
+    label=activity.redact(args[1],activity.secret_values())[:100]
+    command=shlex.join(args[3:])
+    activity.emit('command_start',command,label=label)
+    code=255
+    try:
+        code=subprocess.call(args[3:])
+    except KeyboardInterrupt:
+        code=-2
+    finally:
+        activity.emit('command_end',str(code))
+    return code if code>=0 else 128-code
+
+
+def launch(name, extras):
+    if name == "shell":
+        if not os.environ.get('AGUJA_SESSION_ID') and os.isatty(0):
+            os.execv('/usr/bin/python3', ['/usr/bin/python3','/usr/lib/aguja/console_session.py'])
+        shell = "zsh" if shutil.which("zsh") else "bash"
+        os.execvp(shell, [shell])
+    conf = json.loads(Path("/run/aguja-session.json").read_text()) if Path("/run/aguja-session.json").exists() else {"agent_mode": "full"}
+    binary = {"codex": "codex", "claude": "claude", "antigravity": "agy", "opencode": "opencode"}[name]
+    if not shutil.which(binary):
+        print(f"{name} no está instalado. Consulta /usr/share/aguja/QUICKSTART.md para instalarlo desde el proveedor.", file=sys.stderr)
+        return 127
+    args = [binary]
+    if conf["agent_mode"] == "full":
+        args += {"codex": ["--dangerously-bypass-approvals-and-sandbox"],
+                 "claude": ["--dangerously-skip-permissions"],
+                 "antigravity": ["--dangerously-skip-permissions"], "opencode": []}[name]
+        if name == "opencode":
+            os.environ["OPENCODE_CONFIG_CONTENT"] = json.dumps({"permission": "allow"})
+    workspace = Path("/data/workspace" if os.path.ismount("/data") else "/home/aguja/workspace")
+    workspace.mkdir(parents=True, exist_ok=True)
+    os.chdir(workspace)
+    print(f"Iniciando {name} · modo {conf['agent_mode']} · sudo disponible", flush=True)
+    import profile as platform_profile
+    os.environ.update(platform_profile.provider_environment(name))
+    argv=args+extras
+    import auth_pty
+    if name in ('claude','antigravity','codex') and auth_pty.interactive(argv):
+        try:
+            import auth
+            auth.own_directory()
+        except OSError:
+            print('Navegador no disponible en esta sesión; se conserva el acceso nativo.',file=sys.stderr)
+        else:
+            code=auth_pty.run(argv,name)
+            sys.exit(code if code>=0 else 128-code)
+    os.execvp(binary,argv)
+
+
+def mount_target(device, target):
+    if not Path(device).is_block_device():
+        raise ValueError("Selecciona una partición de bloque real")
+    Path(target).mkdir(parents=True, exist_ok=True)
+    return call("sudo", "-n", "mount", "-o", "ro,nosuid,nodev,noexec", device, target)
+
+
+def menu(auto_setup=False):
+    if auto_setup and Path('/run/aguja-profile-status.json').exists():
+        profile_state = json.loads(Path('/run/aguja-profile-status.json').read_text())
+        if profile_state.get('locked'):
+            print('Perfil protegido: desbloquéalo para cargar red, SSH, proveedores y tailnet.')
+            if sys.stdin.isatty() and not os.environ.get('SSH_CONNECTION'):
+                call('/usr/local/bin/aguja', 'profile', 'unlock')
+    if Path("/run/aguja-session.json").exists():
+        default = json.loads(Path("/run/aguja-session.json").read_text())["default_harness"]
+        if default not in ("menu", "shell"):
+            cockpit.banner(compact=True)
+            if auto_setup and not network.wait(12)["connected"]:
+                call("/usr/local/bin/aguja", "wifi")
+            launch(default, [])
+        if default == "shell":
+            if auto_setup and not network.wait(12)["connected"]:
+                call("/usr/local/bin/aguja", "wifi")
+            cockpit.banner(compact=True)
+            if not os.environ.get('SSH_CONNECTION') and not os.environ.get('AGUJA_SESSION_ID') and os.isatty(0):
+                launch('shell', [])
+            return 0
+    action = cockpit.menu(auto_setup)
+    if action != "shell" or (not os.environ.get('SSH_CONNECTION') and not os.environ.get('AGUJA_SESSION_ID') and os.isatty(0)):
+        launch(action, [])
+    return 0
+
+
+def tools():
+    print("LA AGUJA RESCUE DISK · Herramientas disponibles\n")
+    groups = {
+        "Agentes IA (tu cuenta / Internet)": ("codex", "agy", "claude", "opencode"),
+        "Consola y sesiones": ("zsh", "tmux", "nano", "less", "rg", "jq", "git", "python3"),
+        "Red y acceso": ("nmcli", "nmtui", "ssh", "scp", "rsync", "curl", "avahi-browse"),
+        "Recuperación de datos": ("ddrescue", "ddrescuelog", "testdisk", "photorec"),
+        "Hardware": ("smartctl", "nvme", "lshw", "lspci", "lsusb", "hdparm"),
+        "Particiones y sistemas de archivos": ("lsblk", "blkid", "parted", "sgdisk", "e2fsck", "btrfs", "xfs_repair", "ntfs-3g"),
+        "Volúmenes y cifrado": ("cryptsetup", "lvm", "mdadm", "dislocker"),
+        "Instalación": ("debootstrap", "pacstrap", "grub-install", "efibootmgr", "wimlib-imagex"),
+    }
+    for label, binaries in groups.items():
+        print(label + ":")
+        print("  " + "  ".join(binary + (" [no disponible]" if not shutil.which(binary) else "") for binary in binaries))
+    print("\nGuía: aguja help / Contexto para el agente: aguja context")
+
+
+def main():
+    p = argparse.ArgumentParser(description="LA AGUJA Rescue Disk · AI-first rescue Linux")
+    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "tailscale"])
+    p.add_argument("args", nargs=argparse.REMAINDER, help="tailscale: status [--json]")
+    arguments=sys.argv[1:]
+    if arguments[:1]==['qr']:arguments[0]='browser'  # hidden legacy alias; no QR UI
+    a = p.parse_args(arguments)
+    if a.command == "status":
+        return status(a.args)
+    elif a.command == "run":
+        return run_task(a.args)
+    elif a.command == "login":
+        if not a.args or a.args[0] not in ('claude','antigravity','codex'):
+            p.error('login requiere claude|antigravity|codex')
+        name=a.args[0]
+        import auth_pty
+        argv={'claude':['claude','auth','login'],'antigravity':['agy'],'codex':['codex','login']}[name]+a.args[1:]
+        if not shutil.which(argv[0]):
+            print('Proveedor opcional no instalado; consulta aguja help.', file=sys.stderr)
+            return 127
+        if auth_pty.interactive(argv):
+            code=auth_pty.run(argv,name,login=True)
+            return code if code>=0 else 128-code
+        os.execvp(argv[0],argv)
+    elif a.command == 'profile':
+        import profile_cli
+        return profile_cli.main(a.args)
+    elif a.command == 'tailscale':
+        status_file = Path('/run/aguja-platform/tailscale-status.json')
+        if '--json' in a.args:
+            data = json.loads(status_file.read_text()) if status_file.is_file() else {'connected': False}
+            print(json.dumps(data, ensure_ascii=False))
+            return 0 if data.get('connected') else 1
+        if status_file.is_file():
+            try:
+                data = json.loads(status_file.read_text())
+                if data.get('connected'):
+                    print("Tailscale / Headscale: Conectado")
+                    print(f"IP en la Tailnet: {data.get('ipv4')}")
+                    print(f"Servidor de control: {data.get('login_server')}")
+                    if data.get('hostname'):
+                        print(f"Nombre de nodo: {data.get('hostname')}")
+                    print(f"Conectado desde: {data.get('connected_at')}")
+                    return 0
+                else:
+                    print("Tailscale: Desconectado o con error")
+                    if data.get('error'):
+                        print(f"Detalle: {data.get('error')}")
+                    return 1
+            except Exception:
+                pass
+        print("Tailscale: No configurado en este arranque o sin estado activo.")
+        return 1
+    elif a.command == "browser":
+        return cockpit.menu_auth()
+    elif a.command == "activity":
+        snapshot = activity.snapshot()
+        if "--json" in a.args:
+            print(json.dumps(snapshot, ensure_ascii=False))
+        else:
+            print("LA AGUJA RESCUE DISK · Actividad SSH en memoria")
+            for event in snapshot.get("events", [])[-30:]:
+                print(event.get("kind", "evento") + " · " + event.get("text", ""))
+        return 0
+    elif a.command == "welcome":
+        serial = sys.stdin.isatty() and os.ttyname(0).startswith("/dev/ttyS")
+        if "--remote" in a.args or "--plain" in a.args or serial:
+            cockpit.banner(compact="--remote" in a.args)
+        else:
+            return menu(auto_setup=True)
+    elif a.command == "network":
+        current = network.wait() if "--wait" in a.args else network.state()
+        print(json.dumps(current, ensure_ascii=False))
+        return 0 if current["connected"] else 1
+    elif a.command == "wifi":
+        return network.setup_wifi()
+    elif a.command == "password":
+        return network.set_password()
+    elif a.command == "help":
+        cockpit.guide()
+    elif a.command == "tools":
+        tools()
+    elif a.command == "doctor":
+        return doctor(a.args)
+    elif a.command == "menu":
+        return menu()
+    elif a.command == "agent":
+        if not a.args or a.args[0] not in ("codex", "antigravity", "claude", "opencode", "shell"):
+            p.error("agent requiere codex|antigravity|claude|opencode|shell")
+        launch(a.args[0], a.args[1:])
+    elif a.command == "context":
+        print(Path("/usr/share/aguja/AGENT-CONTEXT.md").read_text())
+    elif a.command == "mount-ro":
+        if len(a.args) != 2:
+            p.error("mount-ro /dev/partición /mnt/target")
+        return mount_target(*a.args)
+    elif a.command == "config":
+        if not Path("/config/aguja.conf").exists():
+            p.error("ISO de solo lectura: conecta un USB LA AGUJA Rescue Disk configurable")
+        return call("sudo", "-n", "nano", "/config/aguja.conf")
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except (OSError, ValueError):
+        print("LA AGUJA Rescue Disk: operación no completada; revisa parámetros y aguja doctor", file=sys.stderr)
+        sys.exit(1)
+    except (KeyboardInterrupt, EOFError):
+        print("\nLA AGUJA Rescue Disk: operación cancelada; consola disponible.", file=sys.stderr)
+        sys.exit(130)

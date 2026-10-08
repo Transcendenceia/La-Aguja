@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" role="img" aria-labelledby="title desc">
+ <title id="title">Aguja</title><desc id="desc">Una aguja precisa junto al nombre Aguja; rescate Linux centrado en IA.</desc>
+ <rect width="640" height="200" rx="24" fill="#0b1220"/>
+ <path d="M58 164 112 34c5-12 22-8 22 5l-20 90Z" fill="#35e3c0"/>
+ <ellipse cx="119" cy="49" rx="5" ry="13" transform="rotate(15 119 49)" fill="#0b1220"/>
+ <path d="m68 115 15 10-20 9" fill="none" stroke="#f5f7fb" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+ <text x="166" y="107" font-family="ui-monospace,monospace" font-size="72" font-weight="700" fill="#f5f7fb" letter-spacing="-4">AGUJA</text>
+ <text x="171" y="146" font-family="system-ui,sans-serif" font-size="19" fill="#92a4bb" letter-spacing="3">AI-FIRST RESCUE LINUX</text>
+</svg>

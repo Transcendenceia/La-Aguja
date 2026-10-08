@@ -1,0 +1,10 @@
+{
+  "version": "1.102.5",
+  "architecture": "amd64",
+  "url": "https://pkgs.tailscale.com/stable/tailscale_1.102.5_amd64.tgz",
+  "sha256": "65e6d7f19ad7e1c87d20c2a21e92f38a96795cb897af54b04536590e1c148d12",
+  "binaries": {
+    "tailscale": "68319a525cbc2f786dff430ba0ae56a609218ed86dd163879df719809c381f36",
+    "tailscaled": "8bd285756b4c6a9f5534a37b6eff078bd4c8533bb7aea97178c50825f72da70f"
+  }
+}

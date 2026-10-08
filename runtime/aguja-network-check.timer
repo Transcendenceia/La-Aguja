@@ -1,0 +1,10 @@
+[Unit]
+Description=LA AGUJA recheck DNS after DHCP renewals and late network arrival
+
+[Timer]
+OnBootSec=12
+OnUnitInactiveSec=90
+Unit=aguja-network-check.service
+
+[Install]
+WantedBy=timers.target

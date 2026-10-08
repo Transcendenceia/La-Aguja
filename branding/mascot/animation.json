@@ -1,0 +1,404 @@
+{
+  "name": "Agujita",
+  "fps": 12,
+  "frameCount": 96,
+  "durationSeconds": 8,
+  "width": 320,
+  "height": 440,
+  "expressions": [
+    "idle",
+    "blink",
+    "wink",
+    "surprise",
+    "laugh",
+    "look-left",
+    "look-right",
+    "mischief"
+  ],
+  "frames": [
+    {
+      "file": "frame-000.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-001.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-002.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-003.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-004.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-005.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-006.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-007.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-008.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-009.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-010.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-011.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-012.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-013.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-014.png",
+      "expression": "blink"
+    },
+    {
+      "file": "frame-015.png",
+      "expression": "blink"
+    },
+    {
+      "file": "frame-016.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-017.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-018.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-019.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-020.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-021.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-022.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-023.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-024.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-025.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-026.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-027.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-028.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-029.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-030.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-031.png",
+      "expression": "look-left"
+    },
+    {
+      "file": "frame-032.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-033.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-034.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-035.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-036.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-037.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-038.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-039.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-040.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-041.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-042.png",
+      "expression": "look-right"
+    },
+    {
+      "file": "frame-043.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-044.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-045.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-046.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-047.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-048.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-049.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-050.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-051.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-052.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-053.png",
+      "expression": "surprise"
+    },
+    {
+      "file": "frame-054.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-055.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-056.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-057.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-058.png",
+      "expression": "blink"
+    },
+    {
+      "file": "frame-059.png",
+      "expression": "blink"
+    },
+    {
+      "file": "frame-060.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-061.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-062.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-063.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-064.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-065.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-066.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-067.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-068.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-069.png",
+      "expression": "laugh"
+    },
+    {
+      "file": "frame-070.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-071.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-072.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-073.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-074.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-075.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-076.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-077.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-078.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-079.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-080.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-081.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-082.png",
+      "expression": "wink"
+    },
+    {
+      "file": "frame-083.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-084.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-085.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-086.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-087.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-088.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-089.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-090.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-091.png",
+      "expression": "mischief"
+    },
+    {
+      "file": "frame-092.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-093.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-094.png",
+      "expression": "idle"
+    },
+    {
+      "file": "frame-095.png",
+      "expression": "idle"
+    }
+  ]
+}

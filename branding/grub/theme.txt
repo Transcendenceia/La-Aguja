@@ -1,0 +1,30 @@
+# Static firmware menu; Plymouth provides animation after the kernel starts.
+desktop-image: "background.png"
+title-text: ""
+terminal-font: "DejaVu Sans Regular 18"
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
++ boot_menu {
+  left = 42%
+  top = 42%
+  width = 55%
+  height = 38%
+  item_font = "DejaVu Sans Regular 18"
+  item_color = "#92a4bb"
+  selected_item_color = "#35e3c0"
+  item_height = 42
+  item_padding = 8
+  item_spacing = 8
+}
++ label {
+  left = 43%
+  top = 81%
+  width = 52%
+  height = 25
+  color = "#92a4bb"
+  font = "DejaVu Sans Regular 18"
+  id = "__timeout__"
+  text = "Arranque en %d s"
+}

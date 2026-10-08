@@ -1,0 +1,1 @@
+{"name":"aguja-public-site","version":"0.9.0","private":true,"type":"module","license":"GPL-3.0-or-later","engines":{"node":">=22"},"scripts":{"start":"node index.mjs","test":"node --test tests/*.test.mjs"}}

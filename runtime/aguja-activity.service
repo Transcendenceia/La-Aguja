@@ -1,0 +1,25 @@
+[Unit]
+Description=LA AGUJA Rescue Disk volatile SSH activity monitor
+After=aguja-boot.service
+Before=ssh.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/aguja/activity.py serve
+Restart=on-failure
+RestartSec=2
+RuntimeDirectory=aguja-activity
+RuntimeDirectoryMode=0755
+RuntimeDirectoryPreserve=restart
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+ReadWritePaths=/run/aguja-activity
+# The monitor must inspect /proc descendants, including commands run via sudo.
+StandardOutput=null
+StandardError=null
+
+[Install]
+WantedBy=multi-user.target

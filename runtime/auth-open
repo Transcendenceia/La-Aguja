@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+"""CLI browser hook: private volatile handoff, no URL in logs or activity."""
+import sys
+sys.path.insert(0,'/usr/lib/aguja')
+import auth
+sys.exit(auth.capture_browser(sys.argv[1:]))

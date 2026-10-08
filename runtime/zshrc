@@ -1,0 +1,87 @@
+# LA AGUJA Rescue Disk: no downloads, update prompts, or special fonts at shell startup.
+export PATH="$HOME/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+[[ -r /etc/profile.d/aguja-locale.sh ]] && source /etc/profile.d/aguja-locale.sh
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=5000
+SAVEHIST=1000
+setopt HIST_IGNORE_SPACE HIST_IGNORE_DUPS HIST_REDUCE_BLANKS INTERACTIVE_COMMENTS AUTO_CD
+unsetopt BEEP
+
+autoload -Uz colors && colors
+zmodload zsh/complist
+fpath=(/usr/local/share/zsh/site-functions $fpath)
+autoload -Uz compinit && compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+bindkey -e
+bindkey '^R' history-incremental-search-backward
+bindkey '^[[A' history-beginning-search-backward
+bindkey '^[[B' history-beginning-search-forward
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+
+PROMPT='%F{cyan}aguja@%m%f %F{yellow}%~%f %(?.%F{green}.%F{red})>%f '
+RPROMPT='%F{cyan}LA AGUJA RESCUE DISK%f'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+[[ -r /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Keep syntax highlighting last, after widgets are installed.
+[[ -r /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+alias ll='ls -lah --color=auto'
+alias panel='aguja'
+alias ayuda='aguja help'
+alias red='aguja status'
+alias wifi='aguja wifi'
+alias herramientas='aguja tools'
+
+# Do not retain explicit credentials in interactive history.
+zshaddhistory() {
+    case "$1" in
+        (*password*|*passwd*|*--show-secrets*|*sshpass*|*TOKEN=*|*SECRET=*) return 1 ;;
+    esac
+    return 0
+}
+
+precmd() {
+    AGUJA_PRECMD_STATUS=$?
+    # A console may have started before the owner unlocked a protected profile.
+    (( $+functions[aguja_refresh_locale] )) && aguja_refresh_locale
+    local addresses
+    addresses=$(ip -o -4 addr show scope global 2>/dev/null | awk '{print $4}' | cut -d/ -f1 | paste -sd ' ')
+    if [[ -n "$addresses" && "$addresses" != "${AGUJA_LAST_IP:-}" ]]; then
+        print -P '%F{cyan}Red lista%f · IP: '"$addresses"' · detalles: aguja status'
+    fi
+    AGUJA_LAST_IP="$addresses"
+}
+
+# Each SSH command is announced to the local panel. Command text travels over
+# stdin, never as a helper argument; output capture never records keyboard input.
+if [[ -n "${AGUJA_SESSION_ID:-}" ]]; then
+    autoload -Uz add-zsh-hook
+    _aguja_activity_preexec() {
+        printf '%s' "$1" | /usr/lib/aguja/activity.py emit command_start >/dev/null 2>&1
+        AGUJA_COMMAND_PENDING=1
+        return 0
+    }
+    _aguja_activity_precmd() {
+        local command_status=${AGUJA_PRECMD_STATUS:-0}
+        if [[ -n "${AGUJA_COMMAND_PENDING:-}" ]]; then
+            printf '%s' "$command_status" | /usr/lib/aguja/activity.py emit command_end >/dev/null 2>&1
+            unset AGUJA_COMMAND_PENDING
+        fi
+        return 0
+    }
+    add-zsh-hook preexec _aguja_activity_preexec
+    add-zsh-hook precmd _aguja_activity_precmd
+fi
+
+if [[ -o login && -t 0 && -z "${AGUJA_COCKPIT:-}" ]]; then
+    export AGUJA_COCKPIT=1
+    if [[ -n "${SSH_CONNECTION:-}" ]]; then
+        aguja welcome --remote
+    else
+        [[ -d /data/workspace ]] && cd /data/workspace
+        aguja welcome
+    fi
+fi

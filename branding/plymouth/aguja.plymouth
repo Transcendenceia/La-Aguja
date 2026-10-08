@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=LA AGUJA Rescue Disk — Agujita
+Description=The curious mustachioed needle. LA AGUJA Rescue Disk, AI-first rescue Linux.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/aguja
+ScriptFile=/usr/share/plymouth/themes/aguja/aguja.script

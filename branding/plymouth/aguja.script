@@ -1,0 +1,60 @@
+# Agujita: 96 true RGBA frames, 12 fps, an 8-second seamless loop.
+# Script plugin controls refresh cadence explicitly; no unportable time API.
+Window.SetBackgroundTopColor(0.043, 0.071, 0.125);
+Window.SetBackgroundBottomColor(0.043, 0.071, 0.125);
+screen_w = Window.GetWidth();
+screen_h = Window.GetHeight();
+scale = Math.Min(1, Math.Min(screen_w / 680, screen_h / 760));
+for (i = 0; i < 96; i++) {
+    prefix = "0";
+    if (i < 10) { prefix = "00"; }
+    filename = "frame-" + prefix + i + ".png";
+    frames[i] = Image(filename).Scale(320 * scale, 440 * scale);
+}
+mascot = Sprite(frames[0]);
+mascot.SetPosition((screen_w - 320 * scale) / 2, screen_h / 2 - 286 * scale, 10);
+word_image = Image("wordmark.png");
+word_image = word_image.Scale(word_image.GetWidth() * scale, word_image.GetHeight() * scale);
+wordmark = Sprite(word_image);
+wordmark.SetPosition((screen_w - word_image.GetWidth()) / 2, screen_h / 2 + 154 * scale, 10);
+tag_image = Image("tagline.png");
+tag_image = tag_image.Scale(tag_image.GetWidth() * scale, tag_image.GetHeight() * scale);
+tagline = Sprite(tag_image);
+tagline.SetPosition((screen_w - tag_image.GetWidth()) / 2, screen_h / 2 + 241 * scale, 10);
+dot_image = Image("dot.png").Scale(6 * scale, 6 * scale);
+for (i = 0; i < 3; i++) {
+    dots[i] = Sprite(dot_image);
+    dots[i].SetPosition(screen_w / 2 + (i - 1) * 18 * scale - 3 * scale, screen_h / 2 + 306 * scale, 10);
+}
+frame_index = 0;
+fun refresh_callback() {
+    elapsed = frame_index / 12;
+    mascot.SetImage(frames[frame_index]);
+    global.frame_index = (frame_index + 1) % 96;
+    for (i = 0; i < 3; i++) {
+        dots[i].SetOpacity(0.3 + 0.7 * (0.5 + 0.5 * Math.Sin(elapsed * 3 - i * 1.2)));
+    }
+}
+Plymouth.SetRefreshRate(12);
+Plymouth.SetRefreshFunction(refresh_callback);
+
+# Never echo secrets. If an early password question appears, show only its prompt
+# and a fixed placeholder; Plymouth owns input and the normal console is on Esc.
+prompt_sprite = Sprite();
+prompt_sprite.SetZ(20);
+fun display_password(prompt, bullets) {
+    prompt_image = Image.Text(prompt + "   [entrada oculta]", 0.96, 0.97, 0.98);
+    prompt_sprite.SetImage(prompt_image);
+    prompt_sprite.SetOpacity(1);
+    prompt_sprite.SetPosition(screen_w / 2 - prompt_image.GetWidth() / 2, screen_h - 55, 20);
+}
+fun display_question(prompt, entry) {
+    prompt_image = Image.Text(prompt, 0.96, 0.97, 0.98);
+    prompt_sprite.SetImage(prompt_image);
+    prompt_sprite.SetOpacity(1);
+    prompt_sprite.SetPosition(screen_w / 2 - prompt_image.GetWidth() / 2, screen_h - 55, 20);
+}
+fun display_normal() { prompt_sprite.SetOpacity(0); }
+Plymouth.SetDisplayPasswordFunction(display_password);
+Plymouth.SetDisplayQuestionFunction(display_question);
+Plymouth.SetDisplayNormalFunction(display_normal);

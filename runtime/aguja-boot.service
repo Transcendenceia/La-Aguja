@@ -1,0 +1,17 @@
+[Unit]
+Description=Aguja configuration, networking and SSH identity
+After=NetworkManager.service local-fs.target
+Before=ssh.service getty@tty1.service serial-getty@ttyS0.service
+Wants=NetworkManager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/aguja/boot.py
+RemainAfterExit=yes
+TimeoutStartSec=60
+UMask=0077
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=multi-user.target

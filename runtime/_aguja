@@ -1,0 +1,39 @@
+#compdef aguja
+local -a commands
+commands=(
+  'menu:Panel interactivo de LA AGUJA Rescue Disk'
+  'status:IP, SSH y nombre local; --json o --disks'
+  'activity:Conexiones, comandos y procesos SSH en memoria; --json'
+  'run:Tarea visible: --label nombre -- comando'
+  'login:Acceso oficial con navegador local para Claude, Antigravity o Codex'
+  'profile:Estado y desbloqueo del perfil preparado'
+  'tailscale:Estado de red privada Tailscale / Headscale'
+  'browser:Ayuda del acceso pendiente (sin QR)'
+  'network:Estado de red JSON; --wait espera conexión'
+  'wifi:Selector Wi-Fi y guardado en el USB'
+  'password:Cambiar y guardar contraseña SSH'
+  'help:Guía de inicio y comandos'
+  'tools:Inventario de herramientas'
+  'doctor:Diagnóstico de configuración y servicios'
+  'context:Instrucciones para el agente remoto'
+  'agent:Iniciar un agente IA'
+  'config:Editar configuración del USB'
+  'mount-ro:Montar explícitamente una partición de rescate'
+  'welcome:Bienvenida local o SSH'
+)
+if (( CURRENT == 2 )); then
+    _describe -t commands 'Comando de LA AGUJA Rescue Disk' commands
+    return
+fi
+case "$words[2]" in
+  profile) _values 'Perfil' status unlock ;;
+  login) _values 'Agente' codex antigravity claude ;;
+  agent) _values 'Agente' codex antigravity claude opencode shell ;;
+  status) _values 'Formato' --json --disks ;;
+  activity) _values 'Formato' --json ;;
+  doctor) _values 'Formato' --json ;;
+  run) _values 'Etiqueta de tarea' --label ;;
+  network) _values 'Red' --wait ;;
+  welcome) _values 'Vista' --plain --remote ;;
+  mount-ro) _files ;;
+esac

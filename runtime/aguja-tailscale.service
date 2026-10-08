@@ -1,0 +1,22 @@
+[Unit]
+Description=LA AGUJA optional Tailscale / Headscale enrollment
+After=aguja-boot.service NetworkManager.service aguja-network-check.service
+Wants=aguja-network-check.service
+Requires=aguja-boot.service
+ConditionPathExists=/run/aguja-tailnet-private/config.json
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 /usr/lib/aguja/tailscale_service.py
+# Network may arrive later or the control server may approve the node later.
+Restart=on-failure
+RestartSec=30
+TimeoutStartSec=90
+UMask=0077
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+build/
+dist/
+private/
+__pycache__/
+*.pyc
+*.log
+node_modules
+aguja.conf
+!config/aguja.conf
+
+# Private physical operations, captures and access material
+operations/
+*.private.*
+
+# Browser test output lives outside source
+desktop/tests/*.png
+desktop/tests/*.fixture.json
+.venv/

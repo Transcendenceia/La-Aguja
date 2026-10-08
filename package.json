@@ -1,0 +1,18 @@
+{
+  "name": "aguja-brand-tooling",
+  "private": true,
+  "version": "0.9.0",
+  "scripts": {
+    "branding": "node scripts/brand-assets.cjs",
+    "check:branding": "node scripts/verify-branding.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0",
+    "sharp": "0.35.5"
+  },
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Transcendenceia/La-Aguja.git"
+  }
+}

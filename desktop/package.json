@@ -1,7 +1,7 @@
 {
   "name": "aguja-companion",
   "productName": "LA AGUJA Flash Imager",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "private": true,
   "author": {
     "name": "Transcendence IA",
@@ -46,7 +46,9 @@
       "linux-privileged.cjs",
       "windows-environment.cjs",
       "windows-privileged.cjs",
-      "public-download.cjs"
+      "public-download.cjs",
+      "windows-native-import.cjs",
+      "windows-credentials.ps1"
     ],
     "extraResources": [
       {
@@ -140,6 +142,7 @@
   "desktopName": "aguja-companion.desktop",
   "dependencies": {
     "@iarna/toml": "2.2.5",
+    "age-encryption": "0.3.1",
     "jsonc-parser": "3.3.1"
   },
   "license": "GPL-3.0-or-later",

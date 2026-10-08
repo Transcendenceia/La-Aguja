@@ -53,7 +53,7 @@ Helpers Arch/Cachy: `python`, `python-cryptography`, `mtools`, `polkit`, `zstd`,
 
 ## Autenticación IA y perfiles
 
-El inicio de sesión de un CLI del PC abre el terminal oficial; tú autorizas. La importación permite solo archivos nativos portables validados del usuario, no llavero completo, historial, hooks o MCP. Un formato válido no prueba vigencia. El producto no crea sesiones ni tokens de LA AGUJA.
+El inicio de sesión de un CLI del PC abre el terminal oficial; tú autorizas. La importación permite archivos nativos validados del usuario y entradas específicas del Administrador de credenciales de Windows, no llavero completo, historial, hooks o MCP. Un formato válido no prueba vigencia. El producto no crea sesiones ni tokens de LA AGUJA.
 
 Un perfil reutilizable `.aguja` va cifrado AES-256-GCM/scrypt; incluye red/SSH/API y tailnet habilitada, no credenciales desconocidas inyectadas por el renderer. Las sesiones OAuth se comprueban otra vez al preparar. Desactivar tailnet retira sus secretos del perfil preparado/exportado.
 
@@ -77,3 +77,9 @@ npm run build:win
 `windows-profile.test.cjs` prepara GPT/FAT32 real con el escritor Windows JS; mtools lee el perfil y el lector Python real lo abre en ambos modos. También prueba el rechazo de imagen sin capacidad tailnet y la conservación de la fuente. Esta prueba corre en Linux con herramientas FAT, no certifica el sistema de E/S de cualquier Windows.
 
 Las pruebas Electron pueden usar `--no-sandbox` solo en el contenedor de QA que no admite namespaces; esa opción no forma parte del producto entregado. El renderer mantiene `contextIsolation:true`, `sandbox:true`, `nodeIntegration:false`, navegación bloqueada y CSP local. CLI, USB físico, login/inferencia real y arranque de hardware se verifican por separado en el informe de entrega.
+
+## Imager 0.9.4 · sesiones nativas de Windows
+
+Antigravity importa su entrada nativa del Administrador de credenciales; Codex lee su archivo, llavero directo o perfil cifrado `codex_auth.age`, respetando el almacén configurado. Claude Code y OpenCode conservan sus archivos y rutas de configuración nativos. Se extrae solo la sesión del proveedor elegido, sin modificarla ni copiar otros secretos, historial, hooks o MCP.
+
+Ejecuta el Imager con el mismo usuario de Windows que inició sesión en el CLI. No necesitas elevar la interfaz. Los tokens se mantienen en memoria del proceso principal y llegan al perfil privado por una tubería, sin archivos temporales de credenciales. Linux no cambia. El formato válido no certifica vigencia ni inferencia real de la cuenta.

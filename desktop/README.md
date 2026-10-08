@@ -1,4 +1,4 @@
-# LA AGUJA Flash Imager · Windows and Linux 0.9.3
+# LA AGUJA Flash Imager · Windows and Linux 0.9.4
 
 [Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
 
@@ -28,7 +28,7 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-0.9.3-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-0.9.4-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 
@@ -48,7 +48,7 @@ Arch/Cachy helpers: `python`, `python-cryptography`, `mtools`, `polkit`, `zstd`,
 
 ## AI and profiles
 
-CLI login opens the official local terminal flow and you authorise it. Imports accept only supported native portable session files, not complete keychains/history/hooks/MCP. Format validity does not prove a current session.
+CLI login opens the official local terminal flow and you authorise it. Imports accept supported native session files and selected Windows Credential Manager entries, not complete keychains/history/hooks/MCP. Format validity does not prove a current session.
 
 Reusable `.aguja` profiles use AES-256-GCM/scrypt and contain authorised configuration. Sessions are checked again during preparation; disabling tailnet removes its secrets from prepared/exported profiles.
 
@@ -79,3 +79,13 @@ npm run build:win
 - Failed re-imports refresh the renderer status and invalidate prepared images; file replacement with symlinks is still rejected.
 
 The Rescue Disk image remains 0.9.0. These changes concern the desktop preparer and its bundled profile helper, not the boot image.
+
+## Imager 0.9.4 · native Windows sessions
+
+- Antigravity: reads its exact native `gemini` Credential Manager entry (derived from the current user profile), then exports only OAuth fields to the Linux-compatible profile. A selected folder explicitly imports its portable file instead.
+- Codex: honours `cli_auth_credentials_store` (`file`, `keyring`, `auto`), custom `CODEX_HOME`, UTF-16 native keyring entries and the encrypted `secrets/codex_auth.age` backend. Only `global/CODEX_AUTH` is decrypted; MCP/general secrets are not imported. The exported config uses file storage on the rescue system.
+- Claude Code: native `.claude/.credentials.json`, including `CLAUDE_CONFIG_DIR`. OpenCode: native XDG `opencode/auth.json` and JSON/JSONC settings with configured locations.
+- Run the Imager as the same Windows user as the authenticated CLI. No elevation is needed to import your own session. The reader is read-only; tokens travel through a private process pipe and stay in main-process memory until image preparation or revocation. No temporary plaintext credential file is created.
+- A valid imported format is not a live provider authentication check. Synthetic Windows vault and GUI regression tests do not claim real-account inference. Linux imports are unchanged.
+
+Native backend references: [Codex storage](https://github.com/openai/codex/blob/main/codex-rs/login/src/auth/storage.rs), [Codex encrypted store](https://github.com/openai/codex/blob/main/codex-rs/secrets/src/local.rs), [Claude storage](https://code.claude.com/docs/en/authentication), [OpenCode auth](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/auth/index.ts), [Antigravity auth](https://antigravity.google/docs/cli/install/).

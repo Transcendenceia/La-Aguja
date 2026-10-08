@@ -1,13 +1,13 @@
 {
   "name": "aguja-companion",
   "productName": "LA AGUJA Flash Imager",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "private": true,
   "author": {
     "name": "Transcendence IA",
     "email": "soporte@transcendenceia.net"
   },
-  "description": "Prepara y graba tu LA AGUJA Rescue Disk desde Windows y Linux",
+  "description": "Prepara y graba tu disco de rescate La Aguja desde Windows y Linux",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",

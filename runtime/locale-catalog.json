@@ -840,8 +840,7 @@
       "Pendiente de autorización": "Authorization required",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Windows permissions are needed to query BitLocker. Click Check BitLocker and accept UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "The query does not display or export recovery keys.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Could not check BitLocker. Try again.",
-      "Tu LA AGUJA.": "Your LA AGUJA."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Could not check BitLocker. Try again."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -1531,8 +1530,7 @@
       "Pendiente de autorización": "需要授权",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "查询 BitLocker 需要 Windows 权限。点击“检查 BitLocker”并批准 UAC。",
       "La consulta no muestra ni exporta claves de recuperación.": "此查询不会显示或导出恢复密钥。",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "无法检查 BitLocker。请重试。",
-      "Tu LA AGUJA.": "你的 LA AGUJA。"
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "无法检查 BitLocker。请重试。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -2222,8 +2220,7 @@
       "Pendiente de autorización": "Autorisation requise",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Des autorisations Windows sont nécessaires pour consulter BitLocker. Cliquez sur Vérifier BitLocker et acceptez UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "La consultation n’affiche ni n’exporte les clés de récupération.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossible de vérifier BitLocker. Réessayez.",
-      "Tu LA AGUJA.": "Votre LA AGUJA."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossible de vérifier BitLocker. Réessayez."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -2913,8 +2910,7 @@
       "Pendiente de autorización": "Autorização necessária",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "São necessárias permissões do Windows para consultar BitLocker. Clique em Verificar BitLocker e aceite o UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "A consulta não mostra nem exporta chaves de recuperação.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Não foi possível verificar o BitLocker. Tente novamente.",
-      "Tu LA AGUJA.": "Sua LA AGUJA."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Não foi possível verificar o BitLocker. Tente novamente."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -3604,8 +3600,7 @@
       "Pendiente de autorización": "Autorisierung erforderlich",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Zum Abfragen von BitLocker sind Windows-Berechtigungen erforderlich. Klicke auf BitLocker prüfen und bestätige UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "Die Abfrage zeigt oder exportiert keine Wiederherstellungsschlüssel.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "BitLocker konnte nicht geprüft werden. Versuche es erneut.",
-      "Tu LA AGUJA.": "Deine LA AGUJA."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "BitLocker konnte nicht geprüft werden. Versuche es erneut."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -4295,8 +4290,7 @@
       "Pendiente de autorización": "Autorizzazione richiesta",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Per consultare BitLocker servono autorizzazioni Windows. Premi Verifica BitLocker e accetta UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "La verifica non mostra né esporta chiavi di ripristino.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossibile verificare BitLocker. Riprova.",
-      "Tu LA AGUJA.": "La tua LA AGUJA."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossibile verificare BitLocker. Riprova."
     }
   }
 }

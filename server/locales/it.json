@@ -284,5 +284,16 @@
       "Funziona su ogni computer?",
       "La versione attuale è sperimentale e per x86-64. Verifica hardware, avvio, Secure Boot e procedura; non è disponibile una catena Secure Boot universale firmata."
     ]
-  ]
+  ],
+  "imagerSkill": {
+    "title": "Chiedi al tuo agente di preparare La Aguja",
+    "text": "Chiedi un’immagine .img personalizzata con lingua, rete, SSH e impostazioni IA o tailnet facoltative. La skill usa lo stesso motore di Flash Imager, senza la finestra desktop.",
+    "links": [
+      "Scarica la skill (.zip)",
+      "Scarica la skill (.tar.gz)",
+      "Installazione e agenti",
+      "Checksum SHA-256"
+    ],
+    "note": "Formato aperto Agent Skills: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw e caricamento manuale in altri agenti. Richiede Node 22+ e accesso a file/terminale. Crea il file immagine; non scrive automaticamente su USB. Il formato non certifica ogni agente o sistema operativo."
+  }
 }

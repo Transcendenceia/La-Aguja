@@ -284,5 +284,16 @@
       "所有电脑都能使用吗？",
       "当前版本为实验性版本，面向 x86-64。需要确认硬件、启动、Secure Boot 和操作流程兼容性；不提供通用签名的 Secure Boot 启动链。"
     ]
-  ]
+  ],
+  "imagerSkill": {
+    "title": "让你的 AI 代理准备 La Aguja",
+    "text": "请代理按你的语言、网络、SSH 和可选的 AI 或 tailnet 设置生成个性化 .img 镜像。此 skill 使用与 Flash Imager 相同的引擎，无需桌面窗口。",
+    "links": [
+      "下载 skill (.zip)",
+      "下载 skill (.tar.gz)",
+      "安装与代理框架",
+      "SHA-256 校验和"
+    ],
+    "note": "采用开放的 Agent Skills 格式：Codex、Claude Code、OpenCode、Gemini CLI、Cursor、OpenClaw，其他代理可手动加载。需要 Node 22+ 及文件和终端访问权限。只创建镜像文件，不会自动写入 USB。格式兼容不代表所有代理框架或操作系统均已通过测试。"
+  }
 }

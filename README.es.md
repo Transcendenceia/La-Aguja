@@ -12,6 +12,14 @@ Estado: **Imager público 0.9.2 · imagen de rescate 0.9.0 · experimental; cód
 
 ## Flash Imager Windows/Linux → tu Rescue Disk → tu tailnet
 
+### También como skill para tu agente
+
+[Flash Imager Agent Skill 1.0.0](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) permite pedirle a un agente que prepare una imagen `.img` personalizada con el motor real del Imager, sin Electron. Configura idioma, red, SSH y perfiles opcionales de IA/tailnet; verifica el perfil y los hashes, conserva la base y **no graba un USB automáticamente** ni reconstruye la distro.
+
+[Instalación por arnés](skills/flash-imager/references/harnesses.md): Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita acceso a archivos/terminal y Node 22+. El formato portátil no certifica todos los arneses o sistemas operativos. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/SHA256SUMS-flash-imager-skill-1.0.0) · [Skill e interfaz JSON](skills/flash-imager/SKILL.md).
+
+### Aplicación de escritorio
+
 [Aplicación y descargas](https://aguja.transcendenceia.net/) · [Guía Windows/Linux](desktop/README.md).
 
 Prepara idioma/teclado, Ethernet/Wi-Fi, SSH y herramientas IA. **Preparar y grabar USB** crea una imagen privada nueva automáticamente, verifica identidad/capacidad del USB y exige confirmación nativa antes de escribir. Linux ofrece respaldo opcional; **Windows todavía no implementa respaldo USB integrado**, por lo que debe hacerse externamente antes. La verificación de lectura no prueba arranque universal.

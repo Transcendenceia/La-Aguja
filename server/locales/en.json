@@ -310,5 +310,16 @@
       "Will it work on any computer?",
       "The current release is experimental and targets x86-64. Check hardware, boot, Secure Boot and procedure compatibility; no universal signed Secure Boot chain is offered."
     ]
-  ]
+  ],
+  "imagerSkill": {
+    "title": "Let your AI agent prepare La Aguja",
+    "text": "Ask your agent to create a personalised .img with your language, network, SSH and optional AI or tailnet settings. The skill uses the same Flash Imager engine, without its desktop window.",
+    "links": [
+      "Download skill (.zip)",
+      "Download skill (.tar.gz)",
+      "Installation and harnesses",
+      "SHA-256 checksums"
+    ],
+    "note": "Open Agent Skills format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw, and manual loading in other agents. Requires Node 22+ and file/terminal access. Creates the image file; it does not write a USB automatically. Format compatibility is not certification of every harness or operating system."
+  }
 }

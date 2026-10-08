@@ -12,6 +12,14 @@
 
 ## Start here
 
+### Let your AI agent prepare the image
+
+Alongside the desktop installers, [Flash Imager Agent Skill 1.0.0](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) packages the same file-image preparation engine without Electron. Ask your agent to configure language, networking, SSH and optional AI/tailnet profiles; it creates a personalised `.img`, verifies the profile and hashes, and leaves the base image untouched. It does **not** write a USB automatically or rebuild the distribution.
+
+The open `SKILL.md` format has [installation guidance for Codex, Claude Code, OpenCode, Gemini CLI, Cursor and OpenClaw, plus manual loading for other harnesses](skills/flash-imager/references/harnesses.md). A file/shell-capable agent and Node.js 22+ are required. Format compatibility is not a claim that every harness or OS was tested. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/SHA256SUMS-flash-imager-skill-1.0.0) · [Instructions and JSON interface](skills/flash-imager/SKILL.md).
+
+### Desktop and boot workflow
+
 1. Back up the USB before writing. **Windows has no integrated USB backup yet**; use an external tool. Linux offers an optional verified full-device backup.
 2. Download Flash Imager for Windows or Linux. Choose the image from its signed catalogue, or import a decompressed `.img`.
 3. Configure language, keyboard, Ethernet/Wi-Fi, hostname and your own SSH password or public key. AI preparation and private networking are optional.

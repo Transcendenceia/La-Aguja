@@ -284,5 +284,16 @@
       "Werkt het op elke computer?",
       "De huidige versie is experimenteel en gericht op x86-64. Controleer hardware, opstarten, Secure Boot en procedure; er is geen universeel ondertekende Secure Boot-keten."
     ]
-  ]
+  ],
+  "imagerSkill": {
+    "title": "Laat je AI-agent La Aguja voorbereiden",
+    "text": "Vraag je agent om een persoonlijke .img met taal, netwerk, SSH en optionele AI- of tailnetinstellingen. De skill gebruikt dezelfde Flash Imager-engine, zonder het desktopvenster.",
+    "links": [
+      "Skill downloaden (.zip)",
+      "Skill downloaden (.tar.gz)",
+      "Installatie en agents",
+      "SHA-256-controlesommen"
+    ],
+    "note": "Open Agent Skills-formaat: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw en handmatig laden in andere agents. Vereist Node 22+ en toegang tot bestanden/terminal. Maakt het imagebestand; schrijft niet automatisch naar USB. Formaatcompatibiliteit certificeert niet elke agent of elk besturingssysteem."
+  }
 }

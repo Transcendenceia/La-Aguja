@@ -1,0 +1,16 @@
+{
+  "image_path": "/absolute/path/aguja-base.img",
+  "output_path": "/absolute/private/path/my-aguja.img",
+  "image_sha256": "REPLACE_WITH_TRUSTED_BASE_SHA256",
+  "capsule": {
+    "schema": 1,
+    "hostname": "my-aguja",
+    "locale": {"language": "en_US.UTF-8", "keyboard": "us", "variant": ""},
+    "network": {"ethernet": {"method": "auto"}},
+    "ssh": {"port": 22, "password": "", "public_key": "REPLACE_WITH_YOUR_SSH_PUBLIC_KEY"},
+    "providers": {},
+    "tailscale": {"enabled": false}
+  },
+  "protection": {"mode": "plain"},
+  "import_providers": []
+}

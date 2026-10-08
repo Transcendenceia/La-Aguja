@@ -310,5 +310,16 @@
       "Funktioniert es auf jedem Rechner?",
       "Die aktuelle Version ist experimentell und für x86-64 gedacht. Hardware, Boot, Secure Boot und Verfahren prüfen; eine universell signierte Secure-Boot-Kette wird nicht angeboten."
     ]
-  ]
+  ],
+  "imagerSkill": {
+    "title": "Lass deinen KI-Agenten La Aguja vorbereiten",
+    "text": "Bitte deinen Agenten um eine personalisierte .img-Datei mit Sprache, Netzwerk, SSH und optionalen KI- oder Tailnet-Einstellungen. Der Skill nutzt dieselbe Flash-Imager-Engine, ohne das Desktopfenster.",
+    "links": [
+      "Skill herunterladen (.zip)",
+      "Skill herunterladen (.tar.gz)",
+      "Installation und Agenten",
+      "SHA-256-Prüfsummen"
+    ],
+    "note": "Offenes Agent-Skills-Format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw und manuelles Laden in anderen Agenten. Erfordert Node 22+ und Datei-/Terminalzugriff. Erstellt die Imagedatei; schreibt nicht automatisch auf einen USB-Stick. Formatkompatibilität zertifiziert nicht jeden Agenten oder jedes Betriebssystem."
+  }
 }

@@ -68,3 +68,14 @@ npm run build:win
 ```
 
 `tests/tailnet-ui-qa.cjs` accepts `AGUJA_QA_EXECUTABLE`, `AGUJA_QA_ROOT` and `AGUJA_QA_IMAGE` for packaged execution, evidence and a compatible synthetic image. It can prepare plain/encrypted capsules through real IPC but does not enrol a tailnet, authorise accounts or flash a physical USB. Synthetic credentials remain hidden.
+
+## Imager 0.9.3 import fixes
+
+- Linux AppImage: privileged Wi-Fi and USB helpers are staged off FUSE into an ephemeral 0700 directory (0600 script), then removed on completion or cancellation. Only the bundled standalone script is copied, never credentials.
+- Wi-Fi import reports permission cancellation, missing NetworkManager, unavailable PSK and unsupported security instead of silently accepting a missing password. Open, WPA-PSK and WPA3-SAE profiles remain supported; user keyring-only secrets may require manual entry.
+- Windows recheck reads current persisted user/machine tool locations without loading shell profiles or querying credential environment variables. Lookup covers npm custom prefixes, pnpm, Bun, Scoop and NVM directories.
+- Native profile imports accept BOM-marked UTF-8/UTF-16 and OpenCode JSONC; only existing allowlisted data is exported as UTF-8 to canonical Linux paths. Hooks, MCP servers, plugins, history and host paths are not copied.
+- **Select profile folder** explicitly selects a custom or accessible WSL profile directory, without auto-scanning WSL users or launching WSL. This does not export a whole OS keyring. A CLI being installed or authenticated does not by itself guarantee a portable auth file or token validity.
+- Failed re-imports refresh the renderer status and invalidate prepared images; file replacement with symlinks is still rejected.
+
+The Rescue Disk image remains 0.9.0. These changes concern the desktop preparer and its bundled profile helper, not the boot image.

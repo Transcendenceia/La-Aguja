@@ -35,6 +35,13 @@ def build(output):
     for source in sorted(dependency.rglob('*')):
         if source.is_file():
             add(source, 'scripts/lib/desktop/node_modules/@iarna/toml/' + source.relative_to(dependency).as_posix())
+    jsonc = ROOT/'desktop/node_modules/jsonc-parser'
+    jsonc_package = json.loads((jsonc/'package.json').read_text())
+    if jsonc_package['version'] != lock['packages']['node_modules/jsonc-parser']['version']:
+        raise ValueError('JSONC dependency differs from Imager lockfile')
+    for source in sorted(jsonc.rglob('*')):
+        if source.is_file():
+            add(source, 'scripts/lib/desktop/node_modules/jsonc-parser/' + source.relative_to(jsonc).as_posix())
     manifest = {'skill_version':VERSION,'engine':'Flash Imager','imager_version':json.loads((ROOT/'desktop/package.json').read_text())['version'],
                 'dependency':{'name':'@iarna/toml','version':package['version'],'integrity':lock['packages']['node_modules/@iarna/toml']['integrity']},
                 'files':{name:hashlib.sha256(data).hexdigest() for name,data in sorted(files.items())}}

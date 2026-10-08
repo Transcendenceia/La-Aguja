@@ -319,6 +319,15 @@ def materialize_imports(capsule, home=None):
     for name, provider in c['providers'].items():
         if provider['mode'] != 'import':
             continue
+        if provider.get('files'):
+            # Desktop has already materialized explicitly approved custom/WSL
+            # source locations. validate() above sanitizes each canonical file;
+            # never discover additional host files or retain native paths.
+            if provider.get('import_paths') or not any(IMPORTS[name][p] == 'auth' for p in provider['files']):
+                raise ValueError('Falta autenticación portable')
+            provider['files'] = {p: b64(sanitize_import(name, p, unb64(v))) for p, v in provider['files'].items()}
+            provider.pop('import_paths', None)
+            continue
         files = {}
         for value in provider.get('import_paths', []):
             path = Path(value).expanduser()

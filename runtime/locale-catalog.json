@@ -840,7 +840,15 @@
       "Pendiente de autorización": "Authorization required",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Windows permissions are needed to query BitLocker. Click Check BitLocker and accept UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "The query does not display or export recovery keys.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Could not check BitLocker. Try again."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Could not check BitLocker. Try again.",
+      "Seleccionar carpeta del perfil": "Select profile folder",
+      "Seleccionar carpeta del perfil de {provider}": "Select {provider} profile folder",
+      "No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.": "No valid portable authentication file was found for this user. Select the profile folder for a custom location or WSL. Keyring sessions require native sign-in in Aguja.",
+      "No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.": "Wi-Fi import was not authorized. Accept the Linux permission dialog or try again.",
+      "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager could not read the Wi-Fi password. It may be in the user keyring; enter it manually without changing network permissions.",
+      "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Could not query NetworkManager. Check that nmcli is installed and the service is running.",
+      "El nombre de la red Wi-Fi activa no es válido.": "The active Wi-Fi network name is invalid.",
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Connect to exactly one Wi-Fi network before importing it."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -1530,7 +1538,15 @@
       "Pendiente de autorización": "需要授权",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "查询 BitLocker 需要 Windows 权限。点击“检查 BitLocker”并批准 UAC。",
       "La consulta no muestra ni exporta claves de recuperación.": "此查询不会显示或导出恢复密钥。",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "无法检查 BitLocker。请重试。"
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "无法检查 BitLocker。请重试。",
+      "Seleccionar carpeta del perfil": "选择配置文件夹",
+      "Seleccionar carpeta del perfil de {provider}": "选择 {provider} 配置文件夹",
+      "No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.": "未找到此用户的有效可移植认证文件。自定义路径或 WSL 请手动选择配置文件夹。凭据管理器会话需要在 Aguja 中重新登录。",
+      "No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.": "Wi-Fi 导入未获授权。请接受 Linux 权限对话框或重试。",
+      "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager 无法读取 Wi-Fi 密码。密码可能在用户凭据库中；请手动输入，不必修改网络权限。",
+      "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "无法查询 NetworkManager。请检查是否已安装 nmcli 且服务正在运行。",
+      "El nombre de la red Wi-Fi activa no es válido.": "当前 Wi-Fi 网络名称无效。",
+      "Conéctate a una única red Wi-Fi antes de importarla.": "导入前请连接到唯一的 Wi-Fi 网络。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -2220,7 +2236,15 @@
       "Pendiente de autorización": "Autorisation requise",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Des autorisations Windows sont nécessaires pour consulter BitLocker. Cliquez sur Vérifier BitLocker et acceptez UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "La consultation n’affiche ni n’exporte les clés de récupération.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossible de vérifier BitLocker. Réessayez."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossible de vérifier BitLocker. Réessayez.",
+      "Seleccionar carpeta del perfil": "Sélectionner le dossier du profil",
+      "Seleccionar carpeta del perfil de {provider}": "Sélectionner le dossier du profil {provider}",
+      "No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.": "Aucun fichier d’authentification portable valide pour cet utilisateur. Sélectionnez le dossier du profil pour un emplacement personnalisé ou WSL. Les sessions du trousseau nécessitent une connexion native dans Aguja.",
+      "No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.": "L’importation Wi-Fi n’a pas été autorisée. Acceptez la demande de permissions Linux ou réessayez.",
+      "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager n’a pas pu lire le mot de passe Wi-Fi. Il peut être dans le trousseau utilisateur ; saisissez-le manuellement sans modifier les permissions réseau.",
+      "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Impossible de consulter NetworkManager. Vérifiez que nmcli est installé et que le service est actif.",
+      "El nombre de la red Wi-Fi activa no es válido.": "Le nom du réseau Wi-Fi actif n’est pas valide.",
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Connectez-vous à un seul réseau Wi-Fi avant l’importation."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -2910,7 +2934,15 @@
       "Pendiente de autorización": "Autorização necessária",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "São necessárias permissões do Windows para consultar BitLocker. Clique em Verificar BitLocker e aceite o UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "A consulta não mostra nem exporta chaves de recuperação.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Não foi possível verificar o BitLocker. Tente novamente."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Não foi possível verificar o BitLocker. Tente novamente.",
+      "Seleccionar carpeta del perfil": "Selecionar pasta do perfil",
+      "Seleccionar carpeta del perfil de {provider}": "Selecionar pasta do perfil de {provider}",
+      "No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.": "Nenhum arquivo de autenticação portátil válido para este usuário. Selecione a pasta do perfil para um caminho personalizado ou WSL. Sessões do chaveiro exigem login nativo no Aguja.",
+      "No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.": "A importação Wi-Fi não foi autorizada. Aceite o diálogo de permissões do Linux ou tente novamente.",
+      "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "O NetworkManager não pôde ler a senha Wi-Fi. Ela pode estar no chaveiro do usuário; digite-a manualmente sem alterar as permissões da rede.",
+      "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Não foi possível consultar o NetworkManager. Verifique se nmcli está instalado e o serviço está ativo.",
+      "El nombre de la red Wi-Fi activa no es válido.": "O nome da rede Wi-Fi ativa não é válido.",
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Conecte-se a uma única rede Wi-Fi antes de importá-la."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -3600,7 +3632,15 @@
       "Pendiente de autorización": "Autorisierung erforderlich",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Zum Abfragen von BitLocker sind Windows-Berechtigungen erforderlich. Klicke auf BitLocker prüfen und bestätige UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "Die Abfrage zeigt oder exportiert keine Wiederherstellungsschlüssel.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "BitLocker konnte nicht geprüft werden. Versuche es erneut."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "BitLocker konnte nicht geprüft werden. Versuche es erneut.",
+      "Seleccionar carpeta del perfil": "Profilordner auswählen",
+      "Seleccionar carpeta del perfil de {provider}": "Profilordner von {provider} auswählen",
+      "No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.": "Keine gültige portable Authentifizierungsdatei für diesen Benutzer gefunden. Wähle bei eigenen Pfaden oder WSL den Profilordner. Schlüsselbund-Sitzungen erfordern eine native Anmeldung in Aguja.",
+      "No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.": "Der WLAN-Import wurde nicht autorisiert. Bestätige den Linux-Berechtigungsdialog oder versuche es erneut.",
+      "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager konnte das WLAN-Passwort nicht lesen. Es könnte im Benutzer-Schlüsselbund liegen; gib es manuell ein, ohne die Netzwerkberechtigungen zu ändern.",
+      "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "NetworkManager konnte nicht abgefragt werden. Prüfe, ob nmcli installiert ist und der Dienst läuft.",
+      "El nombre de la red Wi-Fi activa no es válido.": "Der Name des aktiven WLAN-Netzes ist ungültig.",
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Verbinde dich vor dem Import mit genau einem WLAN-Netz."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -4290,7 +4330,15 @@
       "Pendiente de autorización": "Autorizzazione richiesta",
       "Se necesitan permisos de Windows para consultar BitLocker. Pulsa Comprobar BitLocker y acepta UAC.": "Per consultare BitLocker servono autorizzazioni Windows. Premi Verifica BitLocker e accetta UAC.",
       "La consulta no muestra ni exporta claves de recuperación.": "La verifica non mostra né esporta chiavi di ripristino.",
-      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossibile verificare BitLocker. Riprova."
+      "No se pudo comprobar BitLocker. Vuelve a intentarlo.": "Impossibile verificare BitLocker. Riprova.",
+      "Seleccionar carpeta del perfil": "Seleziona cartella del profilo",
+      "Seleccionar carpeta del perfil de {provider}": "Seleziona cartella del profilo di {provider}",
+      "No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.": "Nessun file di autenticazione portabile valido per questo utente. Seleziona la cartella del profilo per un percorso personalizzato o WSL. Le sessioni del portachiavi richiedono un accesso nativo in Aguja.",
+      "No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.": "Importazione Wi-Fi non autorizzata. Accetta la richiesta di permessi Linux o riprova.",
+      "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager non ha potuto leggere la password Wi-Fi. Potrebbe trovarsi nel portachiavi utente; inseriscila manualmente senza modificare i permessi di rete.",
+      "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Impossibile consultare NetworkManager. Verifica che nmcli sia installato e il servizio attivo.",
+      "El nombre de la red Wi-Fi activa no es válido.": "Il nome della rete Wi-Fi attiva non è valido.",
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Connettiti a una sola rete Wi-Fi prima di importarla."
     }
   }
 }

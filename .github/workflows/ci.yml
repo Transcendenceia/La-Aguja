@@ -26,3 +26,15 @@ jobs:
         working-directory: desktop
       - run: npm test
         working-directory: server
+  windows-imports:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+        working-directory: desktop
+      - name: Native Windows CLI lookup and portable imports
+        run: node --test tests/import-portability.test.cjs tests/ai-tools.test.cjs tests/windows-environment.test.cjs
+        working-directory: desktop

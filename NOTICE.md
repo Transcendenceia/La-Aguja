@@ -1,41 +1,30 @@
-# Licencias y distribución
+# Licensing and distribution
 
-Copyright © 2026 Transcendence IA y colaboradores de LA AGUJA.
+[Español](NOTICE.es.md)
 
-El código propio, documentación y recursos propios de esta edición se publican
-bajo **GPL-3.0-or-later**. El texto completo está en `LICENSE`. Las versiones
-anteriores concedidas bajo MIT conservan esos permisos; su texto se conserva
-en `licenses/MIT-previous-releases.txt`. No se revocan derechos anteriores.
+Copyright © 2026 Transcendence IA and LA AGUJA contributors.
 
-Esta licencia no cambia las licencias de Debian, Linux, firmware, bibliotecas,
-Electron/Chromium, Tailscale ni los clientes/modelos de terceros. LA AGUJA no
-es un producto oficial de los proveedores IA ni de Tailscale/Headscale.
+Project-owned code, documentation and artwork in this edition are **GPL-3.0-or-later**; see `LICENSE`. Previous MIT grants remain valid and their text is retained in `licenses/MIT-previous-releases.txt`. Earlier rights are not revoked.
 
-## Componentes externos
+This does not change the licences of Debian, Linux, firmware, libraries, Electron/Chromium, Tailscale or third-party clients/models. LA AGUJA is not an official product of AI providers or Tailscale/Headscale.
 
-| Componente | Régimen / evidencia |
-|---|---|
-| Electron, herramientas npm del Imager | Conservar LICENSE de Electron y LICENSES.chromium.html del paquete; inventario npm en cada release. |
-| Debian y kernel Linux | Licencias por paquete en `/usr/share/doc/*/copyright`; obtener fuentes correspondientes con los repositorios Debian de la versión construida. |
-| Codex CLI | Apache-2.0 en su proyecto original; preservar licencia/avisos originales. |
-| OpenCode | Licencia de la versión fijada en su proyecto original; preservar su archivo LICENSE. |
-| Tailscale | BSD-3-Clause para el código del cliente; preservar avisos. Headscale pertenece al administrador, no está alojado en LA AGUJA. |
-| Firmware de hardware | Licencias por paquete; no declarar todo el medio GPL ni completamente libre. |
-| Claude Code | Software de Anthropic, no GPL. No publicar binarios sin derecho de redistribución acreditado. https://github.com/anthropics/claude-code/blob/main/LICENSE.md |
-| Antigravity | Software/servicio de Google sujeto a sus condiciones; no relicenciar ni atribuir permiso de redistribución por ser descargable. https://www.antigravity.google/terms |
+## External components
 
-Los proveedores pueden exigir su propia cuenta/API y aplicar cuotas. Eso no
-es una cuenta de LA AGUJA: descargar, abrir el Imager y preparar un USB no
-requiere registro en LA AGUJA ni en su web.
+| Component | Licence evidence / handling |
+| --- | --- |
+| Electron and Imager npm dependencies | Preserve Electron LICENSE and package LICENSES.chromium.html; dependency inventory accompanies releases. |
+| Debian and Linux kernel | Per-package `/usr/share/doc/*/copyright`; obtain corresponding sources from the Debian repositories for the built version. |
+| Codex CLI | Apache-2.0 in the original project; preserve original notices. |
+| OpenCode | Licence of the pinned version in its upstream project; preserve LICENSE. |
+| Tailscale | Client code BSD-3-Clause; preserve notices. Headscale is managed by the user, not hosted by LA AGUJA. |
+| Hardware firmware | Per-package licences; do not label the entire medium GPL or entirely free software. |
+| Claude Code | Anthropic software, not GPL. Redistribution must be authorised. https://github.com/anthropics/claude-code/blob/main/LICENSE.md |
+| Antigravity | Google software/service under its terms; download availability is not a redistribution grant. https://www.antigravity.google/terms |
 
-## Publicar medios y fuentes correspondientes
+Providers may require their own accounts/API and quotas. These are not LA AGUJA accounts: downloads, opening the Imager and preparing a USB do not require LA AGUJA registration.
 
-No reutilizar una imagen privada de trabajo ni un USB personalizado como
-release. Construir desde código público, inventariar dependencias y licencias,
-incluir sumas y el código correspondiente a esa etiqueta. Los binarios sin
-redistribución acreditada se instalan desde el proveedor a petición del usuario,
-no se incluyen en el medio público por defecto. No subir tokens, perfiles,
-claves de firma privadas, expedientes de operación ni historiales privados.
+## Publishing media and corresponding sources
 
-La marca LA AGUJA/Agujita identifica el proyecto: el permiso sobre código y
-recursos propios no constituye respaldo oficial de forks o proveedores.
+Never release a private working image or customised USB. Build from public code, inventory licences/dependencies, include checksums and corresponding tagged source. Components without established redistribution rights are installed from their provider at the user's request, not included in public media by default. Do not publish tokens, profiles, private signing keys, operations records or private histories.
+
+The LA AGUJA/Agujita brand identifies the project. Code/artwork permission does not imply official endorsement of forks or providers.

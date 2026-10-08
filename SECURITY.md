@@ -1,14 +1,9 @@
-# Seguridad
+# Security
 
-No publiques secretos ni vulnerabilidades explotables con credenciales en un
-issue. Cuando el repositorio esté activo, utiliza **Security → Report a
-vulnerability** si está habilitado; si no, contacta privadamente con
-`soporte@transcendenceia.net`, sin adjuntar contraseñas ni imágenes personales.
+[Español](SECURITY.es.md)
 
-Incluye versión, alcance, pasos reproducibles con datos sintéticos y efecto
-observado. No pruebes sobre equipos ajenos. Los perfiles preparados pueden
-contener credenciales: usa cifrado y controla la custodia del USB.
+Do not disclose credentials or exploitable vulnerabilities in a public issue. Use **Security → Report a vulnerability** if enabled, otherwise contact `soporte@transcendenceia.net` privately. Do not attach passwords or personal disk images.
 
-Las sumas verifican bytes; el catálogo Ed25519 autentica el catálogo frente
-a la clave distribuida en el Imager. No sustituye Authenticode, Secure Boot ni
-el consentimiento del propietario para escribir discos.
+Include version, scope, reproducible steps using synthetic data and observed impact. Do not test on other people's equipment. Prepared profiles can contain credentials: encrypt them and control physical USB custody.
+
+Checksums verify bytes. The Ed25519 catalogue signature authenticates the catalogue against the public key distributed in the Imager. It does not replace Authenticode, Secure Boot or the owner's consent to write disks.

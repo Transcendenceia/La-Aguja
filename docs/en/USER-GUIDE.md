@@ -1,6 +1,6 @@
 # User guide · LA AGUJA Rescue Disk
 
-[Website](https://aguja.transcendenceia.net/en/docs) · [English](en/USER-GUIDE.md) · [Español](es/USER-GUIDE.md)
+[Website](https://aguja.transcendenceia.net/en/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
 ## A small entry point. Full control.

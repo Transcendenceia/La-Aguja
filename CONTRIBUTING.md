@@ -1,14 +1,12 @@
-# Contribuir a LA AGUJA
+# Contributing to LA AGUJA
 
-Abre un issue con versión, plataforma, pasos de reproducción y resultados
-esperados/observados. Redacta secretos y datos del equipo antes de adjuntar
-logs. No publiques una imagen de USB personalizada ni claves de recuperación.
+[Español](CONTRIBUTING.es.md)
 
-Para contribuir código: crea una rama, limita el cambio, añade una prueba
-funcional si cambia un contrato y abre un pull request. Tus contribuciones
-propias se ofrecen bajo GPL-3.0-or-later; conserva avisos de terceros.
+English is the primary repository language; Spanish is also welcome. Open an issue with version, platform, reproduction steps and expected/observed results. Redact secrets and device data before attaching logs. Never upload a private USB image or recovery keys.
 
-## Desarrollo
+For code: create a branch, keep changes focused, add a functional test when a contract changes and open a pull request. Your original contributions are offered under GPL-3.0-or-later; preserve third-party notices.
+
+## Development
 
 ```sh
 python3 -m venv .venv
@@ -21,10 +19,8 @@ cd ../server
 npm test
 ```
 
-La web es informativa, sin cuentas, base de usuarios ni relay. Las descargas
-son assets públicos de GitHub Releases, con sumas y catálogo Ed25519.
-Los perfiles de red/SSH/IA se procesan localmente. No reintroducir cuentas
-obligatorias ni enviar las configuraciones privadas a la web.
+The website is informational, without accounts, user database or relay. Images and signed catalogue are on the official website; Imager packages are on GitHub. Network/SSH/AI profiles are processed locally. Do not restore mandatory project accounts or upload private configurations.
 
-Nunca pruebes la grabación usando discos del propietario sin autorización
-expresa e identidad comprobada. Para QA usa imágenes sintéticas y USB virtuales.
+Translations are reviewed JSON files in `server/locales/`. Run `python3 scripts/build-site-locales.py` to rebuild pages and repository guides. Preserve commands, identifiers, brand names and technical limits. The extended Spanish manual is retained separately; historical screenshots must keep their actual versions and synthetic-test provenance.
+
+Do not test writing on an owner's disks without explicit authorisation and verified identity. Use synthetic images and virtual USBs for QA.

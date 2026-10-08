@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 const HERE=path.dirname(fileURLToPath(import.meta.url));
-const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.svg':'image/svg+xml','.json':'application/json; charset=utf-8','.ico':'image/x-icon'};
+const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.png':'image/png','.svg':'image/svg+xml','.json':'application/json; charset=utf-8','.ico':'image/x-icon','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
 export function createSite({publicDir=path.join(HERE,'public'),repository='Transcendenceia/La-Aguja',downloadsPublished=true}={}){
  if(!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository))throw Error('Invalid GitHub repository');
  const github='https://github.com/'+repository;
@@ -20,8 +20,10 @@ export function createSite({publicDir=path.join(HERE,'public'),repository='Trans
    res.writeHead(302,{Location:github+'/releases/latest/download/'+encodeURIComponent(name),'Cache-Control':'no-store'});return res.end();
   }
   if(/^\/(account|auth|api|connect|v1)(\/|$)/.test(pathname)){res.writeHead(410,{'Content-Type':types['.json'],'Cache-Control':'no-store'});return res.end(req.method==='HEAD'?undefined:JSON.stringify({error:'LA AGUJA no usa cuentas ni relay propio. Usa tu Tailscale/Headscale y SSH.'}));}
-  const fixed={'/':'index.html','/docs':'docs.html','/privacy':'privacy.html','/robots.txt':'robots.txt'};
+  const fixed={'/':'en/index.html','/docs':'en/docs.html','/privacy':'en/privacy.html','/robots.txt':'robots.txt','/sitemap.xml':'sitemap.xml'};
   let file=fixed[pathname];
+  const localeRoute=pathname.match(/^\/(en|es|fr|de|pt|it|nl|zh)(?:\/(docs|privacy))?\/?$/);
+  if(localeRoute)file=localeRoute[1]+'/'+(localeRoute[2]||'index')+'.html';
   if(!file&&pathname.startsWith('/assets/')){
    const name=pathname.slice(8);if(name.startsWith('docs/'))file='docs-images/'+name.slice(5);else file=name;
   }

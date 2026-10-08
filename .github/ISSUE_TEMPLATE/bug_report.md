@@ -1,17 +1,18 @@
 ---
-name: Fallo
-about: Describe un fallo reproducible sin publicar credenciales
+name: Bug report
+about: Report a reproducible problem without publishing credentials
 title: ''
 labels: bug
 assignees: ''
 ---
 
-## Qué ocurrió y qué esperabas
+## What happened and what you expected
 
-## Versión, plataforma y pasos para reproducir
+## Version, platform and reproduction steps
 
-## Evidencia redactada
+## Redacted evidence
 
-No adjuntes perfiles privados, claves Wi-Fi/SSH/tailnet/API, archivos OAuth ni
-recovery keys BitLocker. Evita imágenes de USB personalizado. Describe si ocurrió
-en preparación, grabación, arranque o conexión: son verificaciones distintas.
+Do not attach private profiles, Wi-Fi/SSH/tailnet/API keys, OAuth files or BitLocker recovery keys. Avoid customised USB images. Specify whether the issue occurred during preparation, writing, boot or connection: these are distinct checks.
+
+English is primary; reports in Spanish are also welcome.
+El inglés es el idioma principal; también puedes informar en español, sin adjuntar secretos.

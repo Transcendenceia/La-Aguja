@@ -3,3 +3,5 @@ Allow: /
 Disallow: /account
 Disallow: /auth
 Disallow: /connect
+
+Sitemap: https://aguja.transcendenceia.net/sitemap.xml

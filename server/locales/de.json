@@ -39,7 +39,7 @@
     ]
   ],
   "imagerTitle": "USB mit Flash Imager vorbereiten",
-  "imagerText": "Die App für Windows und Linux lädt und prüft das Image, beschreibt den USB-Stick und speichert deine Einstellungen. SSH, KI-Agenten und dein Tailscale-/Headscale-Netz lassen sich vorbereiten. Unter Windows können verfügbare BitLocker-Schlüssel verwaltet werden. Version 0.9.3; das Schreiben löscht den Inhalt des USB-Sticks.",
+  "imagerText": "Die App für Windows und Linux lädt und prüft das Image, beschreibt den USB-Stick und speichert deine Einstellungen. SSH, KI-Agenten und dein Tailscale-/Headscale-Netz lassen sich vorbereiten. Unter Windows können verfügbare BitLocker-Schlüssel verwaltet werden. Version 0.9.4; das Schreiben löscht den Inhalt des USB-Sticks.",
   "portable": "Portables Linux-Paket",
   "imagesTitle": "La-Aguja-Image herunterladen",
   "imagesText": "Rescue Disk 0.9.0 ist das Linux, das auf dem Rechner startet. Images liegen auf unserer Website, Imager und Code auf GitHub. Der Imager prüft Katalogsignatur und SHA-256 des Downloads. Kein LA-AGUJA-Konto erforderlich.",

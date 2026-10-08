@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path');
+const {spawn}=require('node:child_process'),{powershellArgs,windowsPowerShell}=require('../ai-tools.cjs');
+module.exports=env=>{const options={env};
+ const run=(command,args,input,settings)=>new Promise((resolve,reject)=>{
+  const child=spawn(command,args,{env:{...process.env,...settings.env},windowsHide:true,stdio:['pipe','pipe','pipe']});let out='';child.stdout.on('data',b=>out+=b);child.stderr.resume();child.on('error',()=>reject(Error('native bridge failed')));child.on('close',code=>code?reject(Error('native bridge failed')):resolve(out));child.stdin.end(input===null?'':JSON.stringify(input));
+ });
+ const declaration=fs.readFileSync(path.resolve(__dirname,'../windows-credentials.ps1'),'utf8').replace(/\r\n/g,'\n').split("@'\n")[1].split("\n'@")[0].replace('[DllImport("advapi32.dll")] public static extern void CredFree', '[DllImport("advapi32.dll", EntryPoint="CredWriteW", CharSet=CharSet.Unicode, SetLastError=true)] public static extern bool Write(ref Credential credential,uint flags);\n [DllImport("advapi32.dll", EntryPoint="CredDeleteW", CharSet=CharSet.Unicode)] public static extern bool Delete(string target,uint type,uint flags);\n [DllImport("advapi32.dll")] public static extern void CredFree');
+ const fixtureScript=`$ErrorActionPreference='Stop';[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false);Add-Type -TypeDefinition @'\n${declaration}\n'@\n$r=[Console]::In.ReadToEnd()|ConvertFrom-Json;if($r.op -eq 'delete'){[AgujaWinCred]::Delete($r.target,1,0)|Out-Null;exit};$p=[IntPtr]::Zero;if([AgujaWinCred]::Read($r.target,1,0,[ref]$p)){[AgujaWinCred]::CredFree($p);throw 'Fixture collision'};$b=[Convert]::FromBase64String($r.blob);$pin=[Runtime.InteropServices.GCHandle]::Alloc($b,[Runtime.InteropServices.GCHandleType]::Pinned);try{$c=New-Object AgujaWinCred+Credential;$c.Type=1;$c.TargetName=$r.target;$c.UserName='Aguja synthetic fixture';$c.Persist=1;$c.BlobSize=$b.Length;$c.Blob=$pin.AddrOfPinnedObject();if(-not [AgujaWinCred]::Write([ref]$c,0)){throw 'Fixture write failed'}}finally{$pin.Free();[Array]::Clear($b,0,$b.Length)}`;
+
+return {run,bridge:request=>run(windowsPowerShell(env),powershellArgs(fixtureScript),request,{env})};};

@@ -65,7 +65,7 @@ function discover(provider,options){const paths=[];for(const item of locations(p
 }
 function materialize(capsule,approved){const c=structuredClone(capsule);for(const [id,p]of Object.entries(c.providers))if(p.mode==='import'){
  const items=approved[id];if(!Array.isArray(items)||!items.some(i=>IMPORTS[id]?.[i.target]==='auth'))throw new Error('Importa primero una sesión nativa portable de '+id+'.');
- const files={};for(const item of items)files[item.target]=readNative(id,item).toString('base64url');p.files=files;delete p.import_paths;
+ const files={};for(const item of items)files[item.target]=(Buffer.isBuffer(item.credential)?sanitize(id,item.target,item.credential):readNative(id,item)).toString('base64url');p.files=files;delete p.import_paths;
  }return c;
 }
 function seal(capsule,protection={mode:'plain'}){

@@ -8,6 +8,7 @@ const core=require('./core.cjs');
 const bitlocker=require('./bitlocker.cjs');
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
+const nativeImport=require('./windows-native-import.cjs');
 const {withPrivilegedHelper}=require('./linux-privileged.cjs');
 const {userEnvironment}=require('./windows-environment.cjs');
 const {flashWindows}=require('./windows-flash.cjs');
@@ -246,8 +247,8 @@ if ($ssidMatch) {
  handle('import-provider',async(id,selectFolder=false)=>exclusive(async()=>{
   validateProvider(id);const options=await nativeOptions();
   if(selectFolder===true){const pick=await showOpenDialog(win,{title:'Seleccionar carpeta del perfil de '+provider(id).name,properties:['openDirectory'],defaultPath:os.homedir()});if(pick.canceled)return {canceled:true};options.configDirectory=pick.filePaths[0];}
-  prepared=null;delete approvedImports[id];const response=provisioning.discover(id,options);
-  if(!response.portable)throw new Error('No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.');
+  prepared=null;nativeImport.clear(approvedImports[id]);delete approvedImports[id];const response=await nativeImport.discover(id,options,{run});
+  if(!response.portable)throw new Error('No se encontró una sesión válida en los archivos ni en el almacén nativo seleccionado de este usuario. Selecciona la carpeta si el perfil está en otra ubicación o en WSL.');
   approvedImports[id]=response.paths;return {portable:true,summary:String(response.summary||'Perfil local disponible para la imagen.').slice(0,250)};
  }));
  handle('invalidate-prepared',async()=>{if(working)throw new Error('Espera a que termine la operación actual.');prepared=null;return {invalidated:true};});
@@ -295,4 +296,4 @@ if ($ssidMatch) {
  }));
 }
 app.whenReady().then(async()=>{uiLanguage=i18n.language(core.LOCALE_CATALOG,app.getLocale?.()||'es');try{const preference=JSON.parse(await fs.promises.readFile(path.join(app.getPath('userData'),'ui-language.json'),'utf8'));uiLanguage=i18n.language(core.LOCALE_CATALOG,preference.language);}catch{}installIPC();win=new BrowserWindow({width:1240,height:880,minWidth:960,minHeight:700,title:'LA AGUJA Flash Imager',backgroundColor:'#0e1220',icon:path.join(__dirname,'ui/assets/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false,webSecurity:true}});win.removeMenu();win.webContents.setWindowOpenHandler(()=>({action:'deny'}));win.webContents.on('will-navigate',(event,url)=>{if(url!==win.webContents.getURL())event.preventDefault();});win.webContents.on('will-attach-webview',event=>event.preventDefault());win.loadFile(path.join(__dirname,'ui/index.html'));});
-app.on('window-all-closed',()=>{selectedImage=null;prepared=null;approvedImports={};app.quit();});
+app.on('window-all-closed',()=>{selectedImage=null;prepared=null;for(const items of Object.values(approvedImports))nativeImport.clear(items);approvedImports={};app.quit();});

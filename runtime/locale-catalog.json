@@ -242,7 +242,6 @@
       "03 / HERRAMIENTAS DE IA": "03 / AI TOOLS",
       "Trae tus herramientas.": "Bring your tools.",
       "Preconfigura una API o importa una sesión local cuando el proveedor permita trasladarla.": "Configure an API or import a local session when the provider supports it.",
-      "El inicio de sesión se hace en el CLI oficial y requiere tu consentimiento. Una sesión ligada al llavero del equipo no se marcará como exportable.": "Sign-in uses the official CLI and requires your consent. Sessions tied to this PC's keyring are not exportable.",
       "04 / ACOMPAÑAMIENTO REMOTO": "04 / REMOTE ACCESS",
       "Cerca, aunque estés lejos.": "Close, even from afar.",
       "Un túnel opcional para acceder a tu disco sin abrir puertos del router. Al crear la imagen o grabar el USB se vincula a tu cuenta verificada, con credenciales nuevas del dispositivo; nunca copia tu contraseña o sesión al disco.": "An optional tunnel without opening router ports. Only when enabled, preparing the disk pairs it with your verified account using fresh device credentials, never your account password or session.",
@@ -315,9 +314,7 @@
       "Acceso remoto": "Remote access",
       "Crear disco": "Create disk",
       "Clave API de OpenAI": "OpenAI API key",
-      "OAuth importable si el CLI guarda un auth.json portable.": "OAuth can be imported if the CLI saves portable auth.json.",
       "Clave API de Gemini": "Gemini API key",
-      "Importa la sesión OAuth nativa de este usuario cuando su archivo es válido y privado. No copia el llavero, historial ni rutas de este PC.": "Import this user's native OAuth session when its file is valid and private. No keyring, history or PC paths are copied.",
       "Clave API de Anthropic": "Anthropic API key",
       "La importación comprueba los archivos nativos; no traslada secretos del llavero.": "Import validates native files; keyring secrets are not transferred.",
       "Clave API": "API key",
@@ -848,7 +845,10 @@
       "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager could not read the Wi-Fi password. It may be in the user keyring; enter it manually without changing network permissions.",
       "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Could not query NetworkManager. Check that nmcli is installed and the service is running.",
       "El nombre de la red Wi-Fi activa no es válido.": "The active Wi-Fi network name is invalid.",
-      "Conéctate a una única red Wi-Fi antes de importarla.": "Connect to exactly one Wi-Fi network before importing it."
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Connect to exactly one Wi-Fi network before importing it.",
+      "El inicio de sesión se hace en el CLI oficial. Al importar, Aguja lee solo la sesión del proveedor elegido: archivos nativos y, en Windows, su entrada del Administrador de credenciales.": "Sign in through the official CLI. Import reads only the selected provider’s session: native files and, on Windows, its Credential Manager entry.",
+      "Importa la sesión de Codex desde su archivo o almacén nativo de Windows.": "Import the Codex session from its file or native Windows credential store.",
+      "Importa la sesión OAuth de este usuario desde su archivo o entrada nativa de Windows. No copia otras credenciales, historial ni rutas de este PC.": "Import this user’s OAuth session from its file or native Windows entry. Other credentials, history and PC paths are not copied."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -940,7 +940,6 @@
       "03 / HERRAMIENTAS DE IA": "03 / AI 工具",
       "Trae tus herramientas.": "带上你的工具。",
       "Preconfigura una API o importa una sesión local cuando el proveedor permita trasladarla.": "预配置 API，或在提供商允许时导入本地会话。",
-      "El inicio de sesión se hace en el CLI oficial y requiere tu consentimiento. Una sesión ligada al llavero del equipo no se marcará como exportable.": "登录通过官方 CLI 进行并需要你的同意。绑定此电脑密钥环的会话不可导出。",
       "04 / ACOMPAÑAMIENTO REMOTO": "04 / 远程访问",
       "Cerca, aunque estés lejos.": "远在天边，近在眼前。",
       "Un túnel opcional para acceder a tu disco sin abrir puertos del router. Al crear la imagen o grabar el USB se vincula a tu cuenta verificada, con credenciales nuevas del dispositivo; nunca copia tu contraseña o sesión al disco.": "可选隧道，无需开放路由器端口。仅在启用后，准备磁盘才会使用新的设备凭据绑定已验证账户，绝不复制账户密码或会话。",
@@ -1013,9 +1012,7 @@
       "Acceso remoto": "远程访问",
       "Crear disco": "创建磁盘",
       "Clave API de OpenAI": "OpenAI API 密钥",
-      "OAuth importable si el CLI guarda un auth.json portable.": "如果 CLI 保存了可迁移的 auth.json，可导入 OAuth。",
       "Clave API de Gemini": "Gemini API 密钥",
-      "Importa la sesión OAuth nativa de este usuario cuando su archivo es válido y privado. No copia el llavero, historial ni rutas de este PC.": "仅导入此用户有效且私密的原生 OAuth 会话。不会复制密钥环、历史记录或电脑路径。",
       "Clave API de Anthropic": "Anthropic API 密钥",
       "La importación comprueba los archivos nativos; no traslada secretos del llavero.": "导入会验证原生文件，不会转移密钥环中的秘密。",
       "Clave API": "API 密钥",
@@ -1546,7 +1543,10 @@
       "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager 无法读取 Wi-Fi 密码。密码可能在用户凭据库中；请手动输入，不必修改网络权限。",
       "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "无法查询 NetworkManager。请检查是否已安装 nmcli 且服务正在运行。",
       "El nombre de la red Wi-Fi activa no es válido.": "当前 Wi-Fi 网络名称无效。",
-      "Conéctate a una única red Wi-Fi antes de importarla.": "导入前请连接到唯一的 Wi-Fi 网络。"
+      "Conéctate a una única red Wi-Fi antes de importarla.": "导入前请连接到唯一的 Wi-Fi 网络。",
+      "El inicio de sesión se hace en el CLI oficial. Al importar, Aguja lee solo la sesión del proveedor elegido: archivos nativos y, en Windows, su entrada del Administrador de credenciales.": "登录通过官方 CLI 进行。导入仅读取所选提供商的会话：原生文件，以及 Windows 凭据管理器中的对应条目。",
+      "Importa la sesión de Codex desde su archivo o almacén nativo de Windows.": "从文件或 Windows 原生凭据存储导入 Codex 会话。",
+      "Importa la sesión OAuth de este usuario desde su archivo o entrada nativa de Windows. No copia otras credenciales, historial ni rutas de este PC.": "从文件或 Windows 原生条目导入此用户的 OAuth 会话。不会复制其他凭据、历史记录或电脑路径。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -1638,7 +1638,6 @@
       "03 / HERRAMIENTAS DE IA": "03 / OUTILS D’IA",
       "Trae tus herramientas.": "Apportez vos outils.",
       "Preconfigura una API o importa una sesión local cuando el proveedor permita trasladarla.": "Configurez une API ou importez une session locale si le fournisseur le permet.",
-      "El inicio de sesión se hace en el CLI oficial y requiere tu consentimiento. Una sesión ligada al llavero del equipo no se marcará como exportable.": "La connexion utilise le CLI officiel et nécessite votre consentement. Les sessions liées au trousseau de cet ordinateur ne sont pas exportables.",
       "04 / ACOMPAÑAMIENTO REMOTO": "04 / ACCÈS DISTANT",
       "Cerca, aunque estés lejos.": "Proche, même à distance.",
       "Un túnel opcional para acceder a tu disco sin abrir puertos del router. Al crear la imagen o grabar el USB se vincula a tu cuenta verificada, con credenciales nuevas del dispositivo; nunca copia tu contraseña o sesión al disco.": "Un tunnel facultatif sans ouvrir de ports sur le routeur. Uniquement s’il est activé, la préparation du disque l’associe à votre compte vérifié avec de nouveaux identifiants de périphérique, jamais votre mot de passe ou session de compte.",
@@ -1711,9 +1710,7 @@
       "Acceso remoto": "Accès distant",
       "Crear disco": "Créer le disque",
       "Clave API de OpenAI": "Clé API OpenAI",
-      "OAuth importable si el CLI guarda un auth.json portable.": "OAuth peut être importé si le CLI enregistre un auth.json portable.",
       "Clave API de Gemini": "Clé API Gemini",
-      "Importa la sesión OAuth nativa de este usuario cuando su archivo es válido y privado. No copia el llavero, historial ni rutas de este PC.": "Importe la session OAuth native de cet utilisateur si son fichier est valide et privé. Aucun trousseau, historique ni chemin de cet ordinateur n’est copié.",
       "Clave API de Anthropic": "Clé API Anthropic",
       "La importación comprueba los archivos nativos; no traslada secretos del llavero.": "L’importation vérifie les fichiers natifs ; les secrets du trousseau ne sont pas transférés.",
       "Clave API": "Clé API",
@@ -2244,7 +2241,10 @@
       "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager n’a pas pu lire le mot de passe Wi-Fi. Il peut être dans le trousseau utilisateur ; saisissez-le manuellement sans modifier les permissions réseau.",
       "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Impossible de consulter NetworkManager. Vérifiez que nmcli est installé et que le service est actif.",
       "El nombre de la red Wi-Fi activa no es válido.": "Le nom du réseau Wi-Fi actif n’est pas valide.",
-      "Conéctate a una única red Wi-Fi antes de importarla.": "Connectez-vous à un seul réseau Wi-Fi avant l’importation."
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Connectez-vous à un seul réseau Wi-Fi avant l’importation.",
+      "El inicio de sesión se hace en el CLI oficial. Al importar, Aguja lee solo la sesión del proveedor elegido: archivos nativos y, en Windows, su entrada del Administrador de credenciales.": "Connectez-vous avec le CLI officiel. L’importation lit uniquement la session du fournisseur choisi : fichiers natifs et, sous Windows, son entrée du Gestionnaire d’identifiants.",
+      "Importa la sesión de Codex desde su archivo o almacén nativo de Windows.": "Importez la session Codex depuis son fichier ou le stockage natif de Windows.",
+      "Importa la sesión OAuth de este usuario desde su archivo o entrada nativa de Windows. No copia otras credenciales, historial ni rutas de este PC.": "Importez la session OAuth de cet utilisateur depuis son fichier ou son entrée Windows native. Aucun autre identifiant, historique ni chemin du PC n’est copié."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -2336,7 +2336,6 @@
       "03 / HERRAMIENTAS DE IA": "03 / FERRAMENTAS DE IA",
       "Trae tus herramientas.": "Traga suas ferramentas.",
       "Preconfigura una API o importa una sesión local cuando el proveedor permita trasladarla.": "Configure uma API ou importe uma sessão local quando o provedor permitir.",
-      "El inicio de sesión se hace en el CLI oficial y requiere tu consentimiento. Una sesión ligada al llavero del equipo no se marcará como exportable.": "O login usa o CLI oficial e requer seu consentimento. Sessões vinculadas ao chaveiro deste computador não são exportáveis.",
       "04 / ACOMPAÑAMIENTO REMOTO": "04 / ACESSO REMOTO",
       "Cerca, aunque estés lejos.": "Perto, mesmo de longe.",
       "Un túnel opcional para acceder a tu disco sin abrir puertos del router. Al crear la imagen o grabar el USB se vincula a tu cuenta verificada, con credenciales nuevas del dispositivo; nunca copia tu contraseña o sesión al disco.": "Um túnel opcional sem abrir portas do roteador. Somente quando ativado, a preparação do disco o vincula à sua conta verificada com novas credenciais do dispositivo, nunca sua senha ou sessão da conta.",
@@ -2409,9 +2408,7 @@
       "Acceso remoto": "Acesso remoto",
       "Crear disco": "Criar disco",
       "Clave API de OpenAI": "Chave API da OpenAI",
-      "OAuth importable si el CLI guarda un auth.json portable.": "OAuth pode ser importado se o CLI salvar um auth.json portátil.",
       "Clave API de Gemini": "Chave API do Gemini",
-      "Importa la sesión OAuth nativa de este usuario cuando su archivo es válido y privado. No copia el llavero, historial ni rutas de este PC.": "Importa a sessão OAuth nativa deste usuário quando seu arquivo é válido e privado. Não copia o chaveiro, histórico ou caminhos deste computador.",
       "Clave API de Anthropic": "Chave API da Anthropic",
       "La importación comprueba los archivos nativos; no traslada secretos del llavero.": "A importação valida os arquivos nativos; não transfere segredos do chaveiro.",
       "Clave API": "Chave API",
@@ -2942,7 +2939,10 @@
       "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "O NetworkManager não pôde ler a senha Wi-Fi. Ela pode estar no chaveiro do usuário; digite-a manualmente sem alterar as permissões da rede.",
       "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Não foi possível consultar o NetworkManager. Verifique se nmcli está instalado e o serviço está ativo.",
       "El nombre de la red Wi-Fi activa no es válido.": "O nome da rede Wi-Fi ativa não é válido.",
-      "Conéctate a una única red Wi-Fi antes de importarla.": "Conecte-se a uma única rede Wi-Fi antes de importá-la."
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Conecte-se a uma única rede Wi-Fi antes de importá-la.",
+      "El inicio de sesión se hace en el CLI oficial. Al importar, Aguja lee solo la sesión del proveedor elegido: archivos nativos y, en Windows, su entrada del Administrador de credenciales.": "Entre pelo CLI oficial. A importação lê apenas a sessão do provedor escolhido: arquivos nativos e, no Windows, a entrada no Gerenciador de Credenciais.",
+      "Importa la sesión de Codex desde su archivo o almacén nativo de Windows.": "Importe a sessão Codex do arquivo ou armazenamento nativo do Windows.",
+      "Importa la sesión OAuth de este usuario desde su archivo o entrada nativa de Windows. No copia otras credenciales, historial ni rutas de este PC.": "Importe a sessão OAuth deste usuário do arquivo ou entrada nativa do Windows. Não copia outras credenciais, histórico ou caminhos do PC."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -3034,7 +3034,6 @@
       "03 / HERRAMIENTAS DE IA": "03 / KI-WERKZEUGE",
       "Trae tus herramientas.": "Bring deine Werkzeuge mit.",
       "Preconfigura una API o importa una sesión local cuando el proveedor permita trasladarla.": "Richte eine API ein oder importiere eine lokale Sitzung, sofern der Anbieter das unterstützt.",
-      "El inicio de sesión se hace en el CLI oficial y requiere tu consentimiento. Una sesión ligada al llavero del equipo no se marcará como exportable.": "Die Anmeldung erfolgt über die offizielle CLI und erfordert deine Zustimmung. An den Schlüsselbund dieses Rechners gebundene Sitzungen sind nicht exportierbar.",
       "04 / ACOMPAÑAMIENTO REMOTO": "04 / FERNZUGRIFF",
       "Cerca, aunque estés lejos.": "Nah, auch aus der Ferne.",
       "Un túnel opcional para acceder a tu disco sin abrir puertos del router. Al crear la imagen o grabar el USB se vincula a tu cuenta verificada, con credenciales nuevas del dispositivo; nunca copia tu contraseña o sesión al disco.": "Ein optionaler Tunnel ohne offene Router-Ports. Nur wenn er aktiviert ist, verknüpft die Datenträgervorbereitung ihn mit deinem bestätigten Konto und neuen Geräte-Zugangsdaten, niemals deinem Kontopasswort oder deiner Kontositzung.",
@@ -3107,9 +3106,7 @@
       "Acceso remoto": "Fernzugriff",
       "Crear disco": "Datenträger erstellen",
       "Clave API de OpenAI": "OpenAI-API-Schlüssel",
-      "OAuth importable si el CLI guarda un auth.json portable.": "OAuth lässt sich importieren, wenn die CLI eine portable auth.json speichert.",
       "Clave API de Gemini": "Gemini-API-Schlüssel",
-      "Importa la sesión OAuth nativa de este usuario cuando su archivo es válido y privado. No copia el llavero, historial ni rutas de este PC.": "Importiert die native OAuth-Sitzung dieses Benutzers, sofern ihre Datei gültig und privat ist. Schlüsselbund, Verlauf und Rechnerpfade werden nicht kopiert.",
       "Clave API de Anthropic": "Anthropic-API-Schlüssel",
       "La importación comprueba los archivos nativos; no traslada secretos del llavero.": "Der Import prüft native Dateien; Geheimnisse des Schlüsselbunds werden nicht übertragen.",
       "Clave API": "API-Schlüssel",
@@ -3640,7 +3637,10 @@
       "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager konnte das WLAN-Passwort nicht lesen. Es könnte im Benutzer-Schlüsselbund liegen; gib es manuell ein, ohne die Netzwerkberechtigungen zu ändern.",
       "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "NetworkManager konnte nicht abgefragt werden. Prüfe, ob nmcli installiert ist und der Dienst läuft.",
       "El nombre de la red Wi-Fi activa no es válido.": "Der Name des aktiven WLAN-Netzes ist ungültig.",
-      "Conéctate a una única red Wi-Fi antes de importarla.": "Verbinde dich vor dem Import mit genau einem WLAN-Netz."
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Verbinde dich vor dem Import mit genau einem WLAN-Netz.",
+      "El inicio de sesión se hace en el CLI oficial. Al importar, Aguja lee solo la sesión del proveedor elegido: archivos nativos y, en Windows, su entrada del Administrador de credenciales.": "Melde dich über den offiziellen CLI an. Importiert wird nur die Sitzung des gewählten Anbieters: native Dateien und unter Windows dessen Eintrag in der Anmeldeinformationsverwaltung.",
+      "Importa la sesión de Codex desde su archivo o almacén nativo de Windows.": "Importiere die Codex-Sitzung aus der Datei oder dem nativen Windows-Anmeldespeicher.",
+      "Importa la sesión OAuth de este usuario desde su archivo o entrada nativa de Windows. No copia otras credenciales, historial ni rutas de este PC.": "Importiere die OAuth-Sitzung dieses Benutzers aus der Datei oder dem nativen Windows-Eintrag. Andere Zugangsdaten, Verlauf und PC-Pfade werden nicht kopiert."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -3732,7 +3732,6 @@
       "03 / HERRAMIENTAS DE IA": "03 / STRUMENTI IA",
       "Trae tus herramientas.": "Porta i tuoi strumenti.",
       "Preconfigura una API o importa una sesión local cuando el proveedor permita trasladarla.": "Configura un’API o importa una sessione locale quando il fornitore lo consente.",
-      "El inicio de sesión se hace en el CLI oficial y requiere tu consentimiento. Una sesión ligada al llavero del equipo no se marcará como exportable.": "L’accesso usa il CLI ufficiale e richiede il tuo consenso. Le sessioni legate al portachiavi di questo computer non sono esportabili.",
       "04 / ACOMPAÑAMIENTO REMOTO": "04 / ACCESSO REMOTO",
       "Cerca, aunque estés lejos.": "Vicino, anche da lontano.",
       "Un túnel opcional para acceder a tu disco sin abrir puertos del router. Al crear la imagen o grabar el USB se vincula a tu cuenta verificada, con credenciales nuevas del dispositivo; nunca copia tu contraseña o sesión al disco.": "Un tunnel facoltativo senza aprire porte del router. Solo se attivato, la preparazione del disco lo associa al tuo account verificato con nuove credenziali del dispositivo, mai la password o la sessione del tuo account.",
@@ -3805,9 +3804,7 @@
       "Acceso remoto": "Accesso remoto",
       "Crear disco": "Crea disco",
       "Clave API de OpenAI": "Chiave API OpenAI",
-      "OAuth importable si el CLI guarda un auth.json portable.": "OAuth può essere importato se il CLI salva un auth.json portabile.",
       "Clave API de Gemini": "Chiave API Gemini",
-      "Importa la sesión OAuth nativa de este usuario cuando su archivo es válido y privado. No copia el llavero, historial ni rutas de este PC.": "Importa la sessione OAuth nativa di questo utente quando il file è valido e privato. Non copia il portachiavi, la cronologia o i percorsi del computer.",
       "Clave API de Anthropic": "Chiave API Anthropic",
       "La importación comprueba los archivos nativos; no traslada secretos del llavero.": "L’importazione verifica i file nativi; non trasferisce i segreti del portachiavi.",
       "Clave API": "Chiave API",
@@ -4338,7 +4335,10 @@
       "NetworkManager no pudo leer la contraseña Wi-Fi. Puede estar en el llavero del usuario; introdúcela manualmente sin cambiar los permisos de la red.": "NetworkManager non ha potuto leggere la password Wi-Fi. Potrebbe trovarsi nel portachiavi utente; inseriscila manualmente senza modificare i permessi di rete.",
       "No se pudo consultar NetworkManager. Comprueba que nmcli esté instalado y que el servicio esté activo.": "Impossibile consultare NetworkManager. Verifica che nmcli sia installato e il servizio attivo.",
       "El nombre de la red Wi-Fi activa no es válido.": "Il nome della rete Wi-Fi attiva non è valido.",
-      "Conéctate a una única red Wi-Fi antes de importarla.": "Connettiti a una sola rete Wi-Fi prima di importarla."
+      "Conéctate a una única red Wi-Fi antes de importarla.": "Connettiti a una sola rete Wi-Fi prima di importarla.",
+      "El inicio de sesión se hace en el CLI oficial. Al importar, Aguja lee solo la sesión del proveedor elegido: archivos nativos y, en Windows, su entrada del Administrador de credenciales.": "Accedi tramite il CLI ufficiale. L’importazione legge solo la sessione del fornitore scelto: file nativi e, su Windows, la voce di Gestione credenziali.",
+      "Importa la sesión de Codex desde su archivo o almacén nativo de Windows.": "Importa la sessione Codex dal file o dall’archivio nativo di Windows.",
+      "Importa la sesión OAuth de este usuario desde su archivo o entrada nativa de Windows. No copia otras credenciales, historial ni rutas de este PC.": "Importa la sessione OAuth dell’utente dal file o dalla voce nativa di Windows. Altre credenziali, cronologia e percorsi del PC non vengono copiati."
     }
   }
 }

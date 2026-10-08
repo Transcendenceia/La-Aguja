@@ -18,7 +18,7 @@ test('locale routes preserve anonymous access, content structure and localised n
      assert(html.includes('aguja profile unlock'));assert(html.includes('Ctrl+Shift+V'));
      assert(html.includes('0.9.2'));assert(html.includes('0.9.0'));
     }else if(route===''){
-     assert(html.includes('v0.9.2/aguja-flash-imager-0.9.2-win-x64.exe'));
+     assert(html.includes('v0.9.3/aguja-flash-imager-0.9.3-win-x64.exe'));
      assert(html.includes('/releases/aguja-0.9.0-amd64.img.zst'));assert(!html.includes('Tu LA AGUJA'));
     }
    }

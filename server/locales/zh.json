@@ -39,7 +39,7 @@
     ]
   ],
   "imagerTitle": "使用 Flash Imager 准备 U 盘",
-  "imagerText": "Windows 和 Linux 应用负责下载、验证镜像，写入 U 盘并保存设置。也可准备 SSH、AI 智能体和自己的 Tailscale 或 Headscale 网络。在 Windows 上可管理可用的 BitLocker 密钥。版本 0.9.2；写入会清除 U 盘内容。",
+  "imagerText": "Windows 和 Linux 应用负责下载、验证镜像，写入 U 盘并保存设置。也可准备 SSH、AI 智能体和自己的 Tailscale 或 Headscale 网络。在 Windows 上可管理可用的 BitLocker 密钥。版本 0.9.3；写入会清除 U 盘内容。",
   "portable": "Linux 便携版",
   "imagesTitle": "下载 La Aguja 镜像",
   "imagesText": "Rescue Disk 0.9.0 是在目标电脑上启动的 Linux。镜像由官网提供，Imager 和源码在 GitHub。Imager 验证目录签名及下载内容的 SHA-256。无需 LA AGUJA 账户。",

@@ -1,12 +1,19 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto'),toml=require('@iarna/toml');
-const core=require('./core.cjs'),fat32=require('./fat32-writer.cjs');
+const core=require('./core.cjs'),fat32=require('./fat32-writer.cjs'),jsonc=require('jsonc-parser');
 const IMPORTS=Object.freeze({codex:{'.codex/auth.json':'auth','.codex/config.toml':'codex-settings'},claude:{'.claude/.credentials.json':'auth','.claude/settings.json':'claude-settings','.claude.json':'claude-onboarding'},antigravity:{'.gemini/antigravity-cli/antigravity-oauth-token':'auth','.gemini/antigravity-cli/settings.json':'antigravity-settings'},opencode:{'.local/share/opencode/auth.json':'auth','.config/opencode/opencode.json':'opencode-settings'}});
 function text(v,max=8192){if(typeof v!=='string'||Buffer.byteLength(v)>max||/[\0\r\n]/.test(v))throw new Error('Configuración privada no válida.');return v;}
 function endpoint(v){const u=core.httpsURL(text(v,2048));if(u.search)throw new Error('Configuración privada no válida.');return v;}
+function decodeNative(raw){
+ // PowerShell and Windows editors may write BOM-marked UTF-8 or UTF-16.
+ // Decode data in memory, normalize the portable output to UTF-8.
+ if(raw[0]===0xff&&raw[1]===0xfe)return raw.subarray(2).toString('utf16le');
+ if(raw[0]===0xfe&&raw[1]===0xff){const copy=Buffer.from(raw.subarray(2));if(copy.length%2)throw new Error('Archivo de configuración privada no válido.');copy.swap16();return copy.toString('utf16le');}
+ return raw.toString('utf8').replace(/^\ufeff/,'');
+}
 function sanitize(provider,filename,raw){
  const kind=IMPORTS[provider]?.[filename];if(!kind||raw.length>512*1024)throw new Error('Archivo de configuración privada no permitido.');
- let data;try{data=kind==='codex-settings'?toml.parse(raw.toString('utf8')):JSON.parse(raw.toString('utf8'));}catch{throw new Error('Archivo de configuración privada no válido.');}
+ let data;try{const decoded=decodeNative(raw);if(kind==='codex-settings')data=toml.parse(decoded);else if(kind==='opencode-settings'){const errors=[];data=jsonc.parse(decoded,errors,{allowTrailingComma:true});if(errors.length)throw Error();}else data=JSON.parse(decoded);}catch{throw new Error('Archivo de configuración privada no válido.');}
  if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Archivo de configuración privada no válido.');
  if(kind==='codex-settings'){
   const clean={};for(const k of ['model','model_reasoning_effort','model_provider'])if(k in data)clean[k]=text(data[k],256);clean.cli_auth_credentials_store='file';
@@ -26,17 +33,19 @@ function sanitize(provider,filename,raw){
  }
  return Buffer.from(JSON.stringify(data));
 }
-function locations(provider,{home=os.homedir(),env=process.env}={}){
+function locations(provider,{home=os.homedir(),env=process.env,configDirectory}={}){
  if(!Object.hasOwn(IMPORTS,provider))throw new Error('Proveedor no válido.');
  const defaults=Object.keys(IMPORTS[provider]).map(target=>({target,source:path.join(home,...target.split('/'))}));
  return defaults.map(item=>{
   const suffix=path.basename(item.source);
+  if(configDirectory){if(!path.isAbsolute(configDirectory))throw new Error('La carpeta del perfil debe ser absoluta.');item.source=path.join(configDirectory,suffix);return item;}
   if(provider==='codex'&&env.CODEX_HOME)item.source=path.join(path.resolve(env.CODEX_HOME),suffix);
   if(provider==='claude'&&env.CLAUDE_CONFIG_DIR)item.source=path.join(path.resolve(env.CLAUDE_CONFIG_DIR),item.target==='.claude.json'?'.claude.json':suffix);
   if(provider==='opencode'){
    if(item.target.startsWith('.local/share/')&&env.XDG_DATA_HOME)item.source=path.join(path.resolve(env.XDG_DATA_HOME),'opencode',suffix);
    if(item.target.startsWith('.config/')&&env.XDG_CONFIG_HOME)item.source=path.join(path.resolve(env.XDG_CONFIG_HOME),'opencode',suffix);
    if(item.target.endsWith('opencode.json')&&env.OPENCODE_CONFIG)item.source=path.resolve(env.OPENCODE_CONFIG);
+   else if(item.target.endsWith('opencode.json')&&env.OPENCODE_CONFIG_DIR)item.source=path.join(path.resolve(env.OPENCODE_CONFIG_DIR),suffix);
   }return item;
  });
 }
@@ -51,7 +60,7 @@ function readNative(provider,item){
  }
  const fd=fs.openSync(item.source,fs.constants.O_RDONLY|(fs.constants.O_NOFOLLOW||0));try{const info=fs.fstatSync(fd);if(info.ino!==before.ino||info.dev!==before.dev||info.size!==before.size||!info.isFile())throw new Error('El archivo de configuración privada cambió.');const raw=fs.readFileSync(fd);return sanitize(provider,item.target,raw);}finally{fs.closeSync(fd);}
 }
-function discover(provider,options){const paths=[];for(const item of locations(provider,options)){try{readNative(provider,item);paths.push(item);}catch{}}
+function discover(provider,options){const paths=[];for(const item of locations(provider,options)){let selected=item;try{readNative(provider,selected);}catch{if(item.target.endsWith('opencode.json')&&item.source.endsWith('.json')&&!options?.env?.OPENCODE_CONFIG){selected={...item,source:item.source+'c'};try{readNative(provider,selected);}catch{continue;}}else continue;}paths.push(selected);}
  const portable=paths.some(p=>IMPORTS[provider][p.target]==='auth');return {portable,paths:portable?paths:[],summary:portable?'Credenciales nativas seleccionadas; su vigencia se comprobará en Aguja.':'No hay una sesión nativa portable válida. Inicia sesión en este PC o usa una clave API.'};
 }
 function materialize(capsule,approved){const c=structuredClone(capsule);for(const [id,p]of Object.entries(c.providers))if(p.mode==='import'){
@@ -75,4 +84,4 @@ async function prepareWindows({source,output,sha256,capsule,protection,approved=
  try{await fs.promises.copyFile(source,temp,fs.constants.COPYFILE_EXCL);if((await core.hashFile(temp)).sha256!==sha256)throw new Error('La imagen original cambió durante la copia.');fat32.writeFat32File(temp,'AGUJA_CFG','aguja-profile.json',sealed);if(bitlocker)fat32.writeFat32File(temp,'AGUJA_CFG','bitlocker.json',Buffer.from(JSON.stringify(bitlocker)));await fs.promises.link(temp,output);}finally{await fs.promises.unlink(temp).catch(()=>{});}
  return {profile_verified:true};
 }
-module.exports={IMPORTS,locations,sanitize,readNative,discover,materialize,seal,releaseMarker,validateFeatures,prepareWindows};
+module.exports={IMPORTS,locations,sanitize,decodeNative,readNative,discover,materialize,seal,releaseMarker,validateFeatures,prepareWindows};

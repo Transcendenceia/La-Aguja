@@ -8,6 +8,8 @@ const core=require('./core.cjs');
 const bitlocker=require('./bitlocker.cjs');
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
+const {withPrivilegedHelper}=require('./linux-privileged.cjs');
+const {userEnvironment}=require('./windows-environment.cjs');
 const {flashWindows}=require('./windows-flash.cjs');
 const {AITools,provider,powershellArgs,windowsPowerShell,openWindowsLoginTerminal}=require('./ai-tools.cjs');
 const isWindows=process.platform==='win32';
@@ -40,7 +42,8 @@ function run(command,args,input=null,{timeout=120000,limit=4*1024*1024,phase='wo
  proc.stderr.on('data',data=>{stderr+=stderrDecoder.write(data);if(stderr.length>limit)stderr=stderr.slice(-limit);});
  proc.on('error',()=>finish(new Error('Falta una herramienta local necesaria.')));
  proc.on('close',code=>{stdout+=stdoutDecoder.end();stderr+=stderrDecoder.end();if(code!==0){
-  if(['helper','flash'].includes(phase)){for(const line of stdout.trim().split('\n').reverse()){try{const result=JSON.parse(line);if(result.ok===false&&typeof result.error==='string')return finish(new Error(result.error.slice(0,300)));}catch{}}}
+  if(['helper','flash','wifi'].includes(phase)){for(const line of stdout.trim().split('\n').reverse()){try{const result=JSON.parse(line);if(result.ok===false&&typeof result.error==='string')return finish(new Error(result.error.slice(0,300)));}catch{}}}
+  if(phase==='wifi'&&[126,127].includes(code))return finish(new Error('No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.'));
   if(phase==='flash'&&[126,127].includes(code))return finish(new Error('No se autorizó la grabación. Acepta el diálogo de permisos de Linux o vuelve a intentarlo.'));
   return finish(new Error(phase==='wifi'?'No se pudo importar la red activa. Puedes escribirla manualmente.':'La operación no se completó. Comprueba las herramientas locales y los permisos.'));
  }finish(null,stdout);});
@@ -76,7 +79,7 @@ function prepareInput(input,{pendingRemote=false}={}) {
  // New images use the user's own tailnet. Never enroll, claim or copy
  // proprietary relay credentials even if an old renderer/profile requests it.
  capsule.remote={enabled:false};
- for(const [p,settings]of Object.entries(capsule.providers))if(settings.mode==='import'){if(!approvedImports[p])throw new Error('Importa primero la autenticación de '+p+'.');if(!isWindows)settings.import_paths=approvedImports[p];}
+ for(const [p,settings]of Object.entries(capsule.providers))if(settings.mode==='import'){if(!approvedImports[p])throw new Error('Importa primero la autenticación de '+p+'.');}
  const bitlockerData=input?.bitlocker&&Array.isArray(input.bitlocker)&&input.bitlocker.length>0?bitlocker.buildBitLockerPayload(input.bitlocker):null;
  const fingerprint=crypto.createHash('sha256').update(JSON.stringify({capsule,protection,image:selectedImage.sha256,bitlocker:bitlockerData})).digest('hex');
  return {capsule,protection,fingerprint,bitlocker:bitlockerData};
@@ -87,7 +90,7 @@ async function prepareImage(settings,output) {
  if(isWindows){
   await provisioning.prepareWindows({source:selectedImage.path,output,sha256:selectedImage.sha256,capsule:settings.capsule,protection:settings.protection,approved:approvedImports,bitlocker:settings.bitlocker});
  }else{
-  const result=await helper('prepare',{image_path:selectedImage.path,output_path:output,image_sha256:selectedImage.sha256,capsule:settings.capsule,protection:settings.protection});
+  const result=await helper('prepare',{image_path:selectedImage.path,output_path:output,image_sha256:selectedImage.sha256,capsule:provisioning.materialize(settings.capsule,approvedImports),protection:settings.protection});
   if(settings.bitlocker){
    fat32.writeFat32File(output,'AGUJA_CFG','bitlocker.json',Buffer.from(JSON.stringify(settings.bitlocker,null,2),'utf8'));
   }
@@ -198,7 +201,7 @@ if ($ssidMatch) {
   }
   if(process.platform!=='linux')throw new Error('La importación Wi-Fi está disponible en Linux y Windows.');
   const script=app.isPackaged?path.join(ROOT,'wifi-helper.py'):path.join(__dirname,'wifi-helper.py');
-  const data=JSON.parse(await run('/usr/bin/pkexec',['/usr/bin/python3','-I',script],null,{phase:'wifi'}));
+  const data=JSON.parse(await withPrivilegedHelper(script,staged=>run('/usr/bin/pkexec',['/usr/bin/python3','-I',staged],null,{phase:'wifi'})));
   return {wifi:data};
  }));
  handle('bitlocker-status',async(authorize=false)=>bitlocker.getBitLockerStatus({authorize:authorize===true}));
@@ -230,16 +233,23 @@ if ($ssidMatch) {
   await fs.promises.writeFile(dest,textContent,{flag:'wx',mode:0o600});
   return {exported:true,path:dest};
  }));
- handle('provider-status',async()=>{const providers={};for(const p of Object.keys(providerBins))providers[p]={installed:Boolean(providerFound(p)),imported:Boolean(approvedImports[p])};return {providers};});
+ async function nativeOptions(){if(isWindows)aiTools.env=await userEnvironment(run,process.env);return {home:os.homedir(),env:aiTools.environment()};}
+ handle('provider-status',async()=>{await nativeOptions();const providers={};for(const p of Object.keys(providerBins))providers[p]={installed:Boolean(providerFound(p)),imported:Boolean(approvedImports[p])};return {providers};});
  handle('provider-install',async(id)=>exclusive(async()=>{validateProvider(id);const answer=await showMessageBox(win,{type:'question',title:'Instalar herramienta IA',message:'Descargar e instalar '+provider(id).name+' en este PC',detail:'Se utilizará la fuente oficial y una instalación de usuario. No se iniciará sesión ni se copiarán credenciales. Tus ajustes de la imagen no cambian.',buttons:['Cancelar','Descargar e instalar'],defaultId:0,cancelId:0});if(answer.response!==1)return {canceled:true};return aiTools.install(id);}));
  handle('provider-docs',async(id)=>{await shell.openExternal(provider(id).docs);return {opened:true};});
- handle('provider-login',async(id)=>{validateProvider(id);const launch=aiTools.loginCommand(id),env=aiTools.environment();
+ handle('provider-login',async(id)=>{validateProvider(id);await nativeOptions();const launch=aiTools.loginCommand(id),env=aiTools.environment();
    // Native visible terminal; user performs consent directly. No account or token captured here.
    if(isWindows)return openWindowsLoginTerminal(launch,{env,cwd:os.homedir(),name:provider(id).name,run});
    const terminals=[['/usr/bin/kitty',['--',launch.command,...launch.args]],['/usr/bin/konsole',['-e',launch.command,...launch.args]],['/usr/bin/gnome-terminal',['--',launch.command,...launch.args]],['/usr/bin/xterm',['-e',launch.command,...launch.args]]];
    const terminal=terminals.find(t=>fs.existsSync(t[0]));if(!terminal)throw new Error('Abre un terminal y ejecuta el inicio de sesión del CLI oficial. No hay un terminal compatible instalado.');
    const child=spawn(terminal[0],terminal[1],{detached:true,stdio:'ignore',env,cwd:os.homedir()});await new Promise((resolve,reject)=>{child.once('spawn',resolve);child.once('error',()=>reject(new Error('No se pudo abrir el terminal del CLI.')));});child.unref();return {launched:true};});
- handle('import-provider',async(provider)=>exclusive(async()=>{validateProvider(provider);prepared=null;delete approvedImports[provider];const response=isWindows?provisioning.discover(provider):await helper('import-provider',{provider});if(!response.portable)throw new Error('No hay una sesión nativa portable válida para importar. Comprueba el login y los permisos del archivo, o inicia sesión en el disco.');approvedImports[provider]=isWindows?response.paths:response.import_paths;return {portable:true,summary:String(response.summary||'Perfil local disponible para la imagen.').slice(0,250)};}));
+ handle('import-provider',async(id,selectFolder=false)=>exclusive(async()=>{
+  validateProvider(id);const options=await nativeOptions();
+  if(selectFolder===true){const pick=await showOpenDialog(win,{title:'Seleccionar carpeta del perfil de '+provider(id).name,properties:['openDirectory'],defaultPath:os.homedir()});if(pick.canceled)return {canceled:true};options.configDirectory=pick.filePaths[0];}
+  prepared=null;delete approvedImports[id];const response=provisioning.discover(id,options);
+  if(!response.portable)throw new Error('No hay un archivo de autenticación portable válido para este usuario. Selecciona la carpeta del perfil si usas una ruta personalizada o WSL. Las sesiones del llavero requieren autorización nativa en Aguja.');
+  approvedImports[id]=response.paths;return {portable:true,summary:String(response.summary||'Perfil local disponible para la imagen.').slice(0,250)};
+ }));
  handle('invalidate-prepared',async()=>{if(working)throw new Error('Espera a que termine la operación actual.');prepared=null;return {invalidated:true};});
  handle('prepare',async(input)=>exclusive(async()=>{prepareInput(input,{pendingRemote:true});const output=await chooseSave('Guardar imagen privada configurada',path.join(app.getPath('downloads'),'aguja-personal.img'),['img']);if(!output)return {canceled:true};const settings=prepareInput(input);return {prepared:await prepareImage(settings,output)};}));
  handle('export-profile',async(input)=>{const capsule=core.validateCapsule(input.capsule);capsule.remote={enabled:false};const encrypted=profileEncrypt(capsule,input.passphrase);const file=await chooseSave('Guardar perfil cifrado',path.join(app.getPath('documents'),'aguja-perfil.aguja'),['aguja']);if(!file)return {canceled:true};await fs.promises.writeFile(file,JSON.stringify(encrypted),{flag:'wx',mode:0o600});return {name:path.basename(file)};});
@@ -274,9 +284,11 @@ if ($ssidMatch) {
    return {verified:true,backupVerified:false,device:disk.device,serial:disk.serial,...(preparedReceipt?{prepared:preparedReceipt}:{})};
   }
   progress('flash',{message:'Autorización de Linux para grabar…'});
-  const args=['/usr/bin/python3','-I',path.join(ROOT,'scripts','flash-usb.py'),prepared.path,disk.device,'--serial',disk.serial,'--sha256',prepared.sha256,'--report-dir',reportDir,'--confirm','FLASH:'+disk.serial];
-  if(backupDir)args.push('--backup-dir',backupDir);
-  const output=await run('/usr/bin/pkexec',args,null,{timeout:4*60*60*1000,limit:4*1024*1024,phase:'flash'});
+  const output=await withPrivilegedHelper(path.join(ROOT,'scripts','flash-usb.py'),staged=>{
+   const args=['/usr/bin/python3','-I',staged,prepared.path,disk.device,'--serial',disk.serial,'--sha256',prepared.sha256,'--report-dir',reportDir,'--confirm','FLASH:'+disk.serial];
+   if(backupDir)args.push('--backup-dir',backupDir);
+   return run('/usr/bin/pkexec',args,null,{timeout:4*60*60*1000,limit:4*1024*1024,phase:'flash'});
+  });
   let result;for(const line of output.trim().split('\n')){try{const value=JSON.parse(line);if(typeof value.ok==='boolean')result=value;}catch{}}
   if(!result?.ok||!result.verified)throw new Error(result?.error||'La grabación no devolvió una lectura verificada. Revisa el USB antes de intentarlo de nuevo.');
   return {verified:true,backupVerified:result.backup_verified===true,device:disk.device,serial:disk.serial,...(preparedReceipt?{prepared:preparedReceipt}:{})};

@@ -163,6 +163,10 @@ function resolveProviderBinary(binary,{env=process.env,home=os.homedir(),platfor
   const environmentPath=env.PATH||env.Path||env.path||'';
   const directories=[...environmentPath.split(windows?';':':').map(s=>s.replace(/^"(.*)"$/,'$1')).filter(s=>s&&p.isAbsolute(s)),p.join(home,'.local','bin'),p.join(home,'.opencode','bin')];
   if(windows)directories.push(p.join(env.APPDATA||p.join(home,'AppData','Roaming'),'npm'),p.join(env.LOCALAPPDATA||p.join(home,'AppData','Local'),'agy','bin'),p.join(env.LOCALAPPDATA||p.join(home,'AppData','Local'),'Programs','nodejs'),p.join(env.ProgramFiles||'C:\\Program Files','nodejs'));
+  directories.push(p.join(home,'.bun','bin'),p.join(home,'.npm-global',windows?'':'bin'));
+  if(windows)directories.push(p.join(home,'scoop','shims'));
+  else directories.push(p.join(home,'.local','share','pnpm'),p.join(home,'.local','share','pnpm','bin'));
+  for(const key of ['PNPM_HOME','NVM_HOME','NVM_SYMLINK','NPM_CONFIG_PREFIX','npm_config_prefix'])if(env[key]&&p.isAbsolute(env[key]))directories.push(key.toLowerCase()==='npm_config_prefix'&&!windows?p.join(env[key],'bin'):env[key]);
   const extensions=windows?['.exe','.cmd','.bat','']:[''];
   for(const directory of directories) {
     for(const extension of extensions){const candidate=p.resolve(directory,binary+extension);

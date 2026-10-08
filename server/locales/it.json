@@ -1,55 +1,288 @@
 {
- "name":"Italiano",
- "siteTitle":"LA AGUJA · Recupero libero, sotto il tuo controllo",
- "nav":["Download","Documentazione","Codice su GitHub ↗"],
- "eyebrow":"UN PICCOLO ACCESSO. CONTROLLO COMPLETO.",
- "hero":["Il tuo computer.","Il tuo recupero.","A modo tuo."],
- "lead":"Prepara una USB LA AGUJA con strumenti e agenti IA. Avvia, analizza e, se necessario, collegati via SSH attraverso il tuo Tailscale o Headscale. Un browser locale supporta l’accesso ufficiale ai tuoi strumenti IA.",
- "actions":["Preparare la mia USB","Guida dettagliata"],
- "note":"IL TUO AMBIENTE LOCALE / ACCESSO REMOTO FACOLTATIVO",
- "mascotAlt":"Agujita, l’ago cromato con occhi ambrati e baffi arricciati",
- "caption":["RECUPERARE PRIMA DI SOSTITUIRE","Piccolo accesso. Grandi possibilità.","Un ambiente di recupero da portare con te."],
- "steps":[["Prepara","Configura rete, agenti e accesso remoto in Flash Imager."],["Avvia","Avvia dalla USB. L’iscrizione alla rete privata è facoltativa; chiavi e criteri determinano l’accesso."],["Collegati","Usa SSH dalla rete privata autorizzata. Mantieni il controllo locale e verifica ogni modifica."]],
- "imagerTitle":"LA AGUJA Flash Imager (Windows e Linux · v0.9.2)",
- "imagerText":"Prepara il disco di recupero La Aguja, verifica l’immagine firmata, gestisci le chiavi BitLocker disponibili su Windows e configura la rete privata. Scarica l’applicazione adatta e scegli un’immagine pubblica, senza account LA AGUJA o registrazione.",
- "portable":"Linux portatile",
- "imagesTitle":"Immagini di recupero pubbliche",
- "imagesText":"Le immagini provengono dal nostro sito ufficiale; Imager e codice sono su GitHub. Flash Imager scarica e unisce le parti, verificando firma e SHA-256. Nessun account LA AGUJA necessario.",
- "imageLinks":["Immagine USB compressa (.img.zst) ↗","ISO BIOS/UEFI ↗","Checksum SHA-256 ↗","File e note di versione ↗"],
- "imageNote":"Decomprimi l’immagine prima dell’importazione manuale. Il download integrato unisce le parti in un unico .img verificato.",
- "privacy":"Privacy",
- "footer":"Codice GPL-3.0-or-later · Nessun account di progetto o relay proprietario.",
- "docTitle":"Guida utente · LA AGUJA Rescue Disk",
- "docDescription":"Preparazione USB, avvio, IA e SSH, cifratura, recupero dati e risoluzione dei problemi.",
- "docUI":["Vai alla guida","Indice e ricerca","Recuperare. Comprendere. Decidere.","Cerca nella guida","Esplora l’indice o cerca un termine.","Stampa / salva PDF","Torna all’inizio","Guida al prodotto","Sezioni corrispondenti","Nessun risultato; prova un termine più breve.","Copia comando","Copia questo blocco di comandi","Copiato","Selezionato: copia manualmente","Riferimento approfondito in spagnolo (26 capitoli)","Le schermate mostrano le versioni indicate, non un nuovo test dell’Imager 0.9.2."],
- "privacyTitle":"La tua configurazione resta sotto il tuo controllo.",
- "privacyParagraphs":["Il sito LA AGUJA è informativo: non crea account, richiede login, ospita tunnel o console remote, né usa cookie di account o analisi propri.","Immagini e catalogo firmato vengono dal sito LA AGUJA. Imager e codice sono su GitHub, soggetto alla propria informativa. L’hosting può conservare registri tecnici necessari al servizio.","Flash Imager elabora localmente immagini e profili di rete, SSH, IA e Tailscale/Headscale, senza inviarli a questo sito. Le immagini private possono contenere segreti: controllane conservazione e condivisione.","Tailscale/Headscale e fornitori IA hanno account e condizioni propri. Il loro uso facoltativo non è una registrazione LA AGUJA.","Le richieste di download rivelano la richiesta di rete all’hosting, non le chiavi o il contenuto delle immagini locali."],
- "sections":[
- ["Un piccolo accesso. Controllo completo.","LA AGUJA è un Linux di recupero x86-64 avviato da USB prima del sistema installato. Flash Imager prepara la USB su Windows/Linux funzionante; Rescue Disk opera sul computer esaminato. L’avvio non monta, ripara o scrive automaticamente sui dischi interni. Puoi lavorare localmente o via SSH, con Tailscale/Headscale facoltativo. IA cloud richiede Internet e account proprio; gli strumenti tradizionali possono lavorare offline. Nessun account o relay LA AGUJA. Prodotto sperimentale, non compatibilità universale."],
- ["La prima USB","Salva i dati di una USB abbastanza capiente. Scarica Imager e immagine dal catalogo firmato. Lascia Ethernet DHCP, imposta lingua/tastiera/nome e password SSH personale o chiave pubblica. IA e rete privata possono restare disattivate. Cifra i profili con segreti e conserva la frase fuori dalla USB. Conferma modello, capacità e seriale prima della scrittura. Attendi la rilettura verificata, avvia dalla USB e sblocca il profilo se necessario. Vedere il pannello e identificare i dischi completa il primo test."],
- ["Termini utili","Live significa avvio senza installazione. IMG configurabile e ISO non sono intercambiabili nell’Imager. Disco, partizione e montaggio sono distinti; /dev/sda può cambiare. DHCP assegna indirizzi; SSH offre console cifrata e impronta del server. Root/sudo è amministrazione, non sandbox in sola lettura. Chiave d’iscrizione, chiave API, password SSH e frase del profilo hanno ruoli diversi. SHA-256 verifica byte, non avvio universale. La frase del profilo non apre BitLocker/LUKS."],
- ["Prima: hardware, autorizzazione e backup","Verifica x86-64, USB e firmware. BIOS/UEFI sono previsti; ARM, tutti i chip Wi-Fi e Secure Boot firmato universale non sono garantiti. Ottieni autorizzazione per macchina e dati. Scegli una destinazione separata; per dischi instabili valuta prima un’immagine. La scrittura sostituisce la USB. Windows non offre ancora backup USB integrato: eseguilo esternamente. Linux offre backup completo verificato facoltativo, disattivato per impostazione iniziale, con spazio e permessi necessari. Non è backup del disco interno. BitLocker/LUKS richiedono la chiave del proprietario."],
- ["Scaricare e aprire Imager","Scegli EXE Windows 10/11, AppImage, DEB Debian/Ubuntu o archivio Linux portatile dal sito ufficiale. Verifica SHA-256 e apri sul PC preparatore. Non scrivere EXE/AppImage come immagine USB. Nessun account LA AGUJA. L’EXE non ha firma Authenticode riconosciuta; AppImage può richiedere permessi di esecuzione. La scrittura richiede elevazione locale. Aprire l’applicazione non prova preparazione o avvio della USB."],
- ["Passo 1 · Scegliere l’immagine","Usa catalogo firmato o .img locale. Si verificano Ed25519 e hash; le parti vengono unite. Decomprimi .img.zst prima dell’importazione manuale. La preparazione privata crea un nuovo file senza cambiare l’immagine pubblica. Imager 0.9.2, immagine 0.9.0. Le opzioni dipendono dalle capacità dell’immagine; senza tailscale-profile-v1 viene rifiutata la preparazione con iscrizione alla rete privata. Controlla capacità reale, non solo l’etichetta."],
- ["Passo 2 · Rete, lingua e nome","Scegli lingua live, tastiera e variante; lingua Imager indipendente. Usa un nome riconoscibile. Ethernet DHCP facilita l’avvio. Wi-Fi salvato viene attivato; senza rete c’è selezione interattiva. Importare password Wi-Fi può richiedere permesso locale. Reti aziendali e portali captive possono richiedere NetworkManager manuale. Verifica separatamente rete, DNS, HTTPS e ora. Diagnostica locale possibile offline."],
- ["Passo 3 · SSH","Imposta password unica o chiave pubblica autorizzata, mai privata. Porta predefinita 22; usa IP reale e confronta l’impronta. Cambiare porta non sostituisce autenticazione. Utente e password pubblici di fabbrica: aguja. Password personale prevale; vuota con chiave pubblica permette solo chiave, senza chiave conserva accesso di fabbrica. Sudo illimitato. aguja password conserva sul USB; sudo passwd aguja cambia solo la sessione."],
- ["Passo 4 · Preparare IA","Codex CLI, OpenCode, Claude Code e Antigravity: chiave API, importazione selettiva di sessione portatile compatibile o login dopo l’avvio. Verifica d’installazione non significa login o inferenza riuscita. Nessuna copia dell’intero portachiavi, cronologia, hook o MCP. Le sessioni possono essere scadute. Costi, quote e dati dipendono dal fornitore. Puoi preparare senza credenziali IA; non si promette IA cloud offline."],
- ["Passo 5 · Tailscale/Headscale proprio","Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Identità in RAM, nuova iscrizione dopo riavvio."],
- ["OpenSSH e Tailscale SSH","Il percorso standard è OpenSSH sulla rete privata: password/chiavi, impronta e ACL di rete restano necessari. Tailscale SSH è avanzato, con server compatibile e politiche SSH esplicite. Distingui iscrizione, raggiungibilità, porta TCP e autenticazione. Non aprire porte pubbliche né ampliare ACL per nascondere errori. Consulta documentazione delle versioni effettivamente utilizzate."],
- ["Segreti e limiti della cifratura","Profili privati possono contenere Wi-Fi, SSH, IA e chiavi d’iscrizione. Cifra la capsula, conserva la frase separata, sblocca localmente prima di caricare. Modelli .aguja e backup sono sensibili. Non cifra tutto AGUJA_DATA né protegge da root dopo sblocco. persistent_home=no perde HOME/token al riavvio; yes li salva non cifrati. aguja.conf in chiaro è fisicamente leggibile. Non pubblicare immagini private o chiavi."],
- ["Windows · BitLocker","Avviare Linux non rimuove BitLocker. Ottieni dal proprietario la chiave corretta per il volume. Frase del profilo e password SSH non sono chiavi BitLocker. LA AGUJA non aggira la cifratura. Imager Windows può consultare chiavi disponibili e includere solo quelle selezionate esplicitamente nell’immagine privata. Proteggi il profilo e tieni altra copia. Vedere la chiave non prova sblocco. La schermata Windows è storica 0.8.1, non nuovo test nativo 0.9.2."],
- ["Passo 6 · Preparare, scrivere, verificare","Rivedi immagine, protezione e riepilogo. Creare immagine privata genera file; preparare e scrivere USB scrive anche il dispositivo. Conferma modello, seriale e capacità reale nel dialogo nativo; annulla nel dubbio. Autorizza UAC/Polkit per l’azione voluta. Attendi scrittura e rilettura completa senza scollegare. Verifica risultato. Byte corretti non garantiscono firmware: prova avvio reale. Backup USB Windows già eseguito esternamente."],
- ["Avviare, sbloccare, collegarsi","Scegli USB nel menu del produttore. Pannello con rete/SSH. Profilo cifrato: aguja profile unlock in console locale. La grafica può ripiegare sulla console testo. Usa IP reale; .local dipende da mDNS/multicast e conflitti. SSH funziona anche in LAN senza tailnet. Confronta impronta, verifica stato/dischi. Pannello visibile non implica montaggio o riparazione interna."],
- ["Riavvii: identità temporanea","Stato tailnet in RAM: dopo riavvio servono rete, profilo sbloccato e nuova iscrizione. Chiave monouso può essere già consumata. Per più avvii usa chiave riutilizzabile valida e limitata. Identità distinta dalla chiave host SSH USB e dalla persistenza HOME. Rimuovi nodi obsoleti e revoca chiavi inutili. Una vecchia connessione non prova lo stato attuale."],
- ["Login IA nel browser locale","aguja login codex, claude o antigravity apre Chromium con sandbox, accesso ufficiale e console nella stessa PTY. Copiare focalizza la console; incolla con Ctrl+Shift+V. Chiudere torna al terminale. Nessun QR o consenso automatico. OpenCode mantiene opencode auth login. SSH/seriale/senza schermo usano metodo nativo; callback localhost remoto non automaticamente inoltrato. API e importazione sessione sono separati. Schermate sintetiche non provano login o inferenza reali."],
- ["Prima diagnosi","Formula domanda precisa, raccogli stato, identità, filesystem e montaggi. Usa aguja doctor e inventario seguente. Identifica USB, origine e destinazione con modello/dimensioni/ID, non lettere supposte. Verifica montaggio sola lettura e comportamento del journal prima di leggere file. Salva osservazioni. Un disco instabile può richiedere immagine ddrescue con mappa, non riparazioni ripetute sull’originale."],
- ["Lavorare con un agente","Definisci obiettivo, computer/disco esatto, azioni autorizzate, backup e criteri di arresto. Chiedi stato reale e prove prima delle modifiche. Verifica dati/avvio indipendentemente dall’agente. aguja ha root/sudo completo; modalità standard a pieno accesso, richiesta di sola lettura non è sandbox. agent_mode=ask mantiene approvazioni senza togliere root. Controlla azioni distruttive e conserva rollback."],
- ["Strumenti e comandi","aguja tools elenca strumenti. ddrescue per immagini con mappa, TestDisk/PhotoRec per recupero, rsync per copia, smartctl/nvme-cli per hardware. Volumi/cifratura richiedono dispositivo e chiavi corretti. Comandi sotto per orientamento. Non formattare, installare bootloader o scrivere partizioni su dispositivi indovinati. Consulta manuali e lavora su copia se necessario. Strumenti tradizionali senza cloud, nessun recupero universale garantito."],
- ["Dieci percorsi pratici","1. Inventario PC senza avvio. 2. Copia autorizzata altrove. 3. Immagine ddrescue con mappa. 4. Ispezione prima di TestDisk. 5. PhotoRec su altro supporto. 6. SMART/NVMe. 7. Diagnosi UEFI/bootloader dopo backup. 8. BitLocker/LUKS con chiave corretta. 9. Supporto SSH autorizzato. 10. Installazione OS solo su destinazione approvata. Procedure adattabili, non riparazioni automatiche o garanzie. Identifica origine/destinazione/rollback e verifica risultato; non recuperare sulla fonte."],
- ["Percorso professionale","Registra autorizzazione, hardware, versione/hash, stato, dischi e piano. Lavora su copia, etichetta prove e collegamento all’originale. Conserva mappa e criteri di arresto per media instabili. Modifiche limitate con scopo e risultato. Verifica dati/avvio, non solo exit code. Cifra .aguja riutilizzabili e rivedi credenziali obsolete. Nessun dato o chiave cliente nei ticket pubblici."],
- ["Problemi per livelli","Nessun avvio: architettura, integrità, firmware, console testo. Nessuna rete: link/Wi-Fi, DHCP, DNS, HTTPS, ora. Nessun SSH: IP/porta, servizio, politica, autenticazione. Nessuna tailnet: chiave, URL, scadenza, monouso consumata. Nessuna IA: metodo, account, Internet, callback. Profilo assente: capacità/sblocco. Disco assente: controller e inventario prima delle scritture. doctor sano non prova ACL, OAuth o compatibilità totale."],
- ["Chiudere senza accessi dimenticati","Riassumi osservazioni, cambiamenti e verifiche. Chiudi sessioni, completa scritture, spegni correttamente e controlla i file sul destinatario. Conserva originali/backup fino all’accettazione. Rimuovi nodi temporanei e revoca chiavi inutili; verifica token persistenti sul USB. Gestisci immagini/profili con procedura approvata e recuperabile. Non togliere accessi estranei né distruggere prove. Segnala limiti residui."],
- ["Cosa è verificato","Edizione pubblica senza account LA AGUJA o relay proprietario. Test di preparazione, pacchetti e VM coprono percorsi specifici, non ogni PC. Imager 0.9.2 corregge il titolo in sette lingue; immagine 0.9.0 invariata. Schermate conservano versioni reali. Rilettura non è avvio universale; pannello/CLI/sessione non è login IA; iscrizione locale non prova SSH. Windows senza backup USB integrato o Authenticode riconosciuto. Nessun Secure Boot firmato universale."],
- ["Riferimenti e prossimi passi","Link superiori per download e codice. Riferimento spagnolo esteso conserva i 26 capitoli originali; questa guida copre le stesse fasi in italiano. Schermate mantengono origine/versione. Stampa per PDF italiano; PDF storico separato in spagnolo. Consulta OpenSSH, Tailscale/Headscale, ddrescue, TestDisk e Microsoft BitLocker per le tue versioni. Codice GPL-3.0-or-later, terzi con proprie licenze. Ticket con versione e sintomi ripuliti, mai password, token, chiavi o immagini private."]
- ]
+  "name": "Italiano",
+  "siteTitle": "LA AGUJA · IA per lavorare prima dell’avvio del sistema installato",
+  "nav": [
+    "Download",
+    "Documentazione",
+    "Codice su GitHub ↗"
+  ],
+  "eyebrow": "LINUX SU USB. UN ALTRO ACCESSO AL COMPUTER.",
+  "hero": [
+    "Prima di avviare",
+    "il sistema,",
+    "scegli il prossimo passo."
+  ],
+  "lead": "LA AGUJA si avvia da USB e permette di lavorare sul computer anche quando Windows o Linux non partono. Riunisce strumenti di diagnosi e recupero con agenti IA che possono usarli insieme a te.",
+  "actions": [
+    "Preparare la USB",
+    "Leggere la guida"
+  ],
+  "note": "LINUX LIVE SPERIMENTALE · COMPUTER X86-64 · LOCALE O SSH",
+  "mascotAlt": "Agujita, l’ago cromato con occhi ambrati e baffi arricciati",
+  "caption": [
+    "LA AGUJA / RESCUE DISK",
+    "Recuperare il passato. Preparare il prossimo passo.",
+    "Il recupero è il punto di partenza, non l’unico uso possibile."
+  ],
+  "steps": [
+    [
+      "Prepara la USB",
+      "Scegli immagine, lingua, tastiera e rete. IA e accesso remoto sono facoltativi."
+    ],
+    [
+      "Avvia il computer",
+      "Avvia dalla USB. La Aguja carica il proprio Linux, senza dipendere dal sistema installato."
+    ],
+    [
+      "Capisci e decidi",
+      "Esamina il computer, fai una copia quando serve e concorda le modifiche prima di eseguirle."
+    ]
+  ],
+  "imagerTitle": "Prepara la USB con Flash Imager",
+  "imagerText": "L’app per Windows e Linux scarica e verifica l’immagine, scrive la USB e salva le impostazioni. Puoi preparare SSH, agenti IA e la tua rete Tailscale o Headscale. Su Windows può gestire chiavi BitLocker disponibili. Versione 0.9.2; la scrittura cancella il contenuto della USB.",
+  "portable": "Linux portatile",
+  "imagesTitle": "Scarica l’immagine di La Aguja",
+  "imagesText": "Rescue Disk 0.9.0 è il Linux che si avvia sul computer. Le immagini sono sul nostro sito; Imager e codice su GitHub. L’Imager verifica la firma del catalogo e lo SHA-256 del download. Nessun account LA AGUJA necessario.",
+  "imageLinks": [
+    "Immagine USB compressa (.img.zst) ↗",
+    "ISO BIOS/UEFI ↗",
+    "Checksum SHA-256 ↗",
+    "File e note di versione ↗"
+  ],
+  "imageNote": "Decomprimi l’immagine prima dell’importazione manuale. Il download integrato unisce le parti in un unico .img verificato.",
+  "privacy": "Privacy",
+  "footer": "Codice aperto · GPL-3.0-or-later · La tua rete, senza relay LA AGUJA.",
+  "docTitle": "Guida utente · LA AGUJA Rescue Disk",
+  "docDescription": "Preparazione USB, avvio, IA e SSH, cifratura, recupero dati e risoluzione dei problemi.",
+  "docUI": [
+    "Vai alla guida",
+    "Indice e ricerca",
+    "Recuperare. Comprendere. Decidere.",
+    "Cerca nella guida",
+    "Esplora l’indice o cerca un termine.",
+    "Stampa / salva PDF",
+    "Torna all’inizio",
+    "Guida al prodotto",
+    "Sezioni corrispondenti",
+    "Nessun risultato; prova un termine più breve.",
+    "Copia comando",
+    "Copia questo blocco di comandi",
+    "Copiato",
+    "Selezionato: copia manualmente",
+    "Riferimento approfondito in spagnolo (26 capitoli)",
+    "Le schermate mostrano le versioni indicate, non un nuovo test dell’Imager 0.9.2."
+  ],
+  "privacyTitle": "La tua configurazione resta sotto il tuo controllo.",
+  "privacyParagraphs": [
+    "Il sito LA AGUJA è informativo: non crea account, richiede login, ospita tunnel o console remote, né usa cookie di account o analisi propri.",
+    "Immagini e catalogo firmato vengono dal sito LA AGUJA. Imager e codice sono su GitHub, soggetto alla propria informativa. L’hosting può conservare registri tecnici necessari al servizio.",
+    "Flash Imager elabora localmente immagini e profili di rete, SSH, IA e Tailscale/Headscale, senza inviarli a questo sito. Le immagini private possono contenere segreti: controllane conservazione e condivisione.",
+    "Tailscale/Headscale e fornitori IA hanno account e condizioni propri. Il loro uso facoltativo non è una registrazione LA AGUJA.",
+    "Le richieste di download rivelano la richiesta di rete all’hosting, non le chiavi o il contenuto delle immagini locali."
+  ],
+  "sections": [
+    [
+      "Un piccolo accesso. Controllo completo.",
+      "LA AGUJA è un Linux di recupero x86-64 avviato da USB prima del sistema installato. Flash Imager prepara la USB su Windows/Linux funzionante; Rescue Disk opera sul computer esaminato. L’avvio non monta, ripara o scrive automaticamente sui dischi interni. Puoi lavorare localmente o via SSH, con Tailscale/Headscale facoltativo. IA cloud richiede Internet e account proprio; gli strumenti tradizionali possono lavorare offline. Nessun account o relay LA AGUJA. Prodotto sperimentale, non compatibilità universale."
+    ],
+    [
+      "La prima USB",
+      "Salva i dati di una USB abbastanza capiente. Scarica Imager e immagine dal catalogo firmato. Lascia Ethernet DHCP, imposta lingua/tastiera/nome e password SSH personale o chiave pubblica. IA e rete privata possono restare disattivate. Cifra i profili con segreti e conserva la frase fuori dalla USB. Conferma modello, capacità e seriale prima della scrittura. Attendi la rilettura verificata, avvia dalla USB e sblocca il profilo se necessario. Vedere il pannello e identificare i dischi completa il primo test."
+    ],
+    [
+      "Termini utili",
+      "Live significa avvio senza installazione. IMG configurabile e ISO non sono intercambiabili nell’Imager. Disco, partizione e montaggio sono distinti; /dev/sda può cambiare. DHCP assegna indirizzi; SSH offre console cifrata e impronta del server. Root/sudo è amministrazione, non sandbox in sola lettura. Chiave d’iscrizione, chiave API, password SSH e frase del profilo hanno ruoli diversi. SHA-256 verifica byte, non avvio universale. La frase del profilo non apre BitLocker/LUKS."
+    ],
+    [
+      "Prima: hardware, autorizzazione e backup",
+      "Verifica x86-64, USB e firmware. BIOS/UEFI sono previsti; ARM, tutti i chip Wi-Fi e Secure Boot firmato universale non sono garantiti. Ottieni autorizzazione per macchina e dati. Scegli una destinazione separata; per dischi instabili valuta prima un’immagine. La scrittura sostituisce la USB. Windows non offre ancora backup USB integrato: eseguilo esternamente. Linux offre backup completo verificato facoltativo, disattivato per impostazione iniziale, con spazio e permessi necessari. Non è backup del disco interno. BitLocker/LUKS richiedono la chiave del proprietario."
+    ],
+    [
+      "Scaricare e aprire Imager",
+      "Scegli EXE Windows 10/11, AppImage, DEB Debian/Ubuntu o archivio Linux portatile dal sito ufficiale. Verifica SHA-256 e apri sul PC preparatore. Non scrivere EXE/AppImage come immagine USB. Nessun account LA AGUJA. L’EXE non ha firma Authenticode riconosciuta; AppImage può richiedere permessi di esecuzione. La scrittura richiede elevazione locale. Aprire l’applicazione non prova preparazione o avvio della USB."
+    ],
+    [
+      "Passo 1 · Scegliere l’immagine",
+      "Usa catalogo firmato o .img locale. Si verificano Ed25519 e hash; le parti vengono unite. Decomprimi .img.zst prima dell’importazione manuale. La preparazione privata crea un nuovo file senza cambiare l’immagine pubblica. Imager 0.9.2, immagine 0.9.0. Le opzioni dipendono dalle capacità dell’immagine; senza tailscale-profile-v1 viene rifiutata la preparazione con iscrizione alla rete privata. Controlla capacità reale, non solo l’etichetta."
+    ],
+    [
+      "Passo 2 · Rete, lingua e nome",
+      "Scegli lingua live, tastiera e variante; lingua Imager indipendente. Usa un nome riconoscibile. Ethernet DHCP facilita l’avvio. Wi-Fi salvato viene attivato; senza rete c’è selezione interattiva. Importare password Wi-Fi può richiedere permesso locale. Reti aziendali e portali captive possono richiedere NetworkManager manuale. Verifica separatamente rete, DNS, HTTPS e ora. Diagnostica locale possibile offline."
+    ],
+    [
+      "Passo 3 · SSH",
+      "Imposta password unica o chiave pubblica autorizzata, mai privata. Porta predefinita 22; usa IP reale e confronta l’impronta. Cambiare porta non sostituisce autenticazione. Utente e password pubblici di fabbrica: aguja. Password personale prevale; vuota con chiave pubblica permette solo chiave, senza chiave conserva accesso di fabbrica. Sudo illimitato. aguja password conserva sul USB; sudo passwd aguja cambia solo la sessione."
+    ],
+    [
+      "Passo 4 · Preparare IA",
+      "Codex CLI, OpenCode, Claude Code e Antigravity: chiave API, importazione selettiva di sessione portatile compatibile o login dopo l’avvio. Verifica d’installazione non significa login o inferenza riuscita. Nessuna copia dell’intero portachiavi, cronologia, hook o MCP. Le sessioni possono essere scadute. Costi, quote e dati dipendono dal fornitore. Puoi preparare senza credenziali IA; non si promette IA cloud offline."
+    ],
+    [
+      "Passo 5 · Tailscale/Headscale proprio",
+      "Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Identità in RAM, nuova iscrizione dopo riavvio."
+    ],
+    [
+      "OpenSSH e Tailscale SSH",
+      "Il percorso standard è OpenSSH sulla rete privata: password/chiavi, impronta e ACL di rete restano necessari. Tailscale SSH è avanzato, con server compatibile e politiche SSH esplicite. Distingui iscrizione, raggiungibilità, porta TCP e autenticazione. Non aprire porte pubbliche né ampliare ACL per nascondere errori. Consulta documentazione delle versioni effettivamente utilizzate."
+    ],
+    [
+      "Segreti e limiti della cifratura",
+      "Profili privati possono contenere Wi-Fi, SSH, IA e chiavi d’iscrizione. Cifra la capsula, conserva la frase separata, sblocca localmente prima di caricare. Modelli .aguja e backup sono sensibili. Non cifra tutto AGUJA_DATA né protegge da root dopo sblocco. persistent_home=no perde HOME/token al riavvio; yes li salva non cifrati. aguja.conf in chiaro è fisicamente leggibile. Non pubblicare immagini private o chiavi."
+    ],
+    [
+      "Windows · BitLocker",
+      "Avviare Linux non rimuove BitLocker. Ottieni dal proprietario la chiave corretta per il volume. Frase del profilo e password SSH non sono chiavi BitLocker. LA AGUJA non aggira la cifratura. Imager Windows può consultare chiavi disponibili e includere solo quelle selezionate esplicitamente nell’immagine privata. Proteggi il profilo e tieni altra copia. Vedere la chiave non prova sblocco. La schermata Windows è storica 0.8.1, non nuovo test nativo 0.9.2."
+    ],
+    [
+      "Passo 6 · Preparare, scrivere, verificare",
+      "Rivedi immagine, protezione e riepilogo. Creare immagine privata genera file; preparare e scrivere USB scrive anche il dispositivo. Conferma modello, seriale e capacità reale nel dialogo nativo; annulla nel dubbio. Autorizza UAC/Polkit per l’azione voluta. Attendi scrittura e rilettura completa senza scollegare. Verifica risultato. Byte corretti non garantiscono firmware: prova avvio reale. Backup USB Windows già eseguito esternamente."
+    ],
+    [
+      "Avviare, sbloccare, collegarsi",
+      "Scegli USB nel menu del produttore. Pannello con rete/SSH. Profilo cifrato: aguja profile unlock in console locale. La grafica può ripiegare sulla console testo. Usa IP reale; .local dipende da mDNS/multicast e conflitti. SSH funziona anche in LAN senza tailnet. Confronta impronta, verifica stato/dischi. Pannello visibile non implica montaggio o riparazione interna."
+    ],
+    [
+      "Riavvii: identità temporanea",
+      "Stato tailnet in RAM: dopo riavvio servono rete, profilo sbloccato e nuova iscrizione. Chiave monouso può essere già consumata. Per più avvii usa chiave riutilizzabile valida e limitata. Identità distinta dalla chiave host SSH USB e dalla persistenza HOME. Rimuovi nodi obsoleti e revoca chiavi inutili. Una vecchia connessione non prova lo stato attuale."
+    ],
+    [
+      "Login IA nel browser locale",
+      "aguja login codex, claude o antigravity apre Chromium con sandbox, accesso ufficiale e console nella stessa PTY. Copiare focalizza la console; incolla con Ctrl+Shift+V. Chiudere torna al terminale. Nessun QR o consenso automatico. OpenCode mantiene opencode auth login. SSH/seriale/senza schermo usano metodo nativo; callback localhost remoto non automaticamente inoltrato. API e importazione sessione sono separati. Schermate sintetiche non provano login o inferenza reali."
+    ],
+    [
+      "Prima diagnosi",
+      "Formula domanda precisa, raccogli stato, identità, filesystem e montaggi. Usa aguja doctor e inventario seguente. Identifica USB, origine e destinazione con modello/dimensioni/ID, non lettere supposte. Verifica montaggio sola lettura e comportamento del journal prima di leggere file. Salva osservazioni. Un disco instabile può richiedere immagine ddrescue con mappa, non riparazioni ripetute sull’originale."
+    ],
+    [
+      "Lavorare con un agente",
+      "Definisci obiettivo, computer/disco esatto, azioni autorizzate, backup e criteri di arresto. Chiedi stato reale e prove prima delle modifiche. Verifica dati/avvio indipendentemente dall’agente. aguja ha root/sudo completo; modalità standard a pieno accesso, richiesta di sola lettura non è sandbox. agent_mode=ask mantiene approvazioni senza togliere root. Controlla azioni distruttive e conserva rollback."
+    ],
+    [
+      "Strumenti e comandi",
+      "aguja tools elenca strumenti. ddrescue per immagini con mappa, TestDisk/PhotoRec per recupero, rsync per copia, smartctl/nvme-cli per hardware. Volumi/cifratura richiedono dispositivo e chiavi corretti. Comandi sotto per orientamento. Non formattare, installare bootloader o scrivere partizioni su dispositivi indovinati. Consulta manuali e lavora su copia se necessario. Strumenti tradizionali senza cloud, nessun recupero universale garantito."
+    ],
+    [
+      "Dieci percorsi pratici",
+      "1. Inventario PC senza avvio. 2. Copia autorizzata altrove. 3. Immagine ddrescue con mappa. 4. Ispezione prima di TestDisk. 5. PhotoRec su altro supporto. 6. SMART/NVMe. 7. Diagnosi UEFI/bootloader dopo backup. 8. BitLocker/LUKS con chiave corretta. 9. Supporto SSH autorizzato. 10. Installazione OS solo su destinazione approvata. Procedure adattabili, non riparazioni automatiche o garanzie. Identifica origine/destinazione/rollback e verifica risultato; non recuperare sulla fonte."
+    ],
+    [
+      "Percorso professionale",
+      "Registra autorizzazione, hardware, versione/hash, stato, dischi e piano. Lavora su copia, etichetta prove e collegamento all’originale. Conserva mappa e criteri di arresto per media instabili. Modifiche limitate con scopo e risultato. Verifica dati/avvio, non solo exit code. Cifra .aguja riutilizzabili e rivedi credenziali obsolete. Nessun dato o chiave cliente nei ticket pubblici."
+    ],
+    [
+      "Problemi per livelli",
+      "Nessun avvio: architettura, integrità, firmware, console testo. Nessuna rete: link/Wi-Fi, DHCP, DNS, HTTPS, ora. Nessun SSH: IP/porta, servizio, politica, autenticazione. Nessuna tailnet: chiave, URL, scadenza, monouso consumata. Nessuna IA: metodo, account, Internet, callback. Profilo assente: capacità/sblocco. Disco assente: controller e inventario prima delle scritture. doctor sano non prova ACL, OAuth o compatibilità totale."
+    ],
+    [
+      "Chiudere senza accessi dimenticati",
+      "Riassumi osservazioni, cambiamenti e verifiche. Chiudi sessioni, completa scritture, spegni correttamente e controlla i file sul destinatario. Conserva originali/backup fino all’accettazione. Rimuovi nodi temporanei e revoca chiavi inutili; verifica token persistenti sul USB. Gestisci immagini/profili con procedura approvata e recuperabile. Non togliere accessi estranei né distruggere prove. Segnala limiti residui."
+    ],
+    [
+      "Cosa è verificato",
+      "Edizione pubblica senza account LA AGUJA o relay proprietario. Test di preparazione, pacchetti e VM coprono percorsi specifici, non ogni PC. Imager 0.9.2 corregge il titolo in sette lingue; immagine 0.9.0 invariata. Schermate conservano versioni reali. Rilettura non è avvio universale; pannello/CLI/sessione non è login IA; iscrizione locale non prova SSH. Windows senza backup USB integrato o Authenticode riconosciuto. Nessun Secure Boot firmato universale."
+    ],
+    [
+      "Riferimenti e prossimi passi",
+      "Link superiori per download e codice. Riferimento spagnolo esteso conserva i 26 capitoli originali; questa guida copre le stesse fasi in italiano. Schermate mantengono origine/versione. Stampa per PDF italiano; PDF storico separato in spagnolo. Consulta OpenSSH, Tailscale/Headscale, ddrescue, TestDisk e Microsoft BitLocker per le tue versioni. Codice GPL-3.0-or-later, terzi con proprie licenze. Ticket con versione e sintomi ripuliti, mai password, token, chiavi o immagini private."
+    ]
+  ],
+  "homeSections": [
+    {
+      "id": "independent",
+      "title": "Lavorare dall’esterno apre altre possibilità.",
+      "paragraphs": [
+        "Quando il sistema installato si guasta, molti strumenti diventano inaccessibili. La Aguja avvia un Linux indipendente da USB per esaminare hardware e lavorare sui dischi.",
+        "L’IA funziona in quel Linux, non nel firmware né prima di qualsiasi sistema operativo. Non dipende dal Windows o Linux da recuperare, sostituire o preparare.",
+        "L’agente può capire la richiesta, verificare lo stato ed eseguire strumenti, non solo spiegare comandi. Il risultato dipende dall’hardware, dai dati e da ogni intervento."
+      ]
+    },
+    {
+      "id": "today",
+      "title": "Cosa è disponibile oggi",
+      "paragraphs": [
+        "Una base di lavoro, non una riparazione automatica di ogni guasto. Codex CLI e OpenCode sono inclusi; Claude Code e Antigravity hanno integrazioni facoltative. L’IA cloud richiede connessione e il tuo account del fornitore."
+      ],
+      "cards": [
+        [
+          "Capire il problema",
+          "Esaminare dischi, partizioni, memoria, dispositivi e segnali di guasto. Distinguere problemi di avvio da un disco che si deteriora."
+        ],
+        [
+          "Recuperare e copiare",
+          "Usare ddrescue, TestDisk, PhotoRec o rsync per creare immagini, cercare file e copiare dati. Il recupero completo non è garantito."
+        ],
+        [
+          "Intervenire sul sistema",
+          "Esaminare file e impostazioni senza avviarlo. Sono disponibili strumenti per partizioni, avvio, Linux e Windows; ogni riparazione richiede verifiche."
+        ],
+        [
+          "Preparare un nuovo inizio",
+          "Gli strumenti per installazioni Linux e immagini Windows supportano procedure guidate. Non sono un installer universale né un ambiente Windows/WinPE incluso."
+        ]
+      ]
+    },
+    {
+      "id": "possibilities",
+      "title": "Cosa si potrebbe costruire su questa base",
+      "paragraphs": [
+        "L’indipendenza dal sistema installato permette di andare oltre il recupero. Sono possibili sviluppi, non funzioni automatiche attuali né una roadmap promessa."
+      ],
+      "cards": [
+        [
+          "Installazioni su misura",
+          "Preparare partizioni, pacchetti e impostazioni per hardware ed esigenze. Mancano flussi completi e test per ciascun sistema."
+        ],
+        [
+          "Passare a un altro computer",
+          "Trasferire dati e configurazioni senza avviare il vecchio sistema. Applicazioni, permessi e driver richiedono adattamenti specifici."
+        ],
+        [
+          "Conservare un sistema in una macchina virtuale",
+          "Partire da un’immagine del disco per provare a mantenere un ambiente. Avvio, driver, licenze e attivazione vanno risolti: copiare non basta."
+        ],
+        [
+          "Provare prima di cambiare l’originale",
+          "Testare modifiche su una copia o macchina virtuale e confrontare i risultati. Non tutti i guasti fisici o gli interventi sono simulabili."
+        ],
+        [
+          "Ricostruire ambienti di lavoro",
+          "Combinare profili riproducibili e backup, anche per più computer. Servono validazione, gestione dei segreti e controlli per ogni macchina."
+        ]
+      ]
+    },
+    {
+      "id": "responsibility",
+      "title": "Più capacità comporta più responsabilità.",
+      "paragraphs": [
+        "L’agente può ottenere permessi completi. «Guarda soltanto» non è un blocco tecnico della scrittura. Identifica il disco, verifica il piano e autorizza operazioni irreversibili.",
+        "Backup recuperabile su un altro supporto, lavoro su copie quando possibile e verifica sono parte dell’intervento. Un comando senza errori non prova integrità dei file o avvio del sistema.",
+        "La Aguja non aggira la cifratura: BitLocker e LUKS richiedono la chiave corretta. Una sessione live non è un’analisi forense certificata né una garanzia per un computer compromesso.",
+        "Con l’IA cloud, dati e istruzioni inviati possono lasciare il computer secondo il fornitore. Scegli cosa condividere, senza chiavi o credenziali. Gli strumenti tradizionali funzionano offline; l’IA cloud no.",
+        "I file possono contenere istruzioni malevole rivolte all’agente. Sono dati da esaminare, non comandi né permessi per superare il compito concordato."
+      ]
+    }
+  ],
+  "faqTitle": "Prima di iniziare",
+  "faq": [
+    [
+      "Windows o Linux devono funzionare?",
+      "No. Avvii il Linux di La Aguja dalla USB. Servono hardware compatibile e la possibilità di avviare da quel supporto."
+    ],
+    [
+      "Modifica i dischi interni all’avvio?",
+      "Non li monta o ripara automaticamente. Strumenti e agenti possono modificarli in seguito. Scrivere la USB di preparazione è un’operazione distinta che cancella quella USB."
+    ],
+    [
+      "Funziona senza Internet?",
+      "Gli strumenti locali sì. L’IA cloud richiede rete e il tuo account o credenziale; nessun modello locale è incluso."
+    ],
+    [
+      "L’accesso remoto è obbligatorio?",
+      "No. Puoi lavorare sul computer. SSH via LAN o il tuo Tailscale/Headscale è facoltativo; LA AGUJA non ospita una console remota."
+    ],
+    [
+      "Funziona su ogni computer?",
+      "La versione attuale è sperimentale e per x86-64. Verifica hardware, avvio, Secure Boot e procedura; non è disponibile una catena Secure Boot universale firmata."
+    ]
+  ]
 }

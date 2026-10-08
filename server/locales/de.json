@@ -1,55 +1,314 @@
 {
- "name":"Deutsch",
- "siteTitle":"LA AGUJA · Freie Rettung, unter deiner Kontrolle",
- "nav":["Downloads","Dokumentation","Quellcode auf GitHub ↗"],
- "eyebrow":"EIN KLEINER EINSTIEG. VOLLE KONTROLLE.",
- "hero":["Dein Computer.","Deine Rettung.","Dein Weg."],
- "lead":"Bereite einen LA AGUJA USB-Stick mit deinen Werkzeugen und KI-Agenten vor. Starte, untersuche und verbinde dich bei Bedarf per SSH über dein eigenes Tailscale oder Headscale. Ein lokaler Browser unterstützt die offizielle Anmeldung deiner KI-Werkzeuge.",
- "actions":["USB-Stick vorbereiten","Ausführliche Anleitung"],
- "note":"DEINE LOKALE UMGEBUNG / OPTIONALER FERNZUGRIFF",
- "mascotAlt":"Agujita, die verchromte Nadel mit bernsteinfarbenen Augen und geschwungenem Schnurrbart",
- "caption":["RETTEN STATT ERSETZEN","Kleiner Einstieg. Große Möglichkeiten.","Eine Rettungsumgebung zum Mitnehmen."],
- "steps":[["Vorbereiten","Konfiguriere Netzwerk, Agenten und Fernzugriff in Flash Imager."],["Starten","Starte vom USB-Stick. Die Anmeldung im privaten Netz ist optional; deine Schlüssel und Richtlinien bestimmen den Zugriff."],["Verbinden","Nutze SSH aus deinem autorisierten privaten Netz. Behalte die lokale Kontrolle und prüfe jede Änderung."]],
- "imagerTitle":"LA AGUJA Flash Imager (Windows und Linux · v0.9.2)",
- "imagerText":"Bereite deinen La Aguja Rettungsdatenträger vor, prüfe das signierte Abbild, verwalte unter Windows verfügbare BitLocker-Wiederherstellungsschlüssel und konfiguriere dein privates Netz. Lade die passende Anwendung und ein öffentliches Rettungsabbild herunter, ohne LA AGUJA Konto oder Registrierung.",
- "portable":"Portables Linux-Paket",
- "imagesTitle":"Öffentliche Rettungsabbilder",
- "imagesText":"Rettungsabbilder werden direkt von unserer offiziellen Website heruntergeladen; Imager und Quellcode liegen auf GitHub. Flash Imager lädt die Teile automatisch, setzt sie zusammen und prüft Signatur und SHA-256. Kein LA AGUJA Konto erforderlich.",
- "imageLinks":["Komprimiertes USB-Abbild (.img.zst) ↗","BIOS/UEFI ISO ↗","SHA-256-Prüfsummen ↗","Dateien und Versionshinweise ↗"],
- "imageNote":"Entpacke das Abbild vor einem manuellen Import. Der integrierte Download setzt die Teile zu einer geprüften .img-Datei zusammen.",
- "privacy":"Datenschutz",
- "footer":"Quellcode GPL-3.0-or-later · Keine Projektkonten oder proprietären Relays.",
- "docTitle":"Benutzerhandbuch · LA AGUJA Rescue Disk",
- "docDescription":"USB vorbereiten, starten, KI und SSH nutzen, Verschlüsselung verstehen, Daten retten und Fehler eingrenzen.",
- "docUI":["Zum Handbuch springen","Inhalt und Suche","Retten. Verstehen. Entscheiden.","In diesem Handbuch suchen","Inhalt durchsuchen oder einen Suchbegriff eingeben.","Drucken / als PDF speichern","Nach oben","Produktanleitung","Passende Abschnitte","Keine Treffer; versuche einen kürzeren Begriff.","Befehl kopieren","Diesen Befehlsblock kopieren","Kopiert","Ausgewählt: manuell kopieren","Ausführliche spanische Referenz (26 Kapitel)","Die Bildschirmbilder zeigen die angegebenen Versionen, keinen neuen Test des Imagers 0.9.2."],
- "privacyTitle":"Deine Konfiguration bleibt unter deiner Kontrolle.",
- "privacyParagraphs":["Die LA AGUJA Website informiert. Sie erstellt keine Konten, verlangt keine Anmeldung, hostet keine Tunnel oder Fernkonsolen und verwendet keine eigenen Konto-Cookies oder Analysewerkzeuge.","Abbilder und signierter Katalog kommen von der LA AGUJA Website. Imager und Quellcode werden auf GitHub bereitgestellt, das seine eigene Datenschutzrichtlinie anwendet. Das Hosting kann notwendige technische Zugriffsprotokolle speichern.","Flash Imager verarbeitet Abbilder sowie Netzwerk-, SSH-, KI- und Tailscale/Headscale-Profile lokal. Diese Profile werden nicht an diese Website gesendet. Private Abbilder können Geheimnisse enthalten: kontrolliere Speicherung und Weitergabe.","Tailscale/Headscale und KI-Anbieter haben eigene Konten und Bedingungen. Ihre optionale Nutzung ist keine Registrierung bei LA AGUJA.","Downloadanfragen zeigen dem Hosting-Anbieter deine Netzwerkanfrage, nicht deine Schlüssel oder den Inhalt lokaler Abbilder."],
- "sections":[
- ["Kleiner Einstieg. Volle Kontrolle.","LA AGUJA ist ein x86-64 Rettungs-Linux, das vor dem installierten Betriebssystem vom USB-Stick startet. Flash Imager bereitet den Stick auf einem funktionierenden Windows-/Linux-PC vor; Rescue Disk läuft auf dem untersuchten Computer. Beim Start werden interne Datenträger nicht automatisch eingebunden, repariert oder beschrieben.","Arbeite lokal oder per SSH, optional über dein Tailscale/Headscale-Netz. Cloud-KI benötigt Internet und dein eigenes Anbieterkonto; klassische Werkzeuge können offline arbeiten. Es gibt kein LA AGUJA Konto oder zentrales Relay. Das Produkt ist experimentell und garantiert nicht jede Hardware."],
- ["Dein erster USB-Stick","Sichere einen ausreichend großen Stick. Lade den Imager, wähle das öffentliche Abbild aus dem signierten Katalog und lasse Ethernet auf DHCP. Stelle Sprache, Tastatur, Hostname und eigenes SSH-Passwort oder öffentlichen Schlüssel ein. KI und privates Netz können beim ersten Versuch ausgeschaltet bleiben.","Verschlüssele ein Profil mit Geheimnissen und bewahre die Entsperrphrase außerhalb des Sticks auf. Vergleiche Modell, Größe und Seriennummer vor der Schreibbestätigung. Warte auf die Rückleseprüfung, starte vom Stick und entsperre das Profil bei Bedarf. Panel sehen und Datenträger identifizieren reicht für diesen ersten Durchlauf."],
- ["Wichtige Begriffe","Live bedeutet Start ohne Installation. Das konfigurierbare IMG und die Boot-ISO sind im Imager nicht austauschbar. Ein Datenträger ist das gesamte Gerät, eine Partition ein Teil und ein Mount macht Dateien erreichbar. Namen wie /dev/sda können wechseln.","DHCP vergibt Adressen; SSH bietet eine verschlüsselte Konsole mit Host-Fingerabdruck. Root/sudo bedeutet Administration, kein Nur-Lese-Sandbox. Registrierungsschlüssel, KI-API-Schlüssel, SSH-Passwort und Profilphrase erfüllen unterschiedliche Aufgaben. SHA-256 prüft Bytes, nicht das Booten. Die Profilphrase entsperrt keine BitLocker-/LUKS-Volumes."],
- ["Vorher: Hardware, Erlaubnis, Sicherung","Prüfe x86-64 Hardware, USB-Boot und Firmware. BIOS/UEFI sind vorgesehen; ARM, alle WLAN-Chips und eine universelle signierte Secure-Boot-Kette werden nicht zugesichert. Hole die Erlaubnis für Gerät und Daten ein. Wähle ein separates Wiederherstellungsziel. Bei instabilen Datenträgern kann zuerst ein Abbild sinnvoll sein.","Das Schreiben ersetzt den Stickinhalt. Windows hat noch keine integrierte USB-Sicherung: sichere extern. Linux bietet eine optionale geprüfte Vollsicherung, standardmäßig aus, mit Platz- und Rechtebedarf. Das ist keine Sicherung des internen Datenträgers. BitLocker/LUKS benötigen den passenden Schlüssel des Eigentümers."],
- ["Flash Imager herunterladen und öffnen","Wähle auf der offiziellen Seite Windows-10/11-EXE, Linux-AppImage, Debian/Ubuntu-DEB oder portables Archiv. Prüfe SHA-256 und öffne die Anwendung auf dem Vorbereitung-PC. EXE und AppImage gehören nicht als Rettungsabbild auf den Stick. Kein LA AGUJA Konto nötig.","Die EXE hat derzeit keine anerkannte Authenticode-Signatur. AppImages benötigen gegebenenfalls Ausführungsrechte; das portable Archiv ist eine Alternative. Geräteschreiben braucht lokale Rechteerhöhung. Eine gestartete App beweist keine vorbereitete oder bootfähige Rettung."],
- ["Schritt 1 · Passendes Abbild wählen","Nutze den signierten Katalog oder eine lokale .img-Datei. Ed25519 und Hashwerte werden geprüft, Downloadteile zusammengefügt. Eine manuell importierte .img.zst muss vorher entpackt werden. Private Vorbereitung erstellt eine neue Datei und verändert nicht das öffentliche Abbild.","Aktuell: Imager 0.9.2, Rettungsabbild 0.9.0. Optionen hängen von unterstützten Abbildfunktionen ab: Ohne tailscale-profile-v1 wird die Vorbereitung mit privater Netzregistrierung abgelehnt. Prüfe die reale Größe statt der Werbeangabe des Sticks."],
- ["Schritt 2 · Netzwerk, Sprache, Hostname","Wähle Live-Sprache, Tastaturlayout und Variante; die Imager-Oberflächensprache ist unabhängig. Verwende einen erkennbaren Hostnamen. Ethernet DHCP vereinfacht den Einstieg. Gespeichertes WLAN wird beim Start verwendet; ohne Netz bietet das Panel eine interaktive Auswahl.","WLAN-Passwortimport kann lokale Berechtigung erfordern. Unternehmensnetze und Captive Portals brauchen eventuell manuelles NetworkManager-Setup. Prüfe für Onlinedienste Verbindung, DNS, HTTPS und Uhrzeit getrennt. Lokale Diagnose kann ohne Internet funktionieren."],
- ["Schritt 3 · SSH-Zugang","Verwende ein eigenes Passwort oder den öffentlichen Schlüssel des autorisierten Operators, nie einen privaten Schlüssel. Standardport ist 22. Nutze die echte Live-IP und vergleiche den Host-Fingerabdruck. Ein anderer Port ersetzt keine Authentifizierung.","Werkseitiger Benutzer und öffentliches Passwort sind aguja. Ein eigenes Passwort hat Vorrang. Leeres Passwort mit öffentlichem Schlüssel erlaubt nur Schlüsselzugriff; ohne Schlüssel bleibt der Werkszugang erhalten. Der Benutzer hat unbegrenztes sudo. aguja password speichert auf USB, sudo passwd aguja ändert nur die laufende Sitzung."],
- ["Schritt 4 · KI vorbereiten","Flash Imager integriert Codex CLI, OpenCode, Claude Code und Antigravity. Wähle API-Schlüssel, selektiven Import einer kompatiblen portablen Sitzung oder Anmeldung nach dem Start. Eine CLI-Installationsprüfung belegt weder erfolgreiche Anmeldung noch Inferenz.","Der gesamte Schlüsselbund, Verlauf, Hooks und MCP-Konfiguration werden nicht kopiert. Portable Sitzungen können abgelaufen sein. Kosten, Kontingente und Datenübertragung richten sich nach deinem Anbieter. Du kannst den Stick ohne KI-Zugangsdaten vorbereiten; Cloud-KI wird nicht offline zugesichert."],
- ["Schritt 5 · Eigenes Tailscale/Headscale","Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC.","Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Die Live-Identität liegt im RAM und registriert sich nach Neustart erneut."],
- ["OpenSSH ist nicht Tailscale SSH","Standard ist normales OpenSSH über das private Netz: Schlüssel/Passwort und Fingerabdruck gelten weiter, passende Netzwerk-ACLs sind nötig. Tailscale SSH ist eine erweiterte Option mit kompatiblem Server und ausdrücklichen SSH-Richtlinien.","Trenne Registrierung, Erreichbarkeit, TCP-Port und SSH-Authentifizierung. Öffne nicht öffentliche Ports oder breite ACLs, um einen Anmeldefehler zu verdecken. Prüfe die Dokumentation deiner tatsächlich eingesetzten Tailscale-/Headscale-Version."],
- ["Geheimnisse und Verschlüsselungsgrenzen","Private Profile können WLAN-Passwörter, SSH-Einstellungen, KI- und Registrierungsschlüssel enthalten. Verschlüssele die Kapsel, bewahre die Phrase separat auf und entsperre lokal vor dem Laden. Eine .aguja-Vorlage und ihre Sicherungen sind ebenfalls sensibel.","Die Kapsel verschlüsselt nicht ganz AGUJA_DATA und schützt geladene Geheimnisse nicht vor root. persistent_home=no verliert HOME/Tokens nach Neustart; yes speichert sie unverschlüsselt auf USB. Klartext-aguja.conf ist bei physischem Zugriff lesbar. Keine privaten Abbilder oder Schlüssel öffentlich hochladen."],
- ["Windows · BitLocker verstehen","BitLocker schützt Windows-Volumes; Linux-Boot entfernt die Verschlüsselung nicht. Beschaffe vom Eigentümer den zum Volume passenden Wiederherstellungsschlüssel. Profilphrase und SSH-Passwort sind keine BitLocker-Schlüssel. LA AGUJA umgeht die Verschlüsselung nicht.","Unter Windows kann der Imager verfügbare Schlüssel prüfen und ausdrücklich ausgewählte Schlüssel in ein privates Abbild aufnehmen. Verschlüssele das Profil und behalte eine weitere Kopie. Ein angezeigter Schlüssel beweist kein entsperrtes Volume. Der Windows-Screenshot stammt aus 0.8.1, nicht aus einem neuen nativen 0.9.2-Test."],
- ["Schritt 6 · Vorbereiten, schreiben, prüfen","Prüfe Abbild, Schutzmodus und Zusammenfassung. Privates Abbild erstellen erzeugt eine Datei; USB vorbereiten und schreiben beschreibt zusätzlich das gewählte Gerät. Vergleiche Modell, Seriennummer und echte Größe in der nativen Bestätigung. Bei Unsicherheit abbrechen. UAC/Polkit nur für die beabsichtigte Aktion zulassen.","Warte ohne Abziehen auf die vollständige Rückleseprüfung und prüfe deren Ergebnis. Korrekte Bytes garantieren nicht jeden Firmware-Start: teste auf deiner Hardware. Die externe Windows-USB-Sicherung muss vorher erfolgt sein."],
- ["Starten, entsperren, verbinden","Wähle den Stick im Hersteller-Bootmenü. Das Panel zeigt Netzwerk und SSH. Ein verschlüsseltes Profil wird lokal mit aguja profile unlock entsperrt. Bei Bedarf fällt die grafische Ansicht auf eine Textkonsole zurück.","Nutze die tatsächliche IP. .local erfordert funktionierendes mDNS/Multicast und kann bei Kollision wechseln. SSH geht auch im LAN ohne Tailnet. Vergleiche den Fingerabdruck, prüfe Status und Datenträger. Das sichtbare Panel bindet oder repariert keine internen Laufwerke automatisch."],
- ["Neustart: vorübergehende Netzidentität","Die Tailnet-Identität lebt im RAM. Nach Neustart sind Netzwerk, Profilentsperrung und neue Registrierung nötig. Ein Einmalschlüssel kann bereits nach dem ersten Boot verbraucht sein. Für wiederholte Starts verwende einen gültigen, begrenzten wiederverwendbaren Schlüssel in deiner Verwaltung.","Das ist unabhängig vom SSH-Hostschlüssel des USB und von HOME-Persistenz. Entferne veraltete Knoten und widerrufe unbenötigte Schlüssel. Eine frühere Verbindung beweist keine aktuelle Registrierung oder Richtlinie."],
- ["KI-Anmeldung im lokalen Browser","aguja login codex, claude oder antigravity öffnet lokal sandboxed Chromium mit offiziellem Login und Konsole an derselben PTY. Kopieren fokussiert nur die Konsole; füge mit Ctrl+Shift+V ein. Schließen kehrt zum ursprünglichen Terminal zurück. Kein QR und keine automatische Zustimmung.","OpenCode behält opencode auth login. Über SSH, seriell oder ohne Bildschirm gilt die native Methode; entfernte localhost-Callbacks werden nicht automatisch zugesichert. API und Sitzungsimport sind andere Wege. Synthetische Screenshots belegen die Oberfläche, nicht echte Anbieteranmeldung oder Inferenz."],
- ["Erste Diagnose: verstehen vor reparieren","Formuliere eine konkrete Frage, sammle Status, Geräteidentität, Dateisysteme und Mounts. Starte aguja doctor und das Inventar unten. Identifiziere USB, Quelle und Ziel nach Modell, Größe und Kennung, nicht nach vermuteten Gerätebuchstaben.","Prüfe für Dateizugriff Nur-Lese-Mount und Dateisystem-Journalverhalten. Sichere Beobachtungen vor Änderungen. Instabile Medien brauchen möglicherweise ddrescue-Abbild und Map-Datei statt wiederholter Reparaturversuche."],
- ["Mit einem Agenten arbeiten","Definiere Ziel, Computer, exakten Datenträger, erlaubte Aktionen, Sicherungsziel und Abbruchbedingungen. Verlange aktuellen Zustand und Belege vor Änderungen. Prüfe wiederhergestellte Dateien oder Bootverhalten unabhängig von der Antwort des Agenten.","aguja hat volle root-/sudo-Rechte. Standardstarter nutzen die Vollzugriffsmechanismen der Werkzeuge; eine Nur-Lese-Anweisung ist keine Sandbox. agent_mode=ask erhält deren Freigabeverhalten ohne root zu entfernen. Prüfe destruktive Aktionen und behalte eine Rückfallkopie."],
- ["Rettungswerkzeuge und Orientierung","aguja tools zeigt die Werkzeuge. ddrescue erstellt Abbilder instabiler Medien; TestDisk/PhotoRec unterstützen Wiederherstellung; rsync kopiert; smartctl/nvme-cli prüfen Hardware. Volume-/Verschlüsselungswerkzeuge brauchen passende Geräte und Schlüssel.","Die Befehle unten dienen der Bestandsaufnahme. Keine Formatierung, Bootloaderinstallation oder Partitionstabellen-Schreibaktion auf einem geratenen Gerät. Lies die jeweiligen Handbücher und arbeite gegebenenfalls auf Kopien. Klassische Werkzeuge brauchen keine Cloud-KI; universelle Wiederherstellung wird nicht versprochen."],
- ["Zehn praktische Abläufe","1. Nicht bootenden PC inventarisieren. 2. Erlaubte Dateien auf ein anderes Ziel kopieren. 3. Defektes Laufwerk mit ddrescue und Map abbilden. 4. Partitionen vor TestDisk-Schreibzugriff prüfen. 5. PhotoRec auf ein separates Ziel anwenden. 6. SMART/NVMe untersuchen. 7. UEFI/Bootloader nach Sicherung diagnostizieren. 8. BitLocker/LUKS mit richtigem Schlüssel öffnen. 9. Autorisierten SSH-Support leisten. 10. OS-Installation nur auf ausdrücklich freigegebenem Ziel begleiten.","Anpassbare Verfahren, keine automatischen Reparaturen oder garantierten Ergebnisse. Bestimme Quelle, Ziel und Rückweg, prüfe das beobachtbare Ergebnis. Keine geretteten Daten auf die Quelle schreiben."],
- ["Professionell: Belege und Wiederholbarkeit","Dokumentiere Erlaubnis, Hardware, Version/Hash, Anfangszustand, Datenträger und Rettungsplan. Arbeite möglichst auf einer Kopie, kennzeichne Belege und die Zuordnung zum Original. Bei instabilen Medien Map-Datei und Abbruchkriterien erhalten.","Ändere schrittweise mit Zweck und Ergebnis. Prüfe Daten/Boot statt nur Exitcodes. Wiederverwendbare .aguja-Profile verschlüsseln und auf veraltete Schlüssel prüfen. Keine Kundendaten oder Schlüssel in öffentlichen Tickets oder Vorführungen."],
- ["Fehler nach Ebenen eingrenzen","Kein Boot: Architektur, Integrität, Firmware, Textkonsole. Kein Netz: Verbindung/WLAN, DHCP, DNS, HTTPS, Zeit. Kein SSH: IP/Port, Dienst, Richtlinie, Authentifizierung. Kein Tailnet: Schlüssel, URL, Ablauf oder bereits verbrauchter Einmalschlüssel.","Kein KI-Login: Methode, Konto, Internet, Callback. Profil fehlt: Abbildfähigkeit und Entsperrung. Laufwerk fehlt: Controller/Inventar vor Schreibaktionen. Ein gesundes doctor-Ergebnis beweist weder ACLs noch OAuth noch universelle Hardware-Kompatibilität."],
- ["Abschließen ohne vergessene Zugänge","Fasse Beobachtungen, Änderungen und Prüfungen zusammen. Beende Sitzungen und Schreibvorgänge, fahre sauber herunter. Prüfe Dateien am Ziel und behalte Original/Sicherung bis zur Abnahme.","Entferne temporäre Knoten, widerrufe unnötige Schlüssel und prüfe persistente USB-Tokens. Private Profile/Abbilder nur nach freigegebenem, wiederherstellbarem Verfahren behandeln. Keine fremden Eigentümerzugänge entziehen oder Belege vernichten. Verbleibende Grenzen benennen."],
- ["Was getestet ist und was daraus nicht folgt","Die öffentliche Ausgabe entfernt LA AGUJA Konten und proprietäres Relay. Paket-, Vorbereitungs- und VM-Tests belegen bestimmte Abläufe, nicht jeden PC. Imager 0.9.2 korrigiert den Titel in sieben Sprachen; das Rettungsabbild bleibt 0.9.0. Ältere Screenshots behalten ihre echten Versionen.","Rücklesen ist keine universelle Bootprüfung; Panel/CLI/portable Sitzung ist keine KI-Anmeldung. Lokale Registrierung belegt keinen erlaubten SSH-Zugriff. Windows hat weder integrierte USB-Sicherung noch anerkannte Authenticode-Signatur. Keine universelle signierte Secure-Boot-Kette."],
- ["Referenzen und nächste Schritte","Links oben führen zu Downloads und Quellcode. Die ausführliche spanische Referenz enthält das ursprüngliche Handbuch mit 26 Kapiteln. Diese Anleitung deckt dieselben Betriebsschritte auf Deutsch ab. Bilder behalten Version und Herkunft. Drucke diese Seite als deutsches PDF; das separat veröffentlichte historische PDF ist spanisch.","Nutze offizielle Dokumentation von OpenSSH, Tailscale/Headscale, ddrescue, TestDisk und Microsoft BitLocker für deine Versionen. Eigener Code: GPL-3.0-or-later, Fremdkomponenten: eigene Lizenzen. Tickets enthalten Versionen und bereinigte Symptome, keine Passwörter, Tokens, privaten Schlüssel oder Abbilder."]
- ]
+  "name": "Deutsch",
+  "siteTitle": "LA AGUJA · KI für die Arbeit vor dem Start des installierten Systems",
+  "nav": [
+    "Downloads",
+    "Dokumentation",
+    "Quellcode auf GitHub ↗"
+  ],
+  "eyebrow": "LINUX AUF USB. EIN ANDERER ZUGANG ZUM RECHNER.",
+  "hero": [
+    "Bevor dein",
+    "System startet,",
+    "entscheide den nächsten Schritt."
+  ],
+  "lead": "LA AGUJA startet vom USB-Stick. So kannst du am Rechner arbeiten, auch wenn Windows oder Linux nicht mehr starten. Diagnose- und Rettungswerkzeuge treffen auf KI-Agenten, die sie mit dir einsetzen können.",
+  "actions": [
+    "USB vorbereiten",
+    "Anleitung lesen"
+  ],
+  "note": "EXPERIMENTELLES LIVE-LINUX · X86-64 · LOKAL ODER PER SSH",
+  "mascotAlt": "Agujita, die verchromte Nadel mit bernsteinfarbenen Augen und geschwungenem Schnurrbart",
+  "caption": [
+    "LA AGUJA / RESCUE DISK",
+    "Vorhandenes retten. Neues vorbereiten.",
+    "Rettung ist der Ausgangspunkt, nicht der einzige mögliche Einsatz."
+  ],
+  "steps": [
+    [
+      "USB vorbereiten",
+      "Image, Sprache, Tastatur und Netzwerk wählen. KI und Fernzugriff sind optional."
+    ],
+    [
+      "Rechner starten",
+      "Vom USB-Stick booten. La Aguja lädt sein eigenes Linux, unabhängig vom installierten System."
+    ],
+    [
+      "Verstehen und entscheiden",
+      "Rechner prüfen, bei Bedarf sichern und Änderungen vor der Ausführung abstimmen."
+    ]
+  ],
+  "imagerTitle": "USB mit Flash Imager vorbereiten",
+  "imagerText": "Die App für Windows und Linux lädt und prüft das Image, beschreibt den USB-Stick und speichert deine Einstellungen. SSH, KI-Agenten und dein Tailscale-/Headscale-Netz lassen sich vorbereiten. Unter Windows können verfügbare BitLocker-Schlüssel verwaltet werden. Version 0.9.2; das Schreiben löscht den Inhalt des USB-Sticks.",
+  "portable": "Portables Linux-Paket",
+  "imagesTitle": "La-Aguja-Image herunterladen",
+  "imagesText": "Rescue Disk 0.9.0 ist das Linux, das auf dem Rechner startet. Images liegen auf unserer Website, Imager und Code auf GitHub. Der Imager prüft Katalogsignatur und SHA-256 des Downloads. Kein LA-AGUJA-Konto erforderlich.",
+  "imageLinks": [
+    "Komprimiertes USB-Abbild (.img.zst) ↗",
+    "BIOS/UEFI ISO ↗",
+    "SHA-256-Prüfsummen ↗",
+    "Dateien und Versionshinweise ↗"
+  ],
+  "imageNote": "Entpacke das Abbild vor einem manuellen Import. Der integrierte Download setzt die Teile zu einer geprüften .img-Datei zusammen.",
+  "privacy": "Datenschutz",
+  "footer": "Open Source · GPL-3.0-or-later · Dein Netz, kein LA-AGUJA-Relay.",
+  "docTitle": "Benutzerhandbuch · LA AGUJA Rescue Disk",
+  "docDescription": "USB vorbereiten, starten, KI und SSH nutzen, Verschlüsselung verstehen, Daten retten und Fehler eingrenzen.",
+  "docUI": [
+    "Zum Handbuch springen",
+    "Inhalt und Suche",
+    "Retten. Verstehen. Entscheiden.",
+    "In diesem Handbuch suchen",
+    "Inhalt durchsuchen oder einen Suchbegriff eingeben.",
+    "Drucken / als PDF speichern",
+    "Nach oben",
+    "Produktanleitung",
+    "Passende Abschnitte",
+    "Keine Treffer; versuche einen kürzeren Begriff.",
+    "Befehl kopieren",
+    "Diesen Befehlsblock kopieren",
+    "Kopiert",
+    "Ausgewählt: manuell kopieren",
+    "Ausführliche spanische Referenz (26 Kapitel)",
+    "Die Bildschirmbilder zeigen die angegebenen Versionen, keinen neuen Test des Imagers 0.9.2."
+  ],
+  "privacyTitle": "Deine Konfiguration bleibt unter deiner Kontrolle.",
+  "privacyParagraphs": [
+    "Die LA AGUJA Website informiert. Sie erstellt keine Konten, verlangt keine Anmeldung, hostet keine Tunnel oder Fernkonsolen und verwendet keine eigenen Konto-Cookies oder Analysewerkzeuge.",
+    "Abbilder und signierter Katalog kommen von der LA AGUJA Website. Imager und Quellcode werden auf GitHub bereitgestellt, das seine eigene Datenschutzrichtlinie anwendet. Das Hosting kann notwendige technische Zugriffsprotokolle speichern.",
+    "Flash Imager verarbeitet Abbilder sowie Netzwerk-, SSH-, KI- und Tailscale/Headscale-Profile lokal. Diese Profile werden nicht an diese Website gesendet. Private Abbilder können Geheimnisse enthalten: kontrolliere Speicherung und Weitergabe.",
+    "Tailscale/Headscale und KI-Anbieter haben eigene Konten und Bedingungen. Ihre optionale Nutzung ist keine Registrierung bei LA AGUJA.",
+    "Downloadanfragen zeigen dem Hosting-Anbieter deine Netzwerkanfrage, nicht deine Schlüssel oder den Inhalt lokaler Abbilder."
+  ],
+  "sections": [
+    [
+      "Kleiner Einstieg. Volle Kontrolle.",
+      "LA AGUJA ist ein x86-64 Rettungs-Linux, das vor dem installierten Betriebssystem vom USB-Stick startet. Flash Imager bereitet den Stick auf einem funktionierenden Windows-/Linux-PC vor; Rescue Disk läuft auf dem untersuchten Computer. Beim Start werden interne Datenträger nicht automatisch eingebunden, repariert oder beschrieben.",
+      "Arbeite lokal oder per SSH, optional über dein Tailscale/Headscale-Netz. Cloud-KI benötigt Internet und dein eigenes Anbieterkonto; klassische Werkzeuge können offline arbeiten. Es gibt kein LA AGUJA Konto oder zentrales Relay. Das Produkt ist experimentell und garantiert nicht jede Hardware."
+    ],
+    [
+      "Dein erster USB-Stick",
+      "Sichere einen ausreichend großen Stick. Lade den Imager, wähle das öffentliche Abbild aus dem signierten Katalog und lasse Ethernet auf DHCP. Stelle Sprache, Tastatur, Hostname und eigenes SSH-Passwort oder öffentlichen Schlüssel ein. KI und privates Netz können beim ersten Versuch ausgeschaltet bleiben.",
+      "Verschlüssele ein Profil mit Geheimnissen und bewahre die Entsperrphrase außerhalb des Sticks auf. Vergleiche Modell, Größe und Seriennummer vor der Schreibbestätigung. Warte auf die Rückleseprüfung, starte vom Stick und entsperre das Profil bei Bedarf. Panel sehen und Datenträger identifizieren reicht für diesen ersten Durchlauf."
+    ],
+    [
+      "Wichtige Begriffe",
+      "Live bedeutet Start ohne Installation. Das konfigurierbare IMG und die Boot-ISO sind im Imager nicht austauschbar. Ein Datenträger ist das gesamte Gerät, eine Partition ein Teil und ein Mount macht Dateien erreichbar. Namen wie /dev/sda können wechseln.",
+      "DHCP vergibt Adressen; SSH bietet eine verschlüsselte Konsole mit Host-Fingerabdruck. Root/sudo bedeutet Administration, kein Nur-Lese-Sandbox. Registrierungsschlüssel, KI-API-Schlüssel, SSH-Passwort und Profilphrase erfüllen unterschiedliche Aufgaben. SHA-256 prüft Bytes, nicht das Booten. Die Profilphrase entsperrt keine BitLocker-/LUKS-Volumes."
+    ],
+    [
+      "Vorher: Hardware, Erlaubnis, Sicherung",
+      "Prüfe x86-64 Hardware, USB-Boot und Firmware. BIOS/UEFI sind vorgesehen; ARM, alle WLAN-Chips und eine universelle signierte Secure-Boot-Kette werden nicht zugesichert. Hole die Erlaubnis für Gerät und Daten ein. Wähle ein separates Wiederherstellungsziel. Bei instabilen Datenträgern kann zuerst ein Abbild sinnvoll sein.",
+      "Das Schreiben ersetzt den Stickinhalt. Windows hat noch keine integrierte USB-Sicherung: sichere extern. Linux bietet eine optionale geprüfte Vollsicherung, standardmäßig aus, mit Platz- und Rechtebedarf. Das ist keine Sicherung des internen Datenträgers. BitLocker/LUKS benötigen den passenden Schlüssel des Eigentümers."
+    ],
+    [
+      "Flash Imager herunterladen und öffnen",
+      "Wähle auf der offiziellen Seite Windows-10/11-EXE, Linux-AppImage, Debian/Ubuntu-DEB oder portables Archiv. Prüfe SHA-256 und öffne die Anwendung auf dem Vorbereitung-PC. EXE und AppImage gehören nicht als Rettungsabbild auf den Stick. Kein LA AGUJA Konto nötig.",
+      "Die EXE hat derzeit keine anerkannte Authenticode-Signatur. AppImages benötigen gegebenenfalls Ausführungsrechte; das portable Archiv ist eine Alternative. Geräteschreiben braucht lokale Rechteerhöhung. Eine gestartete App beweist keine vorbereitete oder bootfähige Rettung."
+    ],
+    [
+      "Schritt 1 · Passendes Abbild wählen",
+      "Nutze den signierten Katalog oder eine lokale .img-Datei. Ed25519 und Hashwerte werden geprüft, Downloadteile zusammengefügt. Eine manuell importierte .img.zst muss vorher entpackt werden. Private Vorbereitung erstellt eine neue Datei und verändert nicht das öffentliche Abbild.",
+      "Aktuell: Imager 0.9.2, Rettungsabbild 0.9.0. Optionen hängen von unterstützten Abbildfunktionen ab: Ohne tailscale-profile-v1 wird die Vorbereitung mit privater Netzregistrierung abgelehnt. Prüfe die reale Größe statt der Werbeangabe des Sticks."
+    ],
+    [
+      "Schritt 2 · Netzwerk, Sprache, Hostname",
+      "Wähle Live-Sprache, Tastaturlayout und Variante; die Imager-Oberflächensprache ist unabhängig. Verwende einen erkennbaren Hostnamen. Ethernet DHCP vereinfacht den Einstieg. Gespeichertes WLAN wird beim Start verwendet; ohne Netz bietet das Panel eine interaktive Auswahl.",
+      "WLAN-Passwortimport kann lokale Berechtigung erfordern. Unternehmensnetze und Captive Portals brauchen eventuell manuelles NetworkManager-Setup. Prüfe für Onlinedienste Verbindung, DNS, HTTPS und Uhrzeit getrennt. Lokale Diagnose kann ohne Internet funktionieren."
+    ],
+    [
+      "Schritt 3 · SSH-Zugang",
+      "Verwende ein eigenes Passwort oder den öffentlichen Schlüssel des autorisierten Operators, nie einen privaten Schlüssel. Standardport ist 22. Nutze die echte Live-IP und vergleiche den Host-Fingerabdruck. Ein anderer Port ersetzt keine Authentifizierung.",
+      "Werkseitiger Benutzer und öffentliches Passwort sind aguja. Ein eigenes Passwort hat Vorrang. Leeres Passwort mit öffentlichem Schlüssel erlaubt nur Schlüsselzugriff; ohne Schlüssel bleibt der Werkszugang erhalten. Der Benutzer hat unbegrenztes sudo. aguja password speichert auf USB, sudo passwd aguja ändert nur die laufende Sitzung."
+    ],
+    [
+      "Schritt 4 · KI vorbereiten",
+      "Flash Imager integriert Codex CLI, OpenCode, Claude Code und Antigravity. Wähle API-Schlüssel, selektiven Import einer kompatiblen portablen Sitzung oder Anmeldung nach dem Start. Eine CLI-Installationsprüfung belegt weder erfolgreiche Anmeldung noch Inferenz.",
+      "Der gesamte Schlüsselbund, Verlauf, Hooks und MCP-Konfiguration werden nicht kopiert. Portable Sitzungen können abgelaufen sein. Kosten, Kontingente und Datenübertragung richten sich nach deinem Anbieter. Du kannst den Stick ohne KI-Zugangsdaten vorbereiten; Cloud-KI wird nicht offline zugesichert."
+    ],
+    [
+      "Schritt 5 · Eigenes Tailscale/Headscale",
+      "Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC.",
+      "Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Die Live-Identität liegt im RAM und registriert sich nach Neustart erneut."
+    ],
+    [
+      "OpenSSH ist nicht Tailscale SSH",
+      "Standard ist normales OpenSSH über das private Netz: Schlüssel/Passwort und Fingerabdruck gelten weiter, passende Netzwerk-ACLs sind nötig. Tailscale SSH ist eine erweiterte Option mit kompatiblem Server und ausdrücklichen SSH-Richtlinien.",
+      "Trenne Registrierung, Erreichbarkeit, TCP-Port und SSH-Authentifizierung. Öffne nicht öffentliche Ports oder breite ACLs, um einen Anmeldefehler zu verdecken. Prüfe die Dokumentation deiner tatsächlich eingesetzten Tailscale-/Headscale-Version."
+    ],
+    [
+      "Geheimnisse und Verschlüsselungsgrenzen",
+      "Private Profile können WLAN-Passwörter, SSH-Einstellungen, KI- und Registrierungsschlüssel enthalten. Verschlüssele die Kapsel, bewahre die Phrase separat auf und entsperre lokal vor dem Laden. Eine .aguja-Vorlage und ihre Sicherungen sind ebenfalls sensibel.",
+      "Die Kapsel verschlüsselt nicht ganz AGUJA_DATA und schützt geladene Geheimnisse nicht vor root. persistent_home=no verliert HOME/Tokens nach Neustart; yes speichert sie unverschlüsselt auf USB. Klartext-aguja.conf ist bei physischem Zugriff lesbar. Keine privaten Abbilder oder Schlüssel öffentlich hochladen."
+    ],
+    [
+      "Windows · BitLocker verstehen",
+      "BitLocker schützt Windows-Volumes; Linux-Boot entfernt die Verschlüsselung nicht. Beschaffe vom Eigentümer den zum Volume passenden Wiederherstellungsschlüssel. Profilphrase und SSH-Passwort sind keine BitLocker-Schlüssel. LA AGUJA umgeht die Verschlüsselung nicht.",
+      "Unter Windows kann der Imager verfügbare Schlüssel prüfen und ausdrücklich ausgewählte Schlüssel in ein privates Abbild aufnehmen. Verschlüssele das Profil und behalte eine weitere Kopie. Ein angezeigter Schlüssel beweist kein entsperrtes Volume. Der Windows-Screenshot stammt aus 0.8.1, nicht aus einem neuen nativen 0.9.2-Test."
+    ],
+    [
+      "Schritt 6 · Vorbereiten, schreiben, prüfen",
+      "Prüfe Abbild, Schutzmodus und Zusammenfassung. Privates Abbild erstellen erzeugt eine Datei; USB vorbereiten und schreiben beschreibt zusätzlich das gewählte Gerät. Vergleiche Modell, Seriennummer und echte Größe in der nativen Bestätigung. Bei Unsicherheit abbrechen. UAC/Polkit nur für die beabsichtigte Aktion zulassen.",
+      "Warte ohne Abziehen auf die vollständige Rückleseprüfung und prüfe deren Ergebnis. Korrekte Bytes garantieren nicht jeden Firmware-Start: teste auf deiner Hardware. Die externe Windows-USB-Sicherung muss vorher erfolgt sein."
+    ],
+    [
+      "Starten, entsperren, verbinden",
+      "Wähle den Stick im Hersteller-Bootmenü. Das Panel zeigt Netzwerk und SSH. Ein verschlüsseltes Profil wird lokal mit aguja profile unlock entsperrt. Bei Bedarf fällt die grafische Ansicht auf eine Textkonsole zurück.",
+      "Nutze die tatsächliche IP. .local erfordert funktionierendes mDNS/Multicast und kann bei Kollision wechseln. SSH geht auch im LAN ohne Tailnet. Vergleiche den Fingerabdruck, prüfe Status und Datenträger. Das sichtbare Panel bindet oder repariert keine internen Laufwerke automatisch."
+    ],
+    [
+      "Neustart: vorübergehende Netzidentität",
+      "Die Tailnet-Identität lebt im RAM. Nach Neustart sind Netzwerk, Profilentsperrung und neue Registrierung nötig. Ein Einmalschlüssel kann bereits nach dem ersten Boot verbraucht sein. Für wiederholte Starts verwende einen gültigen, begrenzten wiederverwendbaren Schlüssel in deiner Verwaltung.",
+      "Das ist unabhängig vom SSH-Hostschlüssel des USB und von HOME-Persistenz. Entferne veraltete Knoten und widerrufe unbenötigte Schlüssel. Eine frühere Verbindung beweist keine aktuelle Registrierung oder Richtlinie."
+    ],
+    [
+      "KI-Anmeldung im lokalen Browser",
+      "aguja login codex, claude oder antigravity öffnet lokal sandboxed Chromium mit offiziellem Login und Konsole an derselben PTY. Kopieren fokussiert nur die Konsole; füge mit Ctrl+Shift+V ein. Schließen kehrt zum ursprünglichen Terminal zurück. Kein QR und keine automatische Zustimmung.",
+      "OpenCode behält opencode auth login. Über SSH, seriell oder ohne Bildschirm gilt die native Methode; entfernte localhost-Callbacks werden nicht automatisch zugesichert. API und Sitzungsimport sind andere Wege. Synthetische Screenshots belegen die Oberfläche, nicht echte Anbieteranmeldung oder Inferenz."
+    ],
+    [
+      "Erste Diagnose: verstehen vor reparieren",
+      "Formuliere eine konkrete Frage, sammle Status, Geräteidentität, Dateisysteme und Mounts. Starte aguja doctor und das Inventar unten. Identifiziere USB, Quelle und Ziel nach Modell, Größe und Kennung, nicht nach vermuteten Gerätebuchstaben.",
+      "Prüfe für Dateizugriff Nur-Lese-Mount und Dateisystem-Journalverhalten. Sichere Beobachtungen vor Änderungen. Instabile Medien brauchen möglicherweise ddrescue-Abbild und Map-Datei statt wiederholter Reparaturversuche."
+    ],
+    [
+      "Mit einem Agenten arbeiten",
+      "Definiere Ziel, Computer, exakten Datenträger, erlaubte Aktionen, Sicherungsziel und Abbruchbedingungen. Verlange aktuellen Zustand und Belege vor Änderungen. Prüfe wiederhergestellte Dateien oder Bootverhalten unabhängig von der Antwort des Agenten.",
+      "aguja hat volle root-/sudo-Rechte. Standardstarter nutzen die Vollzugriffsmechanismen der Werkzeuge; eine Nur-Lese-Anweisung ist keine Sandbox. agent_mode=ask erhält deren Freigabeverhalten ohne root zu entfernen. Prüfe destruktive Aktionen und behalte eine Rückfallkopie."
+    ],
+    [
+      "Rettungswerkzeuge und Orientierung",
+      "aguja tools zeigt die Werkzeuge. ddrescue erstellt Abbilder instabiler Medien; TestDisk/PhotoRec unterstützen Wiederherstellung; rsync kopiert; smartctl/nvme-cli prüfen Hardware. Volume-/Verschlüsselungswerkzeuge brauchen passende Geräte und Schlüssel.",
+      "Die Befehle unten dienen der Bestandsaufnahme. Keine Formatierung, Bootloaderinstallation oder Partitionstabellen-Schreibaktion auf einem geratenen Gerät. Lies die jeweiligen Handbücher und arbeite gegebenenfalls auf Kopien. Klassische Werkzeuge brauchen keine Cloud-KI; universelle Wiederherstellung wird nicht versprochen."
+    ],
+    [
+      "Zehn praktische Abläufe",
+      "1. Nicht bootenden PC inventarisieren. 2. Erlaubte Dateien auf ein anderes Ziel kopieren. 3. Defektes Laufwerk mit ddrescue und Map abbilden. 4. Partitionen vor TestDisk-Schreibzugriff prüfen. 5. PhotoRec auf ein separates Ziel anwenden. 6. SMART/NVMe untersuchen. 7. UEFI/Bootloader nach Sicherung diagnostizieren. 8. BitLocker/LUKS mit richtigem Schlüssel öffnen. 9. Autorisierten SSH-Support leisten. 10. OS-Installation nur auf ausdrücklich freigegebenem Ziel begleiten.",
+      "Anpassbare Verfahren, keine automatischen Reparaturen oder garantierten Ergebnisse. Bestimme Quelle, Ziel und Rückweg, prüfe das beobachtbare Ergebnis. Keine geretteten Daten auf die Quelle schreiben."
+    ],
+    [
+      "Professionell: Belege und Wiederholbarkeit",
+      "Dokumentiere Erlaubnis, Hardware, Version/Hash, Anfangszustand, Datenträger und Rettungsplan. Arbeite möglichst auf einer Kopie, kennzeichne Belege und die Zuordnung zum Original. Bei instabilen Medien Map-Datei und Abbruchkriterien erhalten.",
+      "Ändere schrittweise mit Zweck und Ergebnis. Prüfe Daten/Boot statt nur Exitcodes. Wiederverwendbare .aguja-Profile verschlüsseln und auf veraltete Schlüssel prüfen. Keine Kundendaten oder Schlüssel in öffentlichen Tickets oder Vorführungen."
+    ],
+    [
+      "Fehler nach Ebenen eingrenzen",
+      "Kein Boot: Architektur, Integrität, Firmware, Textkonsole. Kein Netz: Verbindung/WLAN, DHCP, DNS, HTTPS, Zeit. Kein SSH: IP/Port, Dienst, Richtlinie, Authentifizierung. Kein Tailnet: Schlüssel, URL, Ablauf oder bereits verbrauchter Einmalschlüssel.",
+      "Kein KI-Login: Methode, Konto, Internet, Callback. Profil fehlt: Abbildfähigkeit und Entsperrung. Laufwerk fehlt: Controller/Inventar vor Schreibaktionen. Ein gesundes doctor-Ergebnis beweist weder ACLs noch OAuth noch universelle Hardware-Kompatibilität."
+    ],
+    [
+      "Abschließen ohne vergessene Zugänge",
+      "Fasse Beobachtungen, Änderungen und Prüfungen zusammen. Beende Sitzungen und Schreibvorgänge, fahre sauber herunter. Prüfe Dateien am Ziel und behalte Original/Sicherung bis zur Abnahme.",
+      "Entferne temporäre Knoten, widerrufe unnötige Schlüssel und prüfe persistente USB-Tokens. Private Profile/Abbilder nur nach freigegebenem, wiederherstellbarem Verfahren behandeln. Keine fremden Eigentümerzugänge entziehen oder Belege vernichten. Verbleibende Grenzen benennen."
+    ],
+    [
+      "Was getestet ist und was daraus nicht folgt",
+      "Die öffentliche Ausgabe entfernt LA AGUJA Konten und proprietäres Relay. Paket-, Vorbereitungs- und VM-Tests belegen bestimmte Abläufe, nicht jeden PC. Imager 0.9.2 korrigiert den Titel in sieben Sprachen; das Rettungsabbild bleibt 0.9.0. Ältere Screenshots behalten ihre echten Versionen.",
+      "Rücklesen ist keine universelle Bootprüfung; Panel/CLI/portable Sitzung ist keine KI-Anmeldung. Lokale Registrierung belegt keinen erlaubten SSH-Zugriff. Windows hat weder integrierte USB-Sicherung noch anerkannte Authenticode-Signatur. Keine universelle signierte Secure-Boot-Kette."
+    ],
+    [
+      "Referenzen und nächste Schritte",
+      "Links oben führen zu Downloads und Quellcode. Die ausführliche spanische Referenz enthält das ursprüngliche Handbuch mit 26 Kapiteln. Diese Anleitung deckt dieselben Betriebsschritte auf Deutsch ab. Bilder behalten Version und Herkunft. Drucke diese Seite als deutsches PDF; das separat veröffentlichte historische PDF ist spanisch.",
+      "Nutze offizielle Dokumentation von OpenSSH, Tailscale/Headscale, ddrescue, TestDisk und Microsoft BitLocker für deine Versionen. Eigener Code: GPL-3.0-or-later, Fremdkomponenten: eigene Lizenzen. Tickets enthalten Versionen und bereinigte Symptome, keine Passwörter, Tokens, privaten Schlüssel oder Abbilder."
+    ]
+  ],
+  "homeSections": [
+    {
+      "id": "independent",
+      "title": "Von außen arbeiten eröffnet neue Möglichkeiten.",
+      "paragraphs": [
+        "Fällt das installierte System aus, sind oft auch seine Werkzeuge nicht mehr erreichbar. La Aguja startet ein unabhängiges Linux vom USB-Stick, um Hardware und Datenträger zu untersuchen.",
+        "Die KI läuft in diesem Linux, nicht in der Firmware oder vor jedem Betriebssystem. Sie ist vom Windows oder Linux unabhängig, das du retten, ersetzen oder vorbereiten willst.",
+        "Ein Agent kann dein Anliegen verstehen, den Zustand prüfen und Werkzeuge ausführen, statt nur Befehle zu erklären. Das Ergebnis hängt von Hardware, Datenzustand und Vorgehen ab."
+      ]
+    },
+    {
+      "id": "today",
+      "title": "Was heute verfügbar ist",
+      "paragraphs": [
+        "Eine Arbeitsgrundlage, keine automatische Lösung für jeden Defekt. Codex CLI und OpenCode sind enthalten; Claude Code und Antigravity lassen sich optional integrieren. Cloud-KI braucht Internet und dein Anbieterkonto."
+      ],
+      "cards": [
+        [
+          "Das Problem verstehen",
+          "Datenträger, Partitionen, Speicher, Geräte und Ausfallzeichen prüfen. Startprobleme von einem sich verschlechternden Laufwerk unterscheiden."
+        ],
+        [
+          "Retten und kopieren",
+          "Mit ddrescue, TestDisk, PhotoRec oder rsync Images erstellen, Dateien suchen und Daten kopieren. Vollständige Rettung ist nicht garantiert."
+        ],
+        [
+          "Am System arbeiten",
+          "Dateien und Einstellungen ohne Systemstart untersuchen. Werkzeuge für Partitionen, Boot, Linux und Windows sind vorhanden; jede Reparatur braucht Zustands- und Kompatibilitätsprüfungen."
+        ],
+        [
+          "Einen Neustart vorbereiten",
+          "Werkzeuge für Linux-Installationen und Windows-Images bilden die Grundlage für angeleitete Abläufe. Kein Universalinstaller und kein enthaltenes Windows/WinPE."
+        ]
+      ]
+    },
+    {
+      "id": "possibilities",
+      "title": "Was daraus entstehen könnte",
+      "paragraphs": [
+        "Die Unabhängigkeit vom installierten System eröffnet mehr als Rettung. Das sind mögliche Entwicklungsrichtungen, keine heutigen Automatikfunktionen oder zugesagte Roadmap."
+      ],
+      "cards": [
+        [
+          "Passende Installationen",
+          "Partitionen, Pakete und Einstellungen auf Hardware und Bedarf abstimmen. Vollständige Abläufe und Tests je System fehlen noch."
+        ],
+        [
+          "Auf einen anderen Rechner umziehen",
+          "Daten und Einstellungen ohne Start des alten Systems übertragen. Anwendungen, Rechte und Treiber brauchen gezielte Anpassung."
+        ],
+        [
+          "Ein System als virtuelle Maschine erhalten",
+          "Ein Datenträgerimage als Ausgangspunkt nutzen. Boot, Treiber, Lizenzen und Aktivierung müssen gelöst werden; Kopieren allein reicht nicht."
+        ],
+        [
+          "Vorher auf einer Kopie testen",
+          "Änderungen auf Kopien oder virtuellen Maschinen erproben und vergleichen. Nicht jeder Hardwaredefekt und jeder Eingriff lassen sich simulieren."
+        ],
+        [
+          "Arbeitsumgebungen wiederherstellen",
+          "Reproduzierbare Profile und Datensicherungen kombinieren, auch für mehrere Rechner. Dafür braucht es Validierung, Geheimnisverwaltung und Kontrollen je Gerät."
+        ]
+      ]
+    },
+    {
+      "id": "responsibility",
+      "title": "Mehr Möglichkeiten bedeuten mehr Verantwortung.",
+      "paragraphs": [
+        "Der Agent kann volle Rechte am Rechner erhalten. „Nur ansehen“ ist keine technische Schreibsperre. Vor Änderungen Zieldatenträger bestimmen, Plan prüfen und irreversible Schritte freigeben.",
+        "Eine wiederherstellbare Sicherung auf einem anderen Medium, Arbeit auf Kopien und Ergebnisprüfung gehören dazu. Ein fehlerfreier Befehl beweist weder intakte Dateien noch einen erfolgreichen Systemstart.",
+        "La Aguja umgeht keine Verschlüsselung: BitLocker und LUKS benötigen den richtigen Schlüssel. Eine Live-Sitzung ist weder zertifizierte Forensik noch eine Vertrauensgarantie für kompromittierte Rechner.",
+        "Bei Cloud-KI können übermittelte Daten und Anweisungen den Rechner verlassen, abhängig vom Anbieter. Teile bewusst, ohne Schlüssel und Zugangsdaten. Klassische Werkzeuge arbeiten auch offline; Cloud-KI nicht.",
+        "Dateien können bösartige Anweisungen an den Agenten enthalten. Sie sind zu untersuchende Daten, keine Befehle oder Erlaubnis, über die vereinbarte Aufgabe hinauszugehen."
+      ]
+    }
+  ],
+  "faqTitle": "Vor dem Start",
+  "faq": [
+    [
+      "Müssen Windows oder Linux noch funktionieren?",
+      "Nein. Du startest das Linux von La Aguja per USB. Hardware und Start vom Medium müssen kompatibel sein."
+    ],
+    [
+      "Werden interne Datenträger beim Start verändert?",
+      "Sie werden nicht automatisch eingehängt oder repariert. Werkzeuge und Agenten können sie später verändern. Das Beschreiben des Vorbereitungs-USB ist ein eigener Vorgang und löscht diesen USB."
+    ],
+    [
+      "Geht es ohne Internet?",
+      "Lokale Werkzeuge ja. Cloud-KI braucht Netzwerk und dein Konto oder Zugangsmittel; ein lokales Modell ist nicht enthalten."
+    ],
+    [
+      "Ist Fernzugriff nötig?",
+      "Nein. Du kannst direkt am Rechner arbeiten. SSH im LAN oder deinem Tailscale/Headscale ist optional; LA AGUJA betreibt keine Fernkonsole."
+    ],
+    [
+      "Funktioniert es auf jedem Rechner?",
+      "Die aktuelle Version ist experimentell und für x86-64 gedacht. Hardware, Boot, Secure Boot und Verfahren prüfen; eine universell signierte Secure-Boot-Kette wird nicht angeboten."
+    ]
+  ]
 }

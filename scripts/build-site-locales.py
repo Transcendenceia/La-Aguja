@@ -64,6 +64,24 @@ def common_header(lang, doc=False):
     c=CONTENT[lang]
     return f'<header'+(' class="doc-header"' if doc else '')+f'><a class="brand" href="/{lang}">{images[0]}<span>LA AGUJA<small>TRANSCENDENCEIA / RESCUE DISK</small></span></a><nav class="site-nav" aria-label="{esc(c["nav"][1])}"><a href="/{lang}#application">{esc(c["nav"][0])}</a><a href="/{lang}/docs">{esc(c["nav"][1])}</a><a href="{GH}">{esc(c["nav"][2])}</a></nav></header>'
 
+def home_sections(lang):
+    c = CONTENT[lang]
+    body = ''
+    for section in c['homeSections']:
+        identifier = section['id']
+        if not re.fullmatch(r'[a-z][a-z-]*', identifier):
+            raise ValueError('Invalid home section ID: ' + identifier)
+        body += f'<section class="meaning-section" id="{identifier}" aria-labelledby="heading-{identifier}"><h2 id="heading-{identifier}">{esc(section["title"])}</h2>'
+        body += ''.join(f'<p class="meaning-copy">{esc(text)}</p>' for text in section['paragraphs'])
+        if 'cards' in section:
+            body += '<div class="meaning-grid">' + ''.join(
+                f'<article><h3>{esc(title)}</h3><p>{esc(text)}</p></article>'
+                for title, text in section['cards']) + '</div>'
+        body += '</section>'
+    body += f'<section class="meaning-section home-faq" id="questions" aria-labelledby="heading-questions"><h2 id="heading-questions">{esc(c["faqTitle"])}</h2>'
+    body += ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in c['faq'])
+    return body + '</section>'
+
 def home(lang):
     c=CONTENT[lang]
     hero=''.join(esc(x)+'<br>' for x in c['hero'][:2])+f'<span>{esc(c["hero"][2])}</span>'
@@ -71,7 +89,7 @@ def home(lang):
     installers=[('aguja-flash-imager-0.9.2-win-x64.exe','Windows 10 / 11 (.exe)'),('aguja-flash-imager-0.9.2-x86_64.AppImage','Linux AppImage'),('aguja-flash-imager-0.9.2-amd64.deb','Debian / Ubuntu'),('aguja-flash-imager-0.9.2-linux-x64.tar.gz',c['portable'])]
     links=''.join(f'<a href="{GH}/releases/download/v0.9.2/{name}">{esc(label)} ↗</a>' for name,label in installers)
     imageurls=['/releases/aguja-0.9.0-amd64.img.zst','/releases/aguja-0.9.0-amd64.iso',GH+'/releases/download/v0.9.1/SHA256SUMS',GH+'/releases/tag/v0.9.1']
-    return f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"",c["siteTitle"],c["lead"])}<link rel="stylesheet" href="/assets/app.css">{icon}</head><body>{common_header(lang)}{language_nav(lang)}<main><section id="landing"><div class="landing-hero"><div class="hero-copy"><div class="eyebrow">{esc(c["eyebrow"])}</div><h1>{hero}</h1><p class="lead">{esc(c["lead"])}</p><div class="hero-actions"><a class="button-link" href="#application">{esc(c["actions"][0])} ↘</a><a class="button-link button-ghost" href="/{lang}/docs">{esc(c["actions"][1])} ↗</a></div><p class="hero-note">{esc(c["note"])}</p></div><aside class="needle-lab"><div class="panel-topline"><span>LA AGUJA / RESCUE DISK</span><i aria-hidden="true"></i></div><div class="needle-stage">{mascot}</div><div class="lab-caption"><span class="section-code">{esc(c["caption"][0])}</span><strong>{esc(c["caption"][1])}</strong><p>{esc(c["caption"][2])}</p></div></aside></div><div class="cards">'+''.join(f'<article><span class="step">{i+1:02}</span><h2>{esc(title)}</h2><p>{esc(text)}</p></article>' for i,(title,text) in enumerate(c['steps']))+f'</div><section class="downloads" id="application"><span class="step">01 / FLASH IMAGER</span><h2>{esc(c["imagerTitle"])}</h2><p>{esc(c["imagerText"])}</p><div class="installer-links">{links}</div><p><a href="{GH}/releases/download/v0.9.2/SHA256SUMS-imager-0.9.2-windows">SHA-256 · Windows 0.9.2</a> · <a href="{GH}/releases/download/v0.9.2/SHA256SUMS-imager-0.9.2-linux">SHA-256 · Linux 0.9.2</a></p></section><section class="downloads" id="images"><span class="step">02 / RESCUE DISK</span><h2>{esc(c["imagesTitle"])}</h2><p>{esc(c["imagesText"])}</p><div class="installer-links">'+''.join(f'<a href="{url}">{esc(label)}</a>' for url,label in zip(imageurls,c['imageLinks']))+f'</div><p>{esc(c["imageNote"])}</p></section></section></main><footer><a href="https://www.transcendenceia.net">LA AGUJA / TRANSCENDENCEIA ↗</a><a href="/{lang}/privacy">{esc(c["privacy"])}</a><span>{esc(c["footer"])}</span></footer></body></html>'
+    return f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"",c["siteTitle"],c["lead"])}<link rel="stylesheet" href="/assets/app.css"><link rel="stylesheet" href="/assets/meaning-20261008-v1.css">{icon}</head><body>{common_header(lang)}{language_nav(lang)}<main><section id="landing"><div class="landing-hero"><div class="hero-copy"><div class="eyebrow">{esc(c["eyebrow"])}</div><h1>{hero}</h1><p class="lead">{esc(c["lead"])}</p><div class="hero-actions"><a class="button-link" href="#application">{esc(c["actions"][0])} ↘</a><a class="button-link button-ghost" href="/{lang}/docs">{esc(c["actions"][1])} ↗</a></div><p class="hero-note">{esc(c["note"])}</p></div><aside class="needle-lab"><div class="panel-topline"><span>LA AGUJA / RESCUE DISK</span><i aria-hidden="true"></i></div><div class="needle-stage">{mascot}</div><div class="lab-caption"><span class="section-code">{esc(c["caption"][0])}</span><strong>{esc(c["caption"][1])}</strong><p>{esc(c["caption"][2])}</p></div></aside></div><div class="cards">'+''.join(f'<article><span class="step">{i+1:02}</span><h2>{esc(title)}</h2><p>{esc(text)}</p></article>' for i,(title,text) in enumerate(c['steps']))+f'</div>{home_sections(lang)}<section class="downloads" id="application"><span class="step">01 / FLASH IMAGER</span><h2>{esc(c["imagerTitle"])}</h2><p>{esc(c["imagerText"])}</p><div class="installer-links">{links}</div><p><a href="{GH}/releases/download/v0.9.2/SHA256SUMS-imager-0.9.2-windows">SHA-256 · Windows 0.9.2</a> · <a href="{GH}/releases/download/v0.9.2/SHA256SUMS-imager-0.9.2-linux">SHA-256 · Linux 0.9.2</a></p></section><section class="downloads" id="images"><span class="step">02 / RESCUE DISK</span><h2>{esc(c["imagesTitle"])}</h2><p>{esc(c["imagesText"])}</p><div class="installer-links">'+''.join(f'<a href="{url}">{esc(label)}</a>' for url,label in zip(imageurls,c['imageLinks']))+f'</div><p>{esc(c["imageNote"])}</p></section></section></main><footer><a href="https://www.transcendenceia.net">LA AGUJA / TRANSCENDENCEIA ↗</a><a href="/{lang}/privacy">{esc(c["privacy"])}</a><span>{esc(c["footer"])}</span></footer></body></html>'
 
 def manual(lang):
     c=CONTENT[lang];ui=c['docUI']

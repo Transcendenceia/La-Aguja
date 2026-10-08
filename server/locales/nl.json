@@ -1,55 +1,288 @@
 {
- "name":"Nederlands",
- "siteTitle":"LA AGUJA · Vrij herstel, onder jouw controle",
- "nav":["Downloads","Documentatie","Broncode op GitHub ↗"],
- "eyebrow":"EEN KLEINE INGANG. VOLLEDIGE CONTROLE.",
- "hero":["Jouw computer.","Jouw herstel.","Op jouw manier."],
- "lead":"Bereid een LA AGUJA USB voor met je gereedschappen en AI-agenten. Start, onderzoek en verbind zo nodig via SSH over je eigen Tailscale of Headscale. Een lokale browser ondersteunt de officiële aanmelding van je AI-gereedschappen.",
- "actions":["Mijn USB voorbereiden","Uitgebreide handleiding"],
- "note":"JOUW LOKALE OMGEVING / OPTIONELE TOEGANG OP AFSTAND",
- "mascotAlt":"Agujita, de verchroomde naald met amberkleurige ogen en gekrulde snor",
- "caption":["HERSTELLEN VOORDAT JE VERVANGT","Kleine ingang. Grote mogelijkheden.","Een herstelomgeving om mee te nemen."],
- "steps":[["Voorbereiden","Stel netwerk, agenten en externe toegang in Flash Imager in."],["Starten","Start vanaf je USB. Aanmelding bij je privénetwerk is optioneel; sleutels en beleid bepalen de toegang."],["Verbinden","Gebruik SSH vanuit je toegestane privénetwerk. Behoud lokale controle en controleer elke wijziging."]],
- "imagerTitle":"LA AGUJA Flash Imager (Windows en Linux · v0.9.2)",
- "imagerText":"Bereid je La Aguja herstelschijf voor, controleer het ondertekende image, beheer beschikbare BitLocker-herstelsleutels op Windows en stel je privénetwerk in. Download de juiste toepassing en kies een openbaar image, zonder LA AGUJA-account of registratie.",
- "portable":"Draagbaar Linux-pakket",
- "imagesTitle":"Openbare herstelimages",
- "imagesText":"Images download je van onze officiële website; Imager en broncode staan op GitHub. Flash Imager downloadt en voegt delen samen en controleert handtekening en SHA-256. Geen LA AGUJA-account nodig.",
- "imageLinks":["Gecomprimeerd USB-image (.img.zst) ↗","BIOS/UEFI ISO ↗","SHA-256-controlesommen ↗","Bestanden en versie-informatie ↗"],
- "imageNote":"Pak het image uit vóór handmatige import. De ingebouwde download voegt delen samen tot één gecontroleerd .img-bestand.",
- "privacy":"Privacy",
- "footer":"Broncode GPL-3.0-or-later · Geen projectaccounts of eigen relay.",
- "docTitle":"Gebruikershandleiding · LA AGUJA Rescue Disk",
- "docDescription":"USB voorbereiden, starten, AI en SSH gebruiken, versleuteling begrijpen, gegevens herstellen en problemen onderzoeken.",
- "docUI":["Naar de handleiding","Inhoud en zoeken","Herstellen. Begrijpen. Beslissen.","Zoeken in deze handleiding","Bekijk de inhoud of zoek een term.","Afdrukken / opslaan als PDF","Terug naar boven","Producthandleiding","Overeenkomende onderdelen","Geen resultaten; probeer een kortere term.","Opdracht kopiëren","Dit opdrachtblok kopiëren","Gekopieerd","Geselecteerd: handmatig kopiëren","Uitgebreide Spaanse referentie (26 hoofdstukken)","Schermafbeeldingen tonen de aangegeven versies, geen nieuwe test van Imager 0.9.2."],
- "privacyTitle":"Je configuratie blijft onder jouw controle.",
- "privacyParagraphs":["De LA AGUJA-website geeft informatie: geen accounts, aanmelding, tunnels, externe consoles, eigen accountcookies of analyse.","Images en ondertekende catalogus komen van LA AGUJA. Imager en broncode staan op GitHub, onder diens privacybeleid. Hosting kan noodzakelijke technische toegangslogs bewaren.","Flash Imager verwerkt images en netwerk-, SSH-, AI- en Tailscale/Headscale-profielen lokaal en stuurt die niet naar deze website. Private images kunnen geheimen bevatten: beheer opslag en delen zorgvuldig.","Tailscale/Headscale en AI-aanbieders hebben eigen accounts en voorwaarden. Hun optionele gebruik is geen registratie bij LA AGUJA.","Downloads tonen de netwerkaanvraag aan de host, niet je sleutels of de inhoud van lokale images."],
- "sections":[
- ["Kleine ingang. Volledige controle.","LA AGUJA is x86-64 herstel-Linux dat vanaf USB start vóór het geïnstalleerde systeem. Flash Imager bereidt de USB voor op een werkende Windows/Linux-pc; Rescue Disk draait op de onderzochte computer. Starten koppelt, repareert of beschrijft interne schijven niet automatisch. Werk lokaal of via SSH, optioneel met eigen Tailscale/Headscale. Cloud-AI vereist internet en je eigen account; traditionele tools kunnen offline werken. Geen LA AGUJA-account of centrale relay. Experimenteel, geen universele hardwaregarantie."],
- ["Je eerste USB","Maak een kopie van een voldoende grote USB. Download Imager en kies het image uit de ondertekende catalogus. Laat Ethernet op DHCP, stel taal/toetsenbord/naam en eigen SSH-wachtwoord of publieke sleutel in. AI en privénetwerk mogen uit blijven. Versleutel profielen met geheimen en bewaar de ontgrendelzin buiten USB. Vergelijk model, capaciteit en serienummer vóór schrijven. Wacht op terugleescontrole, start USB en ontgrendel indien nodig. Het paneel zien en schijven herkennen volstaat voor deze eerste test."],
- ["Belangrijke begrippen","Live betekent starten zonder installatie. Configureerbare IMG en boot-ISO zijn in de Imager niet uitwisselbaar. Schijf, partitie en aankoppelen zijn verschillend; /dev/sda kan veranderen. DHCP deelt adressen uit; SSH geeft een versleutelde console met servervingerafdruk. Root/sudo is beheer, geen alleen-lezen-sandbox. Registratiesleutel, API-sleutel, SSH-wachtwoord en profielzin hebben andere rollen. SHA-256 controleert bytes, niet opstartbaarheid. De profielzin opent geen BitLocker/LUKS."],
- ["Vooraf: hardware, toestemming en kopie","Controleer x86-64, USB-boot en firmware. BIOS/UEFI zijn voorzien; ARM, alle wifi-chips en universeel ondertekend Secure Boot niet gegarandeerd. Verkrijg toestemming voor computer en gegevens. Kies een ander hersteldoel; overweeg bij onstabiele schijven eerst een image. Schrijven vervangt USB-inhoud. Windows heeft nog geen ingebouwde USB-back-up: gebruik extern gereedschap. Linux heeft een optionele gecontroleerde volledige kopie, standaard uit, met benodigde ruimte/rechten. Dit kopieert niet de interne schijf. BitLocker/LUKS vereisen de sleutel van de eigenaar."],
- ["Imager downloaden en openen","Kies officiële Windows-10/11-EXE, AppImage, Debian/Ubuntu-DEB of draagbaar Linux-archief. Controleer SHA-256 en open op de voorbereidings-pc. EXE/AppImage zijn geen USB-herstelimages. Geen LA AGUJA-account. De EXE heeft geen erkende Authenticode-handtekening; AppImage kan uitvoerrechten nodig hebben. Schrijven vereist lokale rechtenverhoging. Een geopende toepassing bewijst geen voorbereide of opstartbare USB."],
- ["Stap 1 · Image kiezen","Gebruik ondertekende catalogus of lokale .img. Ed25519 en hashes worden gecontroleerd en delen samengevoegd. Pak .img.zst uit voor handmatige import. Private voorbereiding maakt een nieuw bestand, niet een wijziging van het openbare image. Imager 0.9.2, herstelimage 0.9.0. Opties hangen af van imagefuncties; zonder tailscale-profile-v1 wordt voorbereiding met privénetwerk geweigerd. Controleer echte capaciteit, niet alleen het etiket."],
- ["Stap 2 · Netwerk, taal, naam","Kies live-taal, toetsenbord en variant; de Imager-taal is onafhankelijk. Gebruik een herkenbare hostnaam. Ethernet DHCP maakt de eerste start eenvoudiger. Opgeslagen wifi wordt gebruikt; zonder netwerk is er interactieve selectie. Wifi-import kan lokale toestemming vragen. Bedrijfswifi/captive portals vereisen soms handmatige NetworkManager-instelling. Controleer verbinding, DNS, HTTPS en tijd afzonderlijk. Lokale diagnose kan offline."],
- ["Stap 3 · SSH","Gebruik een uniek wachtwoord of toegestane publieke sleutel, nooit een privésleutel. Standaardpoort 22; gebruik echte IP en vergelijk vingerafdruk. Andere poort vervangt geen authenticatie. Fabrieksgebruiker en openbaar wachtwoord: aguja. Eigen wachtwoord gaat voor; leeg met publieke sleutel geeft alleen sleuteltoegang, zonder sleutel blijft fabriekslogin. Onbeperkt sudo. aguja password bewaart op USB; sudo passwd aguja wijzigt alleen de sessie."],
- ["Stap 4 · AI voorbereiden","Codex CLI, OpenCode, Claude Code en Antigravity: API-sleutel, selectieve import van compatibele draagbare sessie of login na starten. Installatiecontrole bewijst geen login of inferentie. Geen volledige sleutelbos, geschiedenis, hooks of MCP gekopieerd. Sessies kunnen verlopen zijn. Kosten, quota en gegevens hangen van aanbieder af. USB kan zonder AI-gegevens voorbereid worden; cloud-AI wordt niet offline beloofd."],
- ["Stap 5 · Eigen Tailscale/Headscale","Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH. Identiteit in RAM, nieuwe aanmelding na herstart."],
- ["OpenSSH versus Tailscale SSH","Standaard is OpenSSH over het privénetwerk: wachtwoorden/sleutels, vingerafdruk en netwerk-ACLs blijven nodig. Tailscale SSH is geavanceerd, met serverondersteuning en expliciet SSH-beleid. Scheid registratie, bereikbaarheid, TCP-poort en authenticatie. Open geen publieke poorten en verruim ACLs niet om loginproblemen te verbergen. Raadpleeg documentatie van werkelijk gebruikte versies."],
- ["Geheimen en versleuteling","Profielen kunnen wifi-, SSH-, AI- en registratiesleutels bevatten. Versleutel de capsule, bewaar de zin apart en ontgrendel lokaal voor laden. .aguja-sjablonen en kopieën zijn ook gevoelig. Niet heel AGUJA_DATA versleuteld, geen bescherming tegen root na ontgrendelen. persistent_home=no verliest HOME/tokens na herstart; yes bewaart ongecodeerd. Platte aguja.conf is fysiek leesbaar. Publiceer geen private images of sleutels."],
- ["Windows · BitLocker","Linux starten verwijdert BitLocker niet. Vraag de juiste volumesleutel aan de eigenaar. Profielzin en SSH-wachtwoord zijn geen BitLocker-sleutels. LA AGUJA omzeilt versleuteling niet. Windows Imager kan beschikbare sleutels bekijken en expliciet gekozen sleutels in private image opnemen. Bescherm profiel en bewaar andere kopie. Een sleutel zien bewijst geen ontgrendeld volume. Windows-screenshot is historische 0.8.1, geen nieuwe native 0.9.2-test."],
- ["Stap 6 · Voorbereiden, schrijven, controleren","Controleer image, bescherming en overzicht. Private image maken produceert bestand; USB voorbereiden/schrijven beschrijft ook apparaat. Vergelijk model, serie en echte capaciteit in native bevestiging; annuleer bij twijfel. Geef UAC/Polkit alleen voor gewenste actie. Wacht zonder loskoppelen op schrijven en volledige terugleescontrole, controleer resultaat. Correcte bytes garanderen geen firmware: test hardwareboot. Externe Windows-USB-back-up moet vooraf gedaan zijn."],
- ["Starten, ontgrendelen, verbinden","Kies USB in fabrikantmenu. Paneel toont netwerk/SSH. Versleuteld profiel: aguja profile unlock lokaal. Grafisch paneel kan terugvallen op tekstconsole. Gebruik echte IP; .local vereist mDNS/multicast en kan bij naamconflict veranderen. SSH werkt ook via LAN zonder tailnet. Vergelijk vingerafdruk, controleer status/schijven. Paneel betekent geen automatische interne koppeling of reparatie."],
- ["Herstart: tijdelijke identiteit","Tailnet-status staat in RAM. Na herstart zijn netwerk, ontgrendeling en nieuwe registratie nodig. Een eenmalige sleutel kan verbruikt zijn. Gebruik voor meerdere starts een geldige beperkte herbruikbare sleutel. Identiteit staat los van USB-SSH-hostsleutel en HOME-persistentie. Verwijder oude nodes en trek onnodige sleutels in. Oude verbinding bewijst geen huidige status."],
- ["AI-login in lokale browser","aguja login codex, claude of antigravity opent sandboxed Chromium met officiële login en console in dezelfde PTY. Kopiëren focust console; plak bewust met Ctrl+Shift+V. Sluiten keert terug. Geen QR of automatische toestemming. OpenCode houdt opencode auth login. SSH/serie/zonder scherm gebruiken native methode; externe localhost-callback niet automatisch doorgestuurd. API en sessie-import zijn aparte routes. Synthetische screenshots bewijzen geen echte login/inferentie."],
- ["Eerste diagnose","Stel een concrete vraag, verzamel status, apparaatidentiteit, bestandssystemen en mounts. Gebruik aguja doctor en inventaris hieronder. Herken USB, bron en doel via model/grootte/ID, niet aangenomen letters. Controleer alleen-lezen-opties en bestandssysteemjournalgedrag voor bestandstoegang. Bewaar observaties. Instabiele schijf vraagt mogelijk ddrescue-image met mapbestand, niet herhaalde reparatie op origineel."],
- ["Met een agent werken","Definieer doel, exact apparaat/schijf, toegestane acties, back-up en stopcriteria. Vraag actuele status en bewijs vóór wijzigen. Controleer bestanden/boot onafhankelijk. aguja heeft volledige root/sudo. Standaard gebruikt volledige-toegangsmechanismen; alleen-lezen-instructie is geen sandbox. agent_mode=ask behoudt goedkeuringen zonder root weg te nemen. Controleer destructieve acties en behoud terugvalkopie."],
- ["Gereedschappen en opdrachten","aguja tools geeft inventaris. ddrescue voor images met map, TestDisk/PhotoRec voor herstel, rsync voor kopiëren, smartctl/nvme-cli voor hardware. Volume/versleuteling vereist juiste doelen en sleutels. Opdrachten hieronder geven oriëntatie. Geen format, bootloaderinstallatie of partitiewrites naar geraden apparaat. Lees handleidingen, werk zo nodig op kopie. Traditionele tools zonder cloud; geen universele herstelgarantie."],
- ["Tien praktische routes","1. Niet-startende pc inventariseren. 2. Toegestane bestanden elders kopiëren. 3. ddrescue-image met map. 4. Inspectie voor TestDisk. 5. PhotoRec naar ander medium. 6. SMART/NVMe. 7. UEFI/bootloaderdiagnose na kopie. 8. BitLocker/LUKS met juiste sleutel. 9. Toegestane SSH-ondersteuning. 10. OS-installatie alleen op goedgekeurd doel. Aanpasbare procedures, geen automatische reparaties. Herken bron/doel/terugweg en controleer resultaat; herstel niet naar bron."],
- ["Professioneel werken","Leg toestemming, hardware, versie/hash, beginstatus, schijven en plan vast. Werk op kopie, label bewijs en relatie met origineel. Bewaar map en stopcriteria bij instabiele media. Kleine wijzigingen met doel/resultaat. Controleer gegevens/boot, niet alleen exitcode. Versleutel herbruikbare .aguja-profielen en controleer verlopen gegevens. Geen klantgegevens/sleutels in openbare tickets."],
- ["Problemen per laag","Geen boot: architectuur, integriteit, firmware, tekstconsole. Geen netwerk: link/wifi, DHCP, DNS, HTTPS, tijd. Geen SSH: IP/poort, dienst, beleid, login. Geen tailnet: sleutel, URL, geldigheid, gebruikte eenmalige sleutel. Geen AI: methode, account, internet, callback. Geen profiel: functies/ontgrendeling. Geen schijf: controller/inventaris vóór writes. Gezonde doctor bewijst geen ACL, OAuth of alle hardware."],
- ["Afronden zonder vergeten toegang","Vat observaties, wijzigingen en controles samen. Sluit sessies, rond writes af, sluit veilig af en controleer doelbestanden. Bewaar originelen/kopieën tot acceptatie. Verwijder tijdelijke nodes en onnodige sleutels; controleer persistente USB-tokens. Behandel private images/profielen volgens goedgekeurd herstelbaar proces. Trek geen ongerelateerde toegang in en vernietig geen bewijs. Meld resterende grenzen."],
- ["Wat is gecontroleerd","Publieke editie zonder LA AGUJA-accounts/eigen relay. Voorbereidings-, pakket- en VM-tests dekken bepaalde routes, niet elke pc. Imager 0.9.2 corrigeert titel in zeven talen; image blijft 0.9.0. Screenshots behouden echte versies. Teruglezen is geen universele boot; paneel/CLI/sessie is geen AI-login; lokale registratie bewijst geen SSH. Windows zonder ingebouwde USB-back-up of erkende Authenticode. Geen universeel ondertekend Secure Boot."],
- ["Referenties en vervolg","Bovenste links voor downloads en broncode. Uitgebreide Spaanse referentie bewaart 26 oorspronkelijke hoofdstukken; deze gids dekt dezelfde fasen in Nederlands. Screenshots behouden herkomst/versie. Druk af als Nederlands PDF; losse historische PDF is Spaans. Lees officiële OpenSSH, Tailscale/Headscale, ddrescue, TestDisk en Microsoft BitLocker voor je versies. Eigen code GPL-3.0-or-later, derden eigen licenties. Tickets met versie en geschoonde symptomen, nooit wachtwoorden, tokens, privésleutels of images."]
- ]
+  "name": "Nederlands",
+  "siteTitle": "LA AGUJA · AI om te werken voordat je geïnstalleerde systeem start",
+  "nav": [
+    "Downloads",
+    "Documentatie",
+    "Broncode op GitHub ↗"
+  ],
+  "eyebrow": "LINUX OP USB. EEN ANDERE INGANG NAAR JE COMPUTER.",
+  "hero": [
+    "Voordat je",
+    "systeem start,",
+    "bepaal de volgende stap."
+  ],
+  "lead": "LA AGUJA start vanaf USB, zodat je aan een computer kunt werken als Windows of Linux niet meer opstart. Diagnose- en hersteltools komen samen met AI-agenten die ze met je kunnen gebruiken.",
+  "actions": [
+    "Mijn USB voorbereiden",
+    "De handleiding lezen"
+  ],
+  "note": "EXPERIMENTELE LIVE-LINUX · X86-64 · LOKAAL OF VIA SSH",
+  "mascotAlt": "Agujita, de verchroomde naald met amberkleurige ogen en gekrulde snor",
+  "caption": [
+    "LA AGUJA / RESCUE DISK",
+    "Herstellen wat er was. Voorbereiden wat volgt.",
+    "Herstel is het beginpunt, niet de enige mogelijke toepassing."
+  ],
+  "steps": [
+    [
+      "Bereid de USB voor",
+      "Kies image, taal, toetsenbord en netwerk. AI en toegang op afstand zijn optioneel."
+    ],
+    [
+      "Start de computer",
+      "Start vanaf USB. La Aguja laadt zijn eigen Linux, los van het geïnstalleerde systeem."
+    ],
+    [
+      "Begrijp en beslis",
+      "Onderzoek de computer, maak zo nodig een back-up en spreek wijzigingen af vóór uitvoering."
+    ]
+  ],
+  "imagerTitle": "Bereid je USB voor met Flash Imager",
+  "imagerText": "De app voor Windows en Linux downloadt en controleert het image, schrijft de USB en bewaart instellingen. Je kunt SSH, AI-agenten en je eigen Tailscale- of Headscale-netwerk voorbereiden. Op Windows kan hij beschikbare BitLocker-sleutels beheren. Versie 0.9.2; schrijven wist de inhoud van de USB.",
+  "portable": "Draagbaar Linux-pakket",
+  "imagesTitle": "Download het La Aguja-image",
+  "imagesText": "Rescue Disk 0.9.0 is de Linux die op de computer start. Images staan op onze website; Imager en broncode op GitHub. De Imager controleert de catalogushandtekening en SHA-256 van de download. Geen LA AGUJA-account nodig.",
+  "imageLinks": [
+    "Gecomprimeerd USB-image (.img.zst) ↗",
+    "BIOS/UEFI ISO ↗",
+    "SHA-256-controlesommen ↗",
+    "Bestanden en versie-informatie ↗"
+  ],
+  "imageNote": "Pak het image uit vóór handmatige import. De ingebouwde download voegt delen samen tot één gecontroleerd .img-bestand.",
+  "privacy": "Privacy",
+  "footer": "Open source · GPL-3.0-or-later · Je eigen netwerk, zonder LA AGUJA-relay.",
+  "docTitle": "Gebruikershandleiding · LA AGUJA Rescue Disk",
+  "docDescription": "USB voorbereiden, starten, AI en SSH gebruiken, versleuteling begrijpen, gegevens herstellen en problemen onderzoeken.",
+  "docUI": [
+    "Naar de handleiding",
+    "Inhoud en zoeken",
+    "Herstellen. Begrijpen. Beslissen.",
+    "Zoeken in deze handleiding",
+    "Bekijk de inhoud of zoek een term.",
+    "Afdrukken / opslaan als PDF",
+    "Terug naar boven",
+    "Producthandleiding",
+    "Overeenkomende onderdelen",
+    "Geen resultaten; probeer een kortere term.",
+    "Opdracht kopiëren",
+    "Dit opdrachtblok kopiëren",
+    "Gekopieerd",
+    "Geselecteerd: handmatig kopiëren",
+    "Uitgebreide Spaanse referentie (26 hoofdstukken)",
+    "Schermafbeeldingen tonen de aangegeven versies, geen nieuwe test van Imager 0.9.2."
+  ],
+  "privacyTitle": "Je configuratie blijft onder jouw controle.",
+  "privacyParagraphs": [
+    "De LA AGUJA-website geeft informatie: geen accounts, aanmelding, tunnels, externe consoles, eigen accountcookies of analyse.",
+    "Images en ondertekende catalogus komen van LA AGUJA. Imager en broncode staan op GitHub, onder diens privacybeleid. Hosting kan noodzakelijke technische toegangslogs bewaren.",
+    "Flash Imager verwerkt images en netwerk-, SSH-, AI- en Tailscale/Headscale-profielen lokaal en stuurt die niet naar deze website. Private images kunnen geheimen bevatten: beheer opslag en delen zorgvuldig.",
+    "Tailscale/Headscale en AI-aanbieders hebben eigen accounts en voorwaarden. Hun optionele gebruik is geen registratie bij LA AGUJA.",
+    "Downloads tonen de netwerkaanvraag aan de host, niet je sleutels of de inhoud van lokale images."
+  ],
+  "sections": [
+    [
+      "Kleine ingang. Volledige controle.",
+      "LA AGUJA is x86-64 herstel-Linux dat vanaf USB start vóór het geïnstalleerde systeem. Flash Imager bereidt de USB voor op een werkende Windows/Linux-pc; Rescue Disk draait op de onderzochte computer. Starten koppelt, repareert of beschrijft interne schijven niet automatisch. Werk lokaal of via SSH, optioneel met eigen Tailscale/Headscale. Cloud-AI vereist internet en je eigen account; traditionele tools kunnen offline werken. Geen LA AGUJA-account of centrale relay. Experimenteel, geen universele hardwaregarantie."
+    ],
+    [
+      "Je eerste USB",
+      "Maak een kopie van een voldoende grote USB. Download Imager en kies het image uit de ondertekende catalogus. Laat Ethernet op DHCP, stel taal/toetsenbord/naam en eigen SSH-wachtwoord of publieke sleutel in. AI en privénetwerk mogen uit blijven. Versleutel profielen met geheimen en bewaar de ontgrendelzin buiten USB. Vergelijk model, capaciteit en serienummer vóór schrijven. Wacht op terugleescontrole, start USB en ontgrendel indien nodig. Het paneel zien en schijven herkennen volstaat voor deze eerste test."
+    ],
+    [
+      "Belangrijke begrippen",
+      "Live betekent starten zonder installatie. Configureerbare IMG en boot-ISO zijn in de Imager niet uitwisselbaar. Schijf, partitie en aankoppelen zijn verschillend; /dev/sda kan veranderen. DHCP deelt adressen uit; SSH geeft een versleutelde console met servervingerafdruk. Root/sudo is beheer, geen alleen-lezen-sandbox. Registratiesleutel, API-sleutel, SSH-wachtwoord en profielzin hebben andere rollen. SHA-256 controleert bytes, niet opstartbaarheid. De profielzin opent geen BitLocker/LUKS."
+    ],
+    [
+      "Vooraf: hardware, toestemming en kopie",
+      "Controleer x86-64, USB-boot en firmware. BIOS/UEFI zijn voorzien; ARM, alle wifi-chips en universeel ondertekend Secure Boot niet gegarandeerd. Verkrijg toestemming voor computer en gegevens. Kies een ander hersteldoel; overweeg bij onstabiele schijven eerst een image. Schrijven vervangt USB-inhoud. Windows heeft nog geen ingebouwde USB-back-up: gebruik extern gereedschap. Linux heeft een optionele gecontroleerde volledige kopie, standaard uit, met benodigde ruimte/rechten. Dit kopieert niet de interne schijf. BitLocker/LUKS vereisen de sleutel van de eigenaar."
+    ],
+    [
+      "Imager downloaden en openen",
+      "Kies officiële Windows-10/11-EXE, AppImage, Debian/Ubuntu-DEB of draagbaar Linux-archief. Controleer SHA-256 en open op de voorbereidings-pc. EXE/AppImage zijn geen USB-herstelimages. Geen LA AGUJA-account. De EXE heeft geen erkende Authenticode-handtekening; AppImage kan uitvoerrechten nodig hebben. Schrijven vereist lokale rechtenverhoging. Een geopende toepassing bewijst geen voorbereide of opstartbare USB."
+    ],
+    [
+      "Stap 1 · Image kiezen",
+      "Gebruik ondertekende catalogus of lokale .img. Ed25519 en hashes worden gecontroleerd en delen samengevoegd. Pak .img.zst uit voor handmatige import. Private voorbereiding maakt een nieuw bestand, niet een wijziging van het openbare image. Imager 0.9.2, herstelimage 0.9.0. Opties hangen af van imagefuncties; zonder tailscale-profile-v1 wordt voorbereiding met privénetwerk geweigerd. Controleer echte capaciteit, niet alleen het etiket."
+    ],
+    [
+      "Stap 2 · Netwerk, taal, naam",
+      "Kies live-taal, toetsenbord en variant; de Imager-taal is onafhankelijk. Gebruik een herkenbare hostnaam. Ethernet DHCP maakt de eerste start eenvoudiger. Opgeslagen wifi wordt gebruikt; zonder netwerk is er interactieve selectie. Wifi-import kan lokale toestemming vragen. Bedrijfswifi/captive portals vereisen soms handmatige NetworkManager-instelling. Controleer verbinding, DNS, HTTPS en tijd afzonderlijk. Lokale diagnose kan offline."
+    ],
+    [
+      "Stap 3 · SSH",
+      "Gebruik een uniek wachtwoord of toegestane publieke sleutel, nooit een privésleutel. Standaardpoort 22; gebruik echte IP en vergelijk vingerafdruk. Andere poort vervangt geen authenticatie. Fabrieksgebruiker en openbaar wachtwoord: aguja. Eigen wachtwoord gaat voor; leeg met publieke sleutel geeft alleen sleuteltoegang, zonder sleutel blijft fabriekslogin. Onbeperkt sudo. aguja password bewaart op USB; sudo passwd aguja wijzigt alleen de sessie."
+    ],
+    [
+      "Stap 4 · AI voorbereiden",
+      "Codex CLI, OpenCode, Claude Code en Antigravity: API-sleutel, selectieve import van compatibele draagbare sessie of login na starten. Installatiecontrole bewijst geen login of inferentie. Geen volledige sleutelbos, geschiedenis, hooks of MCP gekopieerd. Sessies kunnen verlopen zijn. Kosten, quota en gegevens hangen van aanbieder af. USB kan zonder AI-gegevens voorbereid worden; cloud-AI wordt niet offline beloofd."
+    ],
+    [
+      "Stap 5 · Eigen Tailscale/Headscale",
+      "Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH. Identiteit in RAM, nieuwe aanmelding na herstart."
+    ],
+    [
+      "OpenSSH versus Tailscale SSH",
+      "Standaard is OpenSSH over het privénetwerk: wachtwoorden/sleutels, vingerafdruk en netwerk-ACLs blijven nodig. Tailscale SSH is geavanceerd, met serverondersteuning en expliciet SSH-beleid. Scheid registratie, bereikbaarheid, TCP-poort en authenticatie. Open geen publieke poorten en verruim ACLs niet om loginproblemen te verbergen. Raadpleeg documentatie van werkelijk gebruikte versies."
+    ],
+    [
+      "Geheimen en versleuteling",
+      "Profielen kunnen wifi-, SSH-, AI- en registratiesleutels bevatten. Versleutel de capsule, bewaar de zin apart en ontgrendel lokaal voor laden. .aguja-sjablonen en kopieën zijn ook gevoelig. Niet heel AGUJA_DATA versleuteld, geen bescherming tegen root na ontgrendelen. persistent_home=no verliest HOME/tokens na herstart; yes bewaart ongecodeerd. Platte aguja.conf is fysiek leesbaar. Publiceer geen private images of sleutels."
+    ],
+    [
+      "Windows · BitLocker",
+      "Linux starten verwijdert BitLocker niet. Vraag de juiste volumesleutel aan de eigenaar. Profielzin en SSH-wachtwoord zijn geen BitLocker-sleutels. LA AGUJA omzeilt versleuteling niet. Windows Imager kan beschikbare sleutels bekijken en expliciet gekozen sleutels in private image opnemen. Bescherm profiel en bewaar andere kopie. Een sleutel zien bewijst geen ontgrendeld volume. Windows-screenshot is historische 0.8.1, geen nieuwe native 0.9.2-test."
+    ],
+    [
+      "Stap 6 · Voorbereiden, schrijven, controleren",
+      "Controleer image, bescherming en overzicht. Private image maken produceert bestand; USB voorbereiden/schrijven beschrijft ook apparaat. Vergelijk model, serie en echte capaciteit in native bevestiging; annuleer bij twijfel. Geef UAC/Polkit alleen voor gewenste actie. Wacht zonder loskoppelen op schrijven en volledige terugleescontrole, controleer resultaat. Correcte bytes garanderen geen firmware: test hardwareboot. Externe Windows-USB-back-up moet vooraf gedaan zijn."
+    ],
+    [
+      "Starten, ontgrendelen, verbinden",
+      "Kies USB in fabrikantmenu. Paneel toont netwerk/SSH. Versleuteld profiel: aguja profile unlock lokaal. Grafisch paneel kan terugvallen op tekstconsole. Gebruik echte IP; .local vereist mDNS/multicast en kan bij naamconflict veranderen. SSH werkt ook via LAN zonder tailnet. Vergelijk vingerafdruk, controleer status/schijven. Paneel betekent geen automatische interne koppeling of reparatie."
+    ],
+    [
+      "Herstart: tijdelijke identiteit",
+      "Tailnet-status staat in RAM. Na herstart zijn netwerk, ontgrendeling en nieuwe registratie nodig. Een eenmalige sleutel kan verbruikt zijn. Gebruik voor meerdere starts een geldige beperkte herbruikbare sleutel. Identiteit staat los van USB-SSH-hostsleutel en HOME-persistentie. Verwijder oude nodes en trek onnodige sleutels in. Oude verbinding bewijst geen huidige status."
+    ],
+    [
+      "AI-login in lokale browser",
+      "aguja login codex, claude of antigravity opent sandboxed Chromium met officiële login en console in dezelfde PTY. Kopiëren focust console; plak bewust met Ctrl+Shift+V. Sluiten keert terug. Geen QR of automatische toestemming. OpenCode houdt opencode auth login. SSH/serie/zonder scherm gebruiken native methode; externe localhost-callback niet automatisch doorgestuurd. API en sessie-import zijn aparte routes. Synthetische screenshots bewijzen geen echte login/inferentie."
+    ],
+    [
+      "Eerste diagnose",
+      "Stel een concrete vraag, verzamel status, apparaatidentiteit, bestandssystemen en mounts. Gebruik aguja doctor en inventaris hieronder. Herken USB, bron en doel via model/grootte/ID, niet aangenomen letters. Controleer alleen-lezen-opties en bestandssysteemjournalgedrag voor bestandstoegang. Bewaar observaties. Instabiele schijf vraagt mogelijk ddrescue-image met mapbestand, niet herhaalde reparatie op origineel."
+    ],
+    [
+      "Met een agent werken",
+      "Definieer doel, exact apparaat/schijf, toegestane acties, back-up en stopcriteria. Vraag actuele status en bewijs vóór wijzigen. Controleer bestanden/boot onafhankelijk. aguja heeft volledige root/sudo. Standaard gebruikt volledige-toegangsmechanismen; alleen-lezen-instructie is geen sandbox. agent_mode=ask behoudt goedkeuringen zonder root weg te nemen. Controleer destructieve acties en behoud terugvalkopie."
+    ],
+    [
+      "Gereedschappen en opdrachten",
+      "aguja tools geeft inventaris. ddrescue voor images met map, TestDisk/PhotoRec voor herstel, rsync voor kopiëren, smartctl/nvme-cli voor hardware. Volume/versleuteling vereist juiste doelen en sleutels. Opdrachten hieronder geven oriëntatie. Geen format, bootloaderinstallatie of partitiewrites naar geraden apparaat. Lees handleidingen, werk zo nodig op kopie. Traditionele tools zonder cloud; geen universele herstelgarantie."
+    ],
+    [
+      "Tien praktische routes",
+      "1. Niet-startende pc inventariseren. 2. Toegestane bestanden elders kopiëren. 3. ddrescue-image met map. 4. Inspectie voor TestDisk. 5. PhotoRec naar ander medium. 6. SMART/NVMe. 7. UEFI/bootloaderdiagnose na kopie. 8. BitLocker/LUKS met juiste sleutel. 9. Toegestane SSH-ondersteuning. 10. OS-installatie alleen op goedgekeurd doel. Aanpasbare procedures, geen automatische reparaties. Herken bron/doel/terugweg en controleer resultaat; herstel niet naar bron."
+    ],
+    [
+      "Professioneel werken",
+      "Leg toestemming, hardware, versie/hash, beginstatus, schijven en plan vast. Werk op kopie, label bewijs en relatie met origineel. Bewaar map en stopcriteria bij instabiele media. Kleine wijzigingen met doel/resultaat. Controleer gegevens/boot, niet alleen exitcode. Versleutel herbruikbare .aguja-profielen en controleer verlopen gegevens. Geen klantgegevens/sleutels in openbare tickets."
+    ],
+    [
+      "Problemen per laag",
+      "Geen boot: architectuur, integriteit, firmware, tekstconsole. Geen netwerk: link/wifi, DHCP, DNS, HTTPS, tijd. Geen SSH: IP/poort, dienst, beleid, login. Geen tailnet: sleutel, URL, geldigheid, gebruikte eenmalige sleutel. Geen AI: methode, account, internet, callback. Geen profiel: functies/ontgrendeling. Geen schijf: controller/inventaris vóór writes. Gezonde doctor bewijst geen ACL, OAuth of alle hardware."
+    ],
+    [
+      "Afronden zonder vergeten toegang",
+      "Vat observaties, wijzigingen en controles samen. Sluit sessies, rond writes af, sluit veilig af en controleer doelbestanden. Bewaar originelen/kopieën tot acceptatie. Verwijder tijdelijke nodes en onnodige sleutels; controleer persistente USB-tokens. Behandel private images/profielen volgens goedgekeurd herstelbaar proces. Trek geen ongerelateerde toegang in en vernietig geen bewijs. Meld resterende grenzen."
+    ],
+    [
+      "Wat is gecontroleerd",
+      "Publieke editie zonder LA AGUJA-accounts/eigen relay. Voorbereidings-, pakket- en VM-tests dekken bepaalde routes, niet elke pc. Imager 0.9.2 corrigeert titel in zeven talen; image blijft 0.9.0. Screenshots behouden echte versies. Teruglezen is geen universele boot; paneel/CLI/sessie is geen AI-login; lokale registratie bewijst geen SSH. Windows zonder ingebouwde USB-back-up of erkende Authenticode. Geen universeel ondertekend Secure Boot."
+    ],
+    [
+      "Referenties en vervolg",
+      "Bovenste links voor downloads en broncode. Uitgebreide Spaanse referentie bewaart 26 oorspronkelijke hoofdstukken; deze gids dekt dezelfde fasen in Nederlands. Screenshots behouden herkomst/versie. Druk af als Nederlands PDF; losse historische PDF is Spaans. Lees officiële OpenSSH, Tailscale/Headscale, ddrescue, TestDisk en Microsoft BitLocker voor je versies. Eigen code GPL-3.0-or-later, derden eigen licenties. Tickets met versie en geschoonde symptomen, nooit wachtwoorden, tokens, privésleutels of images."
+    ]
+  ],
+  "homeSections": [
+    {
+      "id": "independent",
+      "title": "Van buitenaf werken opent nieuwe mogelijkheden.",
+      "paragraphs": [
+        "Als het geïnstalleerde systeem uitvalt, zijn veel tools niet meer bereikbaar. La Aguja start een onafhankelijke Linux vanaf USB om hardware te onderzoeken en met schijven te werken.",
+        "AI draait in die Linux, niet in firmware of vóór elk besturingssysteem. Ze is niet afhankelijk van de Windows of Linux die je wilt herstellen, vervangen of voorbereiden.",
+        "Een agent kan je verzoek begrijpen, de toestand controleren en tools uitvoeren, in plaats van alleen commando’s uit te leggen. Het resultaat hangt af van hardware, gegevens en werkwijze."
+      ]
+    },
+    {
+      "id": "today",
+      "title": "Wat je vandaag hebt",
+      "paragraphs": [
+        "Een basis om te werken, geen automatische oplossing voor elke storing. Codex CLI en OpenCode zijn inbegrepen; Claude Code en Antigravity hebben optionele integraties. Cloud-AI vraagt internet en je eigen provideraccount."
+      ],
+      "cards": [
+        [
+          "Het probleem begrijpen",
+          "Schijven, partities, geheugen, apparaten en tekenen van uitval onderzoeken. Een opstartprobleem onderscheiden van een schijf die achteruitgaat."
+        ],
+        [
+          "Herstellen en kopiëren",
+          "Met ddrescue, TestDisk, PhotoRec of rsync images maken, bestanden zoeken en gegevens kopiëren. Volledig herstel is niet gegarandeerd."
+        ],
+        [
+          "Aan het systeem werken",
+          "Bestanden en instellingen onderzoeken zonder het te starten. Tools voor partities, opstarten, Linux en Windows zijn aanwezig; elke reparatie vereist controles."
+        ],
+        [
+          "Een nieuwe start voorbereiden",
+          "Tools voor Linux-installaties en Windows-images ondersteunen begeleide procedures. Geen universele installer en geen inbegrepen Windows/WinPE-omgeving."
+        ]
+      ]
+    },
+    {
+      "id": "possibilities",
+      "title": "Wat op deze basis gebouwd kan worden",
+      "paragraphs": [
+        "Onafhankelijkheid van het geïnstalleerde systeem opent meer dan herstel. Dit zijn mogelijke ontwikkelrichtingen, geen huidige automatische functies of toegezegde roadmap."
+      ],
+      "cards": [
+        [
+          "Installaties op maat",
+          "Partities, pakketten en instellingen afstemmen op hardware en gebruiker. Volledige procedures en tests per systeem zijn nog nodig."
+        ],
+        [
+          "Naar een andere computer verhuizen",
+          "Gegevens en instellingen overzetten zonder het oude systeem te starten. Apps, rechten en drivers vragen gerichte aanpassing."
+        ],
+        [
+          "Een systeem als virtuele machine bewaren",
+          "Een schijfimage gebruiken om een omgeving te proberen te behouden. Opstarten, drivers, licenties en activering moeten worden opgelost; kopiëren alleen volstaat niet."
+        ],
+        [
+          "Testen vóór de originele schijf te wijzigen",
+          "Wijzigingen op een kopie of virtuele machine proberen en vergelijken. Niet elk hardwareprobleem of elke handeling is te simuleren."
+        ],
+        [
+          "Werkomgevingen opnieuw opbouwen",
+          "Reproduceerbare profielen met gegevensback-ups combineren, ook voor meerdere computers. Validatie, geheimenbeheer en controles per apparaat zijn nodig."
+        ]
+      ]
+    },
+    {
+      "id": "responsibility",
+      "title": "Meer mogelijkheden brengen meer verantwoordelijkheid.",
+      "paragraphs": [
+        "Een agent kan volledige rechten krijgen. “Alleen kijken” is geen technische schrijfblokkade. Identificeer de doelschijf, controleer het plan en geef toestemming voor onomkeerbare handelingen.",
+        "Een herstelbare back-up op een ander medium, waar mogelijk op een kopie werken en resultaten controleren horen erbij. Een geslaagd commando bewijst geen intacte bestanden of werkende systeemstart.",
+        "La Aguja omzeilt geen versleuteling: BitLocker en LUKS vragen de juiste sleutel. Een live-sessie is geen gecertificeerd forensisch onderzoek of garantie voor een gecompromitteerde computer.",
+        "Bij cloud-AI kunnen verstuurde gegevens en instructies de computer verlaten, afhankelijk van de provider. Kies bewust wat je deelt, zonder sleutels of inloggegevens. Traditionele tools werken offline; cloud-AI niet.",
+        "Bestanden kunnen kwaadaardige instructies voor de agent bevatten. Behandel ze als te onderzoeken gegevens, niet als opdrachten of toestemming om verder te gaan dan afgesproken."
+      ]
+    }
+  ],
+  "faqTitle": "Voordat je begint",
+  "faq": [
+    [
+      "Moet Windows of Linux nog werken?",
+      "Nee. Je start de Linux van La Aguja vanaf USB. De hardware moet compatibel zijn en vanaf dit medium kunnen starten."
+    ],
+    [
+      "Verandert het interne schijven bij het starten?",
+      "Ze worden niet automatisch aangekoppeld of gerepareerd. Tools en agenten kunnen ze later wijzigen. De voorbereidings-USB schrijven is een aparte handeling die die USB wist."
+    ],
+    [
+      "Werkt het zonder internet?",
+      "Lokale tools wel. Cloud-AI vraagt netwerk en je eigen account of toegangsgegevens; er is geen lokaal model inbegrepen."
+    ],
+    [
+      "Is toegang op afstand verplicht?",
+      "Nee. Werk op de computer zelf. SSH via LAN of je Tailscale/Headscale is optioneel; LA AGUJA host geen externe console."
+    ],
+    [
+      "Werkt het op elke computer?",
+      "De huidige versie is experimenteel en gericht op x86-64. Controleer hardware, opstarten, Secure Boot en procedure; er is geen universeel ondertekende Secure Boot-keten."
+    ]
+  ]
 }

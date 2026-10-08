@@ -22,9 +22,9 @@ public static class AgujaWinCred {
  $request=[Console]::In.ReadToEnd()|ConvertFrom-Json
  if($request.provider -eq 'antigravity') {
   # agy uses Go os.UserHomeDir() + filepath.Join, not the login name.
-  $home=[Environment]::GetEnvironmentVariable('USERPROFILE','Process')
-  if(-not $home -or -not [IO.Path]::IsPathRooted($home)){throw 'Invalid profile'}
-  $target='gemini:'+[IO.Path]::Combine($home,'.gemini','jetski-standalone-oauth-token')
+  $profileRoot=[Environment]::GetEnvironmentVariable('USERPROFILE','Process')
+  if(-not $profileRoot -or -not [IO.Path]::IsPathRooted($profileRoot)){throw 'Invalid profile'}
+  $target='gemini:'+[IO.Path]::Combine($profileRoot,'.gemini','jetski-standalone-oauth-token')
  } elseif($request.provider -eq 'codex' -and $request.target -match '^(cli\|[a-f0-9]{16}\.Codex Auth|secrets\|[a-f0-9]{16}\.codex)$') {
   $target=[string]$request.target
  } else { throw 'Invalid request' }

@@ -6,9 +6,9 @@
 
 **LA AGUJA Rescue Disk** es un entorno live x86-64 para un pendrive: arranca antes del sistema instalado,
 conecta Ethernet por DHCP o Wi-Fi guardado/asistido, activa SSH listo para usar y ofrece
-**Codex CLI y OpenCode**, preinstalados, e integración opcional con Claude Code y Antigravity, sin escritorio de ventanas.
+**Codex CLI, OpenCode, Claude Code y Antigravity**, preinstalados, sin escritorio de ventanas. Los clientes externos conservan sus licencias y condiciones; véase NOTICE.es.md.
 
-Estado: **Imager público 0.9.7 · imagen de rescate 0.9.0 · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/es/docs) · VALIDATION.md. Una imagen construida no significa compatibilidad de todo el hardware.
+Estado: **Imager público 0.9.8 · imagen de rescate 0.9.7 · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/es/docs) · VALIDATION.md. Una imagen construida no significa compatibilidad de todo el hardware.
 
 <p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-es.svg" width="360" alt="Invítanos a un café · Ko-fi"></a></p>
 

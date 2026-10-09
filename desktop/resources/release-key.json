@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "key_id": "aguja-public-2026-10",
-  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAqNsmovUi4GQNaz3o2XxB1dDRGQt7rqdSY6soq50BvrQ=\n-----END PUBLIC KEY-----\n",
-  "catalog_url": "https://aguja.transcendenceia.net/v1/catalog",
+  "key_id": "aguja-public-2026-10-09",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEABIHWueO3JaErKoo1za2BWt3hDXsVrzwYbQdOkVbaosE=\n-----END PUBLIC KEY-----\n",
+  "catalog_url": "https://aguja.transcendenceia.net/v1/catalog-20261009",
   "repository": "Transcendenceia/La-Aguja",
   "image_base_url": "https://aguja.transcendenceia.net/releases/"
 }

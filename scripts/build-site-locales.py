@@ -15,6 +15,8 @@ IDS = ['que-es','primer-usb','glosario','preparacion','descargas','imagen','red'
 GH = 'https://github.com/Transcendenceia/La-Aguja'
 IMAGER_VERSION = json.loads((ROOT / 'desktop/package.json').read_text())['version']
 IMAGER_TAG = 'v' + IMAGER_VERSION
+RESCUE_VERSION = (ROOT / 'VERSION').read_text().strip()
+RESCUE_TAG = 'v' + RESCUE_VERSION
 ORIGIN = 'https://aguja.transcendenceia.net'
 esc = html.escape
 
@@ -100,7 +102,7 @@ def home(lang):
     mascot = re.sub(r'alt="[^"]*"',f'alt="{esc(c["mascotAlt"])}"',images[1])
     installers=[(f'aguja-flash-imager-{IMAGER_VERSION}-win-x64.exe','Windows 10 / 11 (.exe)'),(f'aguja-flash-imager-{IMAGER_VERSION}-x86_64.AppImage','Linux AppImage'),(f'aguja-flash-imager-{IMAGER_VERSION}-amd64.deb','Debian / Ubuntu'),(f'aguja-flash-imager-{IMAGER_VERSION}-x64.tar.gz',c['portable'])]
     links=''.join(f'<a href="{GH}/releases/download/{IMAGER_TAG}/{name}">{esc(label)} ↗</a>' for name,label in installers)
-    imageurls=['/releases/aguja-0.9.0-amd64.img.zst','/releases/aguja-0.9.0-amd64.iso',GH+'/releases/download/v0.9.1/SHA256SUMS',GH+'/releases/tag/v0.9.1']
+    imageurls=[f'/releases/aguja-{RESCUE_VERSION}-amd64.img.zst',f'/releases/aguja-{RESCUE_VERSION}-amd64.iso',f'/releases/SHA256SUMS-rescue-{RESCUE_VERSION}.txt',GH+'/releases/tag/'+RESCUE_TAG]
     return f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"",c["siteTitle"],c["lead"])}<link rel="stylesheet" href="/assets/app.css"><link rel="stylesheet" href="/assets/meaning-20261008-v1.css">{icon}</head><body>{common_header(lang)}{language_nav(lang)}<main><section id="landing"><div class="landing-hero"><div class="hero-copy"><div class="eyebrow">{esc(c["eyebrow"])}</div><h1>{hero}</h1><p class="lead">{esc(c["lead"])}</p><div class="hero-actions"><a class="button-link" href="#application">{esc(c["actions"][0])} ↘</a><a class="button-link button-ghost" href="/{lang}/docs">{esc(c["actions"][1])} ↗</a></div><p class="hero-note">{esc(c["note"])}</p></div><aside class="needle-lab"><div class="panel-topline"><span>LA AGUJA / RESCUE DISK</span><i aria-hidden="true"></i></div><div class="needle-stage">{mascot}</div><div class="lab-caption"><span class="section-code">{esc(c["caption"][0])}</span><strong>{esc(c["caption"][1])}</strong><p>{esc(c["caption"][2])}</p></div></aside></div><div class="cards">'+''.join(f'<article><span class="step">{i+1:02}</span><h2>{esc(title)}</h2><p>{esc(text)}</p></article>' for i,(title,text) in enumerate(c['steps']))+f'</div>{home_sections(lang)}<section class="downloads" id="application"><span class="step">01 / FLASH IMAGER</span><h2>{esc(c["imagerTitle"])}</h2><p>{esc(c["imagerText"])}</p><div class="installer-links">{links}</div><p><a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-windows">SHA-256 · Windows {IMAGER_VERSION}</a> · <a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-linux">SHA-256 · Linux {IMAGER_VERSION}</a></p></section>{skill_section(lang)}<section class="downloads" id="images"><span class="step">03 / RESCUE DISK</span><h2>{esc(c["imagesTitle"])}</h2><p>{esc(c["imagesText"])}</p><div class="installer-links">'+''.join(f'<a href="{url}">{esc(label)}</a>' for url,label in zip(imageurls,c['imageLinks']))+f'</div><p>{esc(c["imageNote"])}</p></section>{donation_section(lang)}</section></main><footer><a href="https://www.transcendenceia.net">LA AGUJA / TRANSCENDENCEIA ↗</a><a href="/{lang}/privacy">{esc(c["privacy"])}</a><span>{esc(c["footer"])}</span></footer></body></html>'
 
 def donation_section(lang):

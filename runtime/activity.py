@@ -23,7 +23,7 @@ DIRECTORY = Path('/run/aguja-activity')
 SOCKET = DIRECTORY / 'events.sock'
 SNAPSHOT = DIRECTORY / 'snapshot.json'
 MAX_PACKET = 131072
-MAX_TEXT = 8192
+MAX_TEXT = 2048
 MAX_COMMAND_TEXT = 16384
 MAX_EVENTS = 2048
 MAX_SESSIONS = 24
@@ -245,7 +245,7 @@ def secret_values():
 
 
 def redact(value, secrets=(), command=False):
-    value = plain(value, 65536 if command else 12000)
+    value = plain(value, 65536 if command else max(12000,len(str(value))))
     if '-----BEGIN ' in value or '-----END ' in value:
         return '[bloque de clave/certificado oculto]'
     for secret in sorted(secrets, key=len, reverse=True):
@@ -258,13 +258,13 @@ def redact(value, secrets=(), command=False):
     value = command_view(value)
     # Mask common unlabelled provider credentials, not hashes/long ordinary text.
     value = re.sub(r'\b(?:sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9_]{20,}|KF_API_[A-Za-z0-9-]+)\b', '[credencial oculta]', value)
-    return value[:MAX_TEXT]
+    return value
 
 
 class OutputFilter:
     """Reassemble chunk-split lines before sanitizing; never publish stdin.
 
-    Do not publish partial lines or huge unbroken lines. PEM blocks remain muted
+    Redact complete lines before splitting them into bounded visible events. PEM blocks remain muted
     even when their headers, contents and trailers arrive in separate chunks.
     """
     def __init__(self, secrets=()):
@@ -277,19 +277,23 @@ class OutputFilter:
         results = []
         for part in chunk.splitlines(keepends=True):
             self.pending += part
-            if len(self.pending) > 8192:
+            if len(self.pending) > 1048576:
                 self.pending = b''
                 self.overflow = True
             if part.endswith((b'\n', b'\r')):
                 if self.overflow:
-                    results.append('[línea extensa oculta]')
+                    results.append('[línea supera 1 MiB: límite de memoria del panel; salida íntegra en consola]')
                 else:
                     results += self._line(self.pending)
                 self.pending = b''
                 self.overflow = False
-        if final and self.pending:
-            results += self._line(self.pending)
+        if final and (self.pending or self.overflow):
+            if self.overflow:
+                results.append('[línea supera 1 MiB: límite de memoria del panel; salida íntegra en consola]')
+            else:
+                results += self._line(self.pending)
             self.pending = b''
+            self.overflow = False
         return results
 
     def _line(self, line):
@@ -302,7 +306,7 @@ class OutputFilter:
                 self.pem = False
             return []
         text = redact(value, self.secrets)
-        return [text] if text.strip() else []
+        return [text[i:i+MAX_TEXT] for i in range(0,len(text),MAX_TEXT)] if text.strip() else []
 
 
 def emit(kind, text='', **fields):

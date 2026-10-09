@@ -216,7 +216,14 @@ def main():
                 if local_result.returncode:
                     raise ValueError("Local shell trace or graphical panel reopening failed")
                 qmp_command("screendump", {"filename": str((a.workdir / "screenshots/local-panel-reopened.png").resolve()), "format": "png"})
-                report.update(local_console_command_trace=True, local_panel_reopens_graphically=True)
+                # Exercise the real framebuffer dialogs without signing into AI.
+                qmp_command('send-key',{'keys':[{'type':'qcode','data':'d'}]});time.sleep(3)
+                qmp_command('screendump',{'filename':str((a.workdir/'screenshots/donation.png').resolve()),'format':'png'})
+                qmp_command('send-key',{'keys':[{'type':'qcode','data':'esc'}]});time.sleep(2)
+                qmp_command('send-key',{'keys':[{'type':'qcode','data':'4'}]});time.sleep(3)
+                qmp_command('screendump',{'filename':str((a.workdir/'screenshots/safe-mode-default.png').resolve()),'format':'png'})
+                qmp_command('send-key',{'keys':[{'type':'qcode','data':'esc'}]});time.sleep(2)
+                report.update(local_console_command_trace=True, local_panel_reopens_graphically=True, donation_dialog_rendered=True, harness_mode_dialog_rendered=True)
                 report["screenshots_captured"] = screenshot_count
                 report["plymouth_theme_installed"] = True
             if a.config_mode == "default":

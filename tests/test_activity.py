@@ -63,6 +63,15 @@ class RedactionTests(unittest.TestCase):
         self.assertIn('comando truncado',value)
         self.assertGreater(len(value),activity.MAX_COMMAND_TEXT)
 
+    def test_large_diagnostic_is_complete_and_split_secret_masked_before_pagination(self):
+        text='diagnostic-data '*2500+' boundary-secret '+('z'*7000)
+        expected=text.replace('boundary-secret','[oculto]')
+        filter=activity.OutputFilter({'boundary-secret'})
+        self.assertEqual(filter.feed(text[:35010].encode()),[])
+        lines=filter.feed((text[35010:]+'\n').encode())
+        self.assertEqual(''.join(lines),expected)
+        self.assertTrue(all(len(line)<=activity.MAX_TEXT for line in lines))
+
     def test_split_secret_and_pem_never_reach_visible_line(self):
         filter = activity.OutputFilter({'test-custom-pass'})
         self.assertEqual(filter.feed(b'hello test-custom-'), [])
@@ -88,8 +97,8 @@ class RedactionTests(unittest.TestCase):
 
     def test_overflow_never_releases_tail_of_secret(self):
         filter = activity.OutputFilter()
-        self.assertEqual(filter.feed(b'x' * 9000), [])
-        self.assertEqual(filter.feed(b'secret-tail\n'), ['[línea extensa oculta]'])
+        self.assertEqual(filter.feed(b'x' * 1048577), [])
+        self.assertEqual(filter.feed(b'secret-tail\n'), ['[línea supera 1 MiB: límite de memoria del panel; salida íntegra en consola]'])
         self.assertEqual(filter.feed(b'partial'), [])
         self.assertEqual(filter.feed(b'', final=True), ['partial'])
 

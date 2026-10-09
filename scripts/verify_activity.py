@@ -100,9 +100,16 @@ def verify(remote, env, workdir, screenshot=None, target_root='/data/workspace')
     interactive = remote[:-1] + ['-tt', remote[-1]]
     p = subprocess.Popen(interactive, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
-        p.stdin.write(b'uname -s\nfalse\nsleep 5\n'); p.stdin.flush()
-        time.sleep(1.3)
-        live = snapshot()
+        p.stdin.write(b'uname -s\nfalse\nsleep 30\n'); p.stdin.flush()
+        hook_deadline=time.monotonic()+20
+        while time.monotonic()<hook_deadline:
+            live=snapshot()
+            ids={session['id'] for session in live.get('sessions',[]) if session.get('mode')=='interactive'}
+            if any(event.get('session') in ids and event.get('kind')=='command_end' and 'código 1' in event.get('text','') for event in live['events']):break
+            time.sleep(.5)
+        else:
+            (workdir/'missing-interactive-snapshot.json').write_text(json.dumps(live))
+            raise ValueError('Interactive hooks did not complete before deadline')
         events = live['events']
         interactive_ids = {s['id'] for s in live.get('sessions', []) if s.get('mode') == 'interactive'}
         if not interactive_ids:
@@ -116,10 +123,13 @@ def verify(remote, env, workdir, screenshot=None, target_root='/data/workspace')
         report['interactive_output_mirror'] = any(e.get('kind') == 'output' and e.get('text') == 'Linux' for e in events)
         if not report['interactive_output_mirror']:
             raise ValueError('Interactive diagnostic output missing from its own session')
-        sleeper = subprocess.Popen(remote + ['sudo -n sleep 6'], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        sleeper = subprocess.Popen(remote + ['sudo -n sleep 20'], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         try:
-            time.sleep(.8)
-            live = snapshot()
+            descendant_deadline=time.monotonic()+10
+            while time.monotonic()<descendant_deadline:
+                live=snapshot()
+                if len(live.get('sessions',[]))>=2 and any('sleep' in process.get('command','') for process in live.get('processes',[])):break
+                time.sleep(.5)
             if len(live.get('sessions', [])) < 2 or not any('sleep' in x.get('command', '') for x in live.get('processes', [])):
                 raise ValueError('Concurrent sessions/process descendants not tracked')
             report['concurrent_sessions_root_descendants'] = True
@@ -135,8 +145,8 @@ def verify(remote, env, workdir, screenshot=None, target_root='/data/workspace')
             if screenshot and not report['physical_vm_framebuffer']:
                 raise ValueError('VM console did not enter graphical framebuffer mode')
         finally:
-            sleeper.wait(timeout=15)
-        p.stdin.write(b'exit\n'); p.stdin.flush()
+            sleeper.wait(timeout=25)
+        p.stdin.write(b'\x03exit 0\n'); p.stdin.flush()
         p.communicate(timeout=15)
         if p.returncode:
             raise ValueError('Interactive SSH did not exit cleanly')

@@ -21,10 +21,20 @@ public static class AgujaWinCred {
 '@
  $request=[Console]::In.ReadToEnd()|ConvertFrom-Json
  if($request.provider -eq 'antigravity') {
-  # agy uses Go os.UserHomeDir() + filepath.Join, not the login name.
+  # Current agy shares gemini:antigravity with its desktop app; earlier
+  # versions used a profile-path key. Consult only these provider entries.
   $profileRoot=[Environment]::GetEnvironmentVariable('USERPROFILE','Process')
   if(-not $profileRoot -or -not [IO.Path]::IsPathRooted($profileRoot)){throw 'Invalid profile'}
-  $target='gemini:'+[IO.Path]::Combine($profileRoot,'.gemini','jetski-standalone-oauth-token')
+  if($request.store -eq 'current') {
+   # Synthetic/overridden profiles must not accidentally read the real account.
+   $actualRoot=[Environment]::GetFolderPath('UserProfile')
+   if(-not [string]::Equals($profileRoot.TrimEnd('\'),$actualRoot.TrimEnd('\'),[StringComparison]::OrdinalIgnoreCase)) {
+    @{status='missing'}|ConvertTo-Json -Compress;exit
+   }
+   $target='gemini:antigravity'
+  } elseif(-not $request.store -or $request.store -eq 'legacy') {
+   $target='gemini:'+[IO.Path]::Combine($profileRoot,'.gemini','jetski-standalone-oauth-token')
+  } else {throw 'Invalid request'}
  } elseif($request.provider -eq 'codex' -and $request.target -match '^(cli\|[a-f0-9]{16}\.Codex Auth|secrets\|[a-f0-9]{16}\.codex)$') {
   $target=[string]$request.target
  } else { throw 'Invalid request' }

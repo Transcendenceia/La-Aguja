@@ -63,6 +63,19 @@ function readNative(provider,item){
 function discover(provider,options){const paths=[];for(const item of locations(provider,options)){let selected=item;try{readNative(provider,selected);}catch{if(item.target.endsWith('opencode.json')&&item.source.endsWith('.json')&&!options?.env?.OPENCODE_CONFIG){selected={...item,source:item.source+'c'};try{readNative(provider,selected);}catch{continue;}}else continue;}paths.push(selected);}
  const portable=paths.some(p=>IMPORTS[provider][p.target]==='auth');return {portable,paths:portable?paths:[],summary:portable?'Credenciales nativas seleccionadas; su vigencia se comprobará en Aguja.':'No hay una sesión nativa portable válida. Inicia sesión en este PC o usa una clave API.'};
 }
+function windowsCandidates(provider,options={}){
+ if(options.configDirectory)return [options];
+ const home=options.home||os.homedir(),env=options.env||process.env,candidates=[{...options,home,env}];
+ // Location overrides can survive a moved profile or an old Explorer process.
+ // Try both the configured location and conventional roots of this user.
+ const roots=[home,env.USERPROFILE,env.HOME,env.HOMEDRIVE&&env.HOMEPATH?env.HOMEDRIVE+env.HOMEPATH:null].filter(p=>typeof p==='string'&&path.isAbsolute(p));
+ const clean={...env};for(const key of ['CODEX_HOME','CLAUDE_CONFIG_DIR','XDG_DATA_HOME','XDG_CONFIG_HOME','OPENCODE_CONFIG','OPENCODE_CONFIG_DIR'])delete clean[key];
+ for(const root of new Set(roots))candidates.push({...options,home:root,env:clean});
+ const directories={codex:['.codex'],claude:['.claude'],antigravity:['.gemini/antigravity-cli','.gemini/antigravity'],opencode:['.local/share/opencode','.config/opencode']}[provider];
+ for(const root of new Set(roots))for(const relative of directories||[])candidates.push({...options,home:root,env:clean,configDirectory:path.join(root,...relative.split('/'))});
+ for(const root of [env.APPDATA,env.LOCALAPPDATA].filter(p=>typeof p==='string'&&path.isAbsolute(p)))for(const name of {codex:['codex'],claude:['Claude','claude'],antigravity:['antigravity-cli'],opencode:['opencode']}[provider]||[])candidates.push({...options,home,env:clean,configDirectory:path.join(root,name)});
+ const seen=new Set();return candidates.filter(o=>{const key=JSON.stringify(locations(provider,o).map(i=>i.source)).toLowerCase();if(seen.has(key))return false;seen.add(key);return true;});
+}
 function materialize(capsule,approved){const c=structuredClone(capsule);for(const [id,p]of Object.entries(c.providers))if(p.mode==='import'){
  const items=approved[id];if(!Array.isArray(items)||!items.some(i=>IMPORTS[id]?.[i.target]==='auth'))throw new Error('Importa primero una sesión nativa portable de '+id+'.');
  const files={};for(const item of items)files[item.target]=(Buffer.isBuffer(item.credential)?sanitize(id,item.target,item.credential):readNative(id,item)).toString('base64url');p.files=files;delete p.import_paths;
@@ -84,4 +97,4 @@ async function prepareWindows({source,output,sha256,capsule,protection,approved=
  try{await fs.promises.copyFile(source,temp,fs.constants.COPYFILE_EXCL);if((await core.hashFile(temp)).sha256!==sha256)throw new Error('La imagen original cambió durante la copia.');fat32.writeFat32File(temp,'AGUJA_CFG','aguja-profile.json',sealed);if(bitlocker)fat32.writeFat32File(temp,'AGUJA_CFG','bitlocker.json',Buffer.from(JSON.stringify(bitlocker)));await fs.promises.link(temp,output);}finally{await fs.promises.unlink(temp).catch(()=>{});}
  return {profile_verified:true};
 }
-module.exports={IMPORTS,locations,sanitize,decodeNative,readNative,discover,materialize,seal,releaseMarker,validateFeatures,prepareWindows};
+module.exports={IMPORTS,locations,sanitize,decodeNative,readNative,discover,windowsCandidates,materialize,seal,releaseMarker,validateFeatures,prepareWindows};

@@ -13,7 +13,7 @@ test('Codex Win32 keyring identifier matches Rust canonical path, including UNC 
 });
 test('Antigravity native session uses memory only and exports just portable OAuth',async t=>{
  const options=fixture(t);let calls=0;const blob=Buffer.from(JSON.stringify({...agy,project:'not-portable',region:'not-portable'}));
- const r=await n.discover('antigravity',options,{platform:'win32',readCredential:async request=>{calls++;assert.deepEqual(request,{provider:'antigravity'});return blob;}});
+ const r=await n.discover('antigravity',options,{platform:'win32',readCredential:async request=>{calls++;assert.deepEqual(request,{provider:'antigravity',store:'current'});return blob;}});
  assert(r.portable);assert.equal(calls,1);assert(blob.every(x=>x===0));assert.equal(r.paths[0].source,undefined);
  const c=p.materialize({providers:{antigravity:{mode:'import'}}},{antigravity:r.paths});assert.deepEqual(JSON.parse(Buffer.from(c.providers.antigravity.files[r.paths[0].target],'base64url')),agy);
  n.clear(r.paths);assert(r.paths[0].credential.every(x=>x===0));assert.throws(()=>p.materialize({providers:{antigravity:{mode:'import'}}},{antigravity:r.paths}));
@@ -57,11 +57,28 @@ test('Credential bridge validates output, redacts private exceptions and does no
 test('native Windows Credential Manager: agy UTF8 and Codex UTF16 roundtrip',{skip:process.platform!=='win32'},async t=>{
  const options=fixture(t);options.env={...process.env,USERPROFILE:options.home};
  const {run,bridge}=require('./windows-vault-fixture.cjs')(options.env);
+ assert.equal(await n.readCredential(run,{provider:'antigravity',store:'current'},options.env),null,'Isolated profile must not read the real shared account');
  const targets=[['antigravity','gemini:'+path.join(options.home,'.gemini','jetski-standalone-oauth-token'),Buffer.from(JSON.stringify(agy))],['codex','cli|'+n.codexStoreKey(path.join(options.home,'.codex'))+'.Codex Auth',Buffer.from(JSON.stringify({OPENAI_API_KEY:'SYNTHETIC-ONLY'}),'utf16le')]];
  file(options,'.codex/config.toml','cli_auth_credentials_store="keyring"');
  for(const [provider,target,blob]of targets){let written=false;try{
   await bridge({target,op:'write',blob:blob.toString('base64')});written=true;
   const result=await n.discover(provider,options,{run});assert.equal(result.portable,true);assert(Buffer.isBuffer(result.paths[0].credential));
-  const c=p.materialize({providers:{[provider]:{mode:'import'}}},{[provider]:result.paths});assert(Buffer.from(c.providers[provider].files[result.paths[0].target],'base64url').length>10);n.clear(result.paths);
+  const c=p.materialize({providers:{[provider]:{mode:'import'}}},{[provider]:result.paths});assert.equal(Buffer.from(c.providers[provider].files[result.paths[0].target],'base64url').toString(),provider==='antigravity'?JSON.stringify(agy):blob.toString('utf16le'));n.clear(result.paths);
  }finally{if(written)await bridge({target,op:'delete'});}}
+});
+
+test('Antigravity automatic discovery falls back from malformed current entry to legacy without exposing bytes',async t=>{
+ const options=fixture(t);const calls=[];const invalid=Buffer.from('invalid');
+ const result=await n.discover('antigravity',options,{platform:'win32',readCredential:async request=>{calls.push(request.store);return request.store==='current'?invalid:Buffer.from(JSON.stringify(agy));}});
+ assert.deepEqual(calls,['current','legacy']);assert(result.portable);assert(invalid.every(x=>x===0));assert.deepEqual(JSON.parse(result.paths[0].credential),agy);n.clear(result.paths);
+});
+test('Windows automatic search finds current-user HOME and AppData without requiring folder selection',async t=>{
+ const options=fixture(t),alternate=path.join(options.home,'relocated'),roaming=path.join(options.home,'roaming');
+ file({home:alternate},'.claude/.credentials.json',{claudeAiOauth:{accessToken:'SYNTHETIC'}});
+ options.env={HOME:alternate,APPDATA:roaming,CLAUDE_CONFIG_DIR:path.join(options.home,'stale')};
+ assert((await n.discover('claude',options,{platform:'win32'})).portable);
+ file({home:roaming},'opencode/auth.json',{openai:{type:'oauth',access:'SYNTHETIC'}});
+ assert((await n.discover('opencode',options,{platform:'win32'})).portable);
+ options.configDirectory=path.join(options.home,'explicit-missing');
+ assert.equal((await n.discover('claude',options,{platform:'win32'})).portable,false);
 });

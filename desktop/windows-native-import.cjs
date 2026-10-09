@@ -47,14 +47,21 @@ async function decryptCodexAge(ciphertext,passphrase){
 async function discover(provider,options={},dependencies={}){
  if((dependencies.platform||process.platform)!=='win32')return provisioning.discover(provider,options);
  if(!Object.hasOwn(provisioning.IMPORTS,provider))throw new Error('Proveedor no válido.');
- const portable=provisioning.discover(provider,options);
+ const candidates=provisioning.windowsCandidates(provider,options);
+ let portable=provisioning.discover(provider,options);
+ if(!portable.portable)for(const candidate of candidates.slice(1)){const found=provisioning.discover(provider,candidate);if(found.portable){portable=found;break;}}
  if(!AUTH[provider])return portable; // Claude/OpenCode use their native auth files.
  // A manually chosen Antigravity folder explicitly requests portable file auth.
  if(provider==='antigravity'&&options.configDirectory)return portable;
  const reader=dependencies.readCredential||((request)=>readCredential(dependencies.run,request,options.env));
  let auth=null;
  if(provider==='antigravity'){
-  const blob=await reader({provider});if(blob)try{auth=authBuffer(provider,decodeBlob(blob,provider));}finally{blob.fill(0);}
+  let failure;
+  for(const store of ['current','legacy']){
+   let blob;try{blob=await reader({provider,store});if(blob)auth=authBuffer(provider,decodeBlob(blob,provider));}catch(error){failure=error;}finally{blob?.fill(0);}
+   if(auth)break;
+  }
+  if(!auth&&failure&&!portable.portable)throw failure;
  }else{
   const home=codexHome(options);let config={};const settings=path.join(home,'config.toml');
   if(fs.existsSync(settings))try{config=toml.parse(provisioning.decodeNative(readLocalFile(settings)));}catch{throw new Error('La configuración nativa de Codex no es válida.');}

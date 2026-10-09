@@ -1,6 +1,6 @@
 'use strict';
 const {powershellArgs,windowsPowerShell}=require('./ai-tools.cjs');
-const KEYS=Object.freeze(['CODEX_HOME','CLAUDE_CONFIG_DIR','XDG_CONFIG_HOME','XDG_DATA_HOME','OPENCODE_CONFIG','OPENCODE_CONFIG_DIR','NPM_CONFIG_PREFIX','PNPM_HOME','NVM_HOME','NVM_SYMLINK']);
+const KEYS=Object.freeze(['HOME','CODEX_HOME','CLAUDE_CONFIG_DIR','XDG_CONFIG_HOME','XDG_DATA_HOME','OPENCODE_CONFIG','OPENCODE_CONFIG_DIR','NPM_CONFIG_PREFIX','PNPM_HOME','NVM_HOME','NVM_SYMLINK']);
 async function userEnvironment(run,base=process.env){
  // Explorer and an already-running Imager retain old PATH after a CLI install.
  // Query only known non-secret location variables; never run shell profiles or

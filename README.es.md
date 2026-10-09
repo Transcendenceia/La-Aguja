@@ -8,7 +8,9 @@
 conecta Ethernet por DHCP o Wi-Fi guardado/asistido, activa SSH listo para usar y ofrece
 **Codex CLI, OpenCode, Claude Code y Antigravity**, preinstalados, sin escritorio de ventanas. Los clientes externos conservan sus licencias y condiciones; véase NOTICE.es.md.
 
-Estado: **Imager público 0.9.8 · imagen de rescate 0.9.7 · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/es/docs) · VALIDATION.md. Una imagen construida no significa compatibilidad de todo el hardware.
+Estado: **Imager público 0.9.9 · imagen de rescate 0.9.9 · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/es/docs) · VALIDATION.md. Una imagen construida no significa compatibilidad de todo el hardware.
+
+**Historial en consola local:** usa la rueda del ratón para revisar respuestas largas. Baja hasta el prompt o pulsa Esc para volver. Hasta 10.000 líneas en RAM, sin guardar transcripciones; SSH conserva su comportamiento normal. [Notas y descargas 0.9.9](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9).
 
 <p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-es.svg" width="360" alt="Invítanos a un café · Ko-fi"></a></p>
 
@@ -16,9 +18,9 @@ Estado: **Imager público 0.9.8 · imagen de rescate 0.9.7 · experimental; cód
 
 ### También como skill para tu agente
 
-[Flash Imager Agent Skill 1.0.0](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) permite pedirle a un agente que prepare una imagen `.img` personalizada con el motor real del Imager, sin Electron. Configura idioma, red, SSH y perfiles opcionales de IA/tailnet; verifica el perfil y los hashes, conserva la base y **no graba un USB automáticamente** ni reconstruye la distro.
+[Flash Imager Agent Skill 1.0.1](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) permite pedirle a un agente que prepare una imagen `.img` personalizada con el motor real del Imager, sin Electron. Configura idioma, red, SSH y perfiles opcionales de IA/tailnet; verifica el perfil y los hashes, conserva la base y **no graba un USB automáticamente** ni reconstruye la distro.
 
-[Instalación por arnés](skills/flash-imager/references/harnesses.md): Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita acceso a archivos/terminal y Node 22+. El formato portátil no certifica todos los arneses o sistemas operativos. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/SHA256SUMS-flash-imager-skill-1.0.0) · [Skill e interfaz JSON](skills/flash-imager/SKILL.md).
+[Instalación por arnés](skills/flash-imager/references/harnesses.md): Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita acceso a archivos/terminal y Node 22+. El formato portátil no certifica todos los arneses o sistemas operativos. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Skill e interfaz JSON](skills/flash-imager/SKILL.md).
 
 ### Aplicación de escritorio
 
@@ -45,9 +47,9 @@ Los informes de versiones previas se conservan en [docs/](docs/) como evidencia 
 2. **Desde la consola del equipo averiado:** elige un agente en el cockpit de texto,
    autentica tu proveedor y trabaja sobre el hardware directamente.
 
-**Full power predeterminado:** la cuenta `aguja` dispone de `sudo` ilimitado. El launcher
-desactiva las aprobaciones/sandbox de los arneses mediante sus mecanismos disponibles.
-`agent_mode=ask` conserva las aprobaciones propias del arnés sin quitarte acceso root.
+**Acceso completo:** la cuenta `aguja` dispone de `sudo` ilimitado. El selector propone
+Seguro para confirmar las tareas; YOLO requiere elegir explícitamente Inseguro.
+La selección no elimina el acceso root.
 No hay reparación, instalación ni escritura sobre discos internos al arrancar.
 
 ## Login oficial en el propio disco
@@ -80,7 +82,7 @@ ssh_public_key =
 ssh_port = 22
 persistent_home = no
 default_harness = menu
-agent_mode = full
+agent_mode = ask
 ```
 
 Valores **literales, sin comillas**. No se ejecutan como shell. CRLF y UTF-8 BOM funcionan.

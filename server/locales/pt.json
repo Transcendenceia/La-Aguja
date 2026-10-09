@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Prepare o USB com Flash Imager",
-  "imagerText": "A aplicação para Windows e Linux descarrega e verifica a imagem, grava o USB e guarda as definições. Pode preparar SSH, agentes IA e a sua rede Tailscale ou Headscale. Em Windows pode gerir chaves BitLocker disponíveis. Versão 0.9.8; gravar o USB apaga o seu conteúdo.",
+  "imagerText": "A aplicação para Windows e Linux descarrega e verifica a imagem, grava o USB e guarda as definições. Pode preparar SSH, agentes IA e a sua rede Tailscale ou Headscale. Em Windows pode gerir chaves BitLocker disponíveis. Versão 0.9.9; gravar o USB apaga o seu conteúdo.",
   "portable": "Linux portátil",
   "imagesTitle": "Descarregue a imagem de La Aguja",
-  "imagesText": "Rescue Disk 0.9.7 é o Linux que inicia no computador. Imagens no nosso site; Imager e código no GitHub. O Imager verifica a assinatura do catálogo e o SHA-256 da descarga. Não precisa de conta LA AGUJA.",
+  "imagesText": "Rescue Disk 0.9.9 é o Linux que inicia no computador. Imagens no nosso site; Imager e código no GitHub. O Imager verifica a assinatura do catálogo e o SHA-256 da descarga. Não precisa de conta LA AGUJA.",
   "imageLinks": [
     "Imagem USB comprimida (.img.zst) ↗",
     "ISO BIOS/UEFI ↗",
@@ -326,5 +326,6 @@
     "title": "Apoiar LA AGUJA",
     "message": "Quando um computador falha, há lembranças, trabalho e pessoas em jogo. LA AGUJA nasceu para ajudar a recuperá-los. Se esteve ao seu lado num momento difícil, seu café mantém este projeto livre. Obrigado por apoiá-lo.",
     "optional": "Doar é opcional. Todas as ferramentas continuam disponíveis."
-  }
+  },
+  "recoveryAlt": "Um USB de resgate reconecta uma paisagem digital quebrada e abre um caminho para a luz."
 }

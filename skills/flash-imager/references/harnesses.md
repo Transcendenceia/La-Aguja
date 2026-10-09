@@ -2,7 +2,7 @@
 
 The package follows the open [Agent Skills specification](https://agentskills.io/specification): a `flash-imager/` directory containing `SKILL.md`, references, assets and executable scripts. No provider-specific tool names, hooks, permission overrides or account service are required.
 
-Download `aguja-flash-imager-skill-1.0.0.zip` or `.tar.gz` from [the Imager release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.2) and check `SHA256SUMS-flash-imager-skill-1.0.0`. Extract the **whole** `flash-imager` folder; copying only `SKILL.md` loses the execution engine. Do not overwrite another installed skill without preserving its version. Run `node <installed-folder>/scripts/imager.cjs doctor` after extraction.
+Download `aguja-flash-imager-skill-1.0.1.zip` or `.tar.gz` from [the Imager release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9) and check `SHA256SUMS-flash-imager-skill-1.0.1`. Extract the **whole** `flash-imager` folder; copying only `SKILL.md` loses the execution engine. Do not overwrite another installed skill without preserving its version. Run `node <installed-folder>/scripts/imager.cjs doctor` after extraction.
 
 ## Discovery locations
 

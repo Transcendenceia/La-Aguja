@@ -3,7 +3,7 @@ name: flash-imager
 description: Prepare a personalised La Aguja bootable disk image on request, using the Flash Imager engine without its GUI. Use for rescue USB image configuration, network, language, SSH and optional AI or tailnet profiles; not for generating pictures.
 license: GPL-3.0-or-later
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Flash Imager for AI agents

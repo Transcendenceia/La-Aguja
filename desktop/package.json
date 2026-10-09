@@ -1,7 +1,7 @@
 {
   "name": "aguja-companion",
   "productName": "LA AGUJA Flash Imager",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "private": true,
   "author": {
     "name": "Transcendence IA",
@@ -48,7 +48,8 @@
       "windows-privileged.cjs",
       "public-download.cjs",
       "windows-native-import.cjs",
-      "windows-credentials.ps1"
+      "windows-credentials.ps1",
+      "image-storage.cjs"
     ],
     "extraResources": [
       {

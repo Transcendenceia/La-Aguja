@@ -93,3 +93,7 @@ Native backend references: [Codex storage](https://github.com/openai/codex/blob/
 ## Cambios 0.9.7
 
 El desbloqueo cifrado al arrancar es el valor inicial, con contraseña pública editable `aguja`. Arranque directo requiere selección expresa. Idioma/teclado se importan del equipo y pueden corregirse; los perfiles cifrados con idioma requieren Rescue Disk 0.9.7 para aplicarlo antes del desbloqueo. La página de apoyo usa un QR local y abre Ko-fi solo al pulsar el enlace. No incluye claves de Ko-fi.
+
+## Cambios 0.9.9
+
+Comprueba el espacio disponible antes de copiar la imagen privada y muestra cuánto falta. En Windows, al preparar y grabar, permite elegir otra carpeta de trabajo si el volumen inicial no tiene espacio; cancelar no inicia la grabación. Un archivo de destino existente no se sobrescribe. El catálogo ofrece Rescue Disk 0.9.9, con historial y rueda de ratón integrados en las consolas locales.

@@ -873,7 +873,13 @@
       "Tarea pendiente de confirmación": "Task awaiting confirmation",
       "Escribe sí / yes para ejecutar. Enter o Esc: cancelar.": "Type yes to execute. Enter or Esc: cancel.",
       "Confirmada": "Confirmed",
-      "Cancelada": "Cancelled"
+      "Cancelada": "Cancelled",
+      "Carpeta de trabajo para la imagen privada": "Working folder for the private image",
+      "No hay espacio suficiente para preparar la imagen privada. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Not enough space to prepare the private image. Choose a folder on another drive or free up space; the USB has not been written.",
+      "Ya existe un archivo en el destino de la imagen privada. Elige otro nombre; no se ha sobrescrito.": "A file already exists at the private image destination. Choose another name; nothing was overwritten.",
+      "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "No permission to save the private image in this folder. Choose another folder; the USB has not been written.",
+      "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "The destination drive cannot store a file of this size. Choose a folder on an NTFS or exFAT drive.",
+      "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Not enough space for the private image: {required} GiB free is required, but only {available} GiB is available. Choose a folder on another drive or free up space; the USB has not been written."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -1596,7 +1602,13 @@
       "Tarea pendiente de confirmación": "任务等待确认",
       "Escribe sí / yes para ejecutar. Enter o Esc: cancelar.": "输入 yes 执行。Enter 或 Esc：取消。",
       "Confirmada": "已确认",
-      "Cancelada": "已取消"
+      "Cancelada": "已取消",
+      "Carpeta de trabajo para la imagen privada": "私有镜像工作文件夹",
+      "No hay espacio suficiente para preparar la imagen privada. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "没有足够空间准备私有镜像。请选择其他驱动器或释放空间；尚未写入 USB。",
+      "Ya existe un archivo en el destino de la imagen privada. Elige otro nombre; no se ha sobrescrito.": "目标位置已有文件。请使用其他名称；未覆盖任何文件。",
+      "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "无权在此文件夹保存。请选择其他文件夹；尚未写入 USB。",
+      "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "此驱动器无法保存此大小的文件。请选择 NTFS 或 exFAT 驱动器。",
+      "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "空间不足：需要 {required} GiB 可用空间，目前只有 {available} GiB。请选择其他驱动器或释放空间；尚未写入 USB。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -2319,7 +2331,13 @@
       "Tarea pendiente de confirmación": "Tâche à confirmer",
       "Escribe sí / yes para ejecutar. Enter o Esc: cancelar.": "Tapez yes pour exécuter. Entrée ou Échap : annuler.",
       "Confirmada": "Confirmée",
-      "Cancelada": "Annulée"
+      "Cancelada": "Annulée",
+      "Carpeta de trabajo para la imagen privada": "Dossier de travail pour l’image privée",
+      "No hay espacio suficiente para preparar la imagen privada. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espace insuffisant pour l’image privée. Choisissez un autre lecteur ou libérez de l’espace ; la clé USB n’a pas été écrite.",
+      "Ya existe un archivo en el destino de la imagen privada. Elige otro nombre; no se ha sobrescrito.": "Un fichier existe déjà à la destination. Choisissez un autre nom ; aucun fichier n’a été écrasé.",
+      "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Permission refusée dans ce dossier. Choisissez un autre dossier ; la clé USB n’a pas été écrite.",
+      "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Ce lecteur ne peut pas stocker un fichier de cette taille. Choisissez un lecteur NTFS ou exFAT.",
+      "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espace insuffisant : {required} GiB libres requis, {available} GiB disponibles. Choisissez un autre lecteur ou libérez de l’espace ; la clé USB n’a pas été écrite."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -3042,7 +3060,13 @@
       "Tarea pendiente de confirmación": "Tarefa aguardando confirmação",
       "Escribe sí / yes para ejecutar. Enter o Esc: cancelar.": "Digite sim / yes para executar. Enter ou Esc: cancelar.",
       "Confirmada": "Confirmada",
-      "Cancelada": "Cancelada"
+      "Cancelada": "Cancelada",
+      "Carpeta de trabajo para la imagen privada": "Pasta de trabalho para a imagem privada",
+      "No hay espacio suficiente para preparar la imagen privada. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espaço insuficiente para a imagem privada. Escolha outra unidade ou liberte espaço; o USB não foi gravado.",
+      "Ya existe un archivo en el destino de la imagen privada. Elige otro nombre; no se ha sobrescrito.": "Já existe um ficheiro no destino. Escolha outro nome; nada foi substituído.",
+      "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Sem permissão para guardar nesta pasta. Escolha outra pasta; o USB não foi gravado.",
+      "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Esta unidade não suporta este tamanho de ficheiro. Escolha uma unidade NTFS ou exFAT.",
+      "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espaço insuficiente: são necessários {required} GiB livres e há {available} GiB disponíveis. Escolha outra unidade ou liberte espaço; o USB não foi gravado."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -3765,7 +3789,13 @@
       "Tarea pendiente de confirmación": "Aufgabe wartet auf Bestätigung",
       "Escribe sí / yes para ejecutar. Enter o Esc: cancelar.": "yes eingeben zum Ausführen. Enter oder Esc: abbrechen.",
       "Confirmada": "Bestätigt",
-      "Cancelada": "Abgebrochen"
+      "Cancelada": "Abgebrochen",
+      "Carpeta de trabajo para la imagen privada": "Arbeitsordner für das private Abbild",
+      "No hay espacio suficiente para preparar la imagen privada. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Nicht genug Platz für das private Abbild. Wähle ein anderes Laufwerk oder gib Speicherplatz frei; der USB wurde nicht beschrieben.",
+      "Ya existe un archivo en el destino de la imagen privada. Elige otro nombre; no se ha sobrescrito.": "Am Ziel existiert bereits eine Datei. Wähle einen anderen Namen; nichts wurde überschrieben.",
+      "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Keine Speicherberechtigung in diesem Ordner. Wähle einen anderen Ordner; der USB wurde nicht beschrieben.",
+      "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Dieses Laufwerk unterstützt die Dateigröße nicht. Wähle ein NTFS- oder exFAT-Laufwerk.",
+      "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Nicht genug Platz: {required} GiB frei erforderlich, {available} GiB verfügbar. Wähle ein anderes Laufwerk oder gib Platz frei; der USB wurde nicht beschrieben."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -4488,7 +4518,13 @@
       "Tarea pendiente de confirmación": "Attività da confermare",
       "Escribe sí / yes para ejecutar. Enter o Esc: cancelar.": "Scrivi yes per eseguire. Invio o Esc: annulla.",
       "Confirmada": "Confermata",
-      "Cancelada": "Annullata"
+      "Cancelada": "Annullata",
+      "Carpeta de trabajo para la imagen privada": "Cartella di lavoro per l’immagine privata",
+      "No hay espacio suficiente para preparar la imagen privada. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Spazio insufficiente per l’immagine privata. Scegli un’altra unità o libera spazio; la chiavetta USB non è stata scritta.",
+      "Ya existe un archivo en el destino de la imagen privada. Elige otro nombre; no se ha sobrescrito.": "Esiste già un file nella destinazione. Scegli un altro nome; nulla è stato sovrascritto.",
+      "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Non hai il permesso di salvare in questa cartella. Scegli un’altra cartella; la chiavetta USB non è stata scritta.",
+      "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Questa unità non supporta un file di queste dimensioni. Scegli un’unità NTFS o exFAT.",
+      "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Spazio insufficiente: servono {required} GiB liberi, ma sono disponibili {available} GiB. Scegli un’altra unità o libera spazio; la chiavetta USB non è stata scritta."
     }
   }
 }

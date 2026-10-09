@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "USB mit Flash Imager vorbereiten",
-  "imagerText": "Die App für Windows und Linux lädt und prüft das Image, beschreibt den USB-Stick und speichert deine Einstellungen. SSH, KI-Agenten und dein Tailscale-/Headscale-Netz lassen sich vorbereiten. Unter Windows können verfügbare BitLocker-Schlüssel verwaltet werden. Version 0.9.8; das Schreiben löscht den Inhalt des USB-Sticks.",
+  "imagerText": "Die App für Windows und Linux lädt und prüft das Image, beschreibt den USB-Stick und speichert deine Einstellungen. SSH, KI-Agenten und dein Tailscale-/Headscale-Netz lassen sich vorbereiten. Unter Windows können verfügbare BitLocker-Schlüssel verwaltet werden. Version 0.9.9; das Schreiben löscht den Inhalt des USB-Sticks.",
   "portable": "Portables Linux-Paket",
   "imagesTitle": "La-Aguja-Image herunterladen",
-  "imagesText": "Rescue Disk 0.9.7 ist das Linux, das auf dem Rechner startet. Images liegen auf unserer Website, Imager und Code auf GitHub. Der Imager prüft Katalogsignatur und SHA-256 des Downloads. Kein LA-AGUJA-Konto erforderlich.",
+  "imagesText": "Rescue Disk 0.9.9 ist das Linux, das auf dem Rechner startet. Images liegen auf unserer Website, Imager und Code auf GitHub. Der Imager prüft Katalogsignatur und SHA-256 des Downloads. Kein LA-AGUJA-Konto erforderlich.",
   "imageLinks": [
     "Komprimiertes USB-Abbild (.img.zst) ↗",
     "BIOS/UEFI ISO ↗",
@@ -326,5 +326,6 @@
     "title": "LA AGUJA unterstützen",
     "message": "Wenn ein Computer ausfällt, stehen Erinnerungen, Arbeit und Menschen dahinter. LA AGUJA hilft, sie zu retten. Hat sie dir in einem schweren Moment geholfen, hält dein Kaffee dieses freie Projekt am Leben. Danke für deine Unterstützung.",
     "optional": "Spenden sind freiwillig. Alle Werkzeuge bleiben verfügbar."
-  }
+  },
+  "recoveryAlt": "Ein Rettungs-USB verbindet eine zerbrochene digitale Landschaft und öffnet einen Weg zum Licht."
 }

@@ -10,7 +10,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 def build(output):
     output.mkdir(parents=True, exist_ok=True)
@@ -21,7 +21,7 @@ def build(output):
         files['flash-imager/' + destination] = source.read_bytes()
     for name in ['SKILL.md','references/interface.md','references/harnesses.md','assets/request.example.json','scripts/imager.cjs']:
         add(ROOT/'skills/flash-imager'/name, name)
-    for name in ['core.cjs','provisioning.cjs','fat32-writer.cjs','public-download.cjs','resources/release-key.json']:
+    for name in ['core.cjs','image-storage.cjs','provisioning.cjs','fat32-writer.cjs','public-download.cjs','resources/release-key.json']:
         add(ROOT/'desktop'/name, 'scripts/lib/desktop/' + name)
     add(ROOT/'runtime/locale-catalog.json', 'scripts/lib/runtime/locale-catalog.json')
     add(ROOT/'LICENSE', 'LICENSE')

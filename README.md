@@ -4,9 +4,11 @@
 
 **English is the primary repository language. [Español](README.es.md) is the secondary language.**
 
-**LA AGUJA Rescue Disk** is experimental x86-64 live Linux for a USB drive. Boot before the installed operating system, inspect hardware, recover authorised data and work locally or over SSH. The complete Rescue 0.9.7 factory image includes Codex CLI, OpenCode, Claude Code and Antigravity, independently of whether you prepare credentials. Third-party clients retain their own licences and terms; see NOTICE.md. Cloud AI needs Internet and your own provider account; traditional tools can work offline.
+**LA AGUJA Rescue Disk** is experimental x86-64 live Linux for a USB drive. Boot before the installed operating system, inspect hardware, recover authorised data and work locally or over SSH. The complete Rescue 0.9.9 factory image includes Codex CLI, OpenCode, Claude Code and Antigravity, independently of whether you prepare credentials. Third-party clients retain their own licences and terms; see NOTICE.md. Cloud AI needs Internet and your own provider account; traditional tools can work offline.
 
-**Current versions:** Flash Imager **0.9.8** · Rescue Disk image **0.9.7**. These versions are independent.
+**Current versions:** Flash Imager **0.9.9** · Rescue Disk image **0.9.9**. [Release notes and downloads](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9).
+
+**Local console history:** use the mouse wheel to review long CLI output; wheel down returns to the prompt, or press Esc. Local sessions retain up to 10,000 terminal lines in RAM, without saving a transcript. SSH keeps its normal terminal behaviour.
 
 [Website and downloads](https://aguja.transcendenceia.net/en) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Latest Imager release](https://github.com/Transcendenceia/La-Aguja/releases/latest) · [TranscendenceIA](https://www.transcendenceia.net/proyectos/la-aguja-rescue-disk)
 
@@ -16,9 +18,9 @@
 
 ### Let your AI agent prepare the image
 
-Alongside the desktop installers, [Flash Imager Agent Skill 1.0.0](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) packages the same file-image preparation engine without Electron. Ask your agent to configure language, networking, SSH and optional AI/tailnet profiles; it creates a personalised `.img`, verifies the profile and hashes, and leaves the base image untouched. It does **not** write a USB automatically or rebuild the distribution.
+Alongside the desktop installers, [Flash Imager Agent Skill 1.0.1](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) packages the same file-image preparation engine without Electron. Ask your agent to configure language, networking, SSH and optional AI/tailnet profiles; it creates a personalised `.img`, verifies the profile and hashes, and leaves the base image untouched. It does **not** write a USB automatically or rebuild the distribution.
 
-The open `SKILL.md` format has [installation guidance for Codex, Claude Code, OpenCode, Gemini CLI, Cursor and OpenClaw, plus manual loading for other harnesses](skills/flash-imager/references/harnesses.md). A file/shell-capable agent and Node.js 22+ are required. Format compatibility is not a claim that every harness or OS was tested. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/aguja-flash-imager-skill-1.0.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.2/SHA256SUMS-flash-imager-skill-1.0.0) · [Instructions and JSON interface](skills/flash-imager/SKILL.md).
+The open `SKILL.md` format has [installation guidance for Codex, Claude Code, OpenCode, Gemini CLI, Cursor and OpenClaw, plus manual loading for other harnesses](skills/flash-imager/references/harnesses.md). A file/shell-capable agent and Node.js 22+ are required. Format compatibility is not a claim that every harness or OS was tested. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Instructions and JSON interface](skills/flash-imager/SKILL.md).
 
 ### Desktop and boot workflow
 
@@ -55,7 +57,7 @@ Locally, `aguja login codex`, `aguja login claude` or `aguja login antigravity` 
 
 OpenCode keeps `opencode auth login`. SSH/serial/headless sessions use native provider methods; a remote localhost callback is not automatically forwarded. API keys and selective import of compatible portable sessions are separate paths. The complete keychain, history, hooks and MCP configuration are not copied. A portable file does not prove session validity.
 
-The `aguja` account has **unrestricted sudo/root**. Default launchers use available full-power mechanisms. `agent_mode=ask` keeps harness approvals without removing root. A read-only instruction is not a sandbox. Provider costs, quotas and transmitted data depend on your account and terms.
+The `aguja` account has **unrestricted sudo/root**. The launcher proposes Safe task confirmation by default; YOLO requires explicitly choosing Unsafe. Neither mode removes root access. A read-only instruction is not a sandbox. Provider costs, quotas and transmitted data depend on your account and terms.
 
 ## Configuration and storage
 

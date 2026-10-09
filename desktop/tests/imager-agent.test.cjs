@@ -54,7 +54,7 @@ test('standalone distributable prepares an image without checkout or npm install
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-agent-bundle-'));
   try {
     const output=path.join(dir,'assets');execFileSync('python3',[path.join(ROOT,'scripts/package-imager-skill.py'),output]);
-    const extracted=path.join(dir,'standalone');execFileSync('python3',['-c','import sys,zipfile;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])',path.join(output,'aguja-flash-imager-skill-1.0.0.zip'),extracted]);
+    const extracted=path.join(dir,'standalone');execFileSync('python3',['-c','import sys,zipfile;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])',path.join(output,'aguja-flash-imager-skill-1.0.1.zip'),extracted]);
     const script=path.join(extracted,'flash-imager/scripts/imager.cjs');assert.equal(call('doctor',undefined,script).status,0);
     const source=synthetic(dir),r=request(source,path.join(dir,'standalone-private.img'));
     assert.equal(call('prepare',r,script).status,0);assert(fs.existsSync(r.output_path));

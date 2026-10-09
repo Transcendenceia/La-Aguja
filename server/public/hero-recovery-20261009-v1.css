@@ -1,0 +1,4 @@
+/* LA AGUJA: recovery and a new beginning. Versioned hero asset. */
+.needle-stage.needle-stage-recovery { min-height: 0; aspect-ratio: 3 / 2; }
+.needle-stage-recovery::before, .needle-stage-recovery::after { display: none; }
+.needle-stage.needle-stage-recovery img { display: block; width: 100%; height: 100%; object-fit: cover; }

@@ -5,6 +5,7 @@ const {StringDecoder}=require('node:string_decoder');
 // Preserve local preferences and private images; legacy account/relay files are never read.
 if(app.commandLine?.hasSwitch && !app.commandLine.hasSwitch('user-data-dir') && app.setPath)app.setPath('userData',path.join(app.getPath('appData'),'Aguja Companion'));
 const core=require('./core.cjs');
+const storage=require('./image-storage.cjs');
 const bitlocker=require('./bitlocker.cjs');
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
@@ -27,7 +28,7 @@ const ROOT=app.isPackaged?path.join(process.resourcesPath,'aguja'):path.resolve(
 let win; let selectedImage=null;let prepared=null;let releases=[];let verifiedCatalog=null;let working=false;let approvedImports={};
 // No crash reporter, analytics, renderer remote content, credentials in command arguments or logs.
 function receipt(ok,data={},error=''){return ok?{ok:true,...data}:{ok:false,error};}
-function message(e){return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
+function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
 function progress(phase,detail={}){if(win&&!win.isDestroyed())win.webContents.send('progress',{phase,...detail,...(detail.message?{message:translate(detail.message)}:{})});}
 function handle(channel,callback){ipcMain.handle(channel,async(event,...args)=>{
  if(event.sender!==win.webContents || event.senderFrame!==win.webContents.mainFrame)throw new Error('Origen no autorizado.');
@@ -102,7 +103,17 @@ async function prepareImage(settings,output) {
  return {name:path.basename(output),...checked};
 }
 async function privateOutput() {
- const dir=path.join(app.getPath('userData'),'private-images');await fs.promises.mkdir(dir,{recursive:true,mode:0o700});
+ let dir=path.join(app.getPath('userData'),'private-images');
+ await fs.promises.mkdir(dir,{recursive:true,mode:0o700});
+ if(isWindows){
+  try{await storage.checkSpace(dir,selectedImage.bytes);}catch(error){
+   if(!/espacio suficiente/.test(error.message))throw error;
+   const pick=await showOpenDialog(win,{title:'Carpeta de trabajo para la imagen privada',message:error.message,defaultPath:path.dirname(selectedImage.path),properties:['openDirectory','createDirectory']});
+   if(pick.canceled)return null;
+   dir=path.join(pick.filePaths[0],'LA AGUJA - imagen privada');await fs.promises.mkdir(dir,{recursive:true,mode:0o700});
+   await storage.checkSpace(dir,selectedImage.bytes);
+  }
+ }
  const stat=await fs.promises.lstat(dir);if(!stat.isDirectory()||stat.isSymbolicLink())throw new Error('La carpeta de imágenes privadas no es válida.');await fs.promises.chmod(dir,0o700);
  return path.join(dir,'aguja-personal-'+crypto.randomBytes(16).toString('hex')+'.img');
 }
@@ -272,7 +283,7 @@ if ($ssidMatch) {
   settings=prepareInput(input);
   // Native dialogs can outlive configuration changes. Recheck the private
   // image fingerprint after confirmation; no network enrollment is performed.
-  let preparedReceipt;if(!prepared||prepared.fingerprint!==settings.fingerprint)preparedReceipt=await prepareImage(settings,await privateOutput());
+  let preparedReceipt;if(!prepared||prepared.fingerprint!==settings.fingerprint){const output=await privateOutput();if(!output)return {canceled:true};preparedReceipt=await prepareImage(settings,output);}
   if(prepared.bytes>disk.size)throw new Error('La imagen privada no cabe en este USB. Elige uno con más capacidad.');
   await selectedDisk(input,disk);
   const checked=await core.hashFile(prepared.path,d=>progress('verify',d));if(checked.sha256!==prepared.sha256||checked.bytes!==prepared.bytes)throw new Error('La imagen privada cambió. Prepara otra antes de grabar.');

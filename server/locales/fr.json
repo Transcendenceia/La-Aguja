@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Préparez votre clé USB avec Flash Imager",
-  "imagerText": "L’application Windows et Linux télécharge et vérifie l’image, écrit la clé et enregistre vos réglages. Elle peut préparer SSH, les agents IA et votre réseau Tailscale ou Headscale. Sous Windows, elle peut gérer les clés BitLocker disponibles. Version 0.9.8 ; l’écriture efface le contenu de la clé.",
+  "imagerText": "L’application Windows et Linux télécharge et vérifie l’image, écrit la clé et enregistre vos réglages. Elle peut préparer SSH, les agents IA et votre réseau Tailscale ou Headscale. Sous Windows, elle peut gérer les clés BitLocker disponibles. Version 0.9.9 ; l’écriture efface le contenu de la clé.",
   "portable": "Linux portable",
   "imagesTitle": "Téléchargez l’image de La Aguja",
-  "imagesText": "Rescue Disk 0.9.7 est le Linux qui démarre sur le PC. Les images sont sur notre site ; l’Imager et le code sur GitHub. L’Imager vérifie la signature du catalogue et le SHA-256 du téléchargement. Aucun compte LA AGUJA n’est nécessaire.",
+  "imagesText": "Rescue Disk 0.9.9 est le Linux qui démarre sur le PC. Les images sont sur notre site ; l’Imager et le code sur GitHub. L’Imager vérifie la signature du catalogue et le SHA-256 du téléchargement. Aucun compte LA AGUJA n’est nécessaire.",
   "imageLinks": [
     "Image USB compressée (.img.zst) ↗",
     "ISO BIOS/UEFI ↗",
@@ -326,5 +326,6 @@
     "title": "Soutenir LA AGUJA",
     "message": "Derrière un ordinateur en panne, il y a des souvenirs, du travail et des personnes. LA AGUJA aide à les retrouver. Si elle vous a aidé dans un moment difficile, votre café fait vivre ce projet libre. Merci de le soutenir.",
     "optional": "Le don est facultatif. Tous les outils restent disponibles."
-  }
+  },
+  "recoveryAlt": "Une clé USB de secours reconnecte un paysage numérique brisé et ouvre un chemin vers la lumière."
 }

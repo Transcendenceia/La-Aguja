@@ -10,7 +10,7 @@ const core = require(path.join(root, 'desktop/core.cjs'));
 const provisioning = require(path.join(root, 'desktop/provisioning.cjs'));
 const fat = require(path.join(root, 'desktop/fat32-writer.cjs'));
 const pin = JSON.parse(fs.readFileSync(path.join(root, 'desktop/resources/release-key.json')));
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 function emit(value) { process.stdout.write(JSON.stringify(value) + '\n'); }
 function requireValue(ok) { if (!ok) throw Error('invalid'); }
 function keys(value, allowed) {

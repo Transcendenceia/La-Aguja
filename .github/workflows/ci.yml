@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '22'
       - name: Native fixture tools
-        run: sudo apt-get update && sudo apt-get install -y mtools gdisk dosfstools e2fsprogs zstd
+        run: sudo apt-get update && sudo apt-get install -y mtools gdisk dosfstools e2fsprogs zstd tmux
       - run: python -m pip install -r requirements-dev.txt
       - run: python scripts/audit-public.py
       - run: python -m unittest discover -s tests
@@ -36,5 +36,5 @@ jobs:
       - run: npm ci
         working-directory: desktop
       - name: Native Windows CLI lookup and portable imports
-        run: node --test tests/import-portability.test.cjs tests/ai-tools.test.cjs tests/windows-environment.test.cjs tests/windows-native-import.test.cjs
+        run: node --test tests/import-portability.test.cjs tests/ai-tools.test.cjs tests/windows-environment.test.cjs tests/windows-native-import.test.cjs tests/image-storage.test.cjs
         working-directory: desktop

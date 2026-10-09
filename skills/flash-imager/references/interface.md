@@ -1,4 +1,4 @@
-# File-image interface · 1.0.0
+# File-image interface · 1.0.1
 
 Use Node.js >=22. The downloadable ZIP is self-contained; no npm install, Electron, root, mtools or mounts are required. From the source checkout install the existing Imager dependency with `npm ci --prefix desktop`. Preparation uses its pure-JavaScript GPT/FAT32 engine on regular `.img` files. The output parent must already exist and be private. Existing files, symlinks and device sources are refused; the factory image is preserved. Keep enough space for a full copy.
 

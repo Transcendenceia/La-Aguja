@@ -63,6 +63,13 @@ class RedactionTests(unittest.TestCase):
         self.assertIn('comando truncado',value)
         self.assertGreater(len(value),activity.MAX_COMMAND_TEXT)
 
+    def test_snapshot_mirror_does_not_recursively_capture_its_own_history(self):
+        snapshot={'events':[{'text':'ordinary previous output'}],'commands':[{'command':'uname -s'}], 'privacy':'Comandos y argumentos visibles; credenciales ocultas. No se registra stdin.', 'available':True}
+        visible=activity.OutputFilter().feed((json.dumps(snapshot)+'\n').encode())
+        self.assertEqual(visible,['Consulta de actividad entregada · 1 tareas · 1 eventos'])
+        self.assertEqual(ssh_session.protocol('aguja activity --json'),'observer')
+        self.assertIsNone(ssh_session.protocol('aguja doctor --json'))
+
     def test_large_diagnostic_is_complete_and_split_secret_masked_before_pagination(self):
         text='diagnostic-data '*2500+' boundary-secret '+('z'*7000)
         expected=text.replace('boundary-secret','[oculto]')

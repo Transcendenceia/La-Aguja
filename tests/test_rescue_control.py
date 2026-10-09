@@ -73,6 +73,13 @@ class RescueControlTests(unittest.TestCase):
             (base/'config/aguja-locale.json').write_text('{"language":"$(touch /tmp/invalid)"}')
             self.assertEqual(profile.apply_locale(None,root=base,runner=lambda *a,**k:None),profile.DEFAULT_LOCALE)
 
+    def test_locked_private_tailnet_state_does_not_block_rescue_home(self):
+        import network
+        with patch.object(network,'output',return_value=''),patch.object(network,'session',return_value={'ssh_auth_mode':'locked'}),patch.object(network.Path,'is_file',side_effect=PermissionError):
+            state=network.state()
+        self.assertEqual(state['ssh_auth_mode'],'locked')
+        self.assertIsNone(state['tailscale'])
+
     def test_factory_password_encrypts_and_wrong_password_does_not_unlock(self):
         capsule={'schema':1,'hostname':'aguja','network':{'ethernet':{'method':'auto'}},
                  'ssh':{'password':'synthetic-ssh','public_key':'','port':22},'providers':{},'remote':{'enabled':False}}

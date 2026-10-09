@@ -100,16 +100,19 @@ def verify(remote, env, workdir, screenshot=None, target_root='/data/workspace')
     interactive = remote[:-1] + ['-tt', remote[-1]]
     p = subprocess.Popen(interactive, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
-        p.stdin.write(b'uname -s\nfalse\nsleep 30\n'); p.stdin.flush()
-        hook_deadline=time.monotonic()+20
-        while time.monotonic()<hook_deadline:
-            live=snapshot()
-            ids={session['id'] for session in live.get('sessions',[]) if session.get('mode')=='interactive'}
-            if any(event.get('session') in ids and event.get('kind')=='command_end' and 'código 1' in event.get('text','') for event in live['events']):break
-            time.sleep(.5)
-        else:
-            (workdir/'missing-interactive-snapshot.json').write_text(json.dumps(live))
-            raise ValueError('Interactive hooks did not complete before deadline')
+        def confirmed_command(command,exit_code):
+            p.stdin.write(command.encode()+b'\n');p.stdin.flush()
+            deadline=time.monotonic()+45
+            while time.monotonic()<deadline:
+                data=snapshot()
+                ids={session['id'] for session in data.get('sessions',[]) if session.get('mode')=='interactive'}
+                if any(c.get('session') in ids and c.get('command')==command and c.get('exit')==exit_code for c in data.get('commands',[])):return data
+                time.sleep(.5)
+            (workdir/'missing-interactive-snapshot.json').write_text(json.dumps(data))
+            raise ValueError('Interactive command did not complete: '+command)
+        confirmed_command('uname -s',0)
+        live=confirmed_command('false',1)
+        p.stdin.write(b'sleep 30\n');p.stdin.flush()
         events = live['events']
         interactive_ids = {s['id'] for s in live.get('sessions', []) if s.get('mode') == 'interactive'}
         if not interactive_ids:

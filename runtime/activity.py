@@ -305,6 +305,14 @@ class OutputFilter:
             if '-----END ' in value:
                 self.pem = False
             return []
+        # A compound/custom observer can also print this exact public schema.
+        # Return its bytes unchanged to the caller; summarize only the mirror.
+        if value.startswith('{') and all(key in value for key in ('"events":','"commands":','"privacy":','"available":')):
+            try:
+                snapshot=json.loads(value)
+                if isinstance(snapshot,dict) and isinstance(snapshot.get('events'),list) and isinstance(snapshot.get('commands'),list) and snapshot.get('privacy')=='Comandos y argumentos visibles; credenciales ocultas. No se registra stdin.':
+                    return ['Consulta de actividad entregada · '+str(len(snapshot['commands']))+' tareas · '+str(len(snapshot['events']))+' eventos']
+            except (ValueError,TypeError):pass
         text = redact(value, self.secrets)
         return [text[i:i+MAX_TEXT] for i in range(0,len(text),MAX_TEXT)] if text.strip() else []
 

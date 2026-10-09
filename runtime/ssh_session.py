@@ -29,6 +29,8 @@ def protocol(command):
     if not words:
         return None
     executable = os.path.basename(words[0])
+    if (executable=='aguja' and words[1:] in (['activity'],['activity','--json'])) or words==['cat','/run/aguja-activity/snapshot.json']:
+        return 'observer'
     if executable in ('internal-sftp', 'sftp-server'):
         return 'sftp'
     if executable == 'scp' and any(option.startswith('-') and ('t' in option or 'f' in option) for option in words[1:]):
@@ -187,8 +189,11 @@ def main():
     code = 255
     try:
         if mode:
-            # SFTP/SCP/rsync must see only their own bytes, no greeting/mirror.
+            # Binary protocols and the observer get their original bytes.
+            # Never journal the journal into itself (unbounded feedback).
             code = relay_pipes(argv, mirror=False)
+            if mode=='observer':
+                stream(('Consulta de actividad entregada · código '+str(code)+'\n').encode())
         elif local and os.isatty(0):
             # Capture task output in a PTY while preserving the validated real
             # VT for framebuffer/mouse access when the panel is reopened.

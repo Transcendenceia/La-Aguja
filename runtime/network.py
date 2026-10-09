@@ -80,8 +80,8 @@ def state():
     settings = session()
     ts_status = None
     ts_file = Path("/run/aguja-platform/tailscale-status.json")
-    if ts_file.is_file():
-        try:
+    try:
+        if ts_file.is_file():
             ts_status = json.loads(ts_file.read_text())
             # Service file is a snapshot; querying the daemon prevents stale IP
             # from presenting an offline or logged-out node as connected.
@@ -92,8 +92,10 @@ def state():
                 binary = tailscale_service.find_binary('tailscale')
                 fresh = tailscale_service.retrieve_status(binary, ts_status.get('login_server', '')) if binary else {'connected': False}
                 ts_status.update(fresh)
-        except (OSError, ValueError):
-            pass
+    except (OSError, ValueError):
+        # Before unlock the protected platform directory is root-private.
+        # Missing/unreadable tailnet metadata must not prevent rescue/locale UI.
+        pass
     return {"hostname": hostname, "addresses": addresses, "devices": devices,
             "connected": bool(addresses), "mdns": mdns,
             "ssh_active": bool(services and services[0] == "active"),

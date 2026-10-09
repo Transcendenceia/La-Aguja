@@ -204,3 +204,5 @@ Cada `aguja agent NOMBRE` muestra Seguro (predeterminado) e Inseguro (YOLO). Seg
 `aguja donate` muestra un QR local para apoyar voluntariamente el proyecto. No hace falta donar ni iniciar sesión para usar LA AGUJA.
 
 La actividad muestra comando, actor, estado y salida, enmascarando únicamente credenciales. La ventana de actividad es acotada (2048 eventos, 100 tareas); no sustituye un archivo de auditoría completo. La entrada de contraseñas y protocolos binarios no se graba.
+
+Las consultas del propio monitor devuelven el estado íntegro al solicitante. En el panel se registran como consultas, no se duplica recursivamente el historial dentro del historial.

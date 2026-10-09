@@ -321,5 +321,10 @@
       "SHA-256-Prüfsummen"
     ],
     "note": "Offenes Agent-Skills-Format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw und manuelles Laden in anderen Agenten. Erfordert Node 22+ und Datei-/Terminalzugriff. Erstellt die Imagedatei; schreibt nicht automatisch auf einen USB-Stick. Formatkompatibilität zertifiziert nicht jeden Agenten oder jedes Betriebssystem."
+  },
+  "donation": {
+    "title": "LA AGUJA unterstützen",
+    "message": "Wenn ein Computer ausfällt, stehen Erinnerungen, Arbeit und Menschen dahinter. LA AGUJA hilft, sie zu retten. Hat sie dir in einem schweren Moment geholfen, hält dein Kaffee dieses freie Projekt am Leben. Danke für deine Unterstützung.",
+    "optional": "Spenden sind freiwillig. Alle Werkzeuge bleiben verfügbar."
   }
 }

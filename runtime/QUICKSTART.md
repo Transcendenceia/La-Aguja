@@ -176,7 +176,7 @@ Empieza identificando discos y modelo/serie, diagnostica en lectura y acuerda el
 Usa otro disco para recuperaciones grandes: el USB de rescate no tiene capacidad ilimitada.
 La raíz del sistema live está en RAM; tus cambios al OS live no persisten al reiniciar.
 
-Codex y OpenCode se incluyen. Claude Code y Antigravity son opcionales y se instalan desde sus proveedores (ver docs/HARNESSES.md). Necesitan tu propia cuenta
+Codex, OpenCode, Claude Code y Antigravity se incluyen en la imagen personal completa, aunque no prepares credenciales. Para usar IA necesitan tu propia cuenta
 y conectividad para usar servicios IA. Las herramientas tradicionales funcionan offline.
 Para ver todo el inventario, usa `aguja tools`; para la guía del agente, `aguja context`.
 
@@ -194,4 +194,4 @@ No se abren puertos del router ni se crean túneles a Internet automáticamente.
 
 ## Instalar proveedores opcionales
 
-Claude Code y Antigravity no están preinstalados en la imagen pública. Instálalos desde https://code.claude.com/docs/en/setup o https://antigravity.google/ conforme a sus instrucciones antes de `aguja login`/`aguja agent`. Una instalación en RAM no sobrevive al reinicio; la preparación de credenciales no instala el binario. Codex y OpenCode se incluyen con sus licencias.
+Los cuatro CLI están preinstalados en la imagen personal completa. Configurar después omite las credenciales, no los ejecutables. `aguja doctor` señala cualquier CLI ausente como fallo. La imagen pública histórica 0.9.0 no incluye Claude/Antigravity; no confundirla con esta imagen personal completa.

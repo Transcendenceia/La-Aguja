@@ -24,12 +24,12 @@ class PublicRuntimeTests(unittest.TestCase):
                          'runtime/aguja-tunnel.service', 'connector/aguja_mcp.py'):
             self.assertFalse((ROOT / filename).exists(), filename)
 
-    def test_dns_failure_is_reported_and_optional_agents_do_not_fail_health(self):
+    def test_dns_failure_is_reported_with_all_required_agents(self):
         for dns, expected in ((True, 0), (False, 1)):
             output = io.StringIO()
             with patch.object(cli.os, 'geteuid', return_value=0), \
                  patch.object(cli, 'load', return_value={'ssh_password': 'aguja', 'ssh_public_key': ''}), \
-                 patch.object(cli.shutil, 'which', side_effect=lambda name: None if name in ('claude', 'agy') else '/usr/bin/'+name), \
+                 patch.object(cli.shutil, 'which', side_effect=lambda name: '/usr/bin/'+name), \
                  patch.object(cli.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0)), \
                  patch.object(cli.network, 'state', return_value={'connected': True}), \
                  patch('network_health.resolves', return_value=dns), contextlib.redirect_stdout(output):
@@ -37,9 +37,24 @@ class PublicRuntimeTests(unittest.TestCase):
             result = json.loads(output.getvalue())
             self.assertEqual(result['dns_ok'], dns)
             self.assertNotIn('legacy_remote', result)
-            self.assertFalse(result['tools']['claude'])
+            self.assertTrue(result['tools']['claude'])
 
-    def test_missing_optional_provider_does_not_launch_or_authorize_it(self):
+    def test_each_missing_cli_fails_health_even_without_credentials(self):
+        for missing in ('codex', 'agy', 'claude', 'opencode'):
+            with self.subTest(missing=missing):
+                output = io.StringIO()
+                with patch.object(cli.os, 'geteuid', return_value=0), \
+                     patch.object(cli, 'load', return_value={'ssh_password': 'aguja', 'ssh_public_key': ''}), \
+                     patch.object(cli.shutil, 'which', side_effect=lambda name: None if name == missing else '/usr/bin/'+name), \
+                     patch.object(cli.subprocess, 'run', return_value=subprocess.CompletedProcess([], 0)), \
+                     patch.object(cli.network, 'state', return_value={'connected': False}), \
+                     patch('network_health.resolves', return_value=False), contextlib.redirect_stdout(output):
+                    self.assertEqual(cli.doctor(['--json']), 1)
+                result = json.loads(output.getvalue())
+                self.assertFalse(result['healthy'])
+                self.assertFalse(result['tools'][missing])
+
+    def test_missing_provider_does_not_launch_or_authorize_it(self):
         with patch.object(cli.shutil, 'which', return_value=None), \
              patch.object(cli.os, 'execvp') as launch, contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(cli.launch('claude', []), 127)

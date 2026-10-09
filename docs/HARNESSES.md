@@ -16,13 +16,13 @@ Cambiar agent_mode a ask conserva sus políticas normales y el acceso sudo.
 El [manual con capturas](https://aguja.transcendenceia.net/docs#ia-preparacion) distingue
 sesión IA, alta de tailnet y autenticación SSH (descarga sin cuenta). Son independientes.
 
-En Flash Imager 0.8.2, selecciona **Mi sesión de este equipo**, pulsa **Iniciar sesión en
+En Flash Imager 0.9.5, selecciona **Mi sesión de este equipo**, pulsa **Iniciar sesión en
 este PC**, completa el CLI oficial y vuelve para **Comprobar e importar**. Abrir el terminal
 no importa una sesión. Solo se admiten archivos portables validados; un llavero ligado al
 PC no se vuelve portable por copiarlo. Alternativas: **Clave API** o **Configurar después**.
 La instalación local del CLI es opcional para importar; el Rescue Disk ya incluye los cuatro.
 
-En Rescue Disk 0.8.0, `aguja login claude|antigravity|codex` abre el mini navegador local
+En Rescue Disk, `aguja login claude|antigravity|codex` abre el mini navegador local
 compatible y mantiene el callback oficial y la misma PTY. Autoriza tú en el dominio oficial.
 Si requiere copiar un código, el foco vuelve a la consola y tú pegas con Ctrl+Shift+V.
 Cerrar devuelve al terminal original. OpenCode conserva `opencode auth login` nativo.
@@ -45,10 +45,20 @@ Fuentes oficiales verificadas para instalación:
 Licencias, planes, cuotas, regiones y métodos de autenticación siguen siendo responsabilidad
 del proveedor. LA AGUJA no incluye una suscripción ni saldo.
 
-## Proveedores opcionales en el medio público
+## Instalación independiente de la autenticación
 
-Codex y OpenCode se incluyen con sus licencias. Claude Code y Antigravity **no se redistribuyen** en el medio público; los paneles permiten configurar sus credenciales para una instalación del proveedor, no prometen que el binario venga preinstalado.
+Las imágenes personales completas incluyen los cuatro ejecutables, con versiones bloqueadas
+por `config/harnesses.json`. Ninguna selección «Configurar después», perfil vacío o perfil
+cifrado elimina un CLI. Los binarios están en la raíz inmutable: no requieren Internet para
+instalarse durante el arranque ni HOME persistente para sobrevivir al reinicio.
 
-Instala la versión del proveedor desde su documentación oficial antes de `aguja login` / `aguja agent`: [Claude Code](https://code.claude.com/docs/en/setup), [Antigravity](https://antigravity.google/). Comprueba las condiciones y el artefacto oficial; no ejecutes un instalador tomado de un fork ni mezcles la identidad de LA AGUJA con la del proveedor. Las versiones usadas en pruebas anteriores se indican en `config/harnesses.json`, no se descargan en el arranque.
+`aguja doctor` falla si falta cualquiera de los cuatro CLI. La construcción comprueba
+`--version` con un HOME vacío, y el smoke BIOS/UEFI ejecuta los cuatro sin autenticar.
 
-En una sesión live una instalación en RAM desaparece al reiniciar. Si necesitas conservarla, usa un entorno personalizado de uso propio y evita publicar sus credenciales/binarios.
+Construcción de uso propio: `sudo scripts/build-rootfs.sh`, seguida de
+`sudo scripts/build-image.sh --personal`. El artefacto se llama `aguja-personal-VERSION-amd64.img`
+y se marca `distribution: personal`. No se publica automáticamente ni sustituye las releases.
+
+La imagen pública 0.9.0 anteriormente publicada contiene solo Codex y OpenCode. Las licencias
+originales de Claude/Antigravity no cambian por instalarlos: mantener estos medios personales
+fuera de releases públicas hasta acreditar la distribución, según `NOTICE.md`.

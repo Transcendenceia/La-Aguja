@@ -1,5 +1,8 @@
 {
-  "node": {"version": "24.21.0", "sha256": "fd8e59d5a511510f6a298afb548f18c7d2b1be404d8b4a27d94fbe49f56cb2d6"},
+  "node": {
+    "version": "24.21.0",
+    "sha256": "fd8e59d5a511510f6a298afb548f18c7d2b1be404d8b4a27d94fbe49f56cb2d6"
+  },
   "codex": "0.160.0",
   "claude": "2.1.289",
   "opencode": "1.18.34",
@@ -7,5 +10,10 @@
     "version": "1.2.16",
     "url": "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.16-5594158052802560/linux-x64/cli_linux_x64.tar.gz",
     "sha512": "c31f09265d4f6aef7c03b5105661ae98f9a8365c6c812c68adcc4a5e1f8b8f96c05fd2e4408a52f5e87e1b561ac350f4ffa7ad41a191893be7a3730ccf9d6553"
+  },
+  "claude_native": {
+    "version": "2.1.289",
+    "url": "https://registry.npmjs.org/@anthropic-ai/claude-code-linux-x64/-/claude-code-linux-x64-2.1.289.tgz",
+    "sha512": "236dd2692604f2f4b015b27e4dcd26465cef26645035a8b20545cafcae51e8156bda53a809d308d92251e0deb1895632eb2c88b77f49362caf3c7a223b29b2cb"
   }
 }

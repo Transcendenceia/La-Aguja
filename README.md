@@ -4,7 +4,7 @@
 
 **English is the primary repository language. [Español](README.es.md) is the secondary language.**
 
-**LA AGUJA Rescue Disk** is experimental x86-64 live Linux for a USB drive. Boot before the installed operating system, inspect hardware, recover authorised data and work locally or over SSH. Codex CLI and OpenCode are provided, with optional Claude Code and Antigravity integration. Cloud AI needs Internet and your own provider account; traditional tools can work offline.
+**LA AGUJA Rescue Disk** is experimental x86-64 live Linux for a USB drive. Boot before the installed operating system, inspect hardware, recover authorised data and work locally or over SSH. Personal complete images include Codex CLI, OpenCode, Claude Code and Antigravity, independently of whether you prepare credentials. The existing public 0.9.0 image includes only Codex and OpenCode. Cloud AI needs Internet and your own provider account; traditional tools can work offline.
 
 **Current versions:** Flash Imager **0.9.4** · Rescue Disk image **0.9.0**. These versions are independent.
 
@@ -72,7 +72,7 @@ Factory SSH user and public password: `aguja`. Set your own password or public k
 | --- | --- |
 | Base | Debian 13 amd64, live-boot, systemd; no conventional desktop |
 | Network | NetworkManager, DHCP, Wi-Fi, OpenSSH, Avahi/mDNS |
-| AI | Codex CLI, OpenCode; optional Claude Code and Antigravity integration |
+| AI | Personal complete image: Codex CLI, OpenCode, Claude Code and Antigravity; authentication optional |
 | Recovery | GNU ddrescue, TestDisk/PhotoRec, rsync |
 | Hardware | smartctl, nvme-cli, hdparm, lshw, PCI/USB inventory |
 | Storage | ext4, Btrfs, XFS, NTFS, exFAT, FAT; LUKS, LVM, RAID, BitLocker tools requiring the correct key |

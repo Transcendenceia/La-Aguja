@@ -75,6 +75,8 @@ OPENCODE=$(jq -r .opencode "$PROJECT/config/harnesses.json")
 chroot "$ROOT" npm install -g "@openai/codex@$CODEX" "opencode-ai@$OPENCODE"
 for binary in codex opencode; do chroot "$ROOT" "$binary" --version; done
 AGUJA_PROJECT="$PROJECT" bash "$PROJECT/scripts/pack-native.sh"
+AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-provider-clis.sh"
+AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 chroot "$ROOT" apt-get purge -y npm nodejs
 chroot "$ROOT" apt-get autoremove -y --purge
 chroot "$ROOT" dpkg-query -W > "$PROJECT/dist/packages.tsv"

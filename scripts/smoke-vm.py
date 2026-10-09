@@ -29,6 +29,7 @@ def main():
     p.add_argument("--config-mode", choices=["custom", "default", "key-only"], default="custom")
     p.add_argument("--screenshots", action="store_true", help="Capture real VGA frames over QMP during boot")
     p.add_argument("--activity", action="store_true", help="Verify live SSH activity, framebuffer, binary streams and file transfers")
+    p.add_argument("--restart-check", action="store_true", help="Reboot the QA clone and verify all CLI remain available")
     a = p.parse_args()
     a.workdir.mkdir(parents=True, exist_ok=True, mode=0o700)
     key = a.workdir / "test-key"
@@ -134,7 +135,7 @@ def main():
                 time.sleep(3)
             else:
                 raise ValueError("SSH no disponible dentro del plazo; consulta serial.log")
-            check = "set -e; id; sudo -n id; systemctl is-active NetworkManager ssh aguja-boot; mountpoint -q /config; mountpoint -q /data; ip -brief address; codex --version; test ! -e /usr/local/bin/agy; test ! -e /usr/local/bin/claude; test ! -e /usr/lib/aguja/tunnel.py; test ! -e /etc/systemd/system/aguja-tunnel.service; opencode --version; test -f /data/workspace/AGENTS.md; test -f /run/aguja-hostkey.pub; sudo -n test -f /data/ssh/ssh_host_ed25519_key; test $(stat -c %a /home/aguja/.ssh/authorized_keys) = 600; aguja doctor; test $(/usr/sbin/plymouth-set-default-theme) = aguja; test -f /usr/share/plymouth/themes/aguja/frame-095.png; cat /usr/share/aguja/VERSION"
+            check = "set -e; id; sudo -n id; systemctl is-active NetworkManager ssh aguja-boot; mountpoint -q /config; mountpoint -q /data; ip -brief address; codex --version; agy --version; claude --version; test ! -e /usr/lib/aguja/tunnel.py; test ! -e /etc/systemd/system/aguja-tunnel.service; opencode --version; test -f /data/workspace/AGENTS.md; test -f /run/aguja-hostkey.pub; sudo -n test -f /data/ssh/ssh_host_ed25519_key; test $(stat -c %a /home/aguja/.ssh/authorized_keys) = 600; aguja doctor; test $(/usr/sbin/plymouth-set-default-theme) = aguja; test -f /usr/share/plymouth/themes/aguja/frame-095.png; cat /usr/share/aguja/VERSION"
             result = subprocess.run(remote + [check], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=120)
             (a.workdir / "checks.txt").write_text(result.stdout)
             (a.workdir / "checks.err").write_text(result.stderr)
@@ -233,6 +234,31 @@ def main():
                 report["password_auth"] = True
             else:
                 report["password_auth"] = "not tested (sshpass missing)"
+            offline = "sudo -n unshare -n runuser -u aguja -- env -i HOME=/home/aguja PATH=/usr/local/bin:/usr/bin:/bin TERM=dumb sh -c 'set -e; codex --version; agy --version; claude --version; opencode --version'"
+            result = subprocess.run(remote + [offline], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=120)
+            (a.workdir / "offline-cli-versions.txt").write_text(result.stdout)
+            if result.returncode:
+                raise ValueError("Un CLI no ejecuta su versión sin red")
+            report['all_four_clis_without_network'] = True
+            if a.restart_check:
+                old_boot = subprocess.check_output(remote + ['cat /proc/sys/kernel/random/boot_id'], env=remote_env, stdin=subprocess.DEVNULL, text=True).strip()
+                subprocess.run(remote + ['sudo -n systemctl reboot'], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, timeout=15)
+                restart_deadline = time.monotonic() + a.timeout
+                while time.monotonic() < restart_deadline:
+                    if proc.poll() is not None:
+                        raise ValueError('QEMU terminó antes de reiniciar el clon')
+                    result = subprocess.run(remote + ['test -f /run/aguja-ready && cat /proc/sys/kernel/random/boot_id'], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=10)
+                    if result.returncode == 0 and result.stdout.strip() != old_boot:
+                        break
+                    time.sleep(3)
+                else:
+                    raise ValueError('El clon no volvió tras el reinicio')
+                result = subprocess.run(remote + [check + '; ' + offline], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=180)
+                (a.workdir / 'restart-checks.txt').write_text(result.stdout)
+                (a.workdir / 'restart-checks.err').write_text(result.stderr)
+                if result.returncode:
+                    raise ValueError('Comprobaciones tras reiniciar fallaron')
+                report['restart_and_cli_persistence'] = True
             (a.workdir / "result.json").write_text(json.dumps(report, indent=2))
             print(json.dumps(report), flush=True)
             subprocess.run(remote + ["sudo -n poweroff"], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True)

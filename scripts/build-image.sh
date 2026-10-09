@@ -5,9 +5,13 @@ ROOT=$(realpath "$PROJECT/build/rootfs")
 ISO_TREE="$PROJECT/build/iso"
 DIST="$PROJECT/dist"
 VERSION=$(cat "$PROJECT/VERSION")
+# This complete image contains provider-owned clients, not GPL project assets.
+# Keep personal media out of public release pipelines until distribution is cleared.
+[[ ${1:-} == --personal && $# == 1 ]] || { echo "Usa --personal para la imagen completa de uso propio; no es una entrega pública."; exit 1; }
 [[ $EUID == 0 ]] || { echo 'Ejecuta con sudo'; exit 1; }
-[[ -L "$ROOT/usr/local/bin/codex" && -L "$ROOT/usr/local/bin/opencode" ]] || { echo 'Construye rootfs primero'; exit 1; }
+AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 cmp -s "$PROJECT/VERSION" "$ROOT/usr/share/aguja/VERSION" || { echo 'Instala la versión actual en rootfs antes de empaquetar'; exit 1; }
+cmp -s "$PROJECT/runtime/aguja" "$ROOT/usr/local/bin/aguja" || { echo 'Instala el diagnóstico actual antes de empaquetar'; exit 1; }
 # Reject unprivileged copies that strip ownership/setuid from the factory.
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/bin/sudo") == 0:0:4755 ]] || { echo 'Restaura propietarios y permisos de la rootfs (sudo)'; exit 1; }
 [[ $(stat -c '%u:%a' "$ROOT/usr/lib/dbus-1.0/dbus-daemon-launch-helper") == 0:4754 ]] || { echo 'Restaura propietarios y permisos de la rootfs (D-Bus)'; exit 1; }
@@ -49,9 +53,9 @@ AVAILABLE_LOCALES=$(chroot "$ROOT" locale -a)
 while IFS= read -r language; do
     [[ $'\n'"$AVAILABLE_LOCALES"$'\n' == *$'\n'"${language/.UTF-8/.utf8}"$'\n'* ]] || { echo 'Genera todos los idiomas compatibles en rootfs con locale-gen'; exit 1; }
 done < <(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print("\n".join(x["value"] for x in c["languages"]))' "$PROJECT/runtime/locale-catalog.json")
-# Refuse legacy relay and proprietary agent binaries in the public medium.
-for retired in usr/lib/aguja/remote.py usr/lib/aguja/tunnel.py usr/lib/aguja/access.py etc/systemd/system/aguja-tunnel.service opt/aguja/agents/claude usr/local/bin/agy usr/local/bin/claude; do
-    [[ ! -e "$ROOT/$retired" && ! -L "$ROOT/$retired" ]] || { echo 'Rootfs no apta para distribución pública'; exit 1; }
+# Refuse retired project relay; required provider clients are installed independently of auth.
+for retired in usr/lib/aguja/remote.py usr/lib/aguja/tunnel.py usr/lib/aguja/access.py etc/systemd/system/aguja-tunnel.service; do
+    [[ ! -e "$ROOT/$retired" && ! -L "$ROOT/$retired" ]] || { echo 'Rootfs contiene componentes retirados'; exit 1; }
 done
 mkdir -p "$ISO_TREE/live" "$ISO_TREE/boot/grub" "$DIST"
 mkdir -p "$ISO_TREE/boot/grub/themes/aguja"
@@ -64,10 +68,20 @@ cp "$(find "$ROOT/boot" -maxdepth 1 -name 'initrd.img-*' | sort -V | tail -1)" "
 for p in dev proc sys; do
     if mountpoint -q "$ROOT/$p"; then echo "Desmonta rootfs/$p antes de empaquetar"; exit 1; fi
 done
-mksquashfs "$ROOT" "$ISO_TREE/live/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 10 -processors 4 -root-uid 0 -root-gid 0 -no-progress -e var/cache/apt var/lib/apt/lists root/.npm root/.cache root/.local
+mksquashfs "$ROOT" "$ISO_TREE/live/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 10 -processors 2 -mem 256M -root-uid 0 -root-gid 0 -no-progress -e var/cache/apt var/lib/apt/lists root/.npm root/.cache root/.local
+# Compare the actual required executable bytes, not only their presence in rootfs.
+for binary in codex agy claude opencode; do
+    executable=$(realpath "$ROOT/usr/local/bin/$binary" 2>/dev/null || true)
+    # Absolute links are rooted in the guest, not in the build host.
+    if [[ -L "$ROOT/usr/local/bin/$binary" ]]; then executable="$ROOT$(readlink "$ROOT/usr/local/bin/$binary")"; fi
+    [[ -x "$executable" ]] || { echo "Falta CLI empaquetable: $binary"; exit 1; }
+    relative=${executable#"$ROOT/"}
+    [[ $(unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "$relative" | sha256sum | cut -d ' ' -f 1) == $(sha256sum "$executable" | cut -d ' ' -f 1) ]] || { echo "CLI empaquetado no coincide: $binary"; exit 1; }
+done
 # Verify the packed filesystem too: mksquashfs must not silently pack a
 # symlink to a factory root instead of its contents.
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/VERSION | cmp -s "$PROJECT/VERSION" - || { echo 'Versión empaquetada no coincide'; exit 1; }
+unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja | cmp -s "$PROJECT/runtime/aguja" - || { echo 'Diagnóstico empaquetado no coincide'; exit 1; }
 for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json"; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/lib/aguja/$(basename "$runtime")" | cmp -s "$runtime" - || { echo 'Runtime empaquetado no coincide'; exit 1; }
 done
@@ -116,10 +130,10 @@ menuentry 'Rescue Disk · Compatibilidad grafica (nomodeset)' {
 menuentry 'Apagar' { halt; }
 menuentry 'Reiniciar' { reboot; }
 EOF
-ISO="$DIST/aguja-$VERSION-amd64.iso"
+ISO="$DIST/aguja-personal-$VERSION-amd64.iso"
 grub-mkrescue -o "$ISO" "$ISO_TREE" -- -volid AGUJA_LIVE -hfsplus off
 # Build hybrid image entirely with files: no loop devices or host-disk mutations.
-IMG="$DIST/aguja-$VERSION-amd64.img"
+IMG="$DIST/aguja-personal-$VERSION-amd64.img"
 cp --reflink=auto "$ISO" "$IMG"
 ISO_SECTORS=$(( ($(stat -c %s "$ISO") + 511) / 512 ))
 CFG_START=$(( (ISO_SECTORS / 2048 + 1) * 2048 ))
@@ -139,7 +153,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$PROJECT/build/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$PROJECT/build/release.json" ::release.json
 printf 'LA AGUJA Rescue Disk\r\nSSH de fabrica: usuario aguja, password aguja.\r\nPersonaliza Wi-Fi/SSH en aguja.conf (sin comillas).\r\nSin Wi-Fi guardado: el arranque abre un selector interactivo.\r\nEn consola: aguja help / aguja wifi / aguja password.\r\nPara el agente SSH: aguja context / aguja tools.\r\n' > "$PROJECT/build/LEEME.txt"
@@ -152,5 +166,5 @@ dd if="$DATA" of="$IMG" bs=512 seek="$DATA_START" conv=notrunc,sparse status=non
 sgdisk -v "$IMG"
 cp "$PROJECT/config/harnesses.json" "$DIST/harnesses.json"
 chroot "$ROOT" dpkg-query -W > "$DIST/packages.tsv"
-(cd "$DIST" && sha256sum "aguja-$VERSION-amd64.iso" "aguja-$VERSION-amd64.img" packages.tsv harnesses.json > SHA256SUMS)
+(cd "$DIST" && sha256sum "aguja-personal-$VERSION-amd64.iso" "aguja-personal-$VERSION-amd64.img" packages.tsv harnesses.json > SHA256SUMS)
 echo "Construidas: $ISO y $IMG"

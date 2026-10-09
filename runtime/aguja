@@ -57,7 +57,7 @@ def doctor(args=()):
     import network_health
     dns_ok = network_health.resolves()
     connected = network.state()['connected']
-    result={'healthy':all(available for binary,available in tools.items() if binary not in ('claude','agy')) and all(services.values()),'configuration_valid':True,
+    result={'healthy':all(tools.values()) and all(services.values()),'configuration_valid':True,
             'ssh_auth_mode':auth,'tools':tools,'services':services,
             'usb_configuration_mounted':os.path.ismount('/config'),'network_connected':connected,
             'dns_ok':dns_ok}

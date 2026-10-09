@@ -25,7 +25,36 @@ def language_nav(lang, suffix=''):
         f'<a href="/{code}{suffix}" lang="{code}" hreflang="{code}"'+ (' aria-current="page"' if code==lang else '') + f'>{CONTENT[code]["name"]}</a>' for code in LANGS) + '</nav>'
 
 def metadata(lang, suffix, title, description=''):
-    return f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{ORIGIN}/{lang}{suffix}">' + ''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN}/{code}{suffix}">' for code in LANGS) + f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/en{suffix}"><link rel="stylesheet" href="/assets/locales-20261008.css"><link rel="stylesheet" href="/assets/support-20261009-v2.css">'
+    og_image = f'{ORIGIN}/assets/og-banner.png'
+    og_meta = (
+        f'<meta property="og:site_name" content="LA AGUJA Rescue Disk">'
+        f'<meta property="og:type" content="website">'
+        f'<meta property="og:url" content="{ORIGIN}/{lang}{suffix}">'
+        f'<meta property="og:title" content="{esc(title)}">'
+        f'<meta property="og:description" content="{esc(description)}">'
+        f'<meta property="og:image" content="{og_image}">'
+        f'<meta property="og:image:secure_url" content="{og_image}">'
+        f'<meta property="og:image:type" content="image/png">'
+        f'<meta property="og:image:width" content="1600">'
+        f'<meta property="og:image:height" content="900">'
+        f'<meta property="og:image:alt" content="Agujita · LA AGUJA Rescue Disk">'
+        f'<meta name="twitter:card" content="summary_large_image">'
+        f'<meta name="twitter:title" content="{esc(title)}">'
+        f'<meta name="twitter:description" content="{esc(description)}">'
+        f'<meta name="twitter:image" content="{og_image}">'
+        f'<meta name="twitter:image:alt" content="Agujita · LA AGUJA Rescue Disk">'
+    )
+    return (
+        f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        f'<meta name="color-scheme" content="dark">'
+        f'<title>{esc(title)}</title><meta name="description" content="{esc(description)}">'
+        f'{og_meta}'
+        f'<link rel="canonical" href="{ORIGIN}/{lang}{suffix}">'
+        + ''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN}/{code}{suffix}">' for code in LANGS)
+        + f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/en{suffix}">'
+        f'<link rel="stylesheet" href="/assets/locales-20261008.css">'
+        f'<link rel="stylesheet" href="/assets/support-20261009-v2.css">'
+    )
 
 # Use fixed original artwork and preserve the long Spanish reference separately.
 original = (PUBLIC / 'index.html').read_text()
@@ -112,7 +141,7 @@ def donation_section(lang):
 def manual(lang):
     c=CONTENT[lang];ui=c['docUI']
     if lang=='es':
-        head=metadata(lang,'/docs',c['docTitle'],c['docDescription']); head=head[head.index('<link rel=\"canonical\"'):]
+        head=metadata(lang,'/docs',c['docTitle'],c['docDescription']); head=head[head.index('<meta property=\"og:site_name\"'):]
         return spanish.replace('</head>',head+'</head>').replace('</header>','</header>'+language_nav(lang,'/docs'),1)
     sections=c['sections']
     if len(sections)!=26: raise ValueError(lang+' requires 26 sections')

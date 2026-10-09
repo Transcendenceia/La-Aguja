@@ -12,3 +12,16 @@ test('retired account, relay and console endpoints cannot establish sessions',()
 test('legacy downloads redirect to GitHub, not a local private release store',()=>fixture(async base=>{for(const [route,end] of [['/releases/SHA256SUMS','SHA256SUMS'],['/v1/catalog','catalog.json']]){const r=await fetch(base+route,{redirect:'manual'});assert.equal(r.status,302);assert.equal(r.headers.get('location'),'https://github.com/Transcendenceia/La-Aguja/releases/latest/download/'+end);}}));
 test('sensitive files, traversal and old account assets are not served',()=>fixture(async base=>{for(const route of ['/assets/../accounts.mjs','/assets/%2e%2e%2findex.mjs','/assets/account.js','/assets/../.env','/devices.json'])assert.equal((await fetch(base+route)).status,404,route);}));
 test('homepage images use the official web and other downloads use the intended GitHub repository',()=>fixture(async base=>{const text=await(await fetch(base+'/')).text();assert(!text.includes('href="/account'));assert(!text.includes('id="connection"'));const links=[...text.matchAll(/href="([^"]*\/releases\/[^\"]+)"/g)].map(m=>m[1]);assert(links.length>=8);const images=new Set(['/releases/aguja-0.9.9-amd64.iso','/releases/aguja-0.9.9-amd64.img.zst']);assert.equal(links.filter(link=>images.has(link)).length,2);for(const link of links)assert(images.has(link)||link==='/releases/SHA256SUMS-rescue-0.9.9.txt'||link.startsWith('https://github.com/Transcendenceia/La-Aguja/releases/'));}));
+test('social crawlers receive Spanish Open Graph metadata and og-banner is delivered',()=>fixture(async base=>{
+ const rCrawler=await fetch(base+'/',{headers:{'User-Agent':'WhatsApp/2.23.23.77 i'}});
+ assert.equal(rCrawler.status,200);
+ const htmlCrawler=await rCrawler.text();
+ assert(htmlCrawler.includes('property="og:site_name" content="LA AGUJA Rescue Disk"'));
+ assert(htmlCrawler.includes('property="og:image" content="https://aguja.transcendenceia.net/assets/og-banner.png"'));
+ assert(htmlCrawler.includes('name="twitter:card" content="summary_large_image"'));
+ assert(htmlCrawler.includes('<html lang="es">'));
+ const rAsset=await fetch(base+'/assets/og-banner.png');
+ assert.equal(rAsset.status,200);
+ assert.equal(rAsset.headers.get('content-type'),'image/png');
+ assert(Number(rAsset.headers.get('content-length'))>50000);
+}));

@@ -321,5 +321,10 @@
       "Somas SHA-256"
     ],
     "note": "Formato aberto Agent Skills: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw e carregamento manual noutros agentes. Requer Node 22+ e acesso a ficheiros/terminal. Cria o ficheiro de imagem; não grava automaticamente um USB. A compatibilidade de formato não certifica todos os agentes ou sistemas operativos."
+  },
+  "donation": {
+    "title": "Apoiar LA AGUJA",
+    "message": "Quando um computador falha, há lembranças, trabalho e pessoas em jogo. LA AGUJA nasceu para ajudar a recuperá-los. Se esteve ao seu lado num momento difícil, seu café mantém este projeto livre. Obrigado por apoiá-lo.",
+    "optional": "Doar é opcional. Todas as ferramentas continuam disponíveis."
   }
 }

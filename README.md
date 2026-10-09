@@ -133,3 +133,7 @@ Preparation, package and VM results are version-specific, not certification of e
 ## Open source
 
 Project-owned code, documentation and artwork: **GPL-3.0-or-later**. Earlier MIT grants remain valid. Third-party components retain their licences and terms; the entire medium is not relicensed as GPL. [LICENSE](LICENSE) · [NOTICE](NOTICE.md) · [Publishing](docs/PUBLISHING.md).
+
+## Support the project
+
+LA AGUJA helps recover computers, memories and work. If it helped you, [buy us a coffee on Ko-fi](https://ko-fi.com/transcendenceia) to help keep this free project alive. Donations are optional; all rescue tools remain available.

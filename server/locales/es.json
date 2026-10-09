@@ -189,5 +189,10 @@
       "Sumas SHA-256"
     ],
     "note": "Formato abierto Agent Skills: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita Node 22+ y acceso a archivos/terminal. Crea el archivo de imagen; no graba un USB automáticamente. La compatibilidad de formato no certifica todos los arneses ni sistemas operativos."
+  },
+  "donation": {
+    "title": "Apoyar LA AGUJA",
+    "message": "Cuando un equipo falla, detrás hay recuerdos, trabajo y personas que no quieren perderlos. LA AGUJA nace para ayudarles a recuperarlos. Si te acompañó en un momento difícil, tu café nos ayuda a seguir cuidando este proyecto libre. Gracias por sostenerlo.",
+    "optional": "Donar es opcional. El rescate y todas sus herramientas siguen disponibles."
   }
 }

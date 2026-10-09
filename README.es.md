@@ -247,3 +247,9 @@ npm test
 ```
 
 La web no ejecuta terminales remotos ni almacena cuentas. Las imágenes y el catálogo firmado se sirven desde la web oficial; el Imager y las fuentes están en GitHub Releases; el catálogo conserva firma Ed25519 y cada imagen se verifica antes de prepararse.
+
+## Apoya el proyecto
+
+Cuando un equipo falla, detrás hay recuerdos, trabajo y personas que no quieren perderlos. LA AGUJA nace para ayudarles a recuperarlos. Si te acompañó en un momento difícil, tu café nos ayuda a seguir cuidando este proyecto libre. Gracias por sostenerlo.
+
+[Invítanos a un café en Ko-fi](https://ko-fi.com/transcendenceia). Donar es opcional: todas las herramientas siguen disponibles.

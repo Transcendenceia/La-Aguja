@@ -321,5 +321,10 @@
       "SHA-256 checksums"
     ],
     "note": "Open Agent Skills format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw, and manual loading in other agents. Requires Node 22+ and file/terminal access. Creates the image file; it does not write a USB automatically. Format compatibility is not certification of every harness or operating system."
+  },
+  "donation": {
+    "title": "Support LA AGUJA",
+    "message": "When a computer fails, memories, work and people are at stake. LA AGUJA exists to help recover them. If it helped you through a difficult moment, your coffee helps us keep this free project alive. Thank you for supporting it.",
+    "optional": "Donations are optional. Rescue and all tools remain available."
   }
 }

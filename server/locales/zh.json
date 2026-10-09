@@ -295,5 +295,10 @@
       "SHA-256 校验和"
     ],
     "note": "采用开放的 Agent Skills 格式：Codex、Claude Code、OpenCode、Gemini CLI、Cursor、OpenClaw，其他代理可手动加载。需要 Node 22+ 及文件和终端访问权限。只创建镜像文件，不会自动写入 USB。格式兼容不代表所有代理框架或操作系统均已通过测试。"
+  },
+  "donation": {
+    "title": "支持 LA AGUJA",
+    "message": "电脑故障背后，是回忆、工作和不愿失去它们的人。LA AGUJA 为帮助找回这些而生。如果它曾陪你度过困难时刻，你的一杯咖啡能帮助这个自由项目继续成长。感谢你的支持。",
+    "optional": "捐赠完全自愿。所有救援工具仍可使用。"
   }
 }

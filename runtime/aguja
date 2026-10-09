@@ -91,6 +91,10 @@ def run_task(args):
 
 
 def launch(name, extras):
+    import console_history
+    history_code = console_history.run(['/usr/local/bin/aguja', 'agent', name] + list(extras))
+    if history_code is not None:
+        raise SystemExit(history_code)
     if name == "shell":
         if not os.environ.get('AGUJA_SESSION_ID') and os.isatty(0):
             os.execv('/usr/bin/python3', ['/usr/bin/python3','/usr/lib/aguja/console_session.py'])
@@ -176,6 +180,10 @@ def main():
         if not a.args or a.args[0] not in ('claude','antigravity','codex'):
             p.error('login requiere claude|antigravity|codex')
         name=a.args[0]
+        import console_history
+        history_code = console_history.run(['/usr/local/bin/aguja', 'login'] + list(a.args))
+        if history_code is not None:
+            return history_code
         import auth_pty
         argv={'claude':['claude','auth','login'],'antigravity':['agy'],'codex':['codex','login']}[name]+a.args[1:]
         if not shutil.which(argv[0]):

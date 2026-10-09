@@ -186,6 +186,7 @@ def user_session(directory):
         children.append(subprocess.Popen(['openbox'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL))
         terminal_process=subprocess.Popen(['xterm','-class','aguja-oauth-console','-T',
             'LA AGUJA | misma consola | Ctrl+Shift+V pega | cerrar vuelve al texto',
+            '-sb','-sl','10000',
             '-geometry','100x28+16+440','-xrm',
             '*VT100.translations: #override Ctrl Shift <Key>V: insert-selection(CLIPBOARD)',
             '-e','/usr/bin/python3','/usr/lib/aguja/browser.py','terminal',str(directory)],

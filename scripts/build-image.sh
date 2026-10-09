@@ -45,7 +45,7 @@ for browser_binary in chromium Xorg openbox xclip xterm xdotool; do
 done
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/lib/chromium/chrome-sandbox") == 0:0:4755 ]] || { echo 'Incluye chromium-sandbox con sus permisos oficiales'; exit 1; }
 # A release capability must describe the packed runtime, never only this script.
-for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json"; do
+for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$PROJECT/runtime/console-history.conf"; do
     cmp -s "$runtime" "$ROOT/usr/lib/aguja/$(basename "$runtime")" || { echo 'Instala el runtime actual antes de empaquetar'; exit 1; }
 done
 cmp -s "$PROJECT/runtime/locale.sh" "$ROOT/etc/profile.d/aguja-locale.sh" || { echo 'Instala el soporte de idioma antes de empaquetar'; exit 1; }

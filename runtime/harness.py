@@ -27,6 +27,8 @@ def invocation(name, mode, extras=()):
         raise ValueError('Selecciona Inseguro en el diálogo para omitir las confirmaciones')
     binary = BINS[name]
     args, env = [binary], {}
+    if name == 'codex' and os.environ.get('TMUX') and os.environ.get('AGUJA_LOCAL_CONSOLE') == '1':
+        args += ['--no-alt-screen']
     if mode == 'unsafe':
         args += {'codex': ['--dangerously-bypass-approvals-and-sandbox'],
                  'claude': ['--dangerously-skip-permissions'],

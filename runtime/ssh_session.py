@@ -198,7 +198,7 @@ def main():
             # Capture task output in a PTY while preserving the validated real
             # VT for framebuffer/mouse access when the panel is reopened.
             # Input is forwarded, never recorded.
-            os.environ['AGUJA_CONSOLE_TTY'] = os.ttyname(0)
+            os.environ.setdefault('AGUJA_CONSOLE_TTY', os.ttyname(0))
             code = relay_pty(argv)
         elif os.isatty(0):
             code = relay_pty(argv)

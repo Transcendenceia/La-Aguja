@@ -84,6 +84,8 @@ class BrowserProtocolTests(unittest.TestCase):
             # remains in the provider page until the user explicitly pastes.
             self.assertEqual(browser.user_session(Path(d)),0)
         self.assertEqual([c[0] for c in calls],['openbox','xterm','chromium'])
+        self.assertIn('-sb', calls[1])
+        self.assertEqual(calls[1][calls[1].index('-sl')+1], '10000')
         self.assertFalse(any(p.exists() for p in profile_paths))
 
     def test_clipboard_owner_signal_never_auto_injects_code(self):

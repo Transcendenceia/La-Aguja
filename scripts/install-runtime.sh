@@ -9,6 +9,7 @@ install -d "$ROOT/usr/lib/aguja" "$ROOT/usr/share/aguja" "$ROOT/etc/aguja" \
   "$ROOT/etc/skel" "$ROOT/etc/profile.d" "$ROOT/etc/systemd/system" "$ROOT/usr/local/share/zsh/site-functions"
 # runtime/*.py is the canonical module inventory, also verified by build-image.
 install -m 755 "$PROJECT/runtime/"*.py "$ROOT/usr/lib/aguja/"
+install -m 644 "$PROJECT/runtime/console-history.conf" "$ROOT/usr/lib/aguja/"
 install -m 644 "$PROJECT/runtime/locale-catalog.json" "$ROOT/usr/lib/aguja/"
 install -m 755 "$PROJECT/runtime/aguja" "$ROOT/usr/local/bin/aguja"
 install -m 755 "$PROJECT/runtime/auth-open" "$ROOT/usr/local/bin/aguja-auth-open"

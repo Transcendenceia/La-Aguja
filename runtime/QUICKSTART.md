@@ -65,6 +65,18 @@ Para un agente que entra por SSH:
     sudo -n bash               Root completo, sin pedir contraseña sudo
     tmux new -s rescate        Sesión que sobrevive a una desconexión SSH
 
+Las consolas locales abiertas desde LA AGUJA conservan hasta 10.000 líneas
+en memoria, también si no funciona la interfaz gráfica. **RePág** (o
+**Mayús+RePág**) abre el historial; usa **RePág/AvPág** o las flechas para
+navegar y **Esc** para volver al CLI. Si el terminal transmite eventos de
+ratón, también funciona la rueda. En una consola Linux pura, LA AGUJA lee
+sólo los movimientos de la rueda del dispositivo local mientras esa consola
+esté visible y en modo texto: gira hacia arriba para consultar el historial y
+hacia abajo para volver; al llegar al final regresas al prompt. No necesitas X
+ni un escritorio gráfico. La rueda no cambia de modo cuando estás en el panel.
+El historial no se guarda en archivos. Los CLI que redibujan toda su pantalla
+pueden conservar sólo su contenido visible; usa también su navegación nativa.
+
 Zsh está lista: Tab completa comandos y rutas, flecha derecha acepta sugerencias,
 Ctrl-R busca en el historial. `ll`, `panel`, `ayuda`, `red`, `wifi` y `herramientas`
 son atajos. No necesitas Oh My Zsh, fuentes especiales ni descargar plugins al iniciar.

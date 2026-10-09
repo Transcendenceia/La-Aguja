@@ -17,7 +17,7 @@ function synthetic(dir) {
   fs.writeFileSync(part,'');fs.truncateSync(part,64*1024**2);
   execFileSync('/usr/sbin/mkfs.vfat',['-F','32','-n','AGUJA_CFG',part],{stdio:'pipe'});
   const fd=fs.openSync(image,'r+'),b=fs.readFileSync(part);fs.writeSync(fd,b,0,b.length,1048576);fs.closeSync(fd);
-  fat.writeFat32File(image,'AGUJA_CFG','release.json',JSON.stringify({version:'0.9.0',features:['platform-profile-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1']}));
+  fat.writeFat32File(image,'AGUJA_CFG','release.json',JSON.stringify({version:'0.9.0',features:['platform-profile-v1','locale-profile-v1','locale-preunlock-v1','i18n-catalog-v1','tailscale-profile-v1']}));
   return image;
 }
 const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');

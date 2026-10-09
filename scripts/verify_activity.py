@@ -53,8 +53,13 @@ def verify(remote, env, workdir, screenshot=None, target_root='/data/workspace')
     if p.stdout.strip() != b'Linux':
         raise ValueError('SSH diagnostic changed')
     time.sleep(.7)
-    events = snapshot()['events']
-    if not any(e.get('kind') == 'output' and e.get('text') == 'Linux' for e in events):
+    mirror_deadline=time.monotonic()+10
+    while time.monotonic()<mirror_deadline:
+        data=snapshot();events=data['events']
+        if any(e.get('kind') == 'output' and e.get('text') == 'Linux' for e in events):break
+        time.sleep(.5)
+    else:
+        (workdir/'missing-diagnostic-snapshot.json').write_text(json.dumps(data))
         raise ValueError('Noninteractive diagnostic not mirrored')
     report['command_output_mirror'] = True
 

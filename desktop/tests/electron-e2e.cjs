@@ -9,8 +9,12 @@ const { _electron: electron }=require('playwright');const assert=require('node:a
  const bin=path.join(home,'.local','bin');fs.mkdirSync(bin,{recursive:true});fs.writeFileSync(path.join(bin,'agy'),'synthetic fixture never executed',{mode:0o700});
  try{
  application=await electron.launch({...(process.env.AGUJA_QA_EXECUTABLE?{executablePath:process.env.AGUJA_QA_EXECUTABLE}:{}),args:[path.resolve(__dirname,'..'),'--lang=es','--no-sandbox','--user-data-dir='+path.join(temp,'user-data')],env:{...process.env,ELECTRON_RUN_AS_NODE:undefined,HOME:home,ELECTRON_DISABLE_SECURITY_WARNINGS:'1'}});
- const window=await application.firstWindow();await window.waitForLoadState('domcontentloaded');
+ const window=await application.firstWindow();await window.waitForLoadState('domcontentloaded');await window.locator('#app-language').selectOption('es');await window.waitForFunction(()=>document.documentElement.lang==='es');
  await window.locator('h1').first().waitFor();
+ assert.equal(await window.locator('input[value=encrypted]').isChecked(),true);assert.equal(await window.locator('#unlock-password').inputValue(),'aguja');
+ await application.evaluate(({shell})=>{globalThis.agujaDonationOpened='';shell.openExternal=async url=>{globalThis.agujaDonationOpened=url;};});
+ await window.locator('#donate-open').click();await window.locator('#donation-dialog').waitFor({state:'visible'});assert.equal(await window.locator('#donation-dialog img').evaluate(image=>image.complete&&image.naturalWidth>0),true);await window.locator('#donate-link').click();assert.equal(await application.evaluate(()=>globalThis.agujaDonationOpened),'https://ko-fi.com/transcendenceia');await window.locator('#donation-dialog form button').click();await window.locator('#donation-dialog').waitFor({state:'hidden'});
+
  const security=await application.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0],p=w.webContents.getLastWebPreferences();return {contextIsolation:p.contextIsolation,sandbox:p.sandbox,nodeIntegration:p.nodeIntegration};});
  assert.deepEqual(security,{contextIsolation:true,sandbox:true,nodeIntegration:false});
  assert.equal(await window.evaluate(()=>typeof window.require),'undefined');
@@ -19,7 +23,7 @@ const { _electron: electron }=require('playwright');const assert=require('node:a
  await window.locator('.step').nth(1).click();await window.locator('#eth-method').selectOption('manual');await window.locator('#static-fields').waitFor({state:'visible'});await window.getByRole('heading',{name:'Idioma y teclado'}).waitFor();await window.locator('#locale-language').selectOption('es_CO.UTF-8');await window.locator('#locale-keyboard').selectOption('latam');await window.locator('#locale-variant').selectOption('nodeadkeys');await window.locator('#locale-keyboard').selectOption('us');assert.equal(await window.locator('#locale-variant').inputValue(),'');await window.locator('#locale-variant').selectOption('intl');await window.locator('#locale-keyboard').selectOption('gb');assert.equal(await window.locator('#locale-variant option').count(),1);assert.equal(await window.locator('#locale-variant').inputValue(),'');
  await window.locator('#wifi-password').fill('SYNTHETIC-WIFI-NOT-A-SECRET');assert.equal(await window.locator('#wifi-password').getAttribute('type'),'password');await window.locator('[data-for="wifi-password"]').click();assert.equal(await window.locator('#wifi-password').getAttribute('type'),'text');await window.locator('[data-for="wifi-password"]').click();
  await window.locator('.step').nth(2).click();const before=await window.locator('#ssh-password').inputValue();await window.locator('#ssh-generate').click();await window.locator('#notification.success').waitFor();const after=await window.locator('#ssh-password').inputValue();assert.notEqual(before,after);assert(after.length>=20);assert.equal(await window.locator('#ssh-password').getAttribute('type'),'password');
- await window.locator('.step').nth(3).click();await window.locator('#mode-antigravity').selectOption('import');await window.locator('#import-antigravity').waitFor({state:'visible'});assert((await window.locator('#import-antigravity').textContent()).includes('OAuth nativa'));
+ await window.locator('.step').nth(3).click();await window.locator('#mode-antigravity').selectOption('import');await window.locator('#import-antigravity').waitFor({state:'visible'});assert((await window.locator('#import-antigravity').textContent()).includes('Comprobar e importar'));
  // Native credential import is exercised through real helper + IPC, never renderer secrets.
  let imported=await window.evaluate(()=>window.aguja.importProvider('antigravity'));
  assert.equal(imported.ok,true);assert.equal(imported.portable,true);assert.equal(JSON.stringify(imported).includes(marker),false);
@@ -40,6 +44,6 @@ const { _electron: electron }=require('playwright');const assert=require('node:a
  await window.locator('.step').nth(0).click();await window.locator('#image-sha').fill('');await window.locator('.image-advanced summary').click();await window.evaluate(()=>document.getElementById('notification').hidden=true);
  // Screenshot contains fixtures only, no account credentials or actual OAuth links.
  await window.screenshot({path:path.join(__dirname,'linux-wizard.fixture.png'),fullPage:true});
- console.log(JSON.stringify({ok:true,checks:32,security,viewport,realElectron:true,physicalUsbWritten:false,nativeAccountsAuthorized:false}));
+ console.log(JSON.stringify({ok:true,checks:38,security,viewport,realElectron:true,physicalUsbWritten:false,nativeAccountsAuthorized:false}));
  }finally{if(application)await application.close();fs.rmSync(temp,{recursive:true,force:true});}
 })().catch(error=>{console.error(error.stack);process.exitCode=1;});

@@ -73,12 +73,12 @@ class NetworkWelcomeTests(unittest.TestCase):
         self.assertEqual(network.fields(r'Test\:name:75:WPA2'), ['Test:name', '75', 'WPA2'])
         self.assertEqual(network.fields(r'back\\slash:75:WPA3'), ['back\\slash', '75', 'WPA3'])
 
-    def test_countdown_opens_wifi_and_live_connection_cancels_it(self):
+    def test_offline_boot_stays_in_rescue_centre_without_forcing_wifi(self):
         class Screen:
             def timeout(self, value): pass
             def getch(self): return ord('1')
         with patch.object(cockpit.curses, 'curs_set'), patch.object(cockpit.curses, 'has_colors', return_value=False), patch.object(cockpit, 'draw'), patch.object(network, 'state', return_value={'connected': False}):
-            self.assertEqual(cockpit.choose(Screen(), auto_setup=True, delay=0), 'wifi')
+            self.assertEqual(cockpit.choose(Screen(), auto_setup=True, delay=0), 'shell')
         with patch.object(cockpit.curses, 'curs_set'), patch.object(cockpit.curses, 'has_colors', return_value=False), patch.object(cockpit, 'draw'), patch.object(network, 'state', return_value={'connected': True}):
             self.assertEqual(cockpit.choose(Screen(), auto_setup=True, delay=0), 'shell')
 

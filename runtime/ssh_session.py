@@ -190,14 +190,15 @@ def main():
             # SFTP/SCP/rsync must see only their own bytes, no greeting/mirror.
             code = relay_pipes(argv, mirror=False)
         elif local and os.isatty(0):
-            # Keep the real VT: nesting a PTY would make the panel fall back
-            # to curses and lose framebuffer/mouse access after reopening it.
-            # Shell hooks still report commands/results; never capture typing.
-            code = subprocess.call(argv)
+            # Capture task output in a PTY while preserving the validated real
+            # VT for framebuffer/mouse access when the panel is reopened.
+            # Input is forwarded, never recorded.
+            os.environ['AGUJA_CONSOLE_TTY'] = os.ttyname(0)
+            code = relay_pty(argv)
         elif os.isatty(0):
             code = relay_pty(argv)
         else:
-            code = relay_pipes(argv, mirror=activity.safe_output(command) or activity.safe_task_output(command))
+            code = relay_pipes(argv, mirror=True)
     except (OSError, ValueError):
         # Fixed error only: exceptions may contain confidential argv/paths.
         try:

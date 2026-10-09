@@ -89,3 +89,7 @@ The Rescue Disk image remains 0.9.0. These changes concern the desktop preparer 
 - A valid imported format is not a live provider authentication check. Synthetic Windows vault and GUI regression tests do not claim real-account inference. Linux imports are unchanged.
 
 Native backend references: [Codex storage](https://github.com/openai/codex/blob/main/codex-rs/login/src/auth/storage.rs), [Codex encrypted store](https://github.com/openai/codex/blob/main/codex-rs/secrets/src/local.rs), [Claude storage](https://code.claude.com/docs/en/authentication), [OpenCode auth](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/auth/index.ts), [Antigravity auth](https://antigravity.google/docs/cli/install/).
+
+## Cambios 0.9.7
+
+El desbloqueo cifrado al arrancar es el valor inicial, con contraseña pública editable `aguja`. Arranque directo requiere selección expresa. Idioma/teclado se importan del equipo y pueden corregirse; los perfiles cifrados con idioma requieren Rescue Disk 0.9.7 para aplicarlo antes del desbloqueo. La página de apoyo usa un QR local y abre Ko-fi solo al pulsar el enlace. No incluye claves de Ko-fi.

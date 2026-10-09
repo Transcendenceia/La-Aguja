@@ -68,7 +68,7 @@ cp "$(find "$ROOT/boot" -maxdepth 1 -name 'initrd.img-*' | sort -V | tail -1)" "
 for p in dev proc sys; do
     if mountpoint -q "$ROOT/$p"; then echo "Desmonta rootfs/$p antes de empaquetar"; exit 1; fi
 done
-mksquashfs "$ROOT" "$ISO_TREE/live/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 10 -processors 2 -mem 256M -root-uid 0 -root-gid 0 -no-progress -e var/cache/apt var/lib/apt/lists root/.npm root/.cache root/.local
+mksquashfs "$ROOT" "$ISO_TREE/live/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 10 -processors 2 -mem 256M -root-uid 0 -root-gid 0 -no-progress -wildcards -e 'tmp/*' 'var/tmp/*' var/cache/apt var/lib/apt/lists root/.npm root/.cache root/.local
 # Compare the actual required executable bytes, not only their presence in rootfs.
 for binary in codex agy claude opencode; do
     executable=$(realpath "$ROOT/usr/local/bin/$binary" 2>/dev/null || true)
@@ -153,10 +153,10 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$PROJECT/build/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$PROJECT/build/release.json" ::release.json
-printf 'LA AGUJA Rescue Disk\r\nSSH de fabrica: usuario aguja, password aguja.\r\nPersonaliza Wi-Fi/SSH en aguja.conf (sin comillas).\r\nSin Wi-Fi guardado: el arranque abre un selector interactivo.\r\nEn consola: aguja help / aguja wifi / aguja password.\r\nPara el agente SSH: aguja context / aguja tools.\r\n' > "$PROJECT/build/LEEME.txt"
+printf 'LA AGUJA Rescue Disk\r\nSSH de fabrica: usuario aguja, password aguja.\r\nPersonaliza Wi-Fi/SSH en aguja.conf (sin comillas).\r\nAl arrancar: Centro de rescate. Wi-Fi/idioma/teclado disponibles en el menu.\r\nEn consola: aguja help / aguja wifi / aguja password.\r\nPara el agente SSH: aguja context / aguja tools.\r\n' > "$PROJECT/build/LEEME.txt"
 mcopy -i "$CFG" "$PROJECT/build/LEEME.txt" ::LEEME.txt
 dd if="$CFG" of="$IMG" bs=512 seek="$CFG_START" conv=notrunc status=none
 DATA="$PROJECT/build/data.ext4"

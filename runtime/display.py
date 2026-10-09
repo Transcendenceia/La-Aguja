@@ -180,6 +180,14 @@ def pointer_action(control, snapshot, event, width, height):
     if action=='back':control.key('back',snapshot);return
     if action in ('wheel-up','wheel-down'):
         control.key('up' if action=='wheel-up' else 'down',snapshot);return
+    if action == 'click' and control.view == 'help':
+        from cockpit import MENU_ACTIONS
+        geo=layout(width,height); scale=geo['scale']; margin=geo['margin']
+        x0,y0,x1,y1=geo['stream']; start=y0+round(73*scale)
+        if x0<=event['x']<=x1 and start<=event['y']<y1:
+            index=int((event['y']-start)/round(25*scale))
+            if 0<=index<len(MENU_ACTIONS):return MENU_ACTIONS[index]
+        return
     if action!='click' or control.view!='commands':return
     x,y,right,bottom,cardheight=command_geometry(width,height)
     px,py=event['x'],event['y']
@@ -282,8 +290,9 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
             lines = [chosen.get('title',t('Comando')),chosen.get('command',''),
                      labels.get(chosen.get('status'),t('FINALIZADO'))+' · '+panel_state.command_duration(chosen,now)+' · '+result_text(chosen.get('result',t('En ejecución'))),
                      'ID: '+chosen.get('id','')+' · '+chosen.get('transport','ssh'),
+                     t('Ejecuta: ')+chosen.get('user','aguja')+' @ '+chosen.get('peer',''),
                      time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(chosen.get('started',now))),
-                     t('Salida privada: disponible por SSH, no se muestra aquí.') if chosen.get('output_private') else t('Salida filtrada del comando:')]
+                     t('Salida del comando · credenciales ocultas:')]
             lines += [e.get('text','') for e in events if e.get('kind')=='output' and e.get('command_id')==chosen.get('id')]
             chars=max(12,int((right-x)/max(1,d.textlength('M',font=mono))))
             wrapped=panel_state.wrap_lines(lines,chars)
@@ -312,7 +321,8 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
             text(x,y+2*lineheight,t('aguja run --label "Revisar memoria" -- free -h'),CYAN,mono,right-x)
             text(x,y+3*lineheight,t('S cambia sesión · F filtra fallos · B muestra sondeos'),DIM,small,right-x)
     elif view == 'help':
-        choices = [t('1  Consola Zsh'), t('2  Conectar Wi-Fi'), t('3  Guía y herramientas'), t('8  Diagnóstico'), '4  Codex', '5  Antigravity', '6  Claude Code', '7  OpenCode', t('9  Contraseña SSH'), t('R  Tailscale / Headscale · SSH privado')]
+        from cockpit import menu_choices
+        choices = menu_choices()
         for i, label in enumerate(choices[:row_capacity]):
             text(x, y+i*lineheight, ('› ' if i==selected else '  ')+label, GOLD if i==selected else WHITE, mono, right-x)
     elif view == 'processes':
@@ -387,6 +397,50 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
     return image
 
 
+def render_options(width, height, title, options, selected=0, detail=''):
+    """Offline modal used by the mode/locale picker. Returns pixels and hit boxes."""
+    from PIL import Image, ImageDraw
+    import panel_state
+    image=Image.new('RGB',(width,height),BG); d=ImageDraw.Draw(image)
+    margin=max(20,int(width*.08)); y=max(22,int(height*.1))
+    d.rounded_rectangle((margin,y,width-margin,height-margin),radius=18,fill=CARD,outline=CYAN)
+    d.text((margin+24,y+22),clean(title),font=font(24,True),fill=CYAN)
+    row_y=y+65; chars=max(12,int((width-margin*2-48)/10))
+    for line in panel_state.wrap_lines([detail],chars):
+        d.text((margin+24,row_y),line,font=font(16),fill=DIM); row_y+=24
+    row_y+=15
+    capacity=max(1,int((height-margin-row_y-55)/42))
+    start=max(0,min(selected-capacity//2,len(options)-capacity))
+    boxes=[]
+    for i in range(start,min(len(options),start+capacity)):
+        box=(margin+20,row_y,width-margin-20,row_y+37)
+        d.rounded_rectangle(box,radius=7,fill='#18333d' if i==selected else BG,
+                            outline=GOLD if i==selected else EDGE)
+        d.text((box[0]+12,row_y+7),('› ' if i==selected else '  ')+clean(options[i][0]),
+               font=font(17),fill=GOLD if i==selected else WHITE)
+        boxes.append((box,i)); row_y+=42
+    d.text((margin+24,height-margin-32),t('↑↓ Elegir · Enter Confirmar · Esc Cancelar'),font=font(14),fill=DIM)
+    return image,boxes
+
+
+def render_donation(width,height):
+    from PIL import Image,ImageDraw
+    import donations,panel_state
+    image=Image.new('RGB',(width,height),BG); d=ImageDraw.Draw(image)
+    margin=max(20,int(width*.06)); y=margin
+    d.text((margin,y),t('Apoyar LA AGUJA'),font=font(26,True),fill=CYAN);y+=55
+    chars=max(12,int((width-2*margin)/10))
+    for line in panel_state.wrap_lines([t(donations.MESSAGE)],chars):
+        d.text((margin,y),line,font=font(17),fill=WHITE);y+=24
+    qr=Image.open(donations.qr_path()).convert('RGB')
+    size=min(width-2*margin,max(120,height-y-105),360)
+    qr=qr.resize((size,size),Image.Resampling.NEAREST)
+    image.paste(qr,((width-size)//2,y+15));y+=size+35
+    d.text((margin,y),donations.URL,font=font(17,mono=True),fill=GOLD)
+    d.text((margin,height-42),t('Esc / Enter: volver. Donar es opcional; el rescate sigue disponible.'),font=font(14),fill=DIM)
+    return image
+
+
 class BitField(ctypes.Structure):
     _fields_ = [('offset',ctypes.c_uint32),('length',ctypes.c_uint32),('msb_right',ctypes.c_uint32)]
 
@@ -429,12 +483,18 @@ class Framebuffer:
         self.fd=None
         self.graphics=False
         self.tty_fd=tty_fd
+        self.owned_tty=False
         tty=os.ttyname(tty_fd)
-        if not re.fullmatch(r'/dev/tty[1-9][0-9]*',tty):
-            raise OSError('Not a local VT')
-        if Path('/sys/class/tty/tty0/active').read_text().strip()!=Path(tty).name:
-            raise OSError('Not the visible VT')
+        actual=os.environ.get('AGUJA_CONSOLE_TTY','')
+        if not re.fullmatch(r'/dev/tty[1-9][0-9]*',tty) and os.environ.get('AGUJA_LOCAL_CONSOLE')=='1' and re.fullmatch(r'/dev/tty[1-9][0-9]*',actual):
+            self.tty_fd=os.open(actual,os.O_RDWR)
+            self.owned_tty=True
+            tty=actual
         try:
+            if not re.fullmatch(r'/dev/tty[1-9][0-9]*',tty):
+                raise OSError('Not a local VT')
+            if Path('/sys/class/tty/tty0/active').read_text().strip()!=Path(tty).name:
+                raise OSError('Not the visible VT')
             self.fd=os.open(device,os.O_RDWR)
             self.var=VarInfo()
             self.fix=FixInfo()
@@ -483,3 +543,5 @@ class Framebuffer:
         if self.fd is not None:
             os.close(self.fd)
             self.fd=None
+        if getattr(self,'owned_tty',False):
+            os.close(self.tty_fd);self.owned_tty=False

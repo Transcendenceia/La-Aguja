@@ -1,5 +1,5 @@
 """Pure, local-only cockpit selection/filter state; never executes commands."""
-VIEWS = ('commands', 'activity', 'processes', 'help')
+VIEWS = ('help', 'commands', 'activity', 'processes')
 
 
 def wrap_lines(lines, columns):
@@ -30,7 +30,7 @@ def visible(data, technical=False, session=None, failures=False):
 
 class PanelState:
     def __init__(self):
-        self.view = 'commands'
+        self.view = 'help'
         self.technical = self.failures = self.detail = False
         self.session = self.selected = None
         self.scroll = 0

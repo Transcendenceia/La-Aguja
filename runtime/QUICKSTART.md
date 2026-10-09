@@ -20,14 +20,13 @@ Preparar/grabar borra el USB confirmado; arrancar el live no modifica automátic
 
 ## Listo al arrancar
 
-- La consola local entra automáticamente como `aguja`.
+- La consola local entra automáticamente como `aguja` y muestra **Centro de rescate**.
+- El Imager propone desbloquear el perfil con `aguja`; puedes cambiarla o elegir explícitamente arranque directo.
 - SSH: usuario `aguja`, contraseña de fábrica pública `aguja`.
 - Una contraseña personalizada en aguja.conf reemplaza la de fábrica.
 - Una contraseña vacía con clave pública habilita solo esa clave.
 - Ethernet conecta por DHCP. El Wi-Fi guardado se activa automáticamente.
-- Sin conexión, la bienvenida abre el selector Wi-Fi después de unos segundos.
-  Elige la red con las flechas, Enter, escribe la clave sin mostrarla y vuelve con Atrás.
-  También puedes saltar la configuración y trabajar sin Internet.
+- Sin conexión, Centro de rescate permanece abierto. Elige Wi-Fi cuando quieras; puedes trabajar sin Internet.
 - La IP se actualiza en el panel: no hace falta reiniciar ni adivinar el nombre de la interfaz.
 
 ## Desde otro equipo de la misma red
@@ -195,3 +194,13 @@ No se abren puertos del router ni se crean túneles a Internet automáticamente.
 ## Instalar proveedores opcionales
 
 Los cuatro CLI están preinstalados en la imagen personal completa. Configurar después omite las credenciales, no los ejecutables. `aguja doctor` señala cualquier CLI ausente como fallo. La imagen pública histórica 0.9.0 no incluye Claude/Antigravity; no confundirla con esta imagen personal completa.
+
+## Control e idioma (0.9.7)
+
+Cada `aguja agent NOMBRE` muestra Seguro (predeterminado) e Inseguro (YOLO). Seguro pide confirmación para las herramientas; Inseguro conserva la ejecución autónoma. Ninguno elimina sudo. Escape cancela. Los ejecutables directos conservan sus opciones nativas.
+
+`aguja locale` permite cambiar idioma, teclado y variante. La configuración del Imager se aplica antes de desbloquear y las preferencias locales guardadas prevalecen al reiniciar. Solo esos datos no secretos quedan públicos; las credenciales siguen cifradas.
+
+`aguja donate` muestra un QR local para apoyar voluntariamente el proyecto. No hace falta donar ni iniciar sesión para usar LA AGUJA.
+
+La actividad muestra comando, actor, estado y salida, enmascarando únicamente credenciales. La ventana de actividad es acotada (2048 eventos, 100 tareas); no sustituye un archivo de auditoría completo. La entrada de contraseñas y protocolos binarios no se graba.

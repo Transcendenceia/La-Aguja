@@ -62,7 +62,7 @@ async function chooseSave(title,defaultPath,extensions){const out=await showSave
 function secretPassword(){return crypto.randomBytes(18).toString('base64url');}
 function validateProvider(p){provider(p);return p;}
 function providerFound(p){return aiTools.resolve(p);}
-function profileEncrypt(capsule,passphrase){if(typeof passphrase!=='string'||passphrase.length<12||passphrase.length>1024)throw new Error('La contraseña del perfil necesita al menos 12 caracteres.');const salt=crypto.randomBytes(16),iv=crypto.randomBytes(12);const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const cipher=crypto.createCipheriv('aes-256-gcm',key,iv);const data=Buffer.concat([cipher.update(JSON.stringify(capsule),'utf8'),cipher.final()]);key.fill(0);return {schema:1,format:'aguja-profile-aes256gcm',salt:salt.toString('base64'),iv:iv.toString('base64'),tag:cipher.getAuthTag().toString('base64'),data:data.toString('base64')};}
+function profileEncrypt(capsule,passphrase){if(typeof passphrase!=='string'||passphrase.length<1||passphrase.length>1024)throw new Error('La contraseña del perfil necesita entre 1 y 1024 caracteres.');const salt=crypto.randomBytes(16),iv=crypto.randomBytes(12);const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const cipher=crypto.createCipheriv('aes-256-gcm',key,iv);const data=Buffer.concat([cipher.update(JSON.stringify(capsule),'utf8'),cipher.final()]);key.fill(0);return {schema:1,format:'aguja-profile-aes256gcm',salt:salt.toString('base64'),iv:iv.toString('base64'),tag:cipher.getAuthTag().toString('base64'),data:data.toString('base64')};}
 function profileDecrypt(envelope,passphrase){if(envelope.format!=='aguja-profile-aes256gcm'||typeof passphrase!=='string'||JSON.stringify(envelope).length>1048576)throw new Error('Perfil cifrado no válido.');try{const salt=Buffer.from(envelope.salt,'base64'),iv=Buffer.from(envelope.iv,'base64'),tag=Buffer.from(envelope.tag,'base64');if(salt.length!==16||iv.length!==12||tag.length!==16)throw Error();const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const decipher=crypto.createDecipheriv('aes-256-gcm',key,iv);decipher.setAuthTag(tag);const data=Buffer.concat([decipher.update(Buffer.from(envelope.data,'base64')),decipher.final()]);key.fill(0);return core.validateCapsule(JSON.parse(data));}catch{throw new Error('La contraseña del perfil no coincide o el archivo fue alterado.');}}
 async function loadVerifiedCatalog({refresh=false,timeoutMs=20000}={}) {
  const pin=JSON.parse(await fs.promises.readFile(path.join(__dirname,'resources','release-key.json'),'utf8'));
@@ -74,9 +74,9 @@ async function loadVerifiedCatalog({refresh=false,timeoutMs=20000}={}) {
 }
 function prepareInput(input,{pendingRemote=false}={}) {
  if(!selectedImage)throw new Error('Selecciona primero una imagen.');
- const capsule=core.validateCapsule(input?.capsule),protection=input.protection||{mode:'plain'};
+ const capsule=core.validateCapsule(input?.capsule),protection=input.protection||{mode:'encrypted',passphrase:'aguja'};
  if(!['plain','encrypted'].includes(protection.mode))throw new Error('Elige cómo desbloquear las credenciales.');
- if(protection.mode==='encrypted'&&(typeof protection.passphrase!=='string'||protection.passphrase.length<12||protection.passphrase.length>1024))throw new Error('El desbloqueo necesita una contraseña de entre 12 y 1024 caracteres.');
+ if(protection.mode==='encrypted'&&(typeof protection.passphrase!=='string'||protection.passphrase.length<1||protection.passphrase.length>1024))throw new Error('El desbloqueo necesita una contraseña de entre 1 y 1024 caracteres.');
  // New images use the user's own tailnet. Never enroll, claim or copy
  // proprietary relay credentials even if an old renderer/profile requests it.
  capsule.remote={enabled:false};
@@ -237,6 +237,7 @@ if ($ssidMatch) {
  async function nativeOptions(){if(isWindows)aiTools.env=await userEnvironment(run,process.env);return {home:os.homedir(),env:aiTools.environment()};}
  handle('provider-status',async()=>{await nativeOptions();const providers={};for(const p of Object.keys(providerBins))providers[p]={installed:Boolean(providerFound(p)),imported:Boolean(approvedImports[p])};return {providers};});
  handle('provider-install',async(id)=>exclusive(async()=>{validateProvider(id);const answer=await showMessageBox(win,{type:'question',title:'Instalar herramienta IA',message:'Descargar e instalar '+provider(id).name+' en este PC',detail:'Se utilizará la fuente oficial y una instalación de usuario. No se iniciará sesión ni se copiarán credenciales. Tus ajustes de la imagen no cambian.',buttons:['Cancelar','Descargar e instalar'],defaultId:0,cancelId:0});if(answer.response!==1)return {canceled:true};return aiTools.install(id);}));
+ handle('donate',async()=>{await shell.openExternal('https://ko-fi.com/transcendenceia');return {opened:true};});
  handle('provider-docs',async(id)=>{await shell.openExternal(provider(id).docs);return {opened:true};});
  handle('provider-login',async(id)=>{validateProvider(id);await nativeOptions();const launch=aiTools.loginCommand(id),env=aiTools.environment();
    // Native visible terminal; user performs consent directly. No account or token captured here.

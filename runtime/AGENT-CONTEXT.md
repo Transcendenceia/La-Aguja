@@ -76,7 +76,7 @@ Red:
     sudo nmtui                 # perfiles avanzados, empresariales y Ethernet
     avahi-browse -rt _ssh._tcp  # descubrir servicios SSH en una LAN con mDNS
 
-La red guardada se activa automáticamente; sin red aparece el asistente en la consola.
+La red guardada se activa automáticamente; Centro de rescate permanece visible incluso sin red.
 Avahi anuncia el hostname `.local` y SSH en la LAN; el panel refleja el nombre real si hay colisión.
 No hay publicación WAN, port-forwarding de router ni túneles automáticos.
 No cambies la red si estás trabajando por ella sin una vía de reconexión.
@@ -111,7 +111,7 @@ Los cuatro agentes nativos están disponibles:
     aguja agent opencode
 
 El launcher usa usuario normal con sudo disponible, no Claude directamente como root.
-El modo `full` desactiva aprobaciones del arnés; no autoriza tareas ajenas al objetivo del usuario.
+Cada lanzamiento permite elegir Seguro (predeterminado, confirmaciones por herramienta) o Inseguro (full/YOLO). Ninguno autoriza tareas ajenas al objetivo del usuario ni reduce sudo. No conviertas una solicitud genérica en autorización del siguiente paso en modo Seguro.
 Las cuentas, login/inferencia de proveedores y conectividad a Internet se verifican por separado.
 No hay tokens ni cuentas de proveedor incluidos de fábrica.
 

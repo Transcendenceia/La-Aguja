@@ -96,25 +96,26 @@ def launch(name, extras):
             os.execv('/usr/bin/python3', ['/usr/bin/python3','/usr/lib/aguja/console_session.py'])
         shell = "zsh" if shutil.which("zsh") else "bash"
         os.execvp(shell, [shell])
-    conf = json.loads(Path("/run/aguja-session.json").read_text()) if Path("/run/aguja-session.json").exists() else {"agent_mode": "full"}
-    binary = {"codex": "codex", "claude": "claude", "antigravity": "agy", "opencode": "opencode"}[name]
-    if not shutil.which(binary):
-        print(f"{name} no está instalado. Consulta /usr/share/aguja/QUICKSTART.md para instalarlo desde el proveedor.", file=sys.stderr)
+    import harness
+    if not shutil.which(harness.BINS[name]):
+        print(f"{name} no está instalado. Consulta aguja doctor.", file=sys.stderr)
         return 127
-    args = [binary]
-    if conf["agent_mode"] == "full":
-        args += {"codex": ["--dangerously-bypass-approvals-and-sandbox"],
-                 "claude": ["--dangerously-skip-permissions"],
-                 "antigravity": ["--dangerously-skip-permissions"], "opencode": []}[name]
-        if name == "opencode":
-            os.environ["OPENCODE_CONFIG_CONTENT"] = json.dumps({"permission": "allow"})
+    mode = harness.choose_mode(name)
+    if mode is None:
+        return 130
+    binary, args, environment = harness.invocation(name, mode, extras)
+    if not shutil.which(binary):
+        print(f"{name} no está instalado. Consulta aguja doctor.", file=sys.stderr)
+        return 127
+    os.environ.update(environment)
+    harness.configure(name, mode)
     workspace = Path("/data/workspace" if os.path.ismount("/data") else "/home/aguja/workspace")
     workspace.mkdir(parents=True, exist_ok=True)
     os.chdir(workspace)
-    print(f"Iniciando {name} · modo {conf['agent_mode']} · sudo disponible", flush=True)
+    print(f"Iniciando {name} · {mode} · sudo disponible", flush=True)
     import profile as platform_profile
     os.environ.update(platform_profile.provider_environment(name))
-    argv=args+extras
+    argv=args
     import auth_pty
     if name in ('claude','antigravity','codex') and auth_pty.interactive(argv):
         try:
@@ -136,26 +137,6 @@ def mount_target(device, target):
 
 
 def menu(auto_setup=False):
-    if auto_setup and Path('/run/aguja-profile-status.json').exists():
-        profile_state = json.loads(Path('/run/aguja-profile-status.json').read_text())
-        if profile_state.get('locked'):
-            print('Perfil protegido: desbloquéalo para cargar red, SSH, proveedores y tailnet.')
-            if sys.stdin.isatty() and not os.environ.get('SSH_CONNECTION'):
-                call('/usr/local/bin/aguja', 'profile', 'unlock')
-    if Path("/run/aguja-session.json").exists():
-        default = json.loads(Path("/run/aguja-session.json").read_text())["default_harness"]
-        if default not in ("menu", "shell"):
-            cockpit.banner(compact=True)
-            if auto_setup and not network.wait(12)["connected"]:
-                call("/usr/local/bin/aguja", "wifi")
-            launch(default, [])
-        if default == "shell":
-            if auto_setup and not network.wait(12)["connected"]:
-                call("/usr/local/bin/aguja", "wifi")
-            cockpit.banner(compact=True)
-            if not os.environ.get('SSH_CONNECTION') and not os.environ.get('AGUJA_SESSION_ID') and os.isatty(0):
-                launch('shell', [])
-            return 0
     action = cockpit.menu(auto_setup)
     if action != "shell" or (not os.environ.get('SSH_CONNECTION') and not os.environ.get('AGUJA_SESSION_ID') and os.isatty(0)):
         launch(action, [])
@@ -182,7 +163,7 @@ def tools():
 
 def main():
     p = argparse.ArgumentParser(description="LA AGUJA Rescue Disk · AI-first rescue Linux")
-    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "tailscale"])
+    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "tailscale", "locale", "donate"])
     p.add_argument("args", nargs=argparse.REMAINDER, help="tailscale: status [--json]")
     arguments=sys.argv[1:]
     if arguments[:1]==['qr']:arguments[0]='browser'  # hidden legacy alias; no QR UI
@@ -233,6 +214,11 @@ def main():
                 pass
         print("Tailscale: No configurado en este arranque o sin estado activo.")
         return 1
+    elif a.command == "locale":
+        import locale_settings
+        return locale_settings.main(a.args)
+    elif a.command == "donate":
+        return cockpit.donate()
     elif a.command == "browser":
         return cockpit.menu_auth()
     elif a.command == "activity":

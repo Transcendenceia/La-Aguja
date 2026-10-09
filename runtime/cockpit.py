@@ -24,6 +24,16 @@ MASCOT = (
     "        V        ",
 )
 
+MENU_ACTIONS = ('shell', 'wifi', 'guide', 'doctor', 'codex', 'antigravity', 'claude',
+                'opencode', 'password', 'remote', 'locale', 'unlock', 'donate')
+
+
+def menu_choices():
+    return [t('1  Consola Zsh'), t('2  Conectar Wi-Fi'), t('3  Guía y herramientas'), t('8  Diagnóstico'),
+            '4  Codex', '5  Antigravity', '6  Claude Code', '7  OpenCode', t('9  Contraseña SSH'),
+            t('R  Tailscale / Headscale · SSH privado'), t('I  Idioma y teclado'),
+            t('U  Desbloquear perfil'), t('D  Apoyar LA AGUJA')]
+
 
 def version():
     try:
@@ -80,7 +90,7 @@ def activity_snapshot():
 
 
 def draw(screen, current, countdown=0, selected=0, activity=None,
-         paused=False, scroll=0, view="activity", stats=None, tick=0, control=None):
+         paused=False, scroll=0, view="help", stats=None, tick=0, control=None):
     """Full-width text alternative for serial, SSH and unsupported framebuffers."""
     import display
     screen.erase()
@@ -122,7 +132,8 @@ def draw(screen, current, countdown=0, selected=0, activity=None,
             rows = [chosen.get('title',''), chosen.get('command',''),
                     result_text(chosen.get('result',t('En curso')))+' · '+panel_state.command_duration(chosen,time.time()),
                     'ID: '+chosen.get('id','')+' · '+chosen.get('transport','ssh'),
-                    t('Salida privada · disponible por SSH') if chosen.get('output_private') else t('Salida filtrada:')]
+                     t('Ejecuta: ')+chosen.get('user','aguja')+' @ '+chosen.get('peer',''),
+                    t('Salida del comando · credenciales ocultas:')]
             rows += [e.get('text','') for e in activity.get('events',[]) if e.get('kind')=='output' and e.get('command_id')==chosen.get('id')]
             rows=panel_state.wrap_lines(rows,max(1,stream_width-2))
             control.bound_scroll(len(rows),capacity)
@@ -152,8 +163,7 @@ def draw(screen, current, countdown=0, selected=0, activity=None,
         else:line(8,t('Sin acceso pendiente. Inicia aguja login claude / antigravity.'),cyan)
         line(height-4,t('A / Esc: volver · navegador en el agente: Ctrl+] · pega el código allí'),gold)
     elif view == "help":
-        options = [t("1  Consola Zsh"), t("2  Conectar Wi-Fi"), t("3  Guía y herramientas"), t("8  Diagnóstico"),
-                   "4  Codex", "5  Antigravity", "6  Claude Code", "7  OpenCode", t("9  Contraseña SSH"), t("R  Tailscale / Headscale · SSH privado")]
+        options = menu_choices()
         for i,text in enumerate(options[:capacity]):
             line(8+i,("> " if selected==i else "  ")+text,gold if selected==i else 0)
     elif view == "processes":
@@ -240,11 +250,13 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             if now >= next_stats:
                 stats = resources.sample()
                 next_stats = now+1
-            remaining = max(0,delay-int(now-start)) if auto_setup and not current.get("connected") else 0
+            remaining = 0
             if fb:
                 try:
                     if pointer:
-                        for event in pointer.poll():display.pointer_action(control,snapshot,event,fb.width,fb.height)
+                        for event in pointer.poll():
+                            action = display.pointer_action(control,snapshot,event,fb.width,fb.height)
+                            if action is not None:return action
                     if control.view=='auth':
                         import auth
                         fb.present(auth.render(fb.width,fb.height,auth.current()))
@@ -259,8 +271,7 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             if fb is None:
                 draw(screen,current,remaining,selection,activity=snapshot,paused=paused,
                      scroll=control.scroll,view=control.view,stats=stats,tick=now-start,control=control)
-            if auto_setup and not current.get("connected") and not remaining:
-                return "wifi"
+
             key = screen.getch()
             if key == curses.KEY_MOUSE:
                 try:
@@ -281,12 +292,12 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             elif key in (curses.KEY_UP,curses.KEY_DOWN,curses.KEY_LEFT,curses.KEY_RIGHT):
                 if control.view == 'help':
                     movement = {curses.KEY_UP:-1,curses.KEY_DOWN:1,curses.KEY_LEFT:-1,curses.KEY_RIGHT:1}[key]
-                    selection = (selection+movement)%10
+                    selection = (selection+movement)%len(MENU_ACTIONS)
                 else:
                     control.key({curses.KEY_UP:'up',curses.KEY_DOWN:'down',curses.KEY_LEFT:'previous',curses.KEY_RIGHT:'next'}[key],snapshot)
             elif key in (10,13):
                 if control.view == "help":
-                    return ("shell","wifi","guide","doctor","codex","antigravity","claude","opencode","password","remote")[selection]
+                    return MENU_ACTIONS[selection]
                 control.key('detail',snapshot)
             elif key in (ord('a'),ord('A')):
                 control.view='commands' if control.view=='auth' else 'auth'
@@ -309,6 +320,12 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                 return "doctor"
             elif key in (ord("r"),ord("R")):
                 return "remote"
+            elif key in (ord('i'),ord('I')):
+                return 'locale'
+            elif key in (ord('u'),ord('U')):
+                return 'unlock'
+            elif key in (ord('d'),ord('D')):
+                return 'donate'
             elif key == ord("9"):
                 return "password"
             elif key in (ord("p"),ord("P")):
@@ -387,6 +404,13 @@ def menu(auto_setup=False):
         elif action == "remote":
             subprocess.call(["/usr/local/bin/aguja", "tailscale"])
             print(t("Configura URL del servidor, nombre y clave de alta en Flash Imager → Red privada. SSH conserva la autenticación del perfil."))
+        elif action == 'locale':
+            subprocess.call(['/usr/local/bin/aguja', 'locale'])
+        elif action == 'unlock':
+            subprocess.call(['/usr/local/bin/aguja', 'profile', 'unlock'])
+        elif action == 'donate':
+            donate()
+            continue
         elif action == "password":
             subprocess.call(["/usr/local/bin/aguja", "password"])
         try:
@@ -400,4 +424,79 @@ def menu_auth():
         print(t('El navegador se abre desde aguja login; esta vista requiere consola interactiva.'),file=sys.stderr)
         return 1
     curses.wrapper(choose,False,12,True)
+    return 0
+
+
+def option_dialog(title, options, detail=''):
+    """Per-opening selection starts at index 0. EOF/Escape never approves YOLO."""
+    if not sys.stdin.isatty():
+        return None
+    def picker(screen):
+        import display
+        fb=pointer=None; selected=0
+        try:
+            try:
+                fb=display.Framebuffer()
+                from pointer import Pointer
+                pointer=Pointer(fb.width,fb.height)
+            except (ImportError,OSError,ValueError,RuntimeError):
+                pass
+            screen.timeout(150)
+            while True:
+                if fb:
+                    pixels,boxes=display.render_options(fb.width,fb.height,title,options,selected,detail)
+                    fb.present(pixels)
+                    if pointer:
+                        for event in pointer.poll():
+                            if event.get('action')=='back':return None
+                            if event.get('action')=='click':
+                                for (x,y,r,b),index in boxes:
+                                    if x<=event['x']<=r and y<=event['y']<=b:
+                                        return options[index][1]
+                else:
+                    screen.erase(); h,w=screen.getmaxyx()
+                    lines=[title,detail,'']+[('> ' if i==selected else '  ')+label for i,(label,_) in enumerate(options)]
+                    for y,line in enumerate(lines[:h-2]):
+                        try:screen.addnstr(y,1,line,w-2)
+                        except curses.error:pass
+                    screen.refresh()
+                key=screen.getch()
+                if key==27:return None
+                if key in (10,13):return options[selected][1]
+                if key in (curses.KEY_UP,curses.KEY_LEFT):selected=(selected-1)%len(options)
+                if key in (curses.KEY_DOWN,curses.KEY_RIGHT,9):selected=(selected+1)%len(options)
+        finally:
+            if pointer:pointer.close()
+            if fb:fb.close()
+    try:return curses.wrapper(picker)
+    except curses.error:
+        print(title+'\n'+detail)
+        for i,(label,_) in enumerate(options):print(str(i+1)+'. '+label)
+        value=input('[1] · Esc: cancelar: ').strip()
+        if value=='\x1b':return None
+        return options[0 if not value else int(value)-1][1]
+
+
+def donate():
+    import donations
+    if not sys.stdin.isatty():
+        print(t(donations.MESSAGE)+'\n'+donations.URL)
+        return 0
+    def show(screen):
+        import display
+        fb=None
+        try:
+            try:fb=display.Framebuffer()
+            except (ImportError,OSError,ValueError,RuntimeError):pass
+            if fb:fb.present(display.render_donation(fb.width,fb.height))
+            else:
+                print(t(donations.MESSAGE)+'\n'+donations.URL)
+                try:
+                    import qrcode
+                    qr=qrcode.QRCode(border=3);qr.add_data(donations.URL);qr.make();qr.print_ascii()
+                except ImportError:pass
+            screen.timeout(-1);screen.getch()
+        finally:
+            if fb:fb.close()
+    curses.wrapper(show)
     return 0

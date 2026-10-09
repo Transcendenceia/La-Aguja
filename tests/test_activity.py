@@ -68,7 +68,7 @@ class RedactionTests(unittest.TestCase):
         self.assertEqual(filter.feed(b'hello test-custom-'), [])
         self.assertEqual(filter.feed(b'pass\n'), ['hello [oculto]'])
         self.assertEqual(filter.feed(b'TO'), [])
-        self.assertEqual(filter.feed(b'KEN=abc\n'), ['[contenido sensible oculto]'])
+        self.assertEqual(filter.feed(b'KEN=abc\n'), ['TOKEN=[oculto]'])
         self.assertEqual(filter.feed(b'-----BEGIN PRIVATE KEY-----\n'), ['[bloque de clave/certificado oculto]'])
         self.assertEqual(filter.feed(b'very-private-unknown-text\n-----END PRIVATE KEY-----\n'), [])
         self.assertEqual(filter.feed(b'ok\n'), ['ok'])
@@ -157,25 +157,19 @@ class MonitorTests(unittest.TestCase):
             m.event({'session':self.sid,'kind':'session_end','exit':0},10,self.uid,procs)
             self.assertEqual(next(iter(m.commands.values()))['exit'],0)
 
-    def test_sensitive_output_stdin_echo_and_boundary_are_suppressed(self):
+    def test_arbitrary_commands_visible_known_values_hidden_and_idle_echo_not_logged(self):
         self.start()
-        self.output(b'unknown-password-no-label\n')
-        self.assertEqual(len(self.monitor.events), 1)
-        self.event('command_start', 'df -h', pid=12, sensitive=False)
-        self.output(b'pending-public')
-        self.event('input_activity')
-        self.output(b'unknown-keyboard-secret\n')
-        self.event('command_start', 'df -h', pid=12, sensitive=False)
-        self.output(b'new clean line\n')
-        self.assertEqual(self.monitor.events[-1]['text'], 'new clean line')
-        self.assertFalse(any('unknown' in e['text'] or 'pending-public' in e['text'] for e in self.monitor.events))
+        self.event('command_start', 'set -e; aguja doctor --json | cat', pid=12)
+        self.output(b'healthy: true\nTOKEN=abc\n')
+        self.assertEqual(self.monitor.events[-1]['text'], 'TOKEN=[oculto]')
+        self.assertTrue(any(e['text']=='healthy: true' for e in self.monitor.events))
         self.event('command_end', '0', pid=12)
         self.event('input_activity')
         self.output(b'next command echoed by TTY\n')
-        self.assertNotIn('next command', str(list(self.monitor.events)))
-        self.event('command_start', 'cat credentials', pid=12, sensitive=False)
-        self.output(b'unknown-secret\n')
-        self.assertNotIn('unknown-secret', str(list(self.monitor.events)))
+        self.assertNotIn('next command',str(list(self.monitor.events)))
+        self.event('command_start','python3 custom-diagnostic.py',pid=12)
+        self.output(b'custom diagnostic complete\n')
+        self.assertEqual(self.monitor.events[-1]['text'],'custom diagnostic complete')
 
     def test_command_end_can_overtake_final_pty_output_without_losing_it(self):
         self.start()
@@ -210,8 +204,8 @@ class MonitorTests(unittest.TestCase):
         self.event('command_start', 'cat credentials', pid=12, sensitive=True)
         with patch.object(activity.time, 'monotonic', return_value=20):
             self.event('command_end', '0', pid=12)
-            self.output(b'unknown sensitive tail\n')
-        self.assertNotIn('unknown sensitive', str(list(self.monitor.events)))
+            self.output(b'TOKEN=synthetic-private-tail\n')
+        self.assertNotIn('synthetic-private-tail', str(list(self.monitor.events)))
 
     def test_bounded_events_and_unavailable_snapshot(self):
         self.start()

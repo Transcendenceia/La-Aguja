@@ -85,6 +85,7 @@ class ControlTests(unittest.TestCase):
                                {'id':'3','session':'c','status':'probe','technical':True}],
                    'events':[],'processes':[],'sessions':[]}
         self.p=panel_state.PanelState()
+        self.p.view="commands"
 
     def test_selection_detail_filters_and_live_are_local_only(self):
         self.assertEqual(self.p.selected_command(self.p.data(self.data))['id'],'2')

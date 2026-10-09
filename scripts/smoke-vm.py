@@ -195,6 +195,13 @@ def main():
                 qmp_command("send-key", {"keys": [{"type": "qcode", "data": "ret"}]})
                 time.sleep(3)
                 qmp_command("screendump", {"filename": str((a.workdir / "screenshots/zsh-status.png").resolve()), "format": "png"})
+                completion_deadline = time.monotonic()+30
+                trace_check = "import sys;sys.path.insert(0,'/usr/lib/aguja');import activity;assert any(c.get('transport')=='local' and c.get('command')=='aguja status' and c.get('exit')==0 for c in activity.snapshot()['commands'])"
+                while time.monotonic()<completion_deadline:
+                    trace = subprocess.run(remote+["python3 -c "+shlex.quote(trace_check)],env=remote_env,capture_output=True,timeout=15)
+                    if trace.returncode==0:break
+                    time.sleep(1)
+                else:raise ValueError("Local status command did not complete")
                 # Return from the newly instrumented local shell to the panel.
                 # This must retain the real VT, not silently fall back to curses
                 # because the shell was nested behind an SSH-style PTY relay.
@@ -202,9 +209,10 @@ def main():
                     qmp_command("send-key", {"keys": [{"type": "qcode", "data": char}], "hold-time": 40})
                     time.sleep(.08)
                 qmp_command("send-key", {"keys": [{"type": "qcode", "data": "ret"}]})
-                time.sleep(2)
+                time.sleep(5)
                 local_check = "import sys,os,fcntl,array;sys.path.insert(0,'/usr/lib/aguja');import activity;s=activity.snapshot();assert any(x.get('transport')=='local' for x in s['sessions']);assert any(c.get('transport')=='local' and c.get('command')=='aguja status' and c.get('exit')==0 for c in s['commands']);f=os.open('/dev/tty1',os.O_RDONLY);a=array.array('i',[0]);fcntl.ioctl(f,0x4B3B,a);os.close(f);assert a[0]==1"
                 local_result = subprocess.run(remote + ["sudo -n python3 -c " + shlex.quote(local_check)], env=remote_env, capture_output=True, timeout=15)
+                (a.workdir / "local-panel-check.err").write_bytes(local_result.stderr)
                 if local_result.returncode:
                     raise ValueError("Local shell trace or graphical panel reopening failed")
                 qmp_command("screendump", {"filename": str((a.workdir / "screenshots/local-panel-reopened.png").resolve()), "format": "png"})

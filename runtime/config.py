@@ -9,7 +9,7 @@ from pathlib import Path
 DEFAULTS = dict(hostname="aguja", wifi_ssid="", wifi_password="",
                 wifi_security="wpa-psk", wifi_country="ES", wifi_hidden="no", ssh_password="aguja",
                 ssh_public_key="", ssh_port="22", persistent_home="no",
-                default_harness="menu", agent_mode="full")
+                default_harness="menu", agent_mode="ask")
 
 
 def load(path):

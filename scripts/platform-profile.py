@@ -93,6 +93,9 @@ def prepare(request):
         if 'locale' in request['capsule'] and 'locale-profile-v1' not in release.get('features', []):
             return {'ok': False, 'error': 'La imagen no admite idioma y teclado personalizados; descarga una versión compatible (0.4.3 o posterior).'}
         locale = request['capsule'].get('locale', {})
+        public_locale = 'locale-preunlock-v1' in release.get('features', [])
+        if locale and request.get('protection', {}).get('mode') == 'encrypted' and not public_locale:
+            return {'ok': False, 'error': 'El teclado antes de desbloquear necesita Rescue Disk 0.9.7 o posterior.'}
         if (locale.get('language') in ('zh_CN.UTF-8', 'ja_JP.UTF-8') or locale.get('keyboard') in ('cn', 'jp')) and 'i18n-catalog-v1' not in release.get('features', []):
             return {'ok': False, 'error': 'La imagen no admite este idioma o teclado; descarga LA AGUJA 0.7.0 o posterior.'}
         if any(name == 'antigravity' and item.get('mode') == 'import' for name, item in request['capsule'].get('providers', {}).items()) and 'antigravity-oauth-file-v1' not in release.get('features', []):
@@ -122,6 +125,15 @@ def prepare(request):
             subprocess.run(['mcopy', '-i', temp + '@@' + str(offset), '::/aguja-profile.json', str(readback)], check=True, capture_output=True)
             if readback.read_bytes() != sealed:
                 raise OSError('Verificación del perfil no coincide')
+            if public_locale and capsule.get('locale'):
+                selection = Path(work) / 'locale.json'
+                selection.write_text(json.dumps(capsule['locale']))
+                subprocess.run(['mcopy', '-o', '-i', temp + '@@' + str(offset), str(selection), '::/aguja-locale.json'], check=True, capture_output=True)
+                checked = Path(work) / 'locale-readback.json'
+                subprocess.run(['mcopy', '-i', temp + '@@' + str(offset), '::/aguja-locale.json', str(checked)], check=True, capture_output=True)
+                if checked.read_bytes() != selection.read_bytes():
+                    raise OSError('Verificación del idioma y teclado no coincide')
+
         current_stat = source.stat()
         if (current_stat.st_size, current_stat.st_mtime_ns, current_stat.st_ino) != (original_stat.st_size, original_stat.st_mtime_ns, original_stat.st_ino):
             raise ValueError('La imagen original cambió')

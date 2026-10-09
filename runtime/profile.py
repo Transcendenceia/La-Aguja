@@ -357,8 +357,8 @@ def seal(capsule, protection):
     if mode != 'encrypted':
         raise ValueError('Protección no válida')
     passphrase = text(protection.get('passphrase', ''), 1024)
-    if len(passphrase) < 10:
-        raise ValueError('La frase de protección necesita al menos 10 caracteres')
+    if len(passphrase) < 1:
+        raise ValueError('La frase de protección necesita entre 1 y 1024 caracteres')
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
     from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
     salt, iv = os.urandom(16), os.urandom(12)
@@ -416,7 +416,7 @@ def locale_environment(path='/etc/default/locale'):
     return {}
 
 
-def apply_locale(capsule=None, root='/', runner=None):
+def apply_locale(capsule=None, root='/', runner=None, respect_override=True):
     """Apply only public owner preferences to the live system, not host input.
 
     An encrypted capsule has no locale until unlocked; reset to factory then.
@@ -425,6 +425,12 @@ def apply_locale(capsule=None, root='/', runner=None):
     import subprocess
     selection = validate_locale((capsule or {}).get('locale', DEFAULT_LOCALE))
     base = Path(root).resolve()
+    preference = base / 'config/aguja-locale.json'
+    if respect_override and preference.is_file() and not preference.is_symlink():
+        try:
+            selection = validate_locale(json.loads(preference.read_text()))
+        except (ValueError, OSError, TypeError):
+            pass
     settings = {
         'etc/default/locale': 'LANG=' + selection['language'] + '\n',
         'etc/default/keyboard': 'XKBMODEL="pc105"\nXKBLAYOUT="' + selection['keyboard'] +

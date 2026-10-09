@@ -8,3 +8,5 @@
 .header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.header-actions label{color:var(--muted);font-size:12px}.header-actions select{width:auto;max-width:200px;margin:0}button{white-space:normal}.card,.intro>div,.section-heading{min-width:0}.card p,.hint,.soft-note{overflow-wrap:anywhere}h1,h2{overflow-wrap:break-word}body{font-family:Inter,"Segoe UI","Noto Sans CJK SC","Noto Sans CJK JP",sans-serif}
 .bitlocker-card{margin-top:18px}.bitlocker-card .provider-head{margin-bottom:12px}.key-box{user-select:all;font-family:monospace;font-size:15px;letter-spacing:1.5px;padding:14px;background:#0f1523;border:1px solid #354057;border-radius:8px;margin:12px 0;color:var(--cyan);word-break:break-all;text-align:center}
 
+
+#donation-dialog{max-width:540px}#donation-dialog img{display:block;margin:20px auto;max-width:100%;height:auto}#donation-dialog p{line-height:1.65}#donation-dialog form{display:inline-block;margin-left:12px}

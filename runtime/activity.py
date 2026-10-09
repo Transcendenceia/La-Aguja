@@ -23,9 +23,9 @@ DIRECTORY = Path('/run/aguja-activity')
 SOCKET = DIRECTORY / 'events.sock'
 SNAPSHOT = DIRECTORY / 'snapshot.json'
 MAX_PACKET = 131072
-MAX_TEXT = 1400
+MAX_TEXT = 8192
 MAX_COMMAND_TEXT = 16384
-MAX_EVENTS = 180
+MAX_EVENTS = 2048
 MAX_SESSIONS = 24
 MAX_PROCESSES = 96
 MAX_COMMANDS = 100
@@ -246,8 +246,8 @@ def secret_values():
 
 def redact(value, secrets=(), command=False):
     value = plain(value, 65536 if command else 12000)
-    if (not command and SENSITIVE.search(value)) or '-----BEGIN ' in value or '-----END ' in value:
-        return '[contenido sensible oculto]'
+    if '-----BEGIN ' in value or '-----END ' in value:
+        return '[bloque de clave/certificado oculto]'
     for secret in sorted(secrets, key=len, reverse=True):
         if secret:
             value = value.replace(secret, '[oculto]')
@@ -255,8 +255,9 @@ def redact(value, secrets=(), command=False):
     if command:
         value = command_view(value)
         return value[:MAX_COMMAND_TEXT] + ('\n[comando truncado: límite 16384 caracteres]' if len(value)>MAX_COMMAND_TEXT else '')
-    value = OPAQUE.sub('[valor largo oculto]', value)
-    value = URL.sub(safe_url, value)
+    value = command_view(value)
+    # Mask common unlabelled provider credentials, not hashes/long ordinary text.
+    value = re.sub(r'\b(?:sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9_]{20,}|KF_API_[A-Za-z0-9-]+)\b', '[credencial oculta]', value)
     return value[:MAX_TEXT]
 
 
@@ -318,7 +319,7 @@ def emit(kind, text='', **fields):
             return
         with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as client:
             needs_ack = kind not in ('output', 'input_activity')
-            client.settimeout(0.12 if needs_ack else 0.005)
+            client.settimeout(1.0 if needs_ack else 0.005)
             client.bind('')  # Linux abstract autobind, never filesystem traces.
             client.sendto(raw, str(SOCKET))
             if needs_ack:
@@ -414,7 +415,7 @@ class Monitor:
         previous = self.commands.get(s.get('command_id'))
         if label and previous and previous['status'] == 'running' and previous.get('labelled'):
             previous.update(title=redact(label, self.secrets)[:100], command=text,
-                            output_private=self.suppressed.get(sid, True))
+                            output_private=False)
             return
         self.finish_command(sid, None)
         self.command_number += 1
@@ -422,7 +423,8 @@ class Monitor:
         self.commands[key] = {'id': key, 'session': sid, 'title': redact(label, self.secrets)[:100] if label else text.split('\n')[0][:100],
                               'command': text, 'started': time.time(), 'status': 'running',
                               'transport': s.get('transport','ssh'),
-                              'technical': bool(s.get('probe')), 'output_private': self.suppressed.get(sid, True), 'labelled': bool(label)}
+                              'technical': bool(s.get('probe')), 'output_private': False, 'labelled': bool(label),
+                              'user': s.get('user','aguja'), 'peer': s.get('peer',''), 'executor': s.get('transport','ssh')}
         if s.get('probe'):
             self.commands[key]['title'] = 'Comprobar repositorio Git'
         s['command_id'] = key
@@ -468,7 +470,7 @@ class Monitor:
             probe = packet.get('probe')
             if isinstance(probe, dict) and probe.get('kind') == 'git_workspace':
                 self.sessions[sid]['probe'] = {'kind': 'git_workspace'}
-            self.suppressed[sid] = bool(packet.get('sensitive', True))
+            self.suppressed[sid] = packet.get('mode') == 'interactive'
             self.filters[sid] = OutputFilter(self.secrets)
             if packet.get('mode') != 'interactive':
                 self.begin_command(sid, self.sessions[sid]['command'], packet.get('label'))
@@ -486,14 +488,16 @@ class Monitor:
                 # No bytes, length, timing transcript or content of stdin.
                 # Mute PTY echo while a human types; hook re-enables only
                 # after the shell has accepted a safe command.
-                self.suppressed[sid] = True
-                self.filters[sid] = OutputFilter(self.secrets)
-                self.ending.pop(sid, None)
+                command = self.commands.get(s.get('command_id'), {})
+                if command.get('status') != 'running':
+                    self.suppressed[sid] = True
+                    self.filters[sid] = OutputFilter(self.secrets)
+                    self.ending.pop(sid, None)
                 return
             if kind == 'session_end':
                 if not self.suppressed.get(sid):
                     for line in self.filters[sid].feed(b'', final=True):
-                        self.events.append({'time': time.time(), 'kind': 'output', 'session': sid, 'text': line})
+                        self.events.append({'time': time.time(), 'kind': 'output', 'session': sid, 'text': line, 'command_id': s.get('command_id'), 'technical': bool(s.get('probe'))})
                 if pid != s['pid']:
                     return
                 s.update(status='ended', ended=time.time(), exit=packet.get('exit'))
@@ -506,7 +510,7 @@ class Monitor:
             elif kind == 'command_start':
                 self.ending.pop(sid, None)
                 raw = packet.get('text', '')
-                sensitive = bool(packet.get('sensitive', True)) or not safe_output(str(raw))
+                sensitive = False
                 self.filters[sid] = OutputFilter(self.secrets)
                 self.suppressed[sid] = sensitive
                 text = redact(raw, self.secrets, command=True)

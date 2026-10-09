@@ -9,7 +9,7 @@
 
 El launcher **no inicia acciones IA al arrancar**. Ejecuta el arnés elegido desde el menú
 o `aguja agent NOMBRE`; los binarios directos siguen disponibles con opciones normales.
-Cambiar agent_mode a ask conserva sus políticas normales y el acceso sudo.
+Desde 0.9.7 cada lanzamiento muestra **Seguro** primero y **Inseguro** después; no se recuerda una selección insegura. Seguro exige confirmación de herramientas: permisos `ask` en OpenCode/Antigravity, reglas `ask` en Claude y una puerta humana PreToolUse con broker privado en Codex. En Codex se exige una respuesta afirmativa nueva; Enter, Escape, EOF, fallo de broker o tiempo agotado deniegan la tarea. No cambia sudo ni pretende ser una frontera contra un usuario local que ejecute directamente un CLI o modifique su configuración. Inseguro conserva los modos full de la tabla.
 
 ## Preparar y autorizar: recorrido actual
 

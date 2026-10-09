@@ -12,6 +12,7 @@ patterns={
  'private-key':rb'(?m)^-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',
  'github-token':rb'\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,})\b',
  'provider-key':rb'\bsk-(?:proj-|ant-)?[A-Za-z0-9_-]{30,}\b',
+ 'kofi-api-key':rb'\bKF_API_[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b',
  'tailnet-key':rb'\btskey-(?:auth|api)-[A-Za-z0-9_-]{20,}\b',
 }
 for name in filter(None,names):

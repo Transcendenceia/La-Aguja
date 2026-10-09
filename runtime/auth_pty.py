@@ -38,6 +38,11 @@ def run(argv,name,login=False):
                        BROWSER='/usr/local/bin/aguja-auth-open')
     shim=session.directory/'xdg-open';shim.write_text('#!/bin/sh\nexec /usr/local/bin/aguja-auth-open "$@"\n');shim.chmod(0o700)
     environment['PATH']=str(session.directory)+os.pathsep+environment.get('PATH',os.defpath)
+    approvals=None
+    if name=='codex' and environment.get('AGUJA_EXECUTION_MODE')=='safe' and not login:
+        from approval_broker import Broker
+        approvals=Broker(session.directory)
+        environment['AGUJA_APPROVAL_SOCKET']=str(approvals.path)
     attributes=termios.tcgetattr(0);size=fcntl.ioctl(0,termios.TIOCGWINSZ,bytes(8))
     pid,master=pty.fork()
     if pid==0:
@@ -72,6 +77,7 @@ def run(argv,name,login=False):
         tty.setraw(0,when=termios.TCSANOW)
         inputs=[0,master]
         while master in inputs:
+            if approvals:approvals.poll(lambda data:write_all(1,data))
             ready,_,_=select.select(inputs,[],[],.1)
             for fd in ready:
                 try:data=os.read(fd,4096)
@@ -128,6 +134,7 @@ def run(argv,name,login=False):
         if gui is not None:
             try:gui.wait(timeout=12)
             except subprocess.TimeoutExpired:pass
+        if approvals:approvals.close()
         relay.close()
         termios.tcsetattr(0,termios.TCSANOW,attributes)
         for sig,handler in previous.items():signal.signal(sig,handler)

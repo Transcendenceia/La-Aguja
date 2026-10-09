@@ -73,6 +73,14 @@ class RescueControlTests(unittest.TestCase):
             (base/'config/aguja-locale.json').write_text('{"language":"$(touch /tmp/invalid)"}')
             self.assertEqual(profile.apply_locale(None,root=base,runner=lambda *a,**k:None),profile.DEFAULT_LOCALE)
 
+    def test_visible_console_helper_rejects_non_vt_and_inactive_terminal(self):
+        import console_mode
+        with patch.object(console_mode.os,'geteuid',return_value=0),patch.object(console_mode.Path,'read_text',return_value='tty1'):
+            for args in [[],['/dev/sda','1'],['/dev/pts/0','1'],['/dev/tty2','1'],['/dev/tty1','3']]:
+                self.assertEqual(console_mode.main(args),1)
+        with patch.object(console_mode.os,'geteuid',return_value=1000):
+            self.assertEqual(console_mode.main(['/dev/tty1','1']),1)
+
     def test_locked_private_tailnet_state_does_not_block_rescue_home(self):
         import network
         with patch.object(network,'output',return_value=''),patch.object(network,'session',return_value={'ssh_auth_mode':'locked'}),patch.object(network.Path,'is_file',side_effect=PermissionError):

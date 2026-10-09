@@ -209,11 +209,19 @@ def main():
                     qmp_command("send-key", {"keys": [{"type": "qcode", "data": char}], "hold-time": 40})
                     time.sleep(.08)
                 qmp_command("send-key", {"keys": [{"type": "qcode", "data": "ret"}]})
-                time.sleep(5)
+                time.sleep(3)
                 local_check = "import sys,os,fcntl,array;sys.path.insert(0,'/usr/lib/aguja');import activity;s=activity.snapshot();assert any(x.get('transport')=='local' for x in s['sessions']);assert any(c.get('transport')=='local' and c.get('command')=='aguja status' and c.get('exit')==0 for c in s['commands']);f=os.open('/dev/tty1',os.O_RDONLY);a=array.array('i',[0]);fcntl.ioctl(f,0x4B3B,a);os.close(f);assert a[0]==1"
-                local_result = subprocess.run(remote + ["sudo -n python3 -c " + shlex.quote(local_check)], env=remote_env, capture_output=True, timeout=15)
+                graphical_deadline=time.monotonic()+20
+                while time.monotonic()<graphical_deadline:
+                    local_result = subprocess.run(remote + ["sudo -n python3 -c " + shlex.quote(local_check)], env=remote_env, capture_output=True, timeout=15)
+                    if local_result.returncode==0:break
+                    time.sleep(1)
                 (a.workdir / "local-panel-check.err").write_bytes(local_result.stderr)
                 if local_result.returncode:
+                    qmp_command('screendump',{'filename':str((a.workdir/'screenshots/local-panel-failed.png').resolve()),'format':'png'})
+                    diagnostic="import sys,os,json,pathlib;sys.path.insert(0,'/usr/lib/aguja');import activity;p=activity.read_processes();rows=[];allowed={'AGUJA_LOCAL_CONSOLE','AGUJA_CONSOLE_TTY','AGUJA_SESSION_ID','TERM'};[(rows.append({'command':r['command'],'env':{x.split('=',1)[0]:x.split('=',1)[1] for x in pathlib.Path('/proc/'+str(pid)+'/environ').read_bytes().decode(errors='replace').split('\\0') if '=' in x and x.split('=',1)[0] in allowed}})) for pid,r in p.items() if r['command'] in ('/usr/bin/python3 /usr/local/bin/aguja','/bin/zsh -l','/usr/bin/python3 /usr/lib/aguja/console_session.py')];print(json.dumps(rows))"
+                    detail=subprocess.run(remote+['sudo -n python3 -c '+shlex.quote(diagnostic)],env=remote_env,capture_output=True,timeout=20)
+                    (a.workdir/'local-panel-diagnostic.json').write_bytes(detail.stdout)
                     raise ValueError("Local shell trace or graphical panel reopening failed")
                 qmp_command("screendump", {"filename": str((a.workdir / "screenshots/local-panel-reopened.png").resolve()), "format": "png"})
                 # Exercise the real framebuffer dialogs without signing into AI.

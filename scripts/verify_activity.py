@@ -98,15 +98,27 @@ def verify(remote, env, workdir, screenshot=None, target_root='/data/workspace')
 
     # A real interactive SSH login exercises Zsh command_start and exit hooks.
     interactive = remote[:-1] + ['-tt', remote[-1]]
-    p = subprocess.Popen(interactive, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(interactive, env=dict(env,TERM='xterm'), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     try:
+        import select
+        def wait_prompt():
+            deadline=time.monotonic()+30;output=b''
+            while time.monotonic()<deadline:
+                if select.select([p.stdout],[],[],.5)[0]:
+                    part=os.read(p.stdout.fileno(),65536)
+                    if not part:raise ValueError('Interactive terminal closed before prompt')
+                    output+=part
+                    if b'\x1b[?2004h' in output:return
+            raise ValueError('Interactive terminal did not become ready')
+        wait_prompt()
         def confirmed_command(command,exit_code):
             p.stdin.write(command.encode()+b'\n');p.stdin.flush()
             deadline=time.monotonic()+45
             while time.monotonic()<deadline:
                 data=snapshot()
                 ids={session['id'] for session in data.get('sessions',[]) if session.get('mode')=='interactive'}
-                if any(c.get('session') in ids and c.get('command')==command and c.get('exit')==exit_code for c in data.get('commands',[])):return data
+                if any(c.get('session') in ids and c.get('command')==command and c.get('exit')==exit_code for c in data.get('commands',[])):
+                    wait_prompt();return data
                 time.sleep(.5)
             (workdir/'missing-interactive-snapshot.json').write_text(json.dumps(data))
             raise ValueError('Interactive command did not complete: '+command)

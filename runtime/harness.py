@@ -41,7 +41,7 @@ def invocation(name, mode, extras=()):
                  '-c', 'developer_instructions=' + json.dumps(SAFE_INSTRUCTIONS)]
     elif name == 'claude':
         settings = {'permissions': {'defaultMode': 'default', 'ask':
-            ['Bash', 'Read', 'Edit', 'Write', 'Glob', 'Grep', 'WebFetch', 'WebSearch', 'Task', 'Agent', 'mcp__*']}}
+            ['Bash', 'Read', 'Edit', 'Write', 'NotebookEdit', 'Skill', 'ToolSearch', 'Glob', 'Grep', 'WebFetch', 'WebSearch', 'Task', 'Agent', 'mcp__*']}}
         args += ['--permission-mode', 'default', '--settings', json.dumps(settings),
                  '--append-system-prompt', SAFE_INSTRUCTIONS]
     elif name == 'antigravity':

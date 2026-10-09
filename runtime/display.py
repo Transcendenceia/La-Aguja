@@ -8,6 +8,8 @@ import fcntl
 from functools import lru_cache
 import math
 import os
+import errno
+import subprocess
 from pathlib import Path
 import re
 import time
@@ -502,11 +504,20 @@ class Framebuffer:
             fcntl.ioctl(self.fd,0x4602,self.fix)
             self.raw_mode=pixel_format(self.var,self.fix)
             self.width,self.height=self.var.xres,self.var.yres
-            fcntl.ioctl(self.tty_fd,0x4B3A,1)  # KDSETMODE / KD_GRAPHICS
+            self.set_mode(1)  # KDSETMODE / KD_GRAPHICS
             self.graphics=True
         except BaseException:
             self.close()
             raise
+
+    def set_mode(self,mode):
+        try:
+            fcntl.ioctl(self.tty_fd,0x4B3A,mode)
+        except OSError as error:
+            if error.errno!=errno.EPERM or not self.owned_tty or os.environ.get('AGUJA_LOCAL_CONSOLE')!='1':raise
+            actual=os.ttyname(self.tty_fd)
+            result=subprocess.run(['sudo','-n','/usr/bin/python3','/usr/lib/aguja/console_mode.py',actual,str(mode)],stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=8)
+            if result.returncode:raise error
 
     def present(self,image):
         if image.size!=(self.width,self.height):
@@ -535,7 +546,7 @@ class Framebuffer:
     def close(self):
         if self.graphics:
             try:
-                fcntl.ioctl(self.tty_fd,0x4B3A,0)  # Always restore KD_TEXT
+                self.set_mode(0)  # Always restore KD_TEXT
             except OSError:
                 pass
             finally:

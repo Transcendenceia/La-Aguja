@@ -10,3 +10,11 @@
 - Trabajos pesados: comprobar memoria disponible, una tarea pesada por host, CPU/RAM/swap/IO acotados y baja prioridad. En CachyOS reservar dos núcleos físicos y al menos 2 GiB fuera del presupuesto de la tarea. No alterar límites de OpenClaw ni aplicaciones del propietario.
 
 La imagen completa incluye clientes externos y conserva distribución personal; esta actualización no publica sus binarios ni regraba ningún pendrive. Preparar, probar en VM y arrancar en hardware son evidencias distintas.
+
+## Validación de la entrega · 9 de octubre
+
+Imagen final SHA-256 `0cefb68bf75118cf290d0381225ebb03341ea11843c355b257587ad2ed6b7e4c` (3.882.876.928 bytes). BIOS y UEFI, con perfil directo y cifrado: cuatro arranques y cuatro reinicios aprobados en clones QEMU/KVM. Incluye versiones de los cuatro CLI sin red, salida de comandos, regreso gráfico del panel y capturas del selector Seguro/donación. En ambos casos cifrados se comprobó el desbloqueo con `aguja`, teclado correcto antes de desbloquear y cambio efectivo de mapa de teclas conservado tras reiniciar.
+
+Runtime: 166 aprobadas y una omitida; escritorio: 99 aprobadas y diez omitidas nativas Windows. Electron Linux empaquetado: 38 comprobaciones; preparación y lectura real de imágenes GPT/FAT directas/cifradas; contenido Windows/Linux coincidente en 28 archivos. EXE Windows compilado y verificado como paquete, no ejecutado nuevamente en Windows en esta entrega. No se realizaron nuevas inferencias con cuentas reales ni grabación física de USB.
+
+Entrega privada en `Descargas/LA-AGUJA-0.9.7`, con imagen, cuatro formatos de imager, capturas, instrucciones y hashes. La candidata previa de esa carpeta se conservó recuperablemente. Donaciones web/GitHub publicadas sin cambiar los enlaces a versiones públicas previas; la imagen personal completa no se publicó como release.

@@ -39,7 +39,7 @@
     ]
   ],
   "imagerTitle": "Prepara la USB con Flash Imager",
-  "imagerText": "L’app per Windows e Linux scarica e verifica l’immagine, scrive la USB e salva le impostazioni. Puoi preparare SSH, agenti IA e la tua rete Tailscale o Headscale. Su Windows può gestire chiavi BitLocker disponibili. Versione 0.9.4; la scrittura cancella il contenuto della USB.",
+  "imagerText": "L’app per Windows e Linux scarica e verifica l’immagine, scrive la USB e salva le impostazioni. Puoi preparare SSH, agenti IA e la tua rete Tailscale o Headscale. Su Windows può gestire chiavi BitLocker disponibili. Versione 0.9.7; la scrittura cancella il contenuto della USB.",
   "portable": "Linux portatile",
   "imagesTitle": "Scarica l’immagine di La Aguja",
   "imagesText": "Rescue Disk 0.9.0 è il Linux che si avvia sul computer. Le immagini sono sul nostro sito; Imager e codice su GitHub. L’Imager verifica la firma del catalogo e lo SHA-256 del download. Nessun account LA AGUJA necessario.",

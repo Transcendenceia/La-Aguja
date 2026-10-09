@@ -6,9 +6,11 @@
 
 **LA AGUJA Rescue Disk** is experimental x86-64 live Linux for a USB drive. Boot before the installed operating system, inspect hardware, recover authorised data and work locally or over SSH. Personal complete images include Codex CLI, OpenCode, Claude Code and Antigravity, independently of whether you prepare credentials. The existing public 0.9.0 image includes only Codex and OpenCode. Cloud AI needs Internet and your own provider account; traditional tools can work offline.
 
-**Current versions:** Flash Imager **0.9.4** · Rescue Disk image **0.9.0**. These versions are independent.
+**Current versions:** Flash Imager **0.9.7** · Rescue Disk image **0.9.0**. These versions are independent.
 
 [Website and downloads](https://aguja.transcendenceia.net/en) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Latest Imager release](https://github.com/Transcendenceia/La-Aguja/releases/latest) · [TranscendenceIA](https://www.transcendenceia.net/proyectos/la-aguja-rescue-disk)
+
+<p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-en.svg" width="360" alt="Buy us a coffee · Ko-fi"></a></p>
 
 ## Start here
 

@@ -3,6 +3,7 @@
 import html
 import json
 import re
+import sys
 from pathlib import Path
 from html.parser import HTMLParser
 
@@ -22,7 +23,7 @@ def language_nav(lang, suffix=''):
         f'<a href="/{code}{suffix}" lang="{code}" hreflang="{code}"'+ (' aria-current="page"' if code==lang else '') + f'>{CONTENT[code]["name"]}</a>' for code in LANGS) + '</nav>'
 
 def metadata(lang, suffix, title, description=''):
-    return f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{ORIGIN}/{lang}{suffix}">' + ''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN}/{code}{suffix}">' for code in LANGS) + f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/en{suffix}"><link rel="stylesheet" href="/assets/locales-20261008.css">'
+    return f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{ORIGIN}/{lang}{suffix}">' + ''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN}/{code}{suffix}">' for code in LANGS) + f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/en{suffix}"><link rel="stylesheet" href="/assets/locales-20261008.css"><link rel="stylesheet" href="/assets/support-20261009-v2.css">'
 
 # Use fixed original artwork and preserve the long Spanish reference separately.
 original = (PUBLIC / 'index.html').read_text()
@@ -64,7 +65,7 @@ def translated_figures(identifier, lang, title):
 
 def common_header(lang, doc=False):
     c=CONTENT[lang]
-    return f'<header'+(' class="doc-header"' if doc else '')+f'><a class="brand" href="/{lang}">{images[0]}<span>LA AGUJA<small>TRANSCENDENCEIA / RESCUE DISK</small></span></a><nav class="site-nav" aria-label="{esc(c["nav"][1])}"><a href="/{lang}#application">{esc(c["nav"][0])}</a><a href="/{lang}/docs">{esc(c["nav"][1])}</a><a href="{GH}">{esc(c["nav"][2])}</a></nav></header>'
+    return f'<header'+(' class="doc-header"' if doc else '')+f'><a class="brand" href="/{lang}">{images[0]}<span>LA AGUJA<small>TRANSCENDENCEIA / RESCUE DISK</small></span></a><nav class="site-nav" aria-label="{esc(c["nav"][1])}"><a href="/{lang}#application">{esc(c["nav"][0])}</a><a href="/{lang}/docs">{esc(c["nav"][1])}</a><a href="{GH}">{esc(c["nav"][2])}</a><a class="support-nav" href="/{lang}#donate"><img src="/assets/support-icon.svg" width="28" height="28" alt="" aria-hidden="true">{esc(c["donation"]["title"])}</a></nav></header>'
 
 def home_sections(lang):
     c = CONTENT[lang]
@@ -97,14 +98,14 @@ def home(lang):
     c=CONTENT[lang]
     hero=''.join(esc(x)+'<br>' for x in c['hero'][:2])+f'<span>{esc(c["hero"][2])}</span>'
     mascot = re.sub(r'alt="[^"]*"',f'alt="{esc(c["mascotAlt"])}"',images[1])
-    installers=[(f'aguja-flash-imager-{IMAGER_VERSION}-win-x64.exe','Windows 10 / 11 (.exe)'),(f'aguja-flash-imager-{IMAGER_VERSION}-x86_64.AppImage','Linux AppImage'),(f'aguja-flash-imager-{IMAGER_VERSION}-amd64.deb','Debian / Ubuntu'),(f'aguja-flash-imager-{IMAGER_VERSION}-linux-x64.tar.gz',c['portable'])]
+    installers=[(f'aguja-flash-imager-{IMAGER_VERSION}-win-x64.exe','Windows 10 / 11 (.exe)'),(f'aguja-flash-imager-{IMAGER_VERSION}-x86_64.AppImage','Linux AppImage'),(f'aguja-flash-imager-{IMAGER_VERSION}-amd64.deb','Debian / Ubuntu'),(f'aguja-flash-imager-{IMAGER_VERSION}-x64.tar.gz',c['portable'])]
     links=''.join(f'<a href="{GH}/releases/download/{IMAGER_TAG}/{name}">{esc(label)} ↗</a>' for name,label in installers)
     imageurls=['/releases/aguja-0.9.0-amd64.img.zst','/releases/aguja-0.9.0-amd64.iso',GH+'/releases/download/v0.9.1/SHA256SUMS',GH+'/releases/tag/v0.9.1']
     return f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"",c["siteTitle"],c["lead"])}<link rel="stylesheet" href="/assets/app.css"><link rel="stylesheet" href="/assets/meaning-20261008-v1.css">{icon}</head><body>{common_header(lang)}{language_nav(lang)}<main><section id="landing"><div class="landing-hero"><div class="hero-copy"><div class="eyebrow">{esc(c["eyebrow"])}</div><h1>{hero}</h1><p class="lead">{esc(c["lead"])}</p><div class="hero-actions"><a class="button-link" href="#application">{esc(c["actions"][0])} ↘</a><a class="button-link button-ghost" href="/{lang}/docs">{esc(c["actions"][1])} ↗</a></div><p class="hero-note">{esc(c["note"])}</p></div><aside class="needle-lab"><div class="panel-topline"><span>LA AGUJA / RESCUE DISK</span><i aria-hidden="true"></i></div><div class="needle-stage">{mascot}</div><div class="lab-caption"><span class="section-code">{esc(c["caption"][0])}</span><strong>{esc(c["caption"][1])}</strong><p>{esc(c["caption"][2])}</p></div></aside></div><div class="cards">'+''.join(f'<article><span class="step">{i+1:02}</span><h2>{esc(title)}</h2><p>{esc(text)}</p></article>' for i,(title,text) in enumerate(c['steps']))+f'</div>{home_sections(lang)}<section class="downloads" id="application"><span class="step">01 / FLASH IMAGER</span><h2>{esc(c["imagerTitle"])}</h2><p>{esc(c["imagerText"])}</p><div class="installer-links">{links}</div><p><a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-windows">SHA-256 · Windows {IMAGER_VERSION}</a> · <a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-linux">SHA-256 · Linux {IMAGER_VERSION}</a></p></section>{skill_section(lang)}<section class="downloads" id="images"><span class="step">03 / RESCUE DISK</span><h2>{esc(c["imagesTitle"])}</h2><p>{esc(c["imagesText"])}</p><div class="installer-links">'+''.join(f'<a href="{url}">{esc(label)}</a>' for url,label in zip(imageurls,c['imageLinks']))+f'</div><p>{esc(c["imageNote"])}</p></section>{donation_section(lang)}</section></main><footer><a href="https://www.transcendenceia.net">LA AGUJA / TRANSCENDENCEIA ↗</a><a href="/{lang}/privacy">{esc(c["privacy"])}</a><span>{esc(c["footer"])}</span></footer></body></html>'
 
 def donation_section(lang):
     c=CONTENT[lang]['donation']
-    return f'<section class="downloads" id="donate"><h2>{esc(c["title"])}</h2><p>{esc(c["message"])}</p><details><summary>{esc(c["title"])} · Ko-fi ↗</summary><img src="/assets/donation-qr.png" width="260" height="260" alt="Ko-fi QR"><p><a class="button-link" href="https://ko-fi.com/transcendenceia" target="_blank" rel="noopener noreferrer">Ko-fi · Transcendence IA ↗</a></p><p>{esc(c["optional"])}</p></details></section>'
+    return f'<section class="downloads" id="donate"><div class="support-heading"><img src="/assets/support-icon.svg" width="64" height="64" alt="" aria-hidden="true"><h2>{esc(c["title"])}</h2></div><p>{esc(c["message"])}</p><details><summary>{esc(c["title"])} · Ko-fi ↗</summary><img class="support-qr" src="/assets/donation-qr.png" width="260" height="260" alt="Ko-fi QR"><p><a class="button-link" href="https://ko-fi.com/transcendenceia" target="_blank" rel="noopener noreferrer">Ko-fi · Transcendence IA ↗</a></p><p>{esc(c["optional"])}</p></details></section>'
 
 def manual(lang):
     c=CONTENT[lang];ui=c['docUI']
@@ -132,6 +133,8 @@ for lang in LANGS:
     folder=PUBLIC / lang
     folder.mkdir(exist_ok=True)
     (folder/'index.html').write_text(home(lang))
+    if '--home-only' in sys.argv:
+        continue
     (folder/'docs.html').write_text(manual(lang))
     c=CONTENT[lang]
     (folder/'privacy.html').write_text(f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"/privacy",c["privacy"]+" · LA AGUJA")}<link rel="stylesheet" href="/assets/theme.css"></head><body>{common_header(lang)}{language_nav(lang,"/privacy")}<main><h1>{esc(c["privacyTitle"])}</h1>'+''.join(f'<p>{esc(text)}</p>' for text in c['privacyParagraphs'])+f'<p><a href="{GH}/blob/main/NOTICE.md">GPL-3.0-or-later / NOTICE</a></p></main></body></html>')
@@ -148,4 +151,4 @@ for lang in LANGS:
         (ROOT/f'docs/{lang}/USER-GUIDE.md').write_text('\n\n'.join(lines)+'\n')
 
 (PUBLIC/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{ORIGIN}/{lang}{suffix}</loc></url>' for lang in LANGS for suffix in ('','/docs','/privacy'))+'</urlset>')
-print('Built 24 locale pages and 8 repository guides.')
+print('Built 8 home pages.' if '--home-only' in sys.argv else 'Built 24 locale pages and 8 repository guides.')

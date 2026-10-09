@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="94" viewBox="0 0 360 94" role="img" aria-label="Support LA AGUJA"><rect x="1" y="1" width="358" height="92" rx="18" fill="#182534" stroke="#ffcc72" stroke-width="2"/><svg x="15" y="15" width="64" height="64" viewBox="0 0 64 64">
+  <rect x="2" y="2" width="60" height="60" rx="18" fill="#253344" stroke="#ffcc72" stroke-width="2"/>
+  <path d="M16 25h28v15a12 12 0 0 1-12 12h-4a12 12 0 0 1-12-12z" fill="#78d8ed"/>
+  <path d="M44 28h5a7 7 0 0 1 0 14h-5" fill="none" stroke="#78d8ed" stroke-width="4"/>
+  <path d="M31 17c-8-10-19 3 0 14 19-11 8-24 0-14" fill="#ffcc72" stroke="#253344" stroke-width="2"/>
+  <path d="M15 55h35" stroke="#ffcc72" stroke-width="3" stroke-linecap="round"/>
+</svg><g font-family="Arial, sans-serif"><text x="96" y="39" fill="#ffdc9a" font-size="22" font-weight="700">Support LA AGUJA</text><text x="96" y="66" fill="#d3deec" font-size="16">Buy us a coffee · Ko-fi</text></g></svg>

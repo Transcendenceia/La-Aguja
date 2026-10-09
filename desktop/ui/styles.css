@@ -10,3 +10,5 @@
 
 
 #donation-dialog{max-width:540px}#donation-dialog img{display:block;margin:20px auto;max-width:100%;height:auto}#donation-dialog p{line-height:1.65}#donation-dialog form{display:inline-block;margin-left:12px}
+
+.support-button{display:flex;align-items:center;gap:11px;text-align:left;width:100%;min-height:76px;padding:13px 11px;margin:22px 0 20px;background:#253344;border:1px solid #c69b57;border-radius:13px;color:#ffdc9a}.support-button img{width:44px;height:44px;flex:none}.support-button span{min-width:0}.support-button strong{display:block;font-size:14px;line-height:1.35}.support-button small{display:block;font-size:12px;margin-top:5px;color:#c7d0de}.support-button:hover{background:#33445b;border-color:#ffcc72}.support-button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}

@@ -39,7 +39,7 @@
     ]
   ],
   "imagerTitle": "Prepara tu USB con Flash Imager",
-  "imagerText": "La aplicación para Windows y Linux descarga y verifica la imagen, prepara el USB y guarda tu configuración. También permite preparar acceso SSH, agentes IA y tu propia red Tailscale o Headscale. En Windows puede gestionar claves de BitLocker disponibles. Versión 0.9.4; grabar el USB borra su contenido.",
+  "imagerText": "La aplicación para Windows y Linux descarga y verifica la imagen, prepara el USB y guarda tu configuración. También permite preparar acceso SSH, agentes IA y tu propia red Tailscale o Headscale. En Windows puede gestionar claves de BitLocker disponibles. Versión 0.9.7; grabar el USB borra su contenido.",
   "portable": "Linux portátil",
   "imagesTitle": "Descarga la imagen de La Aguja",
   "imagesText": "Rescue Disk 0.9.0 es el Linux que arranca en el equipo. Las imágenes están en nuestra web; el Imager y el código, en GitHub. El Imager verifica la firma del catálogo y el SHA-256 de la descarga. No necesitas una cuenta de LA AGUJA.",

@@ -105,6 +105,8 @@ SSH/serie/sin pantalla conservan métodos nativos; no se reenvía automáticamen
 
 Las imágenes privadas y plantillas `.aguja` pueden contener credenciales. No las publiques. `aguja password` conserva un cambio de contraseña SSH; `sudo passwd aguja` solo cambia la sesión. Contraseña vacía **con** clave pública permite solo clave; **sin** clave mantiene el acceso público de fábrica.
 
+El perfil cifrado fuerza `persistent_home=no` al arrancar; HOME persistente sin cifrar corresponde a configuraciones antiguas/en texto plano.
+
 ## Documentación e idiomas
 
 | Siguiente lectura | English | Español |

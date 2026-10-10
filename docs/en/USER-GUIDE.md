@@ -1,13 +1,15 @@
-# User guide · LA AGUJA Rescue Disk
+# User guide · LA AGUJA
 
 [Website](https://aguja.transcendenceia.net/en/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## A small entry point. Full control.
+## A launchpad, not just a lifeboat.
 
-LA AGUJA is an x86-64 rescue Linux that boots from a USB before the installed operating system. Flash Imager runs on a working Windows or Linux computer and prepares that USB; the Rescue Disk runs on the computer being examined. The live system offers network access, SSH, diagnostics and AI-tool integration without a conventional desktop. Booting does not automatically repair, install, mount or write to internal disks.
+LA AGUJA turns a compatible PC into a Linux workbench before its installed operating system starts — even when the disk is blank. Give your agent a mission: build, configure, experiment, migrate or recover.
 
-You can work locally, connect from another computer over SSH, or optionally register the live system with your own Tailscale/Headscale network. Cloud AI requires Internet access and your own compatible provider account; traditional rescue tools can work offline. LA AGUJA has no project account, central relay or hosted remote console. The image is experimental, not a guarantee of compatibility with every computer.
+The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.
+
+Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU/KVM, container engines or build tools need additional installation, enough RAM/storage and hardware support. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model.
 
 [↗](https://aguja.transcendenceia.net/en/docs#que-es)
 
@@ -199,11 +201,9 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/en/docs#herramientas)
 
-## Ten practical workflows
+## Eight missions. Rescue is only one.
 
-1. Inventory a non-booting computer before changing it. 2. Copy authorised files to a different healthy destination. 3. Image a failing disk with ddrescue and retain its map. 4. Inspect partitions before any TestDisk write. 5. Recover files with PhotoRec to another device. 6. Inspect SMART/NVMe health without treating it as a guarantee. 7. Diagnose bootloader/UEFI problems after backup. 8. Access a BitLocker/LUKS volume with the owner’s correct key. 9. Provide support over authorised LAN/tailnet SSH. 10. Assist an OS installation only after approval of the exact target.
-
-These are adaptable procedures, not automatically executed repairs or guaranteed outcomes. For each workflow identify the original, destination and recovery route first; confirm the final observable result. Preserve logs without credentials and avoid writing recovered data onto the source.
+Build on the included Linux tools or add the dependencies your project needs. These are adaptable missions, not one-click features or claims that every scenario has already been tested.
 
 [↗](https://aguja.transcendenceia.net/en/docs#casos)
 

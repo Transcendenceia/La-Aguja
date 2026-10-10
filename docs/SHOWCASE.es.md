@@ -1,7 +1,8 @@
-# Ejemplos · ocho misiones para LA AGUJA
+# Procedimientos de rescate · LA AGUJA
 
 [English](SHOWCASE.md) · [Primeros pasos](GETTING-STARTED.es.md) · [Documentación](README.es.md)
 
+[Más allá del rescate: construir, configurar y experimentar](PLATFORM.es.md).
 Estas son **propuestas prácticas y prompts adaptables**, no intervenciones ejecutadas, testimonios ni garantías. Las capturas de [producto real](SCREENSHOTS.es.md) provienen de QA sintético y no demuestran estos resultados. Las herramientas aportan capacidad; tú defines autorización y verificas la entrega.
 
 ## Acuerdo antes del primer comando

@@ -1,16 +1,18 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk con nuestra mascota Agujita"></p>
 
-<p align="center"><strong>Una entrada pequeña. Control completo.</strong><br>Un Linux de rescate con las herramientas que necesita tu agente IA.</p>
+<p align="center"><strong>Tu IA. Tu equipo. Antes del sistema instalado.</strong><br>Un taller Linux arrancable para construir, configurar, experimentar y recuperar.</p>
 
-<p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/SHOWCASE.es.md">Explorar ejemplos</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
+<p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
 **Flash Imager 0.9.9 · Rescue Disk 0.9.9 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
-Cuando un ordenador no arranca, tus herramientas no deberían quedarse atrapadas dentro. **LA AGUJA Rescue Disk** arranca desde un USB antes del sistema instalado y reúne diagnóstico, recuperación, SSH y **Codex CLI, OpenCode, Claude Code y Antigravity** en la imagen de fábrica completa 0.9.9. Trabaja frente al equipo o permite la intervención de un operador autorizado por LAN o tu propia red Tailscale/Headscale. La autenticación IA es opcional; las herramientas tradicionales pueden funcionar sin Internet.
+**Tu equipo no necesita un sistema instalado para empezar su próximo proyecto.** LA AGUJA arranca desde USB un Linux independiente, incluso con el disco vacío. Lleva **Codex CLI, OpenCode, Claude Code y Antigravity**, herramientas Linux con acceso root y SSH opcional al hardware: instala y configura sistemas, prepara servidores, compila software, amplía la sesión a un laboratorio virtual, migra almacenamiento o recupera datos. Rescatar es una misión, no todo el producto.
 
-**Tu PC operativo → Flash Imager → tu USB de rescate → el equipo que necesita ayuda.**
+**Tu PC operativo → Flash Imager → tu USB live → la máquina donde quieres construir.**
+
+El live usa una **capa de escritura en RAM sobre una imagen USB de solo lectura**; no copia todo el USB a RAM ni ejecuta IA en firmware. No cambia discos internos automáticamente al inicio. Guarda resultados útiles en el almacenamiento elegido: la RAM es temporal, pero escribir deliberadamente en discos sí persiste. La IA en nube necesita red y tu cuenta; las herramientas tradicionales pueden trabajar sin Internet. [Explora ocho misiones ambiciosas](docs/PLATFORM.es.md).
 
 Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí requiere Internet, cuenta compatible propia y cuota disponible. Las licencias y condiciones externas siguen siendo independientes: [NOTICE](NOTICE.es.md).
 
@@ -32,12 +34,13 @@ Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí
 
 | Quieres… | Empieza por… | Con qué deberías terminar |
 | --- | --- | --- |
-| Entender por qué no arranca un PC | [Primer diagnóstico](docs/SHOWCASE.es.md#first-diagnosis) | Inventario y plan priorizado, no reparación a ciegas |
-| Recuperar fotos o trabajo | [Rescatar archivos](docs/SHOWCASE.es.md#file-rescue) | Copias legibles en un destino distinto |
-| Preservar un disco averiado | [Imagen primero](docs/SHOWCASE.es.md#image-first) | Imagen, mapa e informe honesto de sectores ilegibles |
-| Ayudar a distancia | [Taller remoto](docs/SHOWCASE.es.md#remote-workbench) | SSH comprobado y registro de intervención acordado |
-| Ensayar antes de tocar el original | [Ensayo de rescate](docs/SHOWCASE.es.md#rescue-rehearsal) | Plan probado sobre una copia, con incertidumbres explícitas |
-| Preparar medios mediante un agente | [Flash Imager Agent Skill](skills/flash-imager/SKILL.md) | Imagen privada verificada; sin grabación USB automática |
+| Instalar y configurar Linux en un SSD vacío | [Constructor de sistemas](docs/PLATFORM.es.md#1-de-ssd-vacío-a-linux-configurado) | Sistema configurado y primer arranque verificado |
+| Ejecutar invitados sin instalar el anfitrión | [Datacenter de bolsillo](docs/PLATFORM.es.md#2-datacenter-de-bolsillo-sin-instalar-el-anfitrión) | Laboratorio con recursos acotados, QEMU añadido e imágenes guardadas |
+| Usar un PC disponible para una demo LAN o taller | [Servicios pop-up](docs/PLATFORM.es.md#3-taller-lan-o-estación-de-demos-pop-up) | Servicio temporal probado y cierre limpio |
+| Compilar fuera del entorno del disco | [Fábrica de software](docs/PLATFORM.es.md#4-fábrica-de-software-independiente-del-disco) | Scripts reproducibles, pruebas y artefactos exportados |
+| Preparar un NAS o servidor de aplicaciones | [Inicio bare-metal](docs/PLATFORM.es.md#5-preparar-un-nas-o-servidor-de-aplicaciones-desde-bare-metal) | Servicios instalados comprobados desde cliente autorizado |
+| Migrar almacenamiento o probar otra configuración | [Migraciones y experimentos](docs/PLATFORM.es.md#6-taller-de-migraciones-fuera-de-ambos-sistemas) | Datos verificados, reversión y recetas repetibles |
+| Diagnosticar o recuperar el sistema existente | [Procedimientos de rescate](docs/SHOWCASE.es.md) | Resultados observables y respaldos conservados |
 
 Son **ideas de trabajo y plantillas de prompts**, no testimonios ni casos de éxito inventados. Cada ejemplo incluye herramientas, entregables esperados y condiciones de parada.
 
@@ -78,6 +81,9 @@ Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenCla
 | Conectividad | NetworkManager, Ethernet/Wi-Fi, OpenSSH, Avahi/mDNS, tailnet propia opcional |
 | Clientes IA | Codex CLI, OpenCode, Claude Code, Antigravity; instalados independientemente de preparar credenciales |
 | Operación | Zsh, tmux, Python, curl, git, jq, ripgrep, nano |
+| Construcción de sistemas | debootstrap, arch-install-scripts, herramientas de particionado/archivos y GRUB |
+
+**Amplía según tu misión:** puedes añadir QEMU/KVM, motores de contenedores, compiladores y SDK si son compatibles con kernel live, hardware y recursos. No se prometen incluidos ni como funciones de un clic. La plataforma aporta Linux independiente y agentes capaces, no un hipervisor integrado, modelo IA local ni orquestador automático de equipos. [Requisitos, prompts y entregas](docs/PLATFORM.es.md).
 
 **Nuevo en 0.9.9:** historial de consola local con rueda, hasta 10.000 líneas en RAM sin transcripciones guardadas; baja hasta el prompt o pulsa Esc para volver. SSH conserva el comportamiento del terminal cliente. Imager comprueba espacio antes de copiar una imagen privada; Windows permite elegir otra carpeta de trabajo. [Notas de versión](docs/RELEASE-0.9.9.md).
 
@@ -112,6 +118,7 @@ El perfil cifrado fuerza `persistent_home=no` al arrancar; HOME persistente sin 
 | Siguiente lectura | English | Español |
 | --- | --- | --- |
 | Preparar y arrancar | [Getting started](docs/GETTING-STARTED.md) | [Primeros pasos](docs/GETTING-STARTED.es.md) |
+| Construir, configurar y experimentar | [Platform missions](docs/PLATFORM.md) | [Misiones de la plataforma](docs/PLATFORM.es.md) |
 | Prompts, herramientas y entregables | [Showcase](docs/SHOWCASE.md) | [Ejemplos](docs/SHOWCASE.es.md) |
 | Diagnóstico por capas | [Troubleshooting](docs/TROUBLESHOOTING.md) | [Solución de problemas](docs/TROUBLESHOOTING.es.md) |
 | Capturas reales | [Gallery](docs/SCREENSHOTS.md) | [Galería](docs/SCREENSHOTS.es.md) |
@@ -133,6 +140,6 @@ Código, documentación y arte propios: **GPL-3.0-or-later**. Las concesiones MI
 
 ## Apoya el proyecto
 
-Detrás de un equipo averiado hay recuerdos, trabajo y personas. Si LA AGUJA te ayuda, un café ayuda a que el proyecto siga adelante. Donar es opcional; las herramientas de rescate siguen disponibles.
+Cada máquina puede ser el comienzo de algo nuevo. Si LA AGUJA te ayuda a construir, experimentar o recuperar, un café ayuda a que el proyecto siga adelante. Donar es opcional; las herramientas siguen disponibles.
 
 <p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-es.svg" width="360" alt="Invítanos a un café · Ko-fi"></a></p>

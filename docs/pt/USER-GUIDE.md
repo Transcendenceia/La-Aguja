@@ -1,13 +1,15 @@
-# Guia do utilizador · LA AGUJA Rescue Disk
+# Guia do utilizador · LA AGUJA
 
 [Website](https://aguja.transcendenceia.net/pt/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Pequena entrada. Controlo completo.
+## Uma plataforma de lançamento, não apenas um salva-vidas.
 
-LA AGUJA é um Linux de resgate x86-64 que arranca do USB antes do sistema instalado. O Imager prepara o USB num Windows/Linux funcional; o Rescue Disk funciona no computador examinado. Arrancar não monta, repara nem escreve automaticamente nos discos internos.
+LA AGUJA transforma um PC compatível em uma oficina Linux antes de iniciar o sistema instalado, mesmo com o disco vazio. Dê uma missão ao agente: construir, configurar, experimentar, migrar ou recuperar.
 
-Trabalha localmente ou por SSH, com Tailscale/Headscale opcional. IA na nuvem exige Internet e conta própria; ferramentas tradicionais podem funcionar offline. Sem conta LA AGUJA nem relay central. Projeto experimental, sem compatibilidade universal garantida.
+A sessão live usa uma camada gravável em RAM sobre a imagem USB somente leitura. É Linux, não firmware, e o USB inteiro não é copiado para RAM. Os discos internos ficam intactos ao iniciar; você decide quando usá-los para gravação.
+
+Inclui clientes de IA com acesso root, SSH, Python, Git, ferramentas de discos, debootstrap e arch-install-scripts. Amplie com pacotes compatíveis: QEMU/KVM, motores de contêineres e ferramentas de compilação exigem instalação adicional, RAM/armazenamento suficientes e hardware compatível. Salve os resultados importantes explicitamente; a RAM é temporária. IA na nuvem exige rede e sua conta; não há modelo local incluído.
 
 [↗](https://aguja.transcendenceia.net/pt/docs#que-es)
 
@@ -199,11 +201,9 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/pt/docs#herramientas)
 
-## Dez percursos práticos
+## Oito missões. Recuperar é só uma.
 
-1. Inventário de PC sem arranque. 2. Cópia autorizada para outro destino. 3. Imagem ddrescue com mapa. 4. Inspeção antes de TestDisk. 5. PhotoRec para outro disco. 6. SMART/NVMe. 7. Diagnóstico UEFI/bootloader após cópia. 8. BitLocker/LUKS com chave certa. 9. Suporte SSH autorizado. 10. Instalação de OS só num alvo aprovado.
-
-Procedimentos adaptáveis, não reparações automáticas nem garantias. Define origem, destino e retorno; valida o resultado observável. Não recuperes dados para o próprio disco de origem.
+Use as ferramentas Linux incluídas ou adicione dependências do projeto. São missões adaptáveis, não funções de um clique nem cenários todos já testados.
 
 [↗](https://aguja.transcendenceia.net/pt/docs#casos)
 

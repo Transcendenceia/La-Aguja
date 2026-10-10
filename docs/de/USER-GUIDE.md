@@ -1,13 +1,15 @@
-# Benutzerhandbuch · LA AGUJA Rescue Disk
+# Benutzerhandbuch · LA AGUJA
 
 [Website](https://aguja.transcendenceia.net/de/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Kleiner Einstieg. Volle Kontrolle.
+## Eine Startrampe, nicht nur ein Rettungsring.
 
-LA AGUJA ist ein x86-64 Rettungs-Linux, das vor dem installierten Betriebssystem vom USB-Stick startet. Flash Imager bereitet den Stick auf einem funktionierenden Windows-/Linux-PC vor; Rescue Disk läuft auf dem untersuchten Computer. Beim Start werden interne Datenträger nicht automatisch eingebunden, repariert oder beschrieben.
+LA AGUJA macht einen kompatiblen PC zur Linux-Werkstatt, bevor sein installiertes Betriebssystem startet — auch bei leerer Festplatte. Gib deinem Agenten einen Auftrag: bauen, konfigurieren, experimentieren, migrieren oder retten.
 
-Arbeite lokal oder per SSH, optional über dein Tailscale/Headscale-Netz. Cloud-KI benötigt Internet und dein eigenes Anbieterkonto; klassische Werkzeuge können offline arbeiten. Es gibt kein LA AGUJA Konto oder zentrales Relay. Das Produkt ist experimentell und garantiert nicht jede Hardware.
+Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.
+
+Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: QEMU/KVM, Container-Engines oder Build-Werkzeuge erfordern zusätzliche Installation, genügend RAM und Speicher sowie passende Hardware. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten.
 
 [↗](https://aguja.transcendenceia.net/de/docs#que-es)
 
@@ -199,11 +201,9 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/de/docs#herramientas)
 
-## Zehn praktische Abläufe
+## Acht Missionen. Rettung ist nur eine davon.
 
-1. Nicht bootenden PC inventarisieren. 2. Erlaubte Dateien auf ein anderes Ziel kopieren. 3. Defektes Laufwerk mit ddrescue und Map abbilden. 4. Partitionen vor TestDisk-Schreibzugriff prüfen. 5. PhotoRec auf ein separates Ziel anwenden. 6. SMART/NVMe untersuchen. 7. UEFI/Bootloader nach Sicherung diagnostizieren. 8. BitLocker/LUKS mit richtigem Schlüssel öffnen. 9. Autorisierten SSH-Support leisten. 10. OS-Installation nur auf ausdrücklich freigegebenem Ziel begleiten.
-
-Anpassbare Verfahren, keine automatischen Reparaturen oder garantierten Ergebnisse. Bestimme Quelle, Ziel und Rückweg, prüfe das beobachtbare Ergebnis. Keine geretteten Daten auf die Quelle schreiben.
+Nutze die enthaltenen Linux-Werkzeuge oder ergänze Projektabhängigkeiten. Das sind anpassbare Missionen, keine Ein-Klick-Funktionen und keine bereits vollständig getesteten Szenarien.
 
 [↗](https://aguja.transcendenceia.net/de/docs#casos)
 

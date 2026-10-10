@@ -1,13 +1,15 @@
-# Guide d’utilisation · LA AGUJA Rescue Disk
+# Guide d’utilisation · LA AGUJA
 
 [Website](https://aguja.transcendenceia.net/fr/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Une petite entrée. Un contrôle complet.
+## Une rampe de lancement, pas seulement une bouée.
 
-LA AGUJA est un Linux de secours x86-64 démarré depuis une clé USB avant le système installé. Flash Imager prépare la clé sur un ordinateur Windows ou Linux fonctionnel ; le Rescue Disk s’exécute sur l’ordinateur à examiner. Le démarrage ne monte, ne répare et ne modifie pas automatiquement les disques internes.
+LA AGUJA transforme un PC compatible en atelier Linux avant le démarrage du système installé, même avec un disque vide. Donnez une mission à votre agent : construire, configurer, expérimenter, migrer ou récupérer.
 
-Travaillez localement ou par SSH, avec un réseau Tailscale/Headscale facultatif. L’IA distante nécessite Internet et votre propre compte fournisseur ; les outils classiques peuvent fonctionner hors ligne. Aucun compte LA AGUJA ni relais central. Le produit est expérimental, sans garantie de compatibilité universelle.
+La session live utilise une couche inscriptible en RAM sur l’image USB en lecture seule. Il s’agit de Linux, pas du firmware ; toute la clé USB n’est pas copiée en RAM. Les disques internes restent intacts au démarrage ; vous choisissez ensuite de les utiliser.
+
+Inclus : clients IA avec accès root, SSH, Python, Git, outils de stockage, debootstrap et arch-install-scripts. Ajoutez des paquets compatibles : QEMU/KVM, moteurs de conteneurs et outils de compilation nécessitent une installation supplémentaire, assez de RAM et de stockage et un matériel compatible. Enregistrez explicitement les résultats importants ; la RAM est temporaire. L’IA cloud exige le réseau et votre compte ; aucun modèle local n’est inclus.
 
 [↗](https://aguja.transcendenceia.net/fr/docs#que-es)
 
@@ -199,11 +201,9 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/fr/docs#herramientas)
 
-## Dix parcours pratiques
+## Huit missions. La récupération n’en est qu’une.
 
-1. Inventorier un PC qui ne démarre plus. 2. Copier des fichiers autorisés ailleurs. 3. Imager un disque défaillant avec ddrescue et son suivi. 4. Examiner les partitions avant TestDisk. 5. Récupérer avec PhotoRec vers un autre support. 6. Inspecter SMART/NVMe. 7. Diagnostiquer UEFI/chargeur après sauvegarde. 8. Ouvrir BitLocker/LUKS avec la bonne clé. 9. Assister en SSH autorisé. 10. Aider à installer un OS sur une cible explicitement approuvée.
-
-Ce sont des procédures adaptables, pas des réparations automatiques ni des résultats garantis. Identifiez source, destination et retour arrière, puis vérifiez le résultat observable. N’enregistrez pas les fichiers récupérés sur la source.
+Utilisez les outils Linux inclus ou ajoutez les dépendances du projet. Ce sont des missions adaptables, pas des fonctions en un clic ni des scénarios tous déjà testés.
 
 [↗](https://aguja.transcendenceia.net/fr/docs#casos)
 

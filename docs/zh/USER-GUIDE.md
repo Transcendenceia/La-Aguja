@@ -1,11 +1,15 @@
-# 用户指南 · LA AGUJA Rescue Disk
+# 用户指南 · LA AGUJA
 
 [Website](https://aguja.transcendenceia.net/zh/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## 小小入口，完整掌控
+## 不只是救生圈，更是项目发射台。
 
-LA AGUJA 是从 USB 启动的 x86-64 Linux 救援系统，在已安装系统之前运行。Flash Imager 在正常工作的 Windows/Linux 电脑上准备 USB；Rescue Disk 在待检查电脑上运行。启动不会自动挂载、修复或写入内部磁盘。可在本地或通过 SSH 工作，也可选用自己的 Tailscale/Headscale。云端 AI 需要互联网和自己的提供商账户，传统工具可以离线使用。无 LA AGUJA 账户或中央中继。项目仍属实验性质，不保证兼容所有硬件。
+LA AGUJA 在已安装操作系统启动之前，将兼容的 PC 变为 Linux 工作台，即使硬盘为空也可使用。给智能体一个任务：构建、配置、实验、迁移或恢复。
+
+Live 会话使用 RAM 中的可写叠加层，底层是 USB 上的只读镜像。这是 Linux，不是固件，也不会将整个 USB 复制到 RAM。启动时不改动内部磁盘；是否写入由你决定。
+
+已包含可使用 root 权限的 AI 客户端、SSH、Python、Git、磁盘工具、debootstrap 和 arch-install-scripts。可安装兼容软件包扩展会话：QEMU/KVM、容器引擎和构建工具需要额外安装、足够的 RAM/存储及硬件支持。请主动保存重要成果；RAM 状态是临时的。云端 AI 需要网络和你自己的账户，并未包含本地模型。
 
 [↗](https://aguja.transcendenceia.net/zh/docs#que-es)
 
@@ -159,9 +163,9 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/zh/docs#herramientas)
 
-## 十种实际流程
+## 八项任务，救援只是其中之一。
 
-1. 清点无法启动的电脑。2. 把授权文件复制到独立目标。3. ddrescue 镜像与映射。4. TestDisk 写入前检查分区。5. PhotoRec 恢复到另一设备。6. SMART/NVMe 检查。7. 备份后诊断 UEFI/引导器。8. 用正确密钥访问 BitLocker/LUKS。9. 授权 SSH 支持。10. 仅在明确批准的目标安装 OS。这些是可调整流程，不是自动修复或保证。先识别源、目标与回滚，再验证结果；不要把恢复数据写回源。
+使用已包含的 Linux 工具，或添加项目所需依赖。这些是可调整的任务构想，并非一键功能，也不是所有场景都已完成测试。
 
 [↗](https://aguja.transcendenceia.net/zh/docs#casos)
 

@@ -16,7 +16,7 @@ test('social crawlers receive Spanish Open Graph metadata and og-banner is deliv
  const rCrawler=await fetch(base+'/',{headers:{'User-Agent':'WhatsApp/2.23.23.77 i'}});
  assert.equal(rCrawler.status,200);
  const htmlCrawler=await rCrawler.text();
- assert(htmlCrawler.includes('property="og:site_name" content="LA AGUJA Rescue Disk"'));
+ assert(htmlCrawler.includes('property="og:site_name" content="LA AGUJA"'));
  assert(htmlCrawler.includes('property="og:image" content="https://aguja.transcendenceia.net/assets/og-banner.png"'));
  assert(htmlCrawler.includes('name="twitter:card" content="summary_large_image"'));
  assert(htmlCrawler.includes('<html lang="es">'));

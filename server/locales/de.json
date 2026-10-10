@@ -21,7 +21,7 @@
   "mascotAlt": "Agujita, die verchromte Nadel mit bernsteinfarbenen Augen und geschwungenem Schnurrbart",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Vorhandenes retten. Neues vorbereiten.",
+    "Eine Startrampe, nicht nur ein Rettungsring.",
     "Rettung ist der Ausgangspunkt, nicht der einzige mögliche Einsatz."
   ],
   "steps": [
@@ -34,8 +34,8 @@
       "Vom USB-Stick booten. La Aguja lädt sein eigenes Linux, unabhängig vom installierten System."
     ],
     [
-      "Verstehen und entscheiden",
-      "Rechner prüfen, bei Bedarf sichern und Änderungen vor der Ausführung abstimmen."
+      "Linux installieren und konfigurieren",
+      "Starte ein unabhängiges Linux vom USB-Stick und lass KI-Agenten arbeiten: Systeme installieren, Server konfigurieren, ein virtuelles Labor aufbauen oder Daten retten. Ein funktionierendes installiertes System ist optional. Dein nächstes Projekt nicht."
     ]
   ],
   "imagerTitle": "USB mit Flash Imager vorbereiten",
@@ -52,8 +52,8 @@
   "imageNote": "Entpacke das Abbild vor einem manuellen Import. Der integrierte Download setzt die Teile zu einer geprüften .img-Datei zusammen.",
   "privacy": "Datenschutz",
   "footer": "Open Source · GPL-3.0-or-later · Dein Netz, kein LA-AGUJA-Relay.",
-  "docTitle": "Benutzerhandbuch · LA AGUJA Rescue Disk",
-  "docDescription": "USB vorbereiten, starten, KI und SSH nutzen, Verschlüsselung verstehen, Daten retten und Fehler eingrenzen.",
+  "docTitle": "Benutzerhandbuch · LA AGUJA",
+  "docDescription": "USB vorbereiten, unabhängiges Linux starten, mit KI arbeiten, Systeme installieren und konfigurieren, virtuelle Labore erkunden, Daten migrieren oder retten.",
   "docUI": [
     "Zum Handbuch springen",
     "Inhalt und Suche",
@@ -82,9 +82,10 @@
   ],
   "sections": [
     [
-      "Kleiner Einstieg. Volle Kontrolle.",
-      "LA AGUJA ist ein x86-64 Rettungs-Linux, das vor dem installierten Betriebssystem vom USB-Stick startet. Flash Imager bereitet den Stick auf einem funktionierenden Windows-/Linux-PC vor; Rescue Disk läuft auf dem untersuchten Computer. Beim Start werden interne Datenträger nicht automatisch eingebunden, repariert oder beschrieben.",
-      "Arbeite lokal oder per SSH, optional über dein Tailscale/Headscale-Netz. Cloud-KI benötigt Internet und dein eigenes Anbieterkonto; klassische Werkzeuge können offline arbeiten. Es gibt kein LA AGUJA Konto oder zentrales Relay. Das Produkt ist experimentell und garantiert nicht jede Hardware."
+      "Eine Startrampe, nicht nur ein Rettungsring.",
+      "LA AGUJA macht einen kompatiblen PC zur Linux-Werkstatt, bevor sein installiertes Betriebssystem startet — auch bei leerer Festplatte. Gib deinem Agenten einen Auftrag: bauen, konfigurieren, experimentieren, migrieren oder retten.",
+      "Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.",
+      "Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: QEMU/KVM, Container-Engines oder Build-Werkzeuge erfordern zusätzliche Installation, genügend RAM und Speicher sowie passende Hardware. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten."
     ],
     [
       "Dein erster USB-Stick",
@@ -182,9 +183,8 @@
       "Die Befehle unten dienen der Bestandsaufnahme. Keine Formatierung, Bootloaderinstallation oder Partitionstabellen-Schreibaktion auf einem geratenen Gerät. Lies die jeweiligen Handbücher und arbeite gegebenenfalls auf Kopien. Klassische Werkzeuge brauchen keine Cloud-KI; universelle Wiederherstellung wird nicht versprochen."
     ],
     [
-      "Zehn praktische Abläufe",
-      "1. Nicht bootenden PC inventarisieren. 2. Erlaubte Dateien auf ein anderes Ziel kopieren. 3. Defektes Laufwerk mit ddrescue und Map abbilden. 4. Partitionen vor TestDisk-Schreibzugriff prüfen. 5. PhotoRec auf ein separates Ziel anwenden. 6. SMART/NVMe untersuchen. 7. UEFI/Bootloader nach Sicherung diagnostizieren. 8. BitLocker/LUKS mit richtigem Schlüssel öffnen. 9. Autorisierten SSH-Support leisten. 10. OS-Installation nur auf ausdrücklich freigegebenem Ziel begleiten.",
-      "Anpassbare Verfahren, keine automatischen Reparaturen oder garantierten Ergebnisse. Bestimme Quelle, Ziel und Rückweg, prüfe das beobachtbare Ergebnis. Keine geretteten Daten auf die Quelle schreiben."
+      "Acht Missionen. Rettung ist nur eine davon.",
+      "Nutze die enthaltenen Linux-Werkzeuge oder ergänze Projektabhängigkeiten. Das sind anpassbare Missionen, keine Ein-Klick-Funktionen und keine bereits vollständig getesteten Szenarien."
     ],
     [
       "Professionell: Belege und Wiederholbarkeit",
@@ -290,6 +290,10 @@
   ],
   "faqTitle": "Vor dem Start",
   "faq": [
+    [
+      "Ist das nur ein Rettungsdatenträger?",
+      "Starte ein unabhängiges Linux vom USB-Stick und lass KI-Agenten arbeiten: Systeme installieren, Server konfigurieren, ein virtuelles Labor aufbauen oder Daten retten. Ein funktionierendes installiertes System ist optional. Dein nächstes Projekt nicht."
+    ],
     [
       "Müssen Windows oder Linux noch funktionieren?",
       "Nein. Du startest das Linux von La Aguja per USB. Hardware und Start vom Medium müssen kompatibel sein."

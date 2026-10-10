@@ -21,7 +21,7 @@
   "mascotAlt": "Agujita, l’ago cromato con occhi ambrati e baffi arricciati",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Recuperare il passato. Preparare il prossimo passo.",
+    "Una piattaforma di lancio, non solo un salvagente.",
     "Il recupero è il punto di partenza, non l’unico uso possibile."
   ],
   "steps": [
@@ -34,8 +34,8 @@
       "Avvia dalla USB. La Aguja carica il proprio Linux, senza dipendere dal sistema installato."
     ],
     [
-      "Capisci e decidi",
-      "Esamina il computer, fai una copia quando serve e concorda le modifiche prima di eseguirle."
+      "Installare e configurare Linux",
+      "Avvia un Linux indipendente da USB e metti al lavoro gli agenti IA: installa sistemi, configura server, crea un laboratorio virtuale o recupera dati. Un sistema installato funzionante è facoltativo. Il tuo prossimo progetto, no."
     ]
   ],
   "imagerTitle": "Prepara la USB con Flash Imager",
@@ -52,8 +52,8 @@
   "imageNote": "Decomprimi l’immagine prima dell’importazione manuale. Il download integrato unisce le parti in un unico .img verificato.",
   "privacy": "Privacy",
   "footer": "Codice aperto · GPL-3.0-or-later · La tua rete, senza relay LA AGUJA.",
-  "docTitle": "Guida utente · LA AGUJA Rescue Disk",
-  "docDescription": "Preparazione USB, avvio, IA e SSH, cifratura, recupero dati e risoluzione dei problemi.",
+  "docTitle": "Guida utente · LA AGUJA",
+  "docDescription": "Preparare una USB, avviare Linux indipendente, lavorare con l’IA, installare e configurare sistemi, esplorare laboratori virtuali, migrare o recuperare dati.",
   "docUI": [
     "Vai alla guida",
     "Indice e ricerca",
@@ -82,8 +82,10 @@
   ],
   "sections": [
     [
-      "Un piccolo accesso. Controllo completo.",
-      "LA AGUJA è un Linux di recupero x86-64 avviato da USB prima del sistema installato. Flash Imager prepara la USB su Windows/Linux funzionante; Rescue Disk opera sul computer esaminato. L’avvio non monta, ripara o scrive automaticamente sui dischi interni. Puoi lavorare localmente o via SSH, con Tailscale/Headscale facoltativo. IA cloud richiede Internet e account proprio; gli strumenti tradizionali possono lavorare offline. Nessun account o relay LA AGUJA. Prodotto sperimentale, non compatibilità universale."
+      "Una piattaforma di lancio, non solo un salvagente.",
+      "LA AGUJA trasforma un PC compatibile in un’officina Linux prima dell’avvio del sistema installato, anche con il disco vuoto. Dai una missione all’agente: costruire, configurare, sperimentare, migrare o recuperare.",
+      "La sessione live usa uno strato scrivibile in RAM sopra l’immagine USB di sola lettura. È Linux, non firmware; l’intera USB non viene copiata in RAM. I dischi interni restano intatti all’avvio; decidi tu quando scriverci.",
+      "Include client IA con accesso root, SSH, Python, Git, strumenti per dischi, debootstrap e arch-install-scripts. Aggiungi pacchetti compatibili: QEMU/KVM, motori di container e strumenti di compilazione richiedono installazione aggiuntiva, RAM/spazio sufficienti e hardware compatibile. Salva esplicitamente i risultati importanti; la RAM è temporanea. L’IA cloud richiede rete e il tuo account; nessun modello locale è incluso."
     ],
     [
       "La prima USB",
@@ -162,8 +164,8 @@
       "aguja tools elenca strumenti. ddrescue per immagini con mappa, TestDisk/PhotoRec per recupero, rsync per copia, smartctl/nvme-cli per hardware. Volumi/cifratura richiedono dispositivo e chiavi corretti. Comandi sotto per orientamento. Non formattare, installare bootloader o scrivere partizioni su dispositivi indovinati. Consulta manuali e lavora su copia se necessario. Strumenti tradizionali senza cloud, nessun recupero universale garantito."
     ],
     [
-      "Dieci percorsi pratici",
-      "1. Inventario PC senza avvio. 2. Copia autorizzata altrove. 3. Immagine ddrescue con mappa. 4. Ispezione prima di TestDisk. 5. PhotoRec su altro supporto. 6. SMART/NVMe. 7. Diagnosi UEFI/bootloader dopo backup. 8. BitLocker/LUKS con chiave corretta. 9. Supporto SSH autorizzato. 10. Installazione OS solo su destinazione approvata. Procedure adattabili, non riparazioni automatiche o garanzie. Identifica origine/destinazione/rollback e verifica risultato; non recuperare sulla fonte."
+      "Otto missioni. Il recupero è solo una.",
+      "Usa gli strumenti Linux inclusi o aggiungi le dipendenze del progetto. Sono missioni adattabili, non funzioni con un clic né scenari tutti già collaudati."
     ],
     [
       "Percorso professionale",
@@ -264,6 +266,10 @@
   ],
   "faqTitle": "Prima di iniziare",
   "faq": [
+    [
+      "È solo un disco di recupero?",
+      "Avvia un Linux indipendente da USB e metti al lavoro gli agenti IA: installa sistemi, configura server, crea un laboratorio virtuale o recupera dati. Un sistema installato funzionante è facoltativo. Il tuo prossimo progetto, no."
+    ],
     [
       "Windows o Linux devono funzionare?",
       "No. Avvii il Linux di La Aguja dalla USB. Servono hardware compatibile e la possibilità di avviare da quel supporto."

@@ -1,15 +1,17 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk with Agujita, our mascot"></p>
 
-<p align="center"><strong>A small entry point. Full control.</strong><br>A rescue Linux with the tools your AI agent needs.</p>
+<p align="center"><strong>Your AI. Your machine. Before the installed OS.</strong><br>A bootable Linux workbench for building, configuring, experimenting and recovering.</p>
 
-<p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/SHOWCASE.md">Explore workflows</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
+<p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
 **Flash Imager 0.9.9 · Rescue Disk 0.9.9 · Experimental · x86-64**
 English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
-When a computer will not boot, your tools should not be trapped inside it. **LA AGUJA Rescue Disk** starts from a USB before the installed OS, bringing diagnostics, recovery tools, SSH and **Codex CLI, OpenCode, Claude Code and Antigravity** in the complete 0.9.9 factory image. Work at the machine or bring an authorised operator in over your LAN or your own Tailscale/Headscale network. AI authentication is optional; conventional tools can work offline.
+**Your computer does not need an installed OS to start its next project.** LA AGUJA boots an independent Linux from USB, including on a machine with a blank disk. Bring **Codex CLI, OpenCode, Claude Code and Antigravity**, root-capable Linux tools and optional SSH to the hardware: install and configure systems, bootstrap a server, build software, extend the session into a virtual lab, migrate storage or recover data. Recovery is one mission, not the whole product.
 
-**Your working PC → Flash Imager → your rescue USB → the computer that needs help.**
+**Your working PC → Flash Imager → your live USB → the machine you want to build on.**
+
+The live session uses a **writable RAM overlay over a read-only USB image**; it does not copy the entire USB into RAM or run AI in firmware. No internal disk is changed automatically at startup. Save useful outputs to chosen storage: RAM is temporary, but deliberate writes to disks persist. Cloud AI needs your account and networking; conventional tools can work offline. [Explore eight ambitious missions](docs/PLATFORM.md).
 
 No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requires Internet, your own compatible provider account and available quota. Third-party licences and terms remain separate: [NOTICE](NOTICE.md).
 
@@ -31,12 +33,13 @@ No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requir
 
 | You want to… | Start with… | What you should finish with |
 | --- | --- | --- |
-| Understand why a PC will not start | [First diagnosis](docs/SHOWCASE.md#first-diagnosis) | An inventory and a ranked plan, not a blind repair |
-| Recover family photos or work | [File rescue](docs/SHOWCASE.md#file-rescue) | Copies on a separate destination, checked for readability |
-| Preserve a failing disk | [Image first](docs/SHOWCASE.md#image-first) | A recovery image, map and honest unreadable-sector report |
-| Help someone remotely | [Remote workbench](docs/SHOWCASE.md#remote-workbench) | Verified SSH access and an agreed intervention log |
-| Rehearse before touching the original | [Rescue rehearsal](docs/SHOWCASE.md#rescue-rehearsal) | A plan tested on a copy, with remaining uncertainties |
-| Prepare media through an agent | [Flash Imager Agent Skill](skills/flash-imager/SKILL.md) | A verified private image file; no automatic USB write |
+| Install and configure Linux on a blank SSD | [System builder](docs/PLATFORM.md#1-from-blank-ssd-to-a-configured-linux) | A configured OS and verified first boot |
+| Run guests without installing a host OS | [Pocket datacenter](docs/PLATFORM.md#2-a-pocket-datacenter-on-a-pc-with-no-host-installation) | A resource-budgeted lab with QEMU added and guest images saved |
+| Use a spare PC for a LAN demo or workshop | [Pop-up services](docs/PLATFORM.md#3-a-pop-up-lan-workshop-or-demo-station) | A tested temporary service and clean shutdown |
+| Build and package software outside the disk environment | [Software factory](docs/PLATFORM.md#4-a-software-factory-independent-of-the-disk) | Reproducible scripts, test results and exported artifacts |
+| Prepare a NAS or application server | [Bare-metal bootstrap](docs/PLATFORM.md#5-bootstrap-a-nas-or-application-server-from-bare-metal) | Installed services verified from an authorised client |
+| Migrate storage or test a bold configuration | [Migration and experiments](docs/PLATFORM.md#6-a-migration-workshop-outside-both-systems) | Verified data, rollback and repeatable recipes |
+| Diagnose or recover an existing system | [Recovery workflows](docs/SHOWCASE.md) | Observable results and retained backups |
 
 These are **workflow ideas and prompt templates**, not customer testimonials or fabricated success stories. Each example includes tools, expected deliverables and stop conditions.
 
@@ -77,6 +80,9 @@ Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, O
 | Connectivity | NetworkManager, Ethernet/Wi-Fi, OpenSSH, Avahi/mDNS, optional own tailnet |
 | AI clients | Codex CLI, OpenCode, Claude Code, Antigravity; installation is independent of credential preparation |
 | Operations | Zsh, tmux, Python, curl, git, jq, ripgrep, nano |
+| System building | debootstrap, arch-install-scripts, partition/filesystem tools and GRUB utilities |
+
+**Extend it for the mission:** QEMU/KVM, container engines, compilers and SDKs can be added when compatible with the live kernel, hardware and resource budget. They are not promised as bundled or as one-click workflows. The platform provides an independent Linux and capable agents, not a built-in hypervisor, local AI model or automatic fleet orchestrator. [Requirements, prompts and deliverables](docs/PLATFORM.md).
 
 **New in 0.9.9:** local console mouse-wheel history, up to 10,000 lines in RAM without saved transcripts; scroll down to the prompt or press Esc to return. SSH keeps the client terminal behaviour. Imager checks working-space availability before copying a private image; Windows can choose another work folder. [Release notes](docs/RELEASE-0.9.9.md).
 
@@ -111,6 +117,7 @@ Private images and `.aguja` templates may contain credentials. Never publish the
 | Read next | English | Español |
 | --- | --- | --- |
 | Prepare and boot | [Getting started](docs/GETTING-STARTED.md) | [Primeros pasos](docs/GETTING-STARTED.es.md) |
+| Build, configure and experiment | [Platform missions](docs/PLATFORM.md) | [Misiones de la plataforma](docs/PLATFORM.es.md) |
 | Prompts, tools and deliverables | [Showcase](docs/SHOWCASE.md) | [Ejemplos](docs/SHOWCASE.es.md) |
 | Diagnose by layer | [Troubleshooting](docs/TROUBLESHOOTING.md) | [Solución de problemas](docs/TROUBLESHOOTING.es.md) |
 | Real product captures | [Gallery](docs/SCREENSHOTS.md) | [Galería](docs/SCREENSHOTS.es.md) |
@@ -132,6 +139,6 @@ Project-owned code, documentation and artwork are **GPL-3.0-or-later**. Earlier 
 
 ## Support the project
 
-Behind a broken computer are memories, work and people. If LA AGUJA helps you, a coffee helps keep the project moving. Donations are optional; the rescue tools remain available.
+Every machine can become the start of something new. If LA AGUJA helps you build, experiment or recover, a coffee helps keep the project moving. Donations are optional; the tools remain available.
 
 <p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-en.svg" width="360" alt="Buy us a coffee · Ko-fi"></a></p>

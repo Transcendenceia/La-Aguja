@@ -4,6 +4,8 @@
 
 English is primary; Spanish is secondary. The website and operational guides support eight languages.
 
+**Start with a mission, not a failure:** [install systems, build a virtual lab, run temporary services, compile software or prepare a server](PLATFORM.md). [Recovery workflows](SHOWCASE.md) remain a specialist reference, not the scope of the whole platform.
+
 | Language | Guide |
 | --- | --- |
 | English | [User guide](en/USER-GUIDE.md) |

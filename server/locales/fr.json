@@ -21,7 +21,7 @@
   "mascotAlt": "Agujita, l’aiguille chromée aux yeux ambrés et à la moustache bouclée",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Retrouver ce qui était là. Préparer la suite.",
+    "Une rampe de lancement, pas seulement une bouée.",
     "Le secours est le point de départ, pas le seul usage possible."
   ],
   "steps": [
@@ -34,8 +34,8 @@
       "Démarrez depuis la clé. La Aguja charge son propre Linux, indépendamment du système installé."
     ],
     [
-      "Comprenez et décidez",
-      "Examinez le PC, faites une sauvegarde si nécessaire et convenez des modifications avant de les effectuer."
+      "Installer et configurer Linux",
+      "Démarrez un Linux indépendant depuis une clé USB et faites travailler vos agents IA : installer des systèmes, configurer des serveurs, créer un laboratoire virtuel ou récupérer des données. Un système installé fonctionnel est facultatif. Votre prochain projet, non."
     ]
   ],
   "imagerTitle": "Préparez votre clé USB avec Flash Imager",
@@ -52,8 +52,8 @@
   "imageNote": "Pour un import manuel, décompressez d’abord l’image. Le téléchargement intégré assemble les parties en une seule image .img vérifiée.",
   "privacy": "Confidentialité",
   "footer": "Code ouvert · GPL-3.0-or-later · Votre réseau, sans relais LA AGUJA.",
-  "docTitle": "Guide d’utilisation · LA AGUJA Rescue Disk",
-  "docDescription": "Préparer la clé USB, démarrer, utiliser l’IA et SSH, comprendre le chiffrement, récupérer des données et diagnostiquer les problèmes.",
+  "docTitle": "Guide d’utilisation · LA AGUJA",
+  "docDescription": "Préparer une clé USB, démarrer un Linux indépendant, travailler avec l’IA, installer et configurer des systèmes, explorer des laboratoires virtuels, migrer ou récupérer des données.",
   "docUI": [
     "Aller au guide",
     "Sommaire et recherche",
@@ -82,9 +82,10 @@
   ],
   "sections": [
     [
-      "Une petite entrée. Un contrôle complet.",
-      "LA AGUJA est un Linux de secours x86-64 démarré depuis une clé USB avant le système installé. Flash Imager prépare la clé sur un ordinateur Windows ou Linux fonctionnel ; le Rescue Disk s’exécute sur l’ordinateur à examiner. Le démarrage ne monte, ne répare et ne modifie pas automatiquement les disques internes.",
-      "Travaillez localement ou par SSH, avec un réseau Tailscale/Headscale facultatif. L’IA distante nécessite Internet et votre propre compte fournisseur ; les outils classiques peuvent fonctionner hors ligne. Aucun compte LA AGUJA ni relais central. Le produit est expérimental, sans garantie de compatibilité universelle."
+      "Une rampe de lancement, pas seulement une bouée.",
+      "LA AGUJA transforme un PC compatible en atelier Linux avant le démarrage du système installé, même avec un disque vide. Donnez une mission à votre agent : construire, configurer, expérimenter, migrer ou récupérer.",
+      "La session live utilise une couche inscriptible en RAM sur l’image USB en lecture seule. Il s’agit de Linux, pas du firmware ; toute la clé USB n’est pas copiée en RAM. Les disques internes restent intacts au démarrage ; vous choisissez ensuite de les utiliser.",
+      "Inclus : clients IA avec accès root, SSH, Python, Git, outils de stockage, debootstrap et arch-install-scripts. Ajoutez des paquets compatibles : QEMU/KVM, moteurs de conteneurs et outils de compilation nécessitent une installation supplémentaire, assez de RAM et de stockage et un matériel compatible. Enregistrez explicitement les résultats importants ; la RAM est temporaire. L’IA cloud exige le réseau et votre compte ; aucun modèle local n’est inclus."
     ],
     [
       "Votre première clé USB",
@@ -182,9 +183,8 @@
       "Les commandes ci-dessous servent à l’inventaire. Ne formatez pas, ne réinstallez pas de chargeur et n’écrivez pas une table de partitions sur un périphérique deviné. Consultez les manuels et travaillez sur copie si nécessaire. Les outils traditionnels fonctionnent sans IA distante ; aucune récupération universelle n’est promise."
     ],
     [
-      "Dix parcours pratiques",
-      "1. Inventorier un PC qui ne démarre plus. 2. Copier des fichiers autorisés ailleurs. 3. Imager un disque défaillant avec ddrescue et son suivi. 4. Examiner les partitions avant TestDisk. 5. Récupérer avec PhotoRec vers un autre support. 6. Inspecter SMART/NVMe. 7. Diagnostiquer UEFI/chargeur après sauvegarde. 8. Ouvrir BitLocker/LUKS avec la bonne clé. 9. Assister en SSH autorisé. 10. Aider à installer un OS sur une cible explicitement approuvée.",
-      "Ce sont des procédures adaptables, pas des réparations automatiques ni des résultats garantis. Identifiez source, destination et retour arrière, puis vérifiez le résultat observable. N’enregistrez pas les fichiers récupérés sur la source."
+      "Huit missions. La récupération n’en est qu’une.",
+      "Utilisez les outils Linux inclus ou ajoutez les dépendances du projet. Ce sont des missions adaptables, pas des fonctions en un clic ni des scénarios tous déjà testés."
     ],
     [
       "Parcours professionnel : preuve et répétabilité",
@@ -290,6 +290,10 @@
   ],
   "faqTitle": "Avant de commencer",
   "faq": [
+    [
+      "Est-ce seulement un disque de secours ?",
+      "Démarrez un Linux indépendant depuis une clé USB et faites travailler vos agents IA : installer des systèmes, configurer des serveurs, créer un laboratoire virtuel ou récupérer des données. Un système installé fonctionnel est facultatif. Votre prochain projet, non."
+    ],
     [
       "Windows ou Linux doit-il fonctionner ?",
       "Non. Vous démarrez le Linux de La Aguja depuis USB. Il faut du matériel compatible et pouvoir démarrer depuis ce support."

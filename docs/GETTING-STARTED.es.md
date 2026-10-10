@@ -2,7 +2,7 @@
 
 [English](GETTING-STARTED.md) · [Documentación](README.es.md) · [Problemas](TROUBLESHOOTING.es.md) · [Ejemplos](SHOWCASE.es.md)
 
-**Objetivo:** preparar un USB, arrancar el live e identificar el ordenador y sus discos, sin reparar todavía el original. Este primer hito no necesita cuenta IA.
+**Objetivo:** preparar un USB, arrancar el Linux independiente e identificar equipo, recursos y discos antes de elegir misión. Puedes construir, configurar, experimentar, migrar o recuperar; este primer hito no necesita cuenta IA. [Explora la plataforma](PLATFORM.es.md).
 
 ## 1. Reúne lo necesario
 

@@ -1,7 +1,8 @@
-# Showcase · eight missions for LA AGUJA
+# Recovery workflows · LA AGUJA
 
 [Español](SHOWCASE.es.md) · [Getting started](GETTING-STARTED.md) · [Documentation](README.md)
 
+[Beyond recovery: build, configure and experiment](PLATFORM.md).
 These are **practical proposals and adaptable prompts**, not executed interventions, testimonials or guarantees. The [actual product captures](SCREENSHOTS.md) come from synthetic QA and do not demonstrate these outcomes. Tools provide capability; you define permission and verify the deliverable.
 
 ## Agree before the first command

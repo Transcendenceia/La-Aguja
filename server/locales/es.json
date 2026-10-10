@@ -21,7 +21,7 @@
   "mascotAlt": "Agujita, la aguja cromada de ojos ámbar y bigote",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Recuperar lo que había. Preparar lo que viene.",
+    "Una plataforma de lanzamiento, no solo un salvavidas.",
     "El rescate es el punto de partida, no el único uso posible."
   ],
   "steps": [
@@ -34,8 +34,8 @@
       "Inicia desde el USB. La Aguja carga su propio Linux; el sistema del disco no necesita arrancar."
     ],
     [
-      "Entiende y decide",
-      "Examina el equipo, guarda una copia cuando corresponda y acuerda los cambios antes de hacerlos."
+      "Instalar y configurar Linux",
+      "Arranca un Linux independiente desde USB y pon a trabajar a tus agentes IA: instala sistemas, configura servidores, crea un laboratorio virtual o recupera datos. Un sistema instalado que funcione es opcional. Tu próximo proyecto, no."
     ]
   ],
   "imagerTitle": "Prepara tu USB con Flash Imager",
@@ -52,8 +52,8 @@
   "imageNote": "Para importar una imagen comprimida manualmente, descomprímela primero. La descarga integrada une las partes en un único .img verificado.",
   "privacy": "Privacidad",
   "footer": "Código abierto · GPL-3.0-or-later · Tu red, sin relay de LA AGUJA.",
-  "docTitle": "Documentación · LA AGUJA Rescue Disk",
-  "docDescription": "Manual paso a paso: primer USB, IA, cifrado, rescate de archivos, SSH y procedimientos avanzados.",
+  "docTitle": "Documentación · LA AGUJA",
+  "docDescription": "Prepara un USB, arranca un Linux independiente, trabaja con IA, instala y configura sistemas, explora laboratorios virtuales, migra o recupera datos.",
   "docUI": [
     "Saltar al manual",
     "Índice y búsqueda",
@@ -158,6 +158,10 @@
   ],
   "faqTitle": "Antes de empezar",
   "faq": [
+    [
+      "¿Es solo un disco de rescate?",
+      "Arranca un Linux independiente desde USB y pon a trabajar a tus agentes IA: instala sistemas, configura servidores, crea un laboratorio virtual o recupera datos. Un sistema instalado que funcione es opcional. Tu próximo proyecto, no."
+    ],
     [
       "¿Necesito que Windows o Linux funcionen?",
       "No. Arrancas el Linux de La Aguja desde el USB. Sí necesitas hardware compatible y que el equipo pueda iniciar desde ese medio."

@@ -2,7 +2,7 @@
 
 [Español](GETTING-STARTED.es.md) · [Documentation](README.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Workflow ideas](SHOWCASE.md)
 
-**Goal:** prepare a USB, boot the live system and identify the computer and its disks—without repairing the original yet. No AI account is needed for this first milestone.
+**Goal:** prepare a USB, boot the independent Linux and identify the computer, resources and disks before choosing a mission. You can build, configure, experiment, migrate or recover; no AI account is needed for this first milestone. [Explore the platform](PLATFORM.md).
 
 ## 1. Gather the right things
 

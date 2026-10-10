@@ -3,7 +3,8 @@
 [English](README.md). Inglés principal en el repositorio; español secundario. Web y guías operativas en ocho idiomas, sin cambiar la prioridad entre sus rutas.
 
 - [Primeros pasos 0.9.9](GETTING-STARTED.es.md): preparar, proteger, grabar y arrancar.
-- [Ocho misiones](SHOWCASE.es.md): prompts, herramientas, entregas y condiciones de parada.
+- [Ocho misiones de la plataforma](PLATFORM.es.md): instalar, virtualizar, crear servicios, compilar, preparar servidores, migrar, experimentar y recuperar.
+- [Procedimientos de rescate](SHOWCASE.es.md): referencia especializada, no el alcance completo de LA AGUJA.
 - [Problemas por capas](TROUBLESHOOTING.es.md).
 - [Capturas reales y sus límites](SCREENSHOTS.es.md).
 - [Guía web actual e interactiva](https://aguja.transcendenceia.net/es/docs): 26 capítulos, búsqueda, copiar, zoom e impresión.

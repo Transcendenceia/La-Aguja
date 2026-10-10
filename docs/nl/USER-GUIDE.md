@@ -1,11 +1,15 @@
-# Gebruikershandleiding · LA AGUJA Rescue Disk
+# Gebruikershandleiding · LA AGUJA
 
 [Website](https://aguja.transcendenceia.net/nl/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Kleine ingang. Volledige controle.
+## Een lanceerplatform, niet alleen een reddingsboei.
 
-LA AGUJA is x86-64 herstel-Linux dat vanaf USB start vóór het geïnstalleerde systeem. Flash Imager bereidt de USB voor op een werkende Windows/Linux-pc; Rescue Disk draait op de onderzochte computer. Starten koppelt, repareert of beschrijft interne schijven niet automatisch. Werk lokaal of via SSH, optioneel met eigen Tailscale/Headscale. Cloud-AI vereist internet en je eigen account; traditionele tools kunnen offline werken. Geen LA AGUJA-account of centrale relay. Experimenteel, geen universele hardwaregarantie.
+LA AGUJA maakt van een geschikte pc een Linux-werkplaats vóór het geïnstalleerde besturingssysteem start — zelfs met een lege schijf. Geef je agent een missie: bouwen, configureren, experimenteren, migreren of herstellen.
+
+De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.
+
+Inbegrepen: AI-clients met root-toegang, SSH, Python, Git, schijfhulpmiddelen, debootstrap en arch-install-scripts. Breid uit met geschikte pakketten: QEMU/KVM, container-engines en build-tools vereisen extra installatie, genoeg RAM/opslag en geschikte hardware. Sla belangrijke resultaten bewust op; RAM is tijdelijk. Cloud-AI vereist netwerk en je eigen account; er is geen lokaal model inbegrepen.
 
 [↗](https://aguja.transcendenceia.net/nl/docs#que-es)
 
@@ -159,9 +163,9 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/nl/docs#herramientas)
 
-## Tien praktische routes
+## Acht missies. Herstel is er maar één.
 
-1. Niet-startende pc inventariseren. 2. Toegestane bestanden elders kopiëren. 3. ddrescue-image met map. 4. Inspectie voor TestDisk. 5. PhotoRec naar ander medium. 6. SMART/NVMe. 7. UEFI/bootloaderdiagnose na kopie. 8. BitLocker/LUKS met juiste sleutel. 9. Toegestane SSH-ondersteuning. 10. OS-installatie alleen op goedgekeurd doel. Aanpasbare procedures, geen automatische reparaties. Herken bron/doel/terugweg en controleer resultaat; herstel niet naar bron.
+Gebruik de aanwezige Linux-tools of voeg projectafhankelijkheden toe. Dit zijn aanpasbare missies, geen éénklikfuncties of allemaal al geteste scenario’s.
 
 [↗](https://aguja.transcendenceia.net/nl/docs#casos)
 

@@ -21,7 +21,7 @@
   "mascotAlt": "Agujita, de verchroomde naald met amberkleurige ogen en gekrulde snor",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Herstellen wat er was. Voorbereiden wat volgt.",
+    "Een lanceerplatform, niet alleen een reddingsboei.",
     "Herstel is het beginpunt, niet de enige mogelijke toepassing."
   ],
   "steps": [
@@ -34,8 +34,8 @@
       "Start vanaf USB. La Aguja laadt zijn eigen Linux, los van het geïnstalleerde systeem."
     ],
     [
-      "Begrijp en beslis",
-      "Onderzoek de computer, maak zo nodig een back-up en spreek wijzigingen af vóór uitvoering."
+      "Linux installeren en configureren",
+      "Start een onafhankelijk Linux vanaf USB en zet AI-agenten aan het werk: systemen installeren, servers configureren, een virtueel lab bouwen of gegevens herstellen. Een werkend geïnstalleerd systeem is optioneel. Je volgende project niet."
     ]
   ],
   "imagerTitle": "Bereid je USB voor met Flash Imager",
@@ -52,8 +52,8 @@
   "imageNote": "Pak het image uit vóór handmatige import. De ingebouwde download voegt delen samen tot één gecontroleerd .img-bestand.",
   "privacy": "Privacy",
   "footer": "Open source · GPL-3.0-or-later · Je eigen netwerk, zonder LA AGUJA-relay.",
-  "docTitle": "Gebruikershandleiding · LA AGUJA Rescue Disk",
-  "docDescription": "USB voorbereiden, starten, AI en SSH gebruiken, versleuteling begrijpen, gegevens herstellen en problemen onderzoeken.",
+  "docTitle": "Gebruikershandleiding · LA AGUJA",
+  "docDescription": "USB voorbereiden, onafhankelijk Linux starten, werken met AI, systemen installeren en configureren, virtuele labs verkennen, gegevens migreren of herstellen.",
   "docUI": [
     "Naar de handleiding",
     "Inhoud en zoeken",
@@ -82,8 +82,10 @@
   ],
   "sections": [
     [
-      "Kleine ingang. Volledige controle.",
-      "LA AGUJA is x86-64 herstel-Linux dat vanaf USB start vóór het geïnstalleerde systeem. Flash Imager bereidt de USB voor op een werkende Windows/Linux-pc; Rescue Disk draait op de onderzochte computer. Starten koppelt, repareert of beschrijft interne schijven niet automatisch. Werk lokaal of via SSH, optioneel met eigen Tailscale/Headscale. Cloud-AI vereist internet en je eigen account; traditionele tools kunnen offline werken. Geen LA AGUJA-account of centrale relay. Experimenteel, geen universele hardwaregarantie."
+      "Een lanceerplatform, niet alleen een reddingsboei.",
+      "LA AGUJA maakt van een geschikte pc een Linux-werkplaats vóór het geïnstalleerde besturingssysteem start — zelfs met een lege schijf. Geef je agent een missie: bouwen, configureren, experimenteren, migreren of herstellen.",
+      "De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.",
+      "Inbegrepen: AI-clients met root-toegang, SSH, Python, Git, schijfhulpmiddelen, debootstrap en arch-install-scripts. Breid uit met geschikte pakketten: QEMU/KVM, container-engines en build-tools vereisen extra installatie, genoeg RAM/opslag en geschikte hardware. Sla belangrijke resultaten bewust op; RAM is tijdelijk. Cloud-AI vereist netwerk en je eigen account; er is geen lokaal model inbegrepen."
     ],
     [
       "Je eerste USB",
@@ -162,8 +164,8 @@
       "aguja tools geeft inventaris. ddrescue voor images met map, TestDisk/PhotoRec voor herstel, rsync voor kopiëren, smartctl/nvme-cli voor hardware. Volume/versleuteling vereist juiste doelen en sleutels. Opdrachten hieronder geven oriëntatie. Geen format, bootloaderinstallatie of partitiewrites naar geraden apparaat. Lees handleidingen, werk zo nodig op kopie. Traditionele tools zonder cloud; geen universele herstelgarantie."
     ],
     [
-      "Tien praktische routes",
-      "1. Niet-startende pc inventariseren. 2. Toegestane bestanden elders kopiëren. 3. ddrescue-image met map. 4. Inspectie voor TestDisk. 5. PhotoRec naar ander medium. 6. SMART/NVMe. 7. UEFI/bootloaderdiagnose na kopie. 8. BitLocker/LUKS met juiste sleutel. 9. Toegestane SSH-ondersteuning. 10. OS-installatie alleen op goedgekeurd doel. Aanpasbare procedures, geen automatische reparaties. Herken bron/doel/terugweg en controleer resultaat; herstel niet naar bron."
+      "Acht missies. Herstel is er maar één.",
+      "Gebruik de aanwezige Linux-tools of voeg projectafhankelijkheden toe. Dit zijn aanpasbare missies, geen éénklikfuncties of allemaal al geteste scenario’s."
     ],
     [
       "Professioneel werken",
@@ -264,6 +266,10 @@
   ],
   "faqTitle": "Voordat je begint",
   "faq": [
+    [
+      "Is dit alleen een herstelschijf?",
+      "Start een onafhankelijk Linux vanaf USB en zet AI-agenten aan het werk: systemen installeren, servers configureren, een virtueel lab bouwen of gegevens herstellen. Een werkend geïnstalleerd systeem is optioneel. Je volgende project niet."
+    ],
     [
       "Moet Windows of Linux nog werken?",
       "Nee. Je start de Linux van La Aguja vanaf USB. De hardware moet compatibel zijn en vanaf dit medium kunnen starten."

@@ -21,7 +21,7 @@
   "mascotAlt": "Agujita, a agulha cromada de olhos âmbar e bigode encaracolado",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Recuperar o que havia. Preparar o que vem.",
+    "Uma plataforma de lançamento, não apenas um salva-vidas.",
     "O resgate é o ponto de partida, não o único uso possível."
   ],
   "steps": [
@@ -34,8 +34,8 @@
       "Arranque pelo USB. La Aguja carrega o seu próprio Linux, sem depender do sistema instalado."
     ],
     [
-      "Compreenda e decida",
-      "Examine o computador, faça uma cópia quando necessário e combine as alterações antes de as executar."
+      "Instalar e configurar Linux",
+      "Inicie um Linux independente pelo USB e coloque agentes de IA para trabalhar: instalar sistemas, configurar servidores, criar um laboratório virtual ou recuperar dados. Um sistema instalado funcionando é opcional. Seu próximo projeto, não."
     ]
   ],
   "imagerTitle": "Prepare o USB com Flash Imager",
@@ -52,8 +52,8 @@
   "imageNote": "Descomprime a imagem antes da importação manual. A transferência integrada junta as partes num único .img verificado.",
   "privacy": "Privacidade",
   "footer": "Código aberto · GPL-3.0-or-later · A sua rede, sem relay LA AGUJA.",
-  "docTitle": "Guia do utilizador · LA AGUJA Rescue Disk",
-  "docDescription": "Preparar USB, arrancar, usar IA e SSH, compreender a encriptação, recuperar dados e resolver problemas.",
+  "docTitle": "Guia do utilizador · LA AGUJA",
+  "docDescription": "Preparar um USB, iniciar Linux independente, trabalhar com IA, instalar e configurar sistemas, explorar laboratórios virtuais, migrar ou recuperar dados.",
   "docUI": [
     "Saltar para o guia",
     "Índice e pesquisa",
@@ -82,9 +82,10 @@
   ],
   "sections": [
     [
-      "Pequena entrada. Controlo completo.",
-      "LA AGUJA é um Linux de resgate x86-64 que arranca do USB antes do sistema instalado. O Imager prepara o USB num Windows/Linux funcional; o Rescue Disk funciona no computador examinado. Arrancar não monta, repara nem escreve automaticamente nos discos internos.",
-      "Trabalha localmente ou por SSH, com Tailscale/Headscale opcional. IA na nuvem exige Internet e conta própria; ferramentas tradicionais podem funcionar offline. Sem conta LA AGUJA nem relay central. Projeto experimental, sem compatibilidade universal garantida."
+      "Uma plataforma de lançamento, não apenas um salva-vidas.",
+      "LA AGUJA transforma um PC compatível em uma oficina Linux antes de iniciar o sistema instalado, mesmo com o disco vazio. Dê uma missão ao agente: construir, configurar, experimentar, migrar ou recuperar.",
+      "A sessão live usa uma camada gravável em RAM sobre a imagem USB somente leitura. É Linux, não firmware, e o USB inteiro não é copiado para RAM. Os discos internos ficam intactos ao iniciar; você decide quando usá-los para gravação.",
+      "Inclui clientes de IA com acesso root, SSH, Python, Git, ferramentas de discos, debootstrap e arch-install-scripts. Amplie com pacotes compatíveis: QEMU/KVM, motores de contêineres e ferramentas de compilação exigem instalação adicional, RAM/armazenamento suficientes e hardware compatível. Salve os resultados importantes explicitamente; a RAM é temporária. IA na nuvem exige rede e sua conta; não há modelo local incluído."
     ],
     [
       "O teu primeiro USB",
@@ -182,9 +183,8 @@
       "Comandos abaixo são de orientação. Não formates, instales bootloader ou escrevas partições em dispositivo adivinhado. Consulta manuais e trabalha em cópia quando adequado. Ferramentas tradicionais não exigem nuvem; não garantem toda recuperação."
     ],
     [
-      "Dez percursos práticos",
-      "1. Inventário de PC sem arranque. 2. Cópia autorizada para outro destino. 3. Imagem ddrescue com mapa. 4. Inspeção antes de TestDisk. 5. PhotoRec para outro disco. 6. SMART/NVMe. 7. Diagnóstico UEFI/bootloader após cópia. 8. BitLocker/LUKS com chave certa. 9. Suporte SSH autorizado. 10. Instalação de OS só num alvo aprovado.",
-      "Procedimentos adaptáveis, não reparações automáticas nem garantias. Define origem, destino e retorno; valida o resultado observável. Não recuperes dados para o próprio disco de origem."
+      "Oito missões. Recuperar é só uma.",
+      "Use as ferramentas Linux incluídas ou adicione dependências do projeto. São missões adaptáveis, não funções de um clique nem cenários todos já testados."
     ],
     [
       "Percurso profissional",
@@ -290,6 +290,10 @@
   ],
   "faqTitle": "Antes de começar",
   "faq": [
+    [
+      "É apenas um disco de recuperação?",
+      "Inicie um Linux independente pelo USB e coloque agentes de IA para trabalhar: instalar sistemas, configurar servidores, criar um laboratório virtual ou recuperar dados. Um sistema instalado funcionando é opcional. Seu próximo projeto, não."
+    ],
     [
       "Windows ou Linux precisam de funcionar?",
       "Não. Inicia o Linux de La Aguja pelo USB. Precisa de hardware compatível e capacidade de arrancar por esse suporte."

@@ -1,13 +1,13 @@
 {
   "hero": [
-    "Deine KI. Dein Rechner.",
-    "Vor dem installierten System."
+    "Ein kleiner Zugang.",
+    "Große Möglichkeiten."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Starte ein unabhängiges Linux vom USB-Stick und lass KI-Agenten arbeiten: Systeme installieren, Server konfigurieren, ein virtuelles Labor aufbauen oder Daten retten. Ein funktionierendes installiertes System ist optional. Dein nächstes Projekt nicht.",
+  "lead": "Starte unabhängiges Linux vom USB und gib dem KI-Agenten eine Mission: Systeme bauen, Windows vorbereiten, virtuelle Labore erstellen oder erlaubte Rechner koordinieren. Beginne mit der Hardware, nicht dem Zustand des installierten Systems.",
   "introTitle": "Eine Startrampe, nicht nur ein Rettungsring.",
   "intro": [
-    "LA AGUJA macht einen kompatiblen PC zur Linux-Werkstatt, bevor sein installiertes Betriebssystem startet — auch bei leerer Festplatte. Gib deinem Agenten einen Auftrag: bauen, konfigurieren, experimentieren, migrieren oder retten.",
+    "Gib einem fortgeschrittenen Agenten ein Ziel, nicht nur einen Reparaturbefehl. Er kann Hardware prüfen, Werkzeuge auswählen, Skripte im erlaubten Rahmen erzeugen und ausführen sowie Ergebnisse kontrollieren. Das installierte System muss weder starten noch überhaupt existieren.",
     "Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.",
     "Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: QEMU/KVM, Container-Engines oder Build-Werkzeuge erfordern zusätzliche Installation, genügend RAM und Speicher sowie passende Hardware. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten."
   ],
@@ -46,9 +46,19 @@
         "Ergebnis testen, Artefakte exportieren und Dienste beenden."
       ],
       "stop": "Daten nur im RAM blieben oder Zugriffe den Auftrag überschreiten."
+    },
+    {
+      "title": "Die nächste Windows-Installation vorbereiten",
+      "intro": "Prüfe Hardware, offizielle Medien, Treiber und Antwortdatei. Bereite Dateien unter Linux vor; nutze Windows Setup oder WinPE/DISM/BCDBoot nach Bedarf und prüfe einen echten Windows-Start. Medien und Lizenzen sind nicht enthalten.",
+      "steps": [
+        "Erfasse Hardware, genaues Ziel, Backup und Windows-Anforderungen.",
+        "Bereite offizielle Medien und geprüfte Dateien vor; nutze Windows/WinPE für natives Deployment.",
+        "Starte Windows und prüfe Treiber, Anwendungen und Konfiguration."
+      ],
+      "stop": "Ziel oder Backup unklar sind."
     }
   ],
-  "casesTitle": "Acht Missionen. Rettung ist nur eine davon.",
+  "casesTitle": "Was könntest du schon ab dem Start aufbauen?",
   "casesNote": "Nutze die enthaltenen Linux-Werkzeuge oder ergänze Projektabhängigkeiten. Das sind anpassbare Missionen, keine Ein-Klick-Funktionen und keine bereits vollständig getesteten Szenarien.",
   "cases": [
     [
@@ -87,7 +97,67 @@
       "Erzeuge Skripte für Distributionsabbilder oder vergleiche Konfigurationen über VM-Snapshots. Nutze offizielle Medien, isolierte Netze und zusätzliche Werkzeuge; sichere Rezepte außerhalb des RAM."
     ],
     [
-      "08 / RETTUNGSMISSION",
+      "08 / PHYSISCH → VIRTUELL",
+      "Den alten Rechner als Gast bewahren",
+      "Erstelle eine erlaubte Kopie, ergänze Konvertierungswerkzeuge und passe Boot und Treiber an eine VM an. Prüfe Anwendungen und Lizenzen, bevor du das Original stilllegst; ein Abbild allein reicht nicht."
+    ],
+    [
+      "09 / NETZWERKSTART",
+      "Eine Station, mehrere leere Rechner",
+      "Ergänze PXE/iPXE und Serverwerkzeuge für offizielle Bootmedien in einem isolierten Labornetz. Der Agent erstellt Menüs und Rechnerpläne; dafür ist Netzwerkkonfiguration nötig, kein eingebauter PXE-Knopf."
+    ],
+    [
+      "10 / OS-ABBILDFABRIK",
+      "Das nächste Linux selbst bauen",
+      "Mache aus Unterricht, Entwicklung oder Appliance eine Paketliste und reproduzierbare Rezeptur. Ergänze live-build oder den passenden Distributionsbuilder, nutze separaten Speicher und teste das Abbild in einer VM."
+    ],
+    [
+      "11 / OPTIONALE LOKALE KI",
+      "Eine Modellstation auf eigener Hardware",
+      "Prüfe CPU, GPU und Speicher, ergänze passende Inferenzsoftware und ein angemessen großes, lizenziertes Modell und teste lokal. Software, Gewichte und GPU-Treiber sind zusätzlich; das stärkste Cloud-Modell passt nicht automatisch auf den Rechner."
+    ],
+    [
+      "12 / RECHENWERKSTATT",
+      "Freie Hardware mit wissenschaftlichem Auftrag",
+      "Plane Analyse, Simulation oder Rendering mit festen Ressourcen ohne die installierte Umgebung. Ergänze Abhängigkeiten, prüfe GPU-Unterstützung, teste synthetische Daten und exportiere Ergebnisse. Ein Cluster benötigt separat vorbereitete Knoten und Werkzeuge."
+    ],
+    [
+      "13 / EDGE-STATION",
+      "Eine temporäre Brücke zwischen Geräten und Daten",
+      "Baue mit erlaubten USB- oder Netzwerksensoren einen Sammler und ein lokales Dashboard. Ergänze Protokollbibliotheken oder Broker, prüfe Zeitstempel und Messwerte und exportiere Daten; Gerätesteuerung ist ein eigener Auftrag."
+    ],
+    [
+      "14 / RECHNER-DIRIGENT",
+      "Temporäre Steuerung mehrerer Linux-Hosts",
+      "Nutze das Live-System als SSH-Station mit zusätzlicher Automatisierung wie Ansible. Erstelle ein klares Inventar, konfiguriere einen erlaubten Knoten und prüfe vor Erweiterung. Jeder Host braucht eigene Zugänge, Ressourcen und Erlaubnis."
+    ],
+    [
+      "15 / AUSFALLZWILLING",
+      "Den Serververlust proben, ohne ihn zu verlieren",
+      "Stelle erlaubte Backups in isolierten Gästen auf separatem Speicher wieder her und prüfe Boot, Wiederherstellungszeit und Anwendungsdaten. Ergänze Hypervisor und Restore-Werkzeuge; keine doppelten Produktionsadressen oder echten Zugangsdaten."
+    ],
+    [
+      "16 / WINDOWS-DEPLOYMENT",
+      "Die nächste Windows-Installation vorbereiten",
+      "Prüfe Hardware, offizielle Medien, Treiber und Antwortdatei. Bereite Dateien unter Linux vor; nutze Windows Setup oder WinPE/DISM/BCDBoot nach Bedarf und prüfe einen echten Windows-Start. Medien und Lizenzen sind nicht enthalten."
+    ],
+    [
+      "17 / WINDOWS-ROLLENKIT",
+      "Vom frischen Windows zum Arbeitsrechner",
+      "Lass geprüfte PowerShell-Skripte und eine winget-Liste für Entwicklung, Gestaltung oder Büro erstellen. Führe sie nach Windows-Start aus und prüfe Ergebnisse; Linux führt Windows-eigene Einrichtung nicht direkt auf einer Offline-Platte aus."
+    ],
+    [
+      "18 / WINDOWS-LABOR",
+      "Anwendungen und Richtlinien in Wegwerfgästen testen",
+      "Ergänze passenden Hypervisor und offizielle lizenzierte Windows-/Windows-Server-Medien. Vergleiche Anwendungen, Updates oder Domänenrichtlinien isoliert; prüfe Ressourcen, virtuelle TPM-/Firmware-Anforderungen und Lizenzen."
+    ],
+    [
+      "19 / WINDOWS + LINUX",
+      "Beide Welten mit klarem Bootplan behalten",
+      "Erfasse Windows, Verschlüsselung und Backup, dann plane Linux daneben auf erlaubtem Ziel. Nutze native Windows-Vorbereitung nach Bedarf, bewahre Booteinträge und teste beide Systeme. Keine Umgehung oder blinde NTFS-Verkleinerung."
+    ],
+    [
+      "20 / RETTUNGSMISSION",
       "Wenn das bestehende System zurückkommen soll",
       "Untersuche Startfehler, sichere verdächtige Datenträger mit ddrescue oder kopiere erlaubte Dateien auf ein anderes Ziel. Rettung ist Teil der Plattform, nicht ihre gesamte Identität."
     ]
@@ -166,7 +236,10 @@
       "Version 0.9.9 dokumentiert vier unabhängige BIOS/UEFI-VM-Starts und Neustarts mit und ohne verschlüsseltes Profil sowie Verlaufsprüfungen mit einem virtuellen Mausrad. Das ist weder ein Test eines physischen USB-Sticks noch einer menschlichen Mausgeste. Die Aufnahmen dieser Anleitung sind synthetische QA-Beispiele, keine Anbieteranmeldungen oder erfolgreichen Wiederherstellungen."
     ],
     "0": [],
-    "20": []
+    "20": [
+      "Prüfe Hardware, offizielle Medien, Treiber und Antwortdatei. Bereite Dateien unter Linux vor; nutze Windows Setup oder WinPE/DISM/BCDBoot nach Bedarf und prüfe einen echten Windows-Start. Medien und Lizenzen sind nicht enthalten.",
+      "Lass geprüfte PowerShell-Skripte und eine winget-Liste für Entwicklung, Gestaltung oder Büro erstellen. Führe sie nach Windows-Start aus und prüfe Ergebnisse; Linux führt Windows-eigene Einrichtung nicht direkt auf einer Offline-Platte aus."
+    ]
   },
   "prompts": {
     "17": "Untersuche nur den Computer, der mir gehört. Inventarisiere zuerst die Datenträger anhand von Modell, Seriennummer, Größe und Einhängestatus. Hänge nichts mit Schreibzugriff ein, repariere, formatiere oder installiere nichts. Berichte über Belege und Unsicherheiten und lege einen Sicherungsplan vor. Frage vor jeder Änderung nach.",

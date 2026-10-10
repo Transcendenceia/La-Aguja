@@ -5,7 +5,7 @@
 
 ## Een lanceerplatform, niet alleen een reddingsboei.
 
-LA AGUJA maakt van een geschikte pc een Linux-werkplaats vóór het geïnstalleerde besturingssysteem start — zelfs met een lege schijf. Geef je agent een missie: bouwen, configureren, experimenteren, migreren of herstellen.
+Geef een geavanceerde agent een doel, niet alleen een reparatiecommando. Hij kan hardware analyseren, tools kiezen, scripts maken en uitvoeren binnen je toestemming en resultaten controleren. Het geïnstalleerde systeem hoeft niet te starten of zelfs te bestaan.
 
 De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.
 
@@ -163,7 +163,7 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/nl/docs#herramientas)
 
-## Acht missies. Herstel is er maar één.
+## Wat zou je vanaf het opstarten kunnen bouwen?
 
 Gebruik de aanwezige Linux-tools of voeg projectafhankelijkheden toe. Dit zijn aanpasbare missies, geen éénklikfuncties of allemaal al geteste scenario’s.
 

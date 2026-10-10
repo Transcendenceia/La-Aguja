@@ -5,7 +5,7 @@
 
 ## A launchpad, not just a lifeboat.
 
-LA AGUJA turns a compatible PC into a Linux workbench before its installed operating system starts — even when the disk is blank. Give your agent a mission: build, configure, experiment, migrate or recover.
+Give an advanced agent an objective, not just a repair command. It can inspect the available hardware, choose tools, generate and run scripts within your authorised scope, and check the result. The installed OS does not need to start — or even exist.
 
 The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.
 
@@ -201,7 +201,7 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/en/docs#herramientas)
 
-## Eight missions. Rescue is only one.
+## What could you build from boot?
 
 Build on the included Linux tools or add the dependencies your project needs. These are adaptable missions, not one-click features or claims that every scenario has already been tested.
 

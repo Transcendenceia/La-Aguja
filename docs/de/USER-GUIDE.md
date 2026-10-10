@@ -5,7 +5,7 @@
 
 ## Eine Startrampe, nicht nur ein Rettungsring.
 
-LA AGUJA macht einen kompatiblen PC zur Linux-Werkstatt, bevor sein installiertes Betriebssystem startet — auch bei leerer Festplatte. Gib deinem Agenten einen Auftrag: bauen, konfigurieren, experimentieren, migrieren oder retten.
+Gib einem fortgeschrittenen Agenten ein Ziel, nicht nur einen Reparaturbefehl. Er kann Hardware prüfen, Werkzeuge auswählen, Skripte im erlaubten Rahmen erzeugen und ausführen sowie Ergebnisse kontrollieren. Das installierte System muss weder starten noch überhaupt existieren.
 
 Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.
 
@@ -201,7 +201,7 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/de/docs#herramientas)
 
-## Acht Missionen. Rettung ist nur eine davon.
+## Was könntest du schon ab dem Start aufbauen?
 
 Nutze die enthaltenen Linux-Werkzeuge oder ergänze Projektabhängigkeiten. Das sind anpassbare Missionen, keine Ein-Klick-Funktionen und keine bereits vollständig getesteten Szenarien.
 

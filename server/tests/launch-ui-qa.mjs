@@ -13,13 +13,14 @@ try{
   for(const suffix of ['','/docs']){
    await page.goto(base+'/'+lang+suffix);await page.evaluate(async()=>{for(const i of document.images){i.loading='eager';await i.decode();}});
    assert.equal(await page.locator('h1').count(),1);
+   assert.equal(await page.locator('.case-grid > article').count(),20);
    assert.equal(await page.locator('.language-nav a').count(),8);
    assert.equal(await page.locator('.language-nav [aria-current=page]').getAttribute('lang'),lang);
    if(!suffix){const faq=page.locator('#questions details').first();await faq.locator('summary').focus();await page.keyboard.press('Enter');assert(await faq.evaluate(x=>x.open));await page.keyboard.press('Enter');assert.equal(await faq.evaluate(x=>x.open),false);}
 
    const overflow=await page.evaluate(()=>{document.documentElement.style.overflow='visible';document.body.style.overflow='visible';return document.documentElement.scrollWidth>innerWidth;});assert.equal(overflow,false,lang+suffix+' '+width);
    for(const a of await page.locator('.actions a,.installer-links a').all()){const box=await a.boundingBox();assert(box&&box.x>=0&&box.x+box.width<=width+1,lang+' clipped action');}
-   await page.selectOption('#situation','plan-1');assert.equal(await page.locator('[data-plan]:visible').count(),1);await page.selectOption('#situation','all');assert.equal(await page.locator('[data-plan]:visible').count(),3);
+   await page.selectOption('#situation','plan-1');assert.equal(await page.locator('[data-plan]:visible').count(),1);await page.selectOption('#situation','all');assert.equal(await page.locator('[data-plan]:visible').count(),4);
    if(suffix){
     assert.equal(await page.locator('.doc-section').count(),26);await page.locator('.checklist input').first().check();assert((await page.locator('.check-status').innerText()).includes('1 / 6'));
     await page.fill('#doc-search','ENOSPC');assert(await page.locator('[data-doc-link]:visible').count()>0);assert(await page.locator('[data-doc-link]:visible').count()<26);await page.locator('#doc-search').press('Escape');assert.equal(await page.locator('[data-doc-link]:visible').count(),26);
@@ -36,7 +37,7 @@ try{
   }
   await context.close();
  }
- const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:960}});const page=await nojs.newPage();for(const lang of languages){await page.goto(base+'/'+lang+'/docs');assert.equal(await page.locator('.doc-section').count(),26);assert.equal(await page.locator('[data-plan]:visible').count(),3);assert.equal(await page.locator('.zoom-image').count(),5);}await nojs.close();
+ const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:960}});const page=await nojs.newPage();for(const lang of languages){await page.goto(base+'/'+lang+'/docs');assert.equal(await page.locator('.doc-section').count(),26);assert.equal(await page.locator('[data-plan]:visible').count(),4);assert.equal(await page.locator('.zoom-image').count(),5);}await nojs.close();
  assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
  // The existing edge proxy injects this beacon, also present on unchanged privacy pages.
  // Local checks remain strict; live checks require an explicit, narrow expectation.

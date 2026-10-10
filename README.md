@@ -1,6 +1,6 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk with Agujita, our mascot"></p>
 
-<p align="center"><strong>Your AI. Your machine. Before the installed OS.</strong><br>A bootable Linux workbench for building, configuring, experimenting and recovering.</p>
+<p align="center"><strong>A small entry point. Big possibilities.</strong><br>A bootable Linux workbench for building, configuring, experimenting and recovering.</p>
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
@@ -11,7 +11,7 @@ English is the primary repository language; [Spanish](README.es.md) is secondary
 
 **Your working PC → Flash Imager → your live USB → the machine you want to build on.**
 
-The live session uses a **writable RAM overlay over a read-only USB image**; it does not copy the entire USB into RAM or run AI in firmware. No internal disk is changed automatically at startup. Save useful outputs to chosen storage: RAM is temporary, but deliberate writes to disks persist. Cloud AI needs your account and networking; conventional tools can work offline. [Explore eight ambitious missions](docs/PLATFORM.md).
+The live session uses a **writable RAM overlay over a read-only USB image**; it does not copy the entire USB into RAM or run AI in firmware. No internal disk is changed automatically at startup. Save useful outputs to chosen storage: RAM is temporary, but deliberate writes to disks persist. Cloud AI needs your account and networking; conventional tools can work offline. [Explore twenty missions for Linux and Windows](docs/PLATFORM.md).
 
 No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requires Internet, your own compatible provider account and available quota. Third-party licences and terms remain separate: [NOTICE](NOTICE.md).
 
@@ -39,9 +39,13 @@ No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requir
 | Build and package software outside the disk environment | [Software factory](docs/PLATFORM.md#4-a-software-factory-independent-of-the-disk) | Reproducible scripts, test results and exported artifacts |
 | Prepare a NAS or application server | [Bare-metal bootstrap](docs/PLATFORM.md#5-bootstrap-a-nas-or-application-server-from-bare-metal) | Installed services verified from an authorised client |
 | Migrate storage or test a bold configuration | [Migration and experiments](docs/PLATFORM.md#6-a-migration-workshop-outside-both-systems) | Verified data, rollback and repeatable recipes |
+| Prepare and deploy Windows | [Windows deployment](docs/PLATFORM.md#16-prepare-and-deploy-an-official-windows-installation) | Official installation kit and verified native Windows boot |
+| Configure or test Windows for a new role | [Windows role kit and lab](docs/PLATFORM.md#17-a-repeatable-windows-work-role-kit) | Reviewed setup files or isolated guest tests, with native validation |
 | Diagnose or recover an existing system | [Recovery workflows](docs/SHOWCASE.md) | Observable results and retained backups |
 
 These are **workflow ideas and prompt templates**, not customer testimonials or fabricated success stories. Each example includes tools, expected deliverables and stop conditions.
+
+Beyond those starting points: physical-to-virtual migration, a PXE lab, custom Linux image recipes, optional local-model inference, scientific jobs, edge data collection and multi-host coordination. An advanced agent works from the objective and live evidence, not a fixed menu of repairs. See all [twenty missions](docs/PLATFORM.md).
 
 ## Get started
 

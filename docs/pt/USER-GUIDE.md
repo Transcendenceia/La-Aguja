@@ -5,7 +5,7 @@
 
 ## Uma plataforma de lançamento, não apenas um salva-vidas.
 
-LA AGUJA transforma um PC compatível em uma oficina Linux antes de iniciar o sistema instalado, mesmo com o disco vazio. Dê uma missão ao agente: construir, configurar, experimentar, migrar ou recuperar.
+Dê a um agente avançado um objetivo, não apenas um comando de reparo. Ele pode analisar hardware, escolher ferramentas, gerar e executar scripts no escopo autorizado e conferir o resultado. O sistema instalado não precisa iniciar, nem mesmo existir.
 
 A sessão live usa uma camada gravável em RAM sobre a imagem USB somente leitura. É Linux, não firmware, e o USB inteiro não é copiado para RAM. Os discos internos ficam intactos ao iniciar; você decide quando usá-los para gravação.
 
@@ -201,7 +201,7 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/pt/docs#herramientas)
 
-## Oito missões. Recuperar é só uma.
+## O que você poderia construir desde o boot?
 
 Use as ferramentas Linux incluídas ou adicione dependências do projeto. São missões adaptáveis, não funções de um clique nem cenários todos já testados.
 

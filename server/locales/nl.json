@@ -53,7 +53,7 @@
   "privacy": "Privacy",
   "footer": "Open source · GPL-3.0-or-later · Je eigen netwerk, zonder LA AGUJA-relay.",
   "docTitle": "Gebruikershandleiding · LA AGUJA",
-  "docDescription": "USB voorbereiden, onafhankelijk Linux starten, werken met AI, systemen installeren en configureren, virtuele labs verkennen, gegevens migreren of herstellen.",
+  "docDescription": "Start onafhankelijk Linux vanaf USB en geef de AI-agent een missie: systemen bouwen, Windows voorbereiden, virtuele labs maken of toegestane machines coördineren. Begin met hardware, niet de toestand van het geïnstalleerde systeem.",
   "docUI": [
     "Naar de handleiding",
     "Inhoud en zoeken",
@@ -83,7 +83,7 @@
   "sections": [
     [
       "Een lanceerplatform, niet alleen een reddingsboei.",
-      "LA AGUJA maakt van een geschikte pc een Linux-werkplaats vóór het geïnstalleerde besturingssysteem start — zelfs met een lege schijf. Geef je agent een missie: bouwen, configureren, experimenteren, migreren of herstellen.",
+      "Geef een geavanceerde agent een doel, niet alleen een reparatiecommando. Hij kan hardware analyseren, tools kiezen, scripts maken en uitvoeren binnen je toestemming en resultaten controleren. Het geïnstalleerde systeem hoeft niet te starten of zelfs te bestaan.",
       "De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.",
       "Inbegrepen: AI-clients met root-toegang, SSH, Python, Git, schijfhulpmiddelen, debootstrap en arch-install-scripts. Breid uit met geschikte pakketten: QEMU/KVM, container-engines en build-tools vereisen extra installatie, genoeg RAM/opslag en geschikte hardware. Sla belangrijke resultaten bewust op; RAM is tijdelijk. Cloud-AI vereist netwerk en je eigen account; er is geen lokaal model inbegrepen."
     ],
@@ -164,7 +164,7 @@
       "aguja tools geeft inventaris. ddrescue voor images met map, TestDisk/PhotoRec voor herstel, rsync voor kopiëren, smartctl/nvme-cli voor hardware. Volume/versleuteling vereist juiste doelen en sleutels. Opdrachten hieronder geven oriëntatie. Geen format, bootloaderinstallatie of partitiewrites naar geraden apparaat. Lees handleidingen, werk zo nodig op kopie. Traditionele tools zonder cloud; geen universele herstelgarantie."
     ],
     [
-      "Acht missies. Herstel is er maar één.",
+      "Wat zou je vanaf het opstarten kunnen bouwen?",
       "Gebruik de aanwezige Linux-tools of voeg projectafhankelijkheden toe. Dit zijn aanpasbare missies, geen éénklikfuncties of allemaal al geteste scenario’s."
     ],
     [
@@ -268,7 +268,7 @@
   "faq": [
     [
       "Is dit alleen een herstelschijf?",
-      "Start een onafhankelijk Linux vanaf USB en zet AI-agenten aan het werk: systemen installeren, servers configureren, een virtueel lab bouwen of gegevens herstellen. Een werkend geïnstalleerd systeem is optioneel. Je volgende project niet."
+      "Start onafhankelijk Linux vanaf USB en geef de AI-agent een missie: systemen bouwen, Windows voorbereiden, virtuele labs maken of toegestane machines coördineren. Begin met hardware, niet de toestand van het geïnstalleerde systeem."
     ],
     [
       "Moet Windows of Linux nog werken?",

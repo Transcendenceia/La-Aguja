@@ -53,7 +53,7 @@
   "privacy": "Privacy",
   "footer": "Open source · GPL-3.0-or-later · Your network, no LA AGUJA relay.",
   "docTitle": "User guide · LA AGUJA",
-  "docDescription": "Prepare a USB, boot an independent Linux, work with AI, install and configure systems, explore virtual labs, migrate or recover data.",
+  "docDescription": "Boot an independent Linux from USB and give your AI agent a mission: build systems, prepare Windows, create a virtual lab or coordinate authorised machines. Start with the hardware, not the state of the installed OS.",
   "docUI": [
     "Skip to the guide",
     "Contents and search",
@@ -83,7 +83,7 @@
   "sections": [
     [
       "A launchpad, not just a lifeboat.",
-      "LA AGUJA turns a compatible PC into a Linux workbench before its installed operating system starts — even when the disk is blank. Give your agent a mission: build, configure, experiment, migrate or recover.",
+      "Give an advanced agent an objective, not just a repair command. It can inspect the available hardware, choose tools, generate and run scripts within your authorised scope, and check the result. The installed OS does not need to start — or even exist.",
       "The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.",
       "Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU/KVM, container engines or build tools need additional installation, enough RAM/storage and hardware support. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model."
     ],
@@ -183,7 +183,7 @@
       "Use the orientation commands below to collect evidence. Do not run formatting, bootloader installation, partition writes or repair commands against a guessed device. Consult each tool’s manual and work on a copy when appropriate. Traditional diagnostics do not require cloud AI. Tool availability is not a promise of recovering every file or every damaged device."
     ],
     [
-      "Eight missions. Rescue is only one.",
+      "What could you build from boot?",
       "Build on the included Linux tools or add the dependencies your project needs. These are adaptable missions, not one-click features or claims that every scenario has already been tested."
     ],
     [
@@ -292,7 +292,7 @@
   "faq": [
     [
       "Is this only a rescue disk?",
-      "Boot an independent Linux from USB and put AI agents to work: install systems, configure servers, build a virtual lab or recover data. A working installed OS is optional. Your next project is not."
+      "Boot an independent Linux from USB and give your AI agent a mission: build systems, prepare Windows, create a virtual lab or coordinate authorised machines. Start with the hardware, not the state of the installed OS."
     ],
     [
       "Must Windows or Linux still work?",

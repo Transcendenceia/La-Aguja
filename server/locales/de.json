@@ -53,7 +53,7 @@
   "privacy": "Datenschutz",
   "footer": "Open Source · GPL-3.0-or-later · Dein Netz, kein LA-AGUJA-Relay.",
   "docTitle": "Benutzerhandbuch · LA AGUJA",
-  "docDescription": "USB vorbereiten, unabhängiges Linux starten, mit KI arbeiten, Systeme installieren und konfigurieren, virtuelle Labore erkunden, Daten migrieren oder retten.",
+  "docDescription": "Starte unabhängiges Linux vom USB und gib dem KI-Agenten eine Mission: Systeme bauen, Windows vorbereiten, virtuelle Labore erstellen oder erlaubte Rechner koordinieren. Beginne mit der Hardware, nicht dem Zustand des installierten Systems.",
   "docUI": [
     "Zum Handbuch springen",
     "Inhalt und Suche",
@@ -83,7 +83,7 @@
   "sections": [
     [
       "Eine Startrampe, nicht nur ein Rettungsring.",
-      "LA AGUJA macht einen kompatiblen PC zur Linux-Werkstatt, bevor sein installiertes Betriebssystem startet — auch bei leerer Festplatte. Gib deinem Agenten einen Auftrag: bauen, konfigurieren, experimentieren, migrieren oder retten.",
+      "Gib einem fortgeschrittenen Agenten ein Ziel, nicht nur einen Reparaturbefehl. Er kann Hardware prüfen, Werkzeuge auswählen, Skripte im erlaubten Rahmen erzeugen und ausführen sowie Ergebnisse kontrollieren. Das installierte System muss weder starten noch überhaupt existieren.",
       "Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.",
       "Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: QEMU/KVM, Container-Engines oder Build-Werkzeuge erfordern zusätzliche Installation, genügend RAM und Speicher sowie passende Hardware. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten."
     ],
@@ -183,7 +183,7 @@
       "Die Befehle unten dienen der Bestandsaufnahme. Keine Formatierung, Bootloaderinstallation oder Partitionstabellen-Schreibaktion auf einem geratenen Gerät. Lies die jeweiligen Handbücher und arbeite gegebenenfalls auf Kopien. Klassische Werkzeuge brauchen keine Cloud-KI; universelle Wiederherstellung wird nicht versprochen."
     ],
     [
-      "Acht Missionen. Rettung ist nur eine davon.",
+      "Was könntest du schon ab dem Start aufbauen?",
       "Nutze die enthaltenen Linux-Werkzeuge oder ergänze Projektabhängigkeiten. Das sind anpassbare Missionen, keine Ein-Klick-Funktionen und keine bereits vollständig getesteten Szenarien."
     ],
     [
@@ -292,7 +292,7 @@
   "faq": [
     [
       "Ist das nur ein Rettungsdatenträger?",
-      "Starte ein unabhängiges Linux vom USB-Stick und lass KI-Agenten arbeiten: Systeme installieren, Server konfigurieren, ein virtuelles Labor aufbauen oder Daten retten. Ein funktionierendes installiertes System ist optional. Dein nächstes Projekt nicht."
+      "Starte unabhängiges Linux vom USB und gib dem KI-Agenten eine Mission: Systeme bauen, Windows vorbereiten, virtuelle Labore erstellen oder erlaubte Rechner koordinieren. Beginne mit der Hardware, nicht dem Zustand des installierten Systems."
     ],
     [
       "Müssen Windows oder Linux noch funktionieren?",

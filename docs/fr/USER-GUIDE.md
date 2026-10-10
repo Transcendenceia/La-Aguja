@@ -5,7 +5,7 @@
 
 ## Une rampe de lancement, pas seulement une bouée.
 
-LA AGUJA transforme un PC compatible en atelier Linux avant le démarrage du système installé, même avec un disque vide. Donnez une mission à votre agent : construire, configurer, expérimenter, migrer ou récupérer.
+Donnez à un agent avancé un objectif, pas seulement une commande de réparation. Il peut analyser le matériel, choisir des outils, générer et exécuter des scripts dans le périmètre autorisé et vérifier le résultat. Le système installé n’a pas besoin de démarrer, ni même d’exister.
 
 La session live utilise une couche inscriptible en RAM sur l’image USB en lecture seule. Il s’agit de Linux, pas du firmware ; toute la clé USB n’est pas copiée en RAM. Les disques internes restent intacts au démarrage ; vous choisissez ensuite de les utiliser.
 
@@ -201,7 +201,7 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/fr/docs#herramientas)
 
-## Huit missions. La récupération n’en est qu’une.
+## Que pourriez-vous construire dès le démarrage ?
 
 Utilisez les outils Linux inclus ou ajoutez les dépendances du projet. Ce sont des missions adaptables, pas des fonctions en un clic ni des scénarios tous déjà testés.
 

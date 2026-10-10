@@ -1,13 +1,13 @@
 {
   "hero": [
-    "Your AI. Your machine.",
-    "Before the installed OS."
+    "A small entry point.",
+    "Big possibilities."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Boot an independent Linux from USB and put AI agents to work: install systems, configure servers, build a virtual lab or recover data. A working installed OS is optional. Your next project is not.",
+  "lead": "Boot an independent Linux from USB and give your AI agent a mission: build systems, prepare Windows, create a virtual lab or coordinate authorised machines. Start with the hardware, not the state of the installed OS.",
   "introTitle": "A launchpad, not just a lifeboat.",
   "intro": [
-    "LA AGUJA turns a compatible PC into a Linux workbench before its installed operating system starts — even when the disk is blank. Give your agent a mission: build, configure, experiment, migrate or recover.",
+    "Give an advanced agent an objective, not just a repair command. It can inspect the available hardware, choose tools, generate and run scripts within your authorised scope, and check the result. The installed OS does not need to start — or even exist.",
     "The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.",
     "Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU/KVM, container engines or build tools need additional installation, enough RAM/storage and hardware support. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model."
   ],
@@ -46,9 +46,19 @@
         "Test the result, export artifacts and stop temporary services."
       ],
       "stop": "data would exist only in RAM or access exceeds the agreed scope."
+    },
+    {
+      "title": "Prepare the next Windows installation",
+      "intro": "Inspect hardware and plan official media, drivers and a reviewed answer file. Stage files from Linux; run Windows Setup or WinPE/DISM/BCDBoot where required and verify the real Windows boot. Media and licences are yours, not bundled.",
+      "steps": [
+        "Inventory hardware, the exact target, backup and Windows requirements.",
+        "Prepare official media and reviewed files; use Windows/WinPE tools for native deployment.",
+        "Boot Windows and verify drivers, applications and the intended configuration."
+      ],
+      "stop": "the target or backup is uncertain."
     }
   ],
-  "casesTitle": "Eight missions. Rescue is only one.",
+  "casesTitle": "What could you build from boot?",
   "casesNote": "Build on the included Linux tools or add the dependencies your project needs. These are adaptable missions, not one-click features or claims that every scenario has already been tested.",
   "cases": [
     [
@@ -87,7 +97,67 @@
       "Generate scripts to build distro images or compare configurations across VM snapshots. Use official media and isolated networks; add the required image/VM tooling and preserve recipes and results outside RAM."
     ],
     [
-      "08 / RECOVERY MISSION",
+      "08 / PHYSICAL → VIRTUAL",
+      "Keep your old computer as a guest",
+      "Acquire an authorised copy, add suitable conversion tools and adapt boot and drivers for a VM. Verify applications and licences in the guest before retiring the physical original; an image alone is not a finished conversion."
+    ],
+    [
+      "09 / NETWORK LAUNCHPAD",
+      "One boot station, several blank machines",
+      "Add PXE/iPXE and server tools to supply official boot media to compatible machines on an isolated lab network. The agent can prepare menus and per-machine plans; this needs network configuration, not a bundled PXE button."
+    ],
+    [
+      "10 / OS IMAGE FACTORY",
+      "Build the Linux you want to boot next",
+      "Turn a role — classroom, developer station or application appliance — into a repeatable package list and image recipe. Add live-build or the appropriate distro builder, build on separate storage and test the resulting image in a VM."
+    ],
+    [
+      "11 / OPTIONAL LOCAL AI",
+      "A model station on hardware you already own",
+      "Inspect CPU, GPU and memory, add a compatible inference runtime and an appropriately sized licensed model, then test a local endpoint. Runtime, weights and GPU drivers are additional; the strongest cloud model will not automatically fit locally."
+    ],
+    [
+      "12 / COMPUTE WORKSHOP",
+      "Give idle hardware a scientific mission",
+      "Prepare a bounded data-analysis, simulation or rendering job without inheriting the installed software. Add dependencies, check any GPU support, run synthetic validation first and save results externally. A cluster needs separately prepared nodes and tooling."
+    ],
+    [
+      "13 / EDGE STATION",
+      "A temporary bridge for devices and data",
+      "With authorised USB or network sensors, let the agent build a collector and local dashboard. Add protocol libraries or a broker as needed, validate timestamps and readings, and export the dataset; device control is a separate scope."
+    ],
+    [
+      "14 / FLEET CONDUCTOR",
+      "One temporary control plane, several Linux hosts",
+      "Use the live as a control station with SSH and an added automation tool such as Ansible. Build an explicit inventory, configure one permitted node first and validate before expanding. Remote nodes need their own access, resources and approval."
+    ],
+    [
+      "15 / CONTINGENCY TWIN",
+      "Rehearse losing the server without losing the server",
+      "Restore authorised backups into isolated guest machines on separate storage, then test startup, restore time and application data. Add a hypervisor and restore tools; never connect the twin with duplicate production addresses or real credentials."
+    ],
+    [
+      "16 / WINDOWS DEPLOYMENT",
+      "Prepare the next Windows installation",
+      "Inspect hardware and plan official media, drivers and a reviewed answer file. Stage files from Linux; run Windows Setup or WinPE/DISM/BCDBoot where required and verify the real Windows boot. Media and licences are yours, not bundled."
+    ],
+    [
+      "17 / WINDOWS ROLE KIT",
+      "Turn a fresh Windows into your work machine",
+      "Have the agent assemble a reviewed PowerShell setup and winget app list for development, design or office work. Execute and validate them after Windows starts; Linux cannot directly run Windows-specific setup tools against an offline disk."
+    ],
+    [
+      "18 / WINDOWS LAB",
+      "Test applications and policies in disposable guests",
+      "Add a suitable hypervisor and official licensed Windows or Windows Server media. Create isolated guests to compare applications, updates or domain policies before touching the real workstation; check resources, virtual TPM/firmware requirements and licensing."
+    ],
+    [
+      "19 / WINDOWS + LINUX",
+      "Keep both worlds, with an explicit boot plan",
+      "Inventory your Windows installation, encryption and backup, then plan Linux alongside it on an approved target. Use Windows-native preparation where needed; preserve boot entries and test both systems. No requirement bypass or blind NTFS resize."
+    ],
+    [
+      "20 / RECOVERY MISSION",
       "When the existing system needs a way back",
       "Diagnose a failed boot, image a suspect disk with ddrescue or copy authorised files elsewhere. Recovery is part of the platform, not its entire identity."
     ]
@@ -166,7 +236,10 @@
       "Release 0.9.9 records four independent BIOS/UEFI VM boots and restarts, with and without an encrypted profile, plus virtual mouse-wheel history checks. This is not a physical-USB or human mouse-gesture test. The screenshots in this guide are synthetic QA examples, not provider logins or successful recoveries."
     ],
     "0": [],
-    "20": []
+    "20": [
+      "Inspect hardware and plan official media, drivers and a reviewed answer file. Stage files from Linux; run Windows Setup or WinPE/DISM/BCDBoot where required and verify the real Windows boot. Media and licences are yours, not bundled.",
+      "Have the agent assemble a reviewed PowerShell setup and winget app list for development, design or office work. Execute and validate them after Windows starts; Linux cannot directly run Windows-specific setup tools against an offline disk."
+    ]
   },
   "prompts": {
     "17": "Inspect only the computer I own. First inventory disks by model, serial, size and mount state. Do not mount read-write, repair, format or install anything. Report evidence, uncertainty and a backup plan. Ask before any change.",

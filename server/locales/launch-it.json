@@ -1,13 +1,13 @@
 {
   "hero": [
-    "La tua IA. Il tuo computer.",
-    "Prima del sistema installato."
+    "Un piccolo ingresso.",
+    "Grandi possibilità."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Avvia un Linux indipendente da USB e metti al lavoro gli agenti IA: installa sistemi, configura server, crea un laboratorio virtuale o recupera dati. Un sistema installato funzionante è facoltativo. Il tuo prossimo progetto, no.",
+  "lead": "Avvia Linux indipendente da USB e dai una missione all’agente IA: costruire sistemi, preparare Windows, creare laboratori virtuali o coordinare macchine autorizzate. Parti dall’hardware, non dallo stato del sistema installato.",
   "introTitle": "Una piattaforma di lancio, non solo un salvagente.",
   "intro": [
-    "LA AGUJA trasforma un PC compatibile in un’officina Linux prima dell’avvio del sistema installato, anche con il disco vuoto. Dai una missione all’agente: costruire, configurare, sperimentare, migrare o recuperare.",
+    "Dai a un agente avanzato un obiettivo, non solo un comando di riparazione. Può analizzare hardware, scegliere strumenti, generare ed eseguire script nel perimetro autorizzato e verificare i risultati. Il sistema installato non deve avviarsi, né necessariamente esistere.",
     "La sessione live usa uno strato scrivibile in RAM sopra l’immagine USB di sola lettura. È Linux, non firmware; l’intera USB non viene copiata in RAM. I dischi interni restano intatti all’avvio; decidi tu quando scriverci.",
     "Include client IA con accesso root, SSH, Python, Git, strumenti per dischi, debootstrap e arch-install-scripts. Aggiungi pacchetti compatibili: QEMU/KVM, motori di container e strumenti di compilazione richiedono installazione aggiuntiva, RAM/spazio sufficienti e hardware compatibile. Salva esplicitamente i risultati importanti; la RAM è temporanea. L’IA cloud richiede rete e il tuo account; nessun modello locale è incluso."
   ],
@@ -46,9 +46,19 @@
         "Testa, esporta artefatti e arresta i servizi temporanei."
       ],
       "stop": "i dati resterebbero solo in RAM o gli accessi supererebbero l’incarico."
+    },
+    {
+      "title": "Prepara la prossima installazione Windows",
+      "intro": "Verifica hardware, media ufficiali, driver e file di risposte revisionato. Prepara file da Linux; usa Windows Setup o WinPE/DISM/BCDBoot quando serve e controlla un vero avvio. Media e licenze non sono inclusi.",
+      "steps": [
+        "Inventaria hardware, destinazione, backup e requisiti Windows.",
+        "Prepara media e file verificati; usa Windows/WinPE per distribuzione nativa.",
+        "Avvia Windows e verifica driver, applicazioni e configurazione."
+      ],
+      "stop": "destinazione o backup non sono chiari."
     }
   ],
-  "casesTitle": "Otto missioni. Il recupero è solo una.",
+  "casesTitle": "Cosa potresti costruire fin dall’avvio?",
   "casesNote": "Usa gli strumenti Linux inclusi o aggiungi le dipendenze del progetto. Sono missioni adattabili, non funzioni con un clic né scenari tutti già collaudati.",
   "cases": [
     [
@@ -87,7 +97,67 @@
       "Genera script per immagini di distribuzioni o confronta configurazioni con snapshot di VM. Usa media ufficiali, reti isolate e strumenti aggiuntivi; conserva ricette e risultati fuori RAM."
     ],
     [
-      "08 / MISSIONE RECUPERO",
+      "08 / FISICO → VIRTUALE",
+      "Conserva il vecchio PC come ospite",
+      "Crea una copia autorizzata, aggiungi strumenti di conversione e adatta avvio e driver a una VM. Verifica applicazioni e licenze prima di dismettere l’originale; una sola immagine non conclude la conversione."
+    ],
+    [
+      "09 / AVVIO DI RETE",
+      "Una stazione, più macchine vuote",
+      "Aggiungi PXE/iPXE e strumenti server per fornire media ufficiali su una rete isolata. L’agente prepara menu e piani per macchina; serve configurazione di rete, non un pulsante PXE integrato."
+    ],
+    [
+      "10 / FABBRICA DI IMMAGINI OS",
+      "Costruisci il prossimo Linux da avviare",
+      "Trasforma aula, sviluppo o appliance in pacchetti e ricetta ripetibile. Aggiungi live-build o il costruttore della distribuzione, usa storage separato e testa l’immagine in VM."
+    ],
+    [
+      "11 / IA LOCALE OPZIONALE",
+      "Una stazione di modelli sul tuo hardware",
+      "Controlla CPU, GPU e memoria, aggiungi runtime compatibile e modello con dimensioni e licenza adeguate e prova localmente. Runtime, pesi e driver sono aggiuntivi; il modello cloud più forte non entra automaticamente nel PC."
+    ],
+    [
+      "12 / OFFICINA DI CALCOLO",
+      "Una missione scientifica per hardware libero",
+      "Prepara analisi, simulazione o rendering con risorse definite senza ereditare il software installato. Aggiungi dipendenze, verifica GPU, valida con dati sintetici ed esporta risultati. Un cluster richiede nodi e strumenti preparati separatamente."
+    ],
+    [
+      "13 / STAZIONE EDGE",
+      "Un ponte temporaneo tra dispositivi e dati",
+      "Con sensori USB o di rete autorizzati, crea raccoglitore e dashboard locale. Aggiungi librerie o broker, verifica tempi e letture ed esporta dati; controllare dispositivi è un altro incarico."
+    ],
+    [
+      "14 / DIRETTORE DI SISTEMI",
+      "Controllo temporaneo di più host Linux",
+      "Usa il live come stazione SSH con automazione aggiuntiva come Ansible. Crea un inventario, configura un nodo autorizzato e verifica prima di estendere. Ogni remoto richiede accessi, risorse e permessi propri."
+    ],
+    [
+      "15 / GEMELLO DI CONTINUITÀ",
+      "Simula la perdita del server senza perderlo",
+      "Ripristina backup autorizzati in ospiti isolati su storage separato e verifica avvio, tempi e dati applicativi. Aggiungi hypervisor e strumenti; niente indirizzi di produzione duplicati o credenziali reali."
+    ],
+    [
+      "16 / DISTRIBUZIONE WINDOWS",
+      "Prepara la prossima installazione Windows",
+      "Verifica hardware, media ufficiali, driver e file di risposte revisionato. Prepara file da Linux; usa Windows Setup o WinPE/DISM/BCDBoot quando serve e controlla un vero avvio. Media e licenze non sono inclusi."
+    ],
+    [
+      "17 / KIT WINDOWS",
+      "Dal Windows nuovo alla macchina di lavoro",
+      "Chiedi script PowerShell verificati e lista winget per sviluppo, creazione o ufficio. Esegui e verifica dopo l’avvio Windows; Linux non esegue direttamente strumenti nativi Windows su un disco offline."
+    ],
+    [
+      "18 / LABORATORIO WINDOWS",
+      "Prova applicazioni e criteri in ospiti usa e getta",
+      "Aggiungi hypervisor adatto e media ufficiali con licenza Windows o Windows Server. Confronta applicazioni, aggiornamenti o criteri di dominio in isolamento; verifica risorse, TPM/firmware virtuali e licenze."
+    ],
+    [
+      "19 / WINDOWS + LINUX",
+      "Due mondi con un piano d’avvio esplicito",
+      "Inventaria Windows, cifratura e backup, poi pianifica Linux accanto su destinazione autorizzata. Usa preparazione nativa Windows quando serve, conserva le voci d’avvio e prova entrambi. Nessun aggiramento o ridimensionamento NTFS alla cieca."
+    ],
+    [
+      "20 / MISSIONE RECUPERO",
       "Quando il sistema esistente deve tornare",
       "Diagnostica un guasto di avvio, crea un’immagine con ddrescue o copia file autorizzati altrove. Il recupero è parte della piattaforma, non tutta la sua identità."
     ]
@@ -166,7 +236,10 @@
       "La versione 0.9.9 documenta quattro avvii e riavvii indipendenti in macchine virtuali BIOS/UEFI, con e senza profilo cifrato, e verifiche della cronologia tramite rotella virtuale. Non è una prova di USB fisica né di un gesto umano del mouse. Le schermate di questa guida sono esempi di test di qualità sintetici, non accessi a fornitori né recuperi riusciti."
     ],
     "0": [],
-    "20": []
+    "20": [
+      "Verifica hardware, media ufficiali, driver e file di risposte revisionato. Prepara file da Linux; usa Windows Setup o WinPE/DISM/BCDBoot quando serve e controlla un vero avvio. Media e licenze non sono inclusi.",
+      "Chiedi script PowerShell verificati e lista winget per sviluppo, creazione o ufficio. Esegui e verifica dopo l’avvio Windows; Linux non esegue direttamente strumenti nativi Windows su un disco offline."
+    ]
   },
   "prompts": {
     "17": "Esamina soltanto il computer di mia proprietà. Prima fai l'inventario dei dischi per modello, numero di serie, capacità e stato di montaggio. Non montare in lettura e scrittura, non riparare, non formattare e non installare nulla. Riporta evidenze, incertezze e un piano di backup. Chiedi prima di qualsiasi modifica.",

@@ -1,13 +1,13 @@
 {
   "hero": [
-    "Jouw AI. Jouw computer.",
-    "Vóór het geïnstalleerde systeem."
+    "Een kleine ingang.",
+    "Grote mogelijkheden."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Start een onafhankelijk Linux vanaf USB en zet AI-agenten aan het werk: systemen installeren, servers configureren, een virtueel lab bouwen of gegevens herstellen. Een werkend geïnstalleerd systeem is optioneel. Je volgende project niet.",
+  "lead": "Start onafhankelijk Linux vanaf USB en geef de AI-agent een missie: systemen bouwen, Windows voorbereiden, virtuele labs maken of toegestane machines coördineren. Begin met hardware, niet de toestand van het geïnstalleerde systeem.",
   "introTitle": "Een lanceerplatform, niet alleen een reddingsboei.",
   "intro": [
-    "LA AGUJA maakt van een geschikte pc een Linux-werkplaats vóór het geïnstalleerde besturingssysteem start — zelfs met een lege schijf. Geef je agent een missie: bouwen, configureren, experimenteren, migreren of herstellen.",
+    "Geef een geavanceerde agent een doel, niet alleen een reparatiecommando. Hij kan hardware analyseren, tools kiezen, scripts maken en uitvoeren binnen je toestemming en resultaten controleren. Het geïnstalleerde systeem hoeft niet te starten of zelfs te bestaan.",
     "De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.",
     "Inbegrepen: AI-clients met root-toegang, SSH, Python, Git, schijfhulpmiddelen, debootstrap en arch-install-scripts. Breid uit met geschikte pakketten: QEMU/KVM, container-engines en build-tools vereisen extra installatie, genoeg RAM/opslag en geschikte hardware. Sla belangrijke resultaten bewust op; RAM is tijdelijk. Cloud-AI vereist netwerk en je eigen account; er is geen lokaal model inbegrepen."
   ],
@@ -46,9 +46,19 @@
         "Test, exporteer resultaten en stop tijdelijke diensten."
       ],
       "stop": "gegevens alleen in RAM blijven of toegang buiten de opdracht valt."
+    },
+    {
+      "title": "Bereid de volgende Windows-installatie voor",
+      "intro": "Controleer hardware, officiële media, drivers en een nagekeken antwoordbestand. Bereid bestanden in Linux voor; gebruik Windows Setup of WinPE/DISM/BCDBoot waar nodig en controleer echte Windows-boot. Media en licenties zijn niet inbegrepen.",
+      "steps": [
+        "Inventariseer hardware, doel, backup en Windows-eisen.",
+        "Bereid officiële media en gecontroleerde bestanden voor; gebruik Windows/WinPE voor native deployment.",
+        "Start Windows en controleer drivers, apps en configuratie."
+      ],
+      "stop": "doel of backup onduidelijk is."
     }
   ],
-  "casesTitle": "Acht missies. Herstel is er maar één.",
+  "casesTitle": "Wat zou je vanaf het opstarten kunnen bouwen?",
   "casesNote": "Gebruik de aanwezige Linux-tools of voeg projectafhankelijkheden toe. Dit zijn aanpasbare missies, geen éénklikfuncties of allemaal al geteste scenario’s.",
   "cases": [
     [
@@ -87,7 +97,67 @@
       "Maak scripts voor distro-images of vergelijk configuraties met VM-snapshots. Gebruik officiële media, geïsoleerde netwerken en extra tools; bewaar recepten en resultaten buiten RAM."
     ],
     [
-      "08 / HERSTELMISSIE",
+      "08 / FYSIEK → VIRTUEEL",
+      "Bewaar je oude pc als gast",
+      "Maak een toegestane kopie, voeg conversietools toe en pas boot en drivers aan voor een VM. Controleer apps en licenties voor je het origineel uit gebruik neemt; een image alleen voltooit de conversie niet."
+    ],
+    [
+      "09 / NETWERKSTART",
+      "Eén station, meerdere lege machines",
+      "Voeg PXE/iPXE en servertools toe voor officiële bootmedia in een geïsoleerd labnetwerk. De agent maakt menu’s en machineplannen; dit vereist netwerkconfiguratie, geen ingebouwde PXE-knop."
+    ],
+    [
+      "10 / OS-IMAGEFABRIEK",
+      "Bouw de Linux die je hierna wilt starten",
+      "Maak van klaslokaal, ontwikkeling of appliance een pakketlijst en herhaalbaar recept. Voeg live-build of een distro-builder toe, gebruik aparte opslag en test het image in een VM."
+    ],
+    [
+      "11 / OPTIONELE LOKALE AI",
+      "Een modelstation op je eigen hardware",
+      "Controleer CPU, GPU en geheugen, voeg geschikte inferentiesoftware en een passend gelicentieerd model toe en test lokaal. Software, gewichten en drivers zijn extra; het sterkste cloudmodel past niet automatisch op de pc."
+    ],
+    [
+      "12 / REKENWERKPLAATS",
+      "Geef vrije hardware een wetenschappelijke taak",
+      "Plan analyse, simulatie of rendering met vaste middelen zonder bestaande software over te nemen. Voeg afhankelijkheden toe, controleer GPU-steun, test synthetische data en exporteer resultaten. Een cluster vereist apart voorbereide nodes en tools."
+    ],
+    [
+      "13 / EDGE-STATION",
+      "Een tijdelijke brug tussen apparaten en gegevens",
+      "Bouw met toegestane USB- of netwerksensoren een verzamelaar en lokaal dashboard. Voeg protocolbibliotheken of broker toe, controleer tijden en metingen en exporteer data; apparaatbesturing is een aparte opdracht."
+    ],
+    [
+      "14 / HOST-DIRIGENT",
+      "Tijdelijke besturing van meerdere Linux-hosts",
+      "Gebruik live-Linux als SSH-station met extra automatisering zoals Ansible. Maak een expliciete inventaris, configureer één toegestane node en controleer vóór uitbreiding. Elke remote host heeft eigen toegang, middelen en toestemming nodig."
+    ],
+    [
+      "15 / CONTINUÏTEITSTWEELING",
+      "Oefen serververlies zonder de server te verliezen",
+      "Herstel toegestane backups in geïsoleerde gasten op aparte opslag en controleer boot, hersteltijd en applicatiedata. Voeg hypervisor en tools toe; geen dubbele productieadressen of echte inloggegevens."
+    ],
+    [
+      "16 / WINDOWS-DEPLOYMENT",
+      "Bereid de volgende Windows-installatie voor",
+      "Controleer hardware, officiële media, drivers en een nagekeken antwoordbestand. Bereid bestanden in Linux voor; gebruik Windows Setup of WinPE/DISM/BCDBoot waar nodig en controleer echte Windows-boot. Media en licenties zijn niet inbegrepen."
+    ],
+    [
+      "17 / WINDOWS-ROLLENKIT",
+      "Van nieuw Windows naar je werkmachine",
+      "Laat nagekeken PowerShell-scripts en een winget-lijst voor ontwikkeling, ontwerp of kantoor maken. Voer uit en controleer na Windows-start; Linux voert Windows-specifieke setup niet direct uit op een offline schijf."
+    ],
+    [
+      "18 / WINDOWS-LAB",
+      "Test apps en beleid in wegwerpgasten",
+      "Voeg passende hypervisor en officiële gelicentieerde Windows-/Windows-Server-media toe. Vergelijk apps, updates of domeinbeleid geïsoleerd; controleer middelen, virtuele TPM-/firmware-eisen en licenties."
+    ],
+    [
+      "19 / WINDOWS + LINUX",
+      "Twee werelden met een expliciet bootplan",
+      "Inventariseer Windows, versleuteling en backup, plan daarna Linux ernaast op toegestaan doel. Gebruik native Windows-voorbereiding waar nodig, bewaar bootitems en test beide. Geen omzeiling of blind NTFS-resizen."
+    ],
+    [
+      "20 / HERSTELMISSIE",
       "Wanneer het bestaande systeem terug moet komen",
       "Onderzoek startproblemen, maak met ddrescue een image of kopieer toegestane bestanden elders. Herstel is onderdeel van het platform, niet de hele identiteit."
     ]
@@ -166,7 +236,10 @@
       "Versie 0.9.9 documenteert vier onafhankelijke BIOS/UEFI-VM-starts en herstarts, met en zonder versleuteld profiel, plus geschiedeniscontroles met een virtueel muiswiel. Dit is geen test van een fysieke USB-stick of een menselijke muisbeweging. De schermafbeeldingen in deze handleiding zijn synthetische QA-voorbeelden, geen aanmeldingen bij aanbieders of geslaagde herstelacties."
     ],
     "0": [],
-    "20": []
+    "20": [
+      "Controleer hardware, officiële media, drivers en een nagekeken antwoordbestand. Bereid bestanden in Linux voor; gebruik Windows Setup of WinPE/DISM/BCDBoot waar nodig en controleer echte Windows-boot. Media en licenties zijn niet inbegrepen.",
+      "Laat nagekeken PowerShell-scripts en een winget-lijst voor ontwikkeling, ontwerp of kantoor maken. Voer uit en controleer na Windows-start; Linux voert Windows-specifieke setup niet direct uit op een offline schijf."
+    ]
   },
   "prompts": {
     "17": "Onderzoek uitsluitend de computer waarvan ik de eigenaar ben. Inventariseer eerst de schijven op model, serienummer, capaciteit en aankoppelstatus. Koppel niets aan met lees- en schrijfrechten, repareer niets, formatteer niets en installeer niets. Rapporteer bewijsmateriaal, onzekerheden en een back-upplan. Vraag toestemming vóór elke wijziging.",

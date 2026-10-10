@@ -11,7 +11,7 @@ No se tocó app.mjs, CSP, rutas, paquetes, runtime, desktop, runtime del reposit
 ## Fuentes y regeneración
 `python3 scripts/build-launch-pages.py` genera todos los idiomas; acepta códigos como argumentos para revisión parcial. Usa `server/locales/launch-*.json` para contenido nuevo y `server/locales/*.json` para capítulos y etiquetas existentes. La guía española extensa se extrae de `server/public/docs.html`, preservando tablas, pasos y comandos; ese archivo es fuente histórica, NO la ruta /docs servida. Ejecutar este generador DESPUÉS de build-site-locales.py si se regenera todo el sitio. No ejecutar el generador antiguo únicamente: sustituiría la nueva edición.
 
-Interacciones: selector de tres planes, checklist efímera, búsqueda de capítulos, copiar texto con selección manual si clipboard falla, zoom con dialog/Escape/restauración de foco e impresión. No se ejecutan comandos, no se conecta a equipos, no hay API de red ni almacenamiento. Sin JS todos los planes/capítulos son legibles y las capturas enlazan al PNG.
+Interacciones: selector de cuatro planes, checklist efímera, búsqueda de capítulos, copiar texto con selección manual si clipboard falla, zoom con dialog/Escape/restauración de foco e impresión. No se ejecutan comandos, no se conecta a equipos, no hay API de red ni almacenamiento. Sin JS todos los planes/capítulos son legibles y las capturas enlazan al PNG.
 
 Capturas: interfaz española y QA sintética 0.9.9, Rescue en VM e Imager en Linux. El fotograma de historial no acredita movimiento de rueda ni modo copy activo. No login real, recuperación lograda ni hardware universal. Las capturas adicionales imager-*-en no son requeridas por estas páginas.
 

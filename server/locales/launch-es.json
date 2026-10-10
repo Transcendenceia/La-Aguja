@@ -1,13 +1,13 @@
 {
   "hero": [
-    "Tu IA. Tu equipo.",
-    "Antes del sistema instalado."
+    "Una pequeña entrada.",
+    "Grandes posibilidades."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Arranca un Linux independiente desde USB y pon a trabajar a tus agentes IA: instala sistemas, configura servidores, crea un laboratorio virtual o recupera datos. Un sistema instalado que funcione es opcional. Tu próximo proyecto, no.",
+  "lead": "Arranca un Linux independiente desde USB y dale una misión a tu agente IA: construir sistemas, preparar Windows, crear un laboratorio virtual o coordinar equipos autorizados. Empieza por el hardware, no por el estado del sistema instalado.",
   "introTitle": "Una plataforma de lanzamiento, no solo un salvavidas.",
   "intro": [
-    "LA AGUJA convierte un PC compatible en un taller Linux antes de arrancar su sistema instalado, incluso si el disco está vacío. Dale una misión a tu agente: construir, configurar, experimentar, migrar o recuperar.",
+    "Dale a un agente avanzado un objetivo, no solo un comando de reparación. Puede analizar el hardware disponible, elegir herramientas, generar y ejecutar scripts dentro del alcance que autorices y comprobar el resultado. El sistema del disco no necesita arrancar, ni siquiera existir.",
     "La sesión live usa una capa de escritura en RAM sobre la imagen de solo lectura del USB. Es Linux, no firmware, y no se copia todo el USB a RAM. Los discos internos permanecen intactos al inicio; escribes en ellos cuando decides usarlos.",
     "Incluye clientes IA con acceso root, SSH, Python, Git, herramientas de discos, debootstrap y arch-install-scripts. Amplía la sesión con paquetes compatibles: QEMU/KVM, motores de contenedores o herramientas de compilación requieren instalación adicional, RAM/almacenamiento suficientes y soporte del hardware. Guarda los resultados importantes explícitamente; el estado en RAM es temporal. La IA en nube requiere red y tu cuenta, no un modelo local incluido."
   ],
@@ -46,9 +46,19 @@
         "Prueba el resultado, exporta artefactos y detén los servicios temporales."
       ],
       "stop": "los datos solo quedarían en RAM o el acceso excede el alcance acordado."
+    },
+    {
+      "title": "Prepara tu próxima instalación Windows",
+      "intro": "Analiza hardware y planifica medios oficiales, drivers y un archivo de respuestas revisado. Prepara archivos desde Linux; usa Windows Setup o WinPE/DISM/BCDBoot cuando corresponda y verifica el arranque real de Windows. Medios y licencias son tuyos, no incluidos.",
+      "steps": [
+        "Inventaría hardware, destino exacto, respaldo y requisitos Windows.",
+        "Prepara medios oficiales y archivos revisados; usa Windows/WinPE para despliegue nativo.",
+        "Arranca Windows y verifica drivers, aplicaciones y configuración prevista."
+      ],
+      "stop": "no están claros el destino o el respaldo."
     }
   ],
-  "casesTitle": "Ocho misiones. Rescatar es solo una.",
+  "casesTitle": "¿Qué podrías construir desde el arranque?",
   "casesNote": "Construye con las herramientas Linux incluidas o añade las dependencias de tu proyecto. Son misiones adaptables, no funciones de un clic ni afirmaciones de que todos estos escenarios ya se hayan probado.",
   "cases": [
     [
@@ -87,7 +97,67 @@
       "Genera scripts para construir imágenes de distribuciones o comparar configuraciones entre snapshots de VM. Usa medios oficiales y redes aisladas; añade las herramientas de imágenes/VM necesarias y conserva recetas y resultados fuera de RAM."
     ],
     [
-      "08 / MISIÓN DE RESCATE",
+      "08 / FÍSICO → VIRTUAL",
+      "Conserva tu viejo ordenador como invitado",
+      "Obtén una copia autorizada, añade herramientas de conversión apropiadas y adapta arranque y drivers para una VM. Verifica aplicaciones y licencias dentro del invitado antes de retirar el original; crear una imagen no completa la conversión."
+    ],
+    [
+      "09 / PLATAFORMA DE ARRANQUE EN RED",
+      "Una estación, varias máquinas vacías",
+      "Añade PXE/iPXE y herramientas de servidor para ofrecer medios oficiales a equipos compatibles en una red de laboratorio aislada. El agente puede preparar menús y planes por máquina; requiere configurar la red, no es un botón PXE integrado."
+    ],
+    [
+      "10 / FÁBRICA DE IMÁGENES OS",
+      "Construye el Linux que quieres arrancar después",
+      "Convierte un propósito — aula, estación de desarrollo o appliance — en una lista de paquetes y receta repetible. Añade live-build o el constructor de la distribución, trabaja en almacenamiento aparte y prueba la imagen resultante en una VM."
+    ],
+    [
+      "11 / IA LOCAL OPCIONAL",
+      "Una estación de modelos con tu propio hardware",
+      "Analiza CPU, GPU y memoria, añade un runtime compatible y un modelo con licencia y tamaño adecuados y prueba un endpoint local. Runtime, pesos y drivers GPU son adicionales; el modelo de nube más potente no cabe automáticamente en tu equipo."
+    ],
+    [
+      "12 / TALLER DE CÓMPUTO",
+      "Dale al hardware libre una misión científica",
+      "Prepara análisis de datos, simulación o renderizado con recursos acotados sin heredar el software instalado. Añade dependencias, comprueba soporte GPU si se usa, valida con datos sintéticos y guarda resultados aparte. Un clúster exige nodos y herramientas preparados por separado."
+    ],
+    [
+      "13 / ESTACIÓN EDGE",
+      "Un puente temporal entre dispositivos y datos",
+      "Con sensores USB o de red autorizados, pide al agente un recolector y panel local. Añade librerías de protocolo o un broker cuando haga falta, valida tiempos y lecturas y exporta datos; controlar dispositivos es otro alcance."
+    ],
+    [
+      "14 / DIRECTOR DE EQUIPOS",
+      "Un plano de control temporal, varios hosts Linux",
+      "Usa el live como estación de control por SSH con una herramienta adicional como Ansible. Crea un inventario explícito, configura primero un nodo autorizado y valida antes de ampliar. Los remotos necesitan acceso, recursos y permiso propios."
+    ],
+    [
+      "15 / GEMELO DE CONTINGENCIA",
+      "Ensaya perder el servidor sin perderlo",
+      "Restaura respaldos autorizados en invitados aislados sobre almacenamiento aparte y comprueba arranque, tiempo de restauración y datos de aplicaciones. Añade hipervisor y herramientas de restauración; no conectes el gemelo con direcciones de producción duplicadas ni credenciales reales."
+    ],
+    [
+      "16 / DESPLIEGUE WINDOWS",
+      "Prepara tu próxima instalación Windows",
+      "Analiza hardware y planifica medios oficiales, drivers y un archivo de respuestas revisado. Prepara archivos desde Linux; usa Windows Setup o WinPE/DISM/BCDBoot cuando corresponda y verifica el arranque real de Windows. Medios y licencias son tuyos, no incluidos."
+    ],
+    [
+      "17 / KIT DE ROL WINDOWS",
+      "Del Windows recién instalado a tu máquina de trabajo",
+      "Pide al agente un setup PowerShell revisado y una lista winget para desarrollo, diseño u oficina. Ejecútalos y verifícalos después de arrancar Windows; Linux no ejecuta directamente herramientas de configuración propias de Windows contra el disco apagado."
+    ],
+    [
+      "18 / LABORATORIO WINDOWS",
+      "Prueba aplicaciones y políticas en invitados desechables",
+      "Añade hipervisor adecuado y medios oficiales con licencia Windows o Windows Server. Crea invitados aislados para comparar aplicaciones, actualizaciones o políticas de dominio antes de tocar el equipo real; comprueba recursos, requisitos TPM/firmware virtuales y licencia."
+    ],
+    [
+      "19 / WINDOWS + LINUX",
+      "Conserva ambos mundos y decide cómo arrancarlos",
+      "Inventaría Windows, cifrado y respaldo y planifica Linux junto a él en un destino autorizado. Usa preparación nativa Windows cuando haga falta, preserva entradas de arranque y comprueba ambos sistemas. Sin saltar requisitos ni redimensionar NTFS a ciegas."
+    ],
+    [
+      "20 / MISIÓN DE RESCATE",
       "Cuando el sistema existente necesita volver",
       "Diagnostica un fallo de arranque, crea una imagen de un disco sospechoso con ddrescue o copia archivos autorizados a otro destino. Rescatar forma parte de la plataforma, no define todo lo que es."
     ]
@@ -166,7 +236,10 @@
       "La versión 0.9.9 documenta cuatro arranques y reinicios independientes en VM BIOS/UEFI, con y sin perfil cifrado, y comprobaciones del historial con rueda virtual. No es una prueba de USB físico ni de un gesto humano del ratón. Las capturas de esta guía son ejemplos de QA sintética, no inicios de sesión con proveedores ni recuperaciones exitosas."
     ],
     "0": [],
-    "20": []
+    "20": [
+      "Analiza hardware y planifica medios oficiales, drivers y un archivo de respuestas revisado. Prepara archivos desde Linux; usa Windows Setup o WinPE/DISM/BCDBoot cuando corresponda y verifica el arranque real de Windows. Medios y licencias son tuyos, no incluidos.",
+      "Pide al agente un setup PowerShell revisado y una lista winget para desarrollo, diseño u oficina. Ejecútalos y verifícalos después de arrancar Windows; Linux no ejecuta directamente herramientas de configuración propias de Windows contra el disco apagado."
+    ]
   },
   "prompts": {
     "17": "Inspecciona únicamente el equipo de mi propiedad. Primero, haz un inventario de los discos por modelo, número de serie, tamaño y estado de montaje. No montes nada en modo lectura-escritura, ni repares, formatees o instales nada. Informa de las evidencias, las incertidumbres y un plan de copia de seguridad. Pregunta antes de cualquier cambio.",

@@ -1,13 +1,13 @@
 {
   "hero": [
-    "Votre IA. Votre machine.",
-    "Avant le système installé."
+    "Une petite entrée.",
+    "De grandes possibilités."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Démarrez un Linux indépendant depuis une clé USB et faites travailler vos agents IA : installer des systèmes, configurer des serveurs, créer un laboratoire virtuel ou récupérer des données. Un système installé fonctionnel est facultatif. Votre prochain projet, non.",
+  "lead": "Démarrez un Linux indépendant depuis USB et donnez une mission à l’agent IA : construire des systèmes, préparer Windows, créer un laboratoire virtuel ou coordonner des machines autorisées. Partez du matériel, pas de l’état du système installé.",
   "introTitle": "Une rampe de lancement, pas seulement une bouée.",
   "intro": [
-    "LA AGUJA transforme un PC compatible en atelier Linux avant le démarrage du système installé, même avec un disque vide. Donnez une mission à votre agent : construire, configurer, expérimenter, migrer ou récupérer.",
+    "Donnez à un agent avancé un objectif, pas seulement une commande de réparation. Il peut analyser le matériel, choisir des outils, générer et exécuter des scripts dans le périmètre autorisé et vérifier le résultat. Le système installé n’a pas besoin de démarrer, ni même d’exister.",
     "La session live utilise une couche inscriptible en RAM sur l’image USB en lecture seule. Il s’agit de Linux, pas du firmware ; toute la clé USB n’est pas copiée en RAM. Les disques internes restent intacts au démarrage ; vous choisissez ensuite de les utiliser.",
     "Inclus : clients IA avec accès root, SSH, Python, Git, outils de stockage, debootstrap et arch-install-scripts. Ajoutez des paquets compatibles : QEMU/KVM, moteurs de conteneurs et outils de compilation nécessitent une installation supplémentaire, assez de RAM et de stockage et un matériel compatible. Enregistrez explicitement les résultats importants ; la RAM est temporaire. L’IA cloud exige le réseau et votre compte ; aucun modèle local n’est inclus."
   ],
@@ -46,9 +46,19 @@
         "Tester, exporter les artefacts et arrêter les services temporaires."
       ],
       "stop": "les données resteraient seulement en RAM ou les accès dépasseraient le périmètre."
+    },
+    {
+      "title": "Préparer la prochaine installation Windows",
+      "intro": "Analysez matériel, médias officiels, pilotes et fichier de réponses. Préparez les fichiers sous Linux ; utilisez Windows Setup ou WinPE/DISM/BCDBoot selon le cas et vérifiez le démarrage Windows réel. Médias et licences ne sont pas inclus.",
+      "steps": [
+        "Inventoriez matériel, cible, sauvegarde et exigences Windows.",
+        "Préparez médias et fichiers vérifiés ; utilisez Windows/WinPE pour le déploiement natif.",
+        "Démarrez Windows et vérifiez pilotes, applications et configuration."
+      ],
+      "stop": "la cible ou la sauvegarde est incertaine."
     }
   ],
-  "casesTitle": "Huit missions. La récupération n’en est qu’une.",
+  "casesTitle": "Que pourriez-vous construire dès le démarrage ?",
   "casesNote": "Utilisez les outils Linux inclus ou ajoutez les dépendances du projet. Ce sont des missions adaptables, pas des fonctions en un clic ni des scénarios tous déjà testés.",
   "cases": [
     [
@@ -87,7 +97,67 @@
       "Générez des scripts de construction d’images ou comparez des configurations avec des snapshots de VM. Médias officiels, réseaux isolés et outils supplémentaires ; recettes et résultats hors RAM."
     ],
     [
-      "08 / MISSION RÉCUPÉRATION",
+      "08 / PHYSIQUE → VIRTUEL",
+      "Conserver l’ancien PC comme invité",
+      "Créez une copie autorisée, ajoutez les outils de conversion et adaptez amorçage et pilotes à une VM. Vérifiez applications et licences avant de retirer l’original ; une image seule ne suffit pas."
+    ],
+    [
+      "09 / DÉMARRAGE EN RÉSEAU",
+      "Une station, plusieurs machines vides",
+      "Ajoutez PXE/iPXE et des outils serveur pour fournir des médias officiels aux machines compatibles sur un réseau isolé. L’agent prépare menus et plans ; une configuration réseau est nécessaire, pas un bouton PXE intégré."
+    ],
+    [
+      "10 / USINE D’IMAGES OS",
+      "Construire le prochain Linux à démarrer",
+      "Transformez un rôle — salle de cours, poste de développement ou appliance — en paquets et recette reproductible. Ajoutez live-build ou le constructeur adapté, utilisez un stockage séparé et testez l’image en VM."
+    ],
+    [
+      "11 / IA LOCALE FACULTATIVE",
+      "Une station de modèles sur votre matériel",
+      "Analysez CPU, GPU et mémoire, ajoutez un runtime compatible et un modèle de taille et licence adaptées, puis testez un endpoint local. Runtime, poids et pilotes sont supplémentaires ; le meilleur modèle cloud ne tient pas automatiquement sur place."
+    ],
+    [
+      "12 / ATELIER DE CALCUL",
+      "Une mission scientifique pour le matériel disponible",
+      "Préparez analyse, simulation ou rendu avec un budget défini sans hériter des logiciels installés. Ajoutez dépendances, vérifiez le GPU, validez avec des données synthétiques et exportez les résultats. Un cluster exige d’autres nœuds et outils préparés."
+    ],
+    [
+      "13 / STATION EDGE",
+      "Un pont temporaire entre appareils et données",
+      "Avec des capteurs USB ou réseau autorisés, construisez collecteur et tableau de bord local. Ajoutez bibliothèques de protocole ou broker, vérifiez horodatages et mesures et exportez les données ; le contrôle des appareils est un autre périmètre."
+    ],
+    [
+      "14 / CHEF D’ORCHESTRE",
+      "Un contrôle temporaire de plusieurs hôtes Linux",
+      "Utilisez le live comme station SSH avec un outil ajouté tel qu’Ansible. Inventoriez explicitement, configurez d’abord un nœud autorisé et validez avant d’étendre. Chaque hôte exige ses propres accès, ressources et permissions."
+    ],
+    [
+      "15 / JUMEAU DE CONTINUITÉ",
+      "Simuler la perte du serveur sans le perdre",
+      "Restaurez les sauvegardes autorisées dans des invités isolés sur un stockage séparé et mesurez démarrage, restauration et intégrité applicative. Ajoutez hyperviseur et outils ; pas d’adresses de production dupliquées ni de vrais identifiants."
+    ],
+    [
+      "16 / DÉPLOIEMENT WINDOWS",
+      "Préparer la prochaine installation Windows",
+      "Analysez matériel, médias officiels, pilotes et fichier de réponses. Préparez les fichiers sous Linux ; utilisez Windows Setup ou WinPE/DISM/BCDBoot selon le cas et vérifiez le démarrage Windows réel. Médias et licences ne sont pas inclus."
+    ],
+    [
+      "17 / KIT WINDOWS",
+      "Du Windows neuf au poste de travail",
+      "Faites préparer un script PowerShell vérifié et une liste winget pour développement, création ou bureautique. Exécutez et vérifiez après démarrage de Windows ; Linux ne lance pas directement les outils Windows sur un disque hors ligne."
+    ],
+    [
+      "18 / LABORATOIRE WINDOWS",
+      "Tester applications et stratégies dans des invités jetables",
+      "Ajoutez un hyperviseur adapté et des médias Windows ou Windows Server officiels sous licence. Comparez applications, mises à jour ou stratégies de domaine en réseau isolé ; vérifiez ressources, TPM/firmware virtuels et licences."
+    ],
+    [
+      "19 / WINDOWS + LINUX",
+      "Deux mondes et un plan d’amorçage explicite",
+      "Inventoriez Windows, chiffrement et sauvegarde, puis planifiez Linux à côté sur une cible autorisée. Préparez nativement sous Windows si nécessaire, conservez les entrées et testez les deux systèmes. Pas de contournement ni de redimensionnement NTFS aveugle."
+    ],
+    [
+      "20 / MISSION RÉCUPÉRATION",
       "Quand le système existant doit revenir",
       "Diagnostiquez un échec de démarrage, imagez un disque suspect avec ddrescue ou copiez les fichiers autorisés ailleurs. La récupération fait partie de la plateforme sans la définir entièrement."
     ]
@@ -166,7 +236,10 @@
       "La version 0.9.9 documente quatre démarrages et redémarrages indépendants en VM BIOS/UEFI, avec et sans profil chiffré, ainsi que des vérifications de l’historique par molette virtuelle. Ce n’est pas un test de clé USB physique ni de geste humain de souris. Les captures de ce guide sont des exemples de contrôle qualité synthétique, pas des connexions à des fournisseurs ni des récupérations réussies."
     ],
     "0": [],
-    "20": []
+    "20": [
+      "Analysez matériel, médias officiels, pilotes et fichier de réponses. Préparez les fichiers sous Linux ; utilisez Windows Setup ou WinPE/DISM/BCDBoot selon le cas et vérifiez le démarrage Windows réel. Médias et licences ne sont pas inclus.",
+      "Faites préparer un script PowerShell vérifié et une liste winget pour développement, création ou bureautique. Exécutez et vérifiez après démarrage de Windows ; Linux ne lance pas directement les outils Windows sur un disque hors ligne."
+    ]
   },
   "prompts": {
     "17": "Examine uniquement l’ordinateur dont je suis propriétaire. Commence par inventorier les disques par modèle, numéro de série, capacité et état de montage. Ne monte rien en lecture-écriture, ne répare rien, ne formate rien et n’installe rien. Présente les éléments constatés, les incertitudes et un plan de sauvegarde. Demande mon accord avant toute modification.",

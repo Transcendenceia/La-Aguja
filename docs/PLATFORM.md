@@ -1,6 +1,6 @@
 # Your AI workbench before the installed OS
 
-**Your AI. Your machine. Before the installed OS.** LA AGUJA is a bootable Linux workbench, not just an emergency disk. Start a compatible x86-64 PC from USB, including one with an empty disk, and give your agent a project.
+**A small entry point. Big possibilities.** LA AGUJA is a bootable Linux workbench, not just an emergency disk. Start a compatible x86-64 PC from USB, including one with an empty disk, and give your agent a project.
 
 [Español](PLATFORM.es.md) · [Get started](GETTING-STARTED.md) · [Recovery workflows](SHOWCASE.md)
 
@@ -19,7 +19,7 @@ The live Linux uses a read-only USB filesystem plus a **writable RAM overlay**. 
 | Codex CLI, OpenCode, Claude Code, Antigravity | Your compatible provider account and Internet for cloud inference |
 | Storage, network, diagnostics and recovery tools | QEMU and usable KVM for guests; a container engine for containers |
 
-QEMU, a container engine, a local AI model and an automatic VM/cluster orchestrator are **not advertised as bundled**. Check the running release, package availability, CPU/firmware, live-kernel support, RAM and storage before adding them. Cloud accounts and loaded secrets should not be introduced into untrusted guests. These are mission recipes, not claims that all eight scenarios were executed in 0.9.9.
+QEMU, a container engine, a local AI model and an automatic VM/cluster orchestrator are **not advertised as bundled**. Check the running release, package availability, CPU/firmware, live-kernel support, RAM and storage before adding them. Cloud accounts and loaded secrets should not be introduced into untrusted guests. These are mission recipes, not claims that all twenty scenarios were executed in 0.9.9.
 
 ## 1. From blank SSD to a configured Linux
 
@@ -105,7 +105,127 @@ QEMU, a container engine, a local AI model and an automatic VM/cluster orchestra
 
 **Finish with:** An experiment someone can rerun: inputs, script, output image or configuration, measured result and limitations. Possible expansions include a classroom lab or multi-node test plan with separately configured orchestration.
 
-## 8. Recovery when it is actually the mission
+## 8. Preserve a physical computer as a virtual guest
+
+**Prompt:**
+
+> Turn my authorised computer into a proposed VM migration. Identify the original and a separate image destination, make a recovery baseline and choose suitable conversion tools. Work on a copy. List boot, driver and licence changes, and test a guest without raw-host disk access. Do not retire the physical machine until applications and data are verified.
+
+**Tools and requirements:** Included imaging/storage tools; additional QEMU/hypervisor and suitable libguestfs/virt-v2v or platform-specific conversion tooling. A supported virt-p2v workflow may require its own boot media and conversion server, not merely installing a command here. Windows additionally needs guest drivers and licence/activation review.
+
+**Expected result and stopping conditions:** A booting converted guest, application/data checks and a retained physical rollback. Stop if an image is partial, conversion is unsupported or licensing cannot be satisfied.
+
+## 9. A network launchpad for blank machines
+
+**Prompt:**
+
+> Design an isolated PXE/iPXE lab that serves official boot media to an explicit list of compatible computers. Inspect NIC and BIOS/UEFI paths, propose server dependencies and a per-machine boot menu. Do not create a second DHCP server on our normal LAN. After lab-network approval, test one client first and record its fetched image identity.
+
+**Tools and requirements:** Additional PXE/iPXE, HTTP/TFTP and appropriate DHCP/proxy-DHCP tooling, a deliberately configured lab network and compatible clients. Serving official media is not evidence that LA AGUJA itself supports a diskless/PXE boot configuration.
+
+**Expected result and stopping conditions:** A tested client boot, identified media, network diagram and shutdown recipe. Stop on a DHCP conflict or unexpected client; no implied permission to reconfigure the router.
+
+## 10. A factory for purpose-built Linux images
+
+**Prompt:**
+
+> Build a recipe for a Linux image dedicated to my classroom, developer workflow or application appliance. Specify official base, packages, services and configuration without credentials. Add the appropriate image-builder, estimate working space and create the image outside RAM. Boot it in a disposable VM and check the intended role before delivering the artifact.
+
+**Tools and requirements:** Additional live-build or a distribution-supported builder, packages, working storage and a VM test host. Building a separate distro image is not rebuilding or redistributing LA AGUJA or third-party clients.
+
+**Expected result and stopping conditions:** An image, hashes, package manifest, recipe and verified test boot. Stop if dependencies or licences prevent distribution; do not bake personal sessions into a public image.
+
+## 11. An optional local model station
+
+**Prompt:**
+
+> Inspect CPU, GPU, RAM, VRAM and live-kernel support. Propose a locally runnable model and compatible inference runtime that fit this machine, with licence and storage identified. Use a small synthetic test and a loopback endpoint first. Measure memory and a real response, export the configuration and stop the service afterwards.
+
+**Tools and requirements:** Additional inference runtime such as llama.cpp, separately obtained compatible model weights, enough memory/storage and supported drivers if using a GPU. Download/setup may need Internet; later offline inference requires all dependencies and weights present.
+
+**Expected result and stopping conditions:** A tested local response, measured resource use and saved setup. Stop or choose a smaller model when resources are inadequate. Local availability does not mean a model matches the capability of an advanced cloud model; cloud-first clients do not automatically switch to it.
+
+## 12. A temporary scientific compute workshop
+
+**Prompt:**
+
+> Plan a reproducible analysis, simulation or rendering job on this available hardware. Inspect resource limits and add only the required compatible scientific or rendering tools. Validate first with a small synthetic workload, then run the approved dataset with CPU/RAM limits. Save inputs, versions and results to identified separate storage.
+
+**Tools and requirements:** Included Python/shell plus task-specific numerical/rendering packages; GPU tooling only after compatibility checks. Distributed work needs separate prepared nodes, access and scheduling software.
+
+**Expected result and stopping conditions:** A repeatable job, tested small case, runtime/resource measurements and saved results. Stop before resource exhaustion or unintended dataset exposure; changing firmware or overclocking is not part of this mission.
+
+## 13. An edge collector for authorised devices
+
+**Prompt:**
+
+> Build a read-only collector for these permitted USB or network sensors. Inventory interfaces and protocols, add libraries or a broker only where needed and use synthetic input before contacting a real device. Store timestamps, units and errors and create a local dashboard. Do not send actuator commands or change device configuration.
+
+**Tools and requirements:** Included Python/Node.js and network/USB inventory; additional device libraries, broker and dashboard dependencies as needed. Real device compatibility and authentication must be checked, not inferred from Linux USB visibility.
+
+**Expected result and stopping conditions:** Verified readings, known collection intervals, a saved dataset and a stopped collector. Stop if access requires permission not granted or data semantics are unclear; device control needs a separate authorised mission.
+
+## 14. Coordinate several Linux hosts from a temporary control station
+
+**Prompt:**
+
+> Create an explicit inventory of my permitted Linux hosts and their roles. Use approved SSH identities without writing secrets into the repository. Add a compatible automation tool and produce reviewed configuration tasks. Start with a dry run where supported and one pilot node; verify it and obtain approval for expanding to the listed hosts. Keep rollback and per-host results.
+
+**Tools and requirements:** Included SSH/Python; additional Ansible or appropriate orchestration software, required remote runtimes and access to each node. Machines must already be reachable, or need a separately approved provisioning route.
+
+**Expected result and stopping conditions:** An inventory, reproducible tasks and independently verified changes per host. Stop on any unexpected target or pilot failure. Root on this live host does not grant access to every machine on the network.
+
+## 15. A contingency twin of a real service
+
+**Prompt:**
+
+> Use these authorised backups to create a synthetic disaster-recovery rehearsal on isolated guest machines. Identify restore dependencies and licences; preserve the backup originals. Add a hypervisor, budget resources and restore onto separate guest storage. Test application data, recovery steps and elapsed restore time. Use lab identities and never duplicate production addresses.
+
+**Tools and requirements:** Additional hypervisor and application-specific restore software, valid backups and sufficient storage/RAM. A twin is a test copy, not an automatically faithful replica of all production dependencies.
+
+**Expected result and stopping conditions:** Restore instructions, service/data checks, measured recovery time and remaining gaps. Stop if guests reach production or backups contain secrets that cannot be kept within the approved lab.
+
+## 16. Prepare and deploy an official Windows installation
+
+**Prompt:**
+
+> Plan a supported Windows installation for my exact approved computer. Inspect hardware and boot mode and preserve data/recovery keys. Identify official licensed media, edition, drivers and disk layout. Prepare a reviewed answer file and deployment checklist from Linux, with no passwords embedded. Use official Setup or a matching Windows/WinPE deployment phase for DISM and BCDBoot. Verify Windows boot and drivers.
+
+**Tools and requirements:** Included hardware/storage and wimlib tools for applicable image operations; separate official Windows media, valid licence and Windows ADK/WinPE or installer tools as required. DISM, BCDBoot and Windows System Image Manager are not native tools bundled into this Linux.
+
+**Expected result and stopping conditions:** A reviewed deployment kit and, after the native phase, a booting Windows with device checks. Stop before erasing an uncertain target or bypassing requirements. Applying WIM contents alone is not a completed Windows installation.
+
+## 17. A repeatable Windows work-role kit
+
+**Prompt:**
+
+> Prepare a reviewed setup for this new Windows workstation: development, design or office use. Generate a PowerShell script and winget import list from official app identifiers, with versions and licence requirements noted. Do not store credentials or silently accept subscriptions. Transfer the kit as files; run it with my approval in Windows and verify installed applications and configuration there.
+
+**Tools and requirements:** Linux can generate and stage text/configuration files. Execution needs Windows, appropriate PowerShell/winget support, network/package sources and any required administrator approval. An offline NTFS mount is not a running Windows environment.
+
+**Expected result and stopping conditions:** Versioned setup files plus native Windows execution and validation records when performed. Until then, label the kit prepared, not installed. Stop if a requested app requires purchase, unsupported packages or unapproved broad access.
+
+## 18. A disposable Windows or Windows Server lab
+
+**Prompt:**
+
+> Design an isolated Windows compatibility lab using official licensed media. Check hypervisor support, RAM, storage and virtual firmware/TPM requirements for the selected release. Test an application, update or synthetic domain-policy setup on disposable guests. Keep production accounts and networks out, snapshot before each experiment and record before/after behaviour.
+
+**Tools and requirements:** Additional compatible hypervisor, official guest media/licences and any guest TPM/firmware components. Domain-policy experiments need separately configured Windows Server/AD roles and synthetic accounts; Linux itself is not running those Windows services.
+
+**Expected result and stopping conditions:** Booted guests, a reproducible test and saved evidence. Stop if hardware/licensing does not permit the chosen guest or isolation fails. Guest success is not certification of every physical Windows workstation.
+
+## 19. Plan and validate Windows and Linux side by side
+
+**Prompt:**
+
+> Inventory my Windows installation, disk layout, encryption and firmware boot entries. Preserve data and recovery keys, then propose Linux alongside Windows on the exact approved disk or a separate one. Identify which preparation must be done natively in Windows, including any supported volume shrinking. Do not force-write hibernated NTFS. After approval, install Linux and verify both systems boot and data remains readable.
+
+**Tools and requirements:** Included Linux install/storage tools; official media, Windows-native disk/encryption preparation where required and the owner’s matching recovery keys. Follow each OS requirement and keep a reversible partition/boot plan.
+
+**Expected result and stopping conditions:** Both systems booting, verified data and retained recovery media. Stop if space, keys or backups are missing; this is not permission to disable the owner’s security settings or bypass platform requirements.
+
+## 20. Recovery when it is actually the mission
 
 **Prompt:**
 
@@ -119,5 +239,14 @@ QEMU, a container engine, a local AI model and an automatic VM/cluster orchestra
 - [Arch installation guide](https://wiki.archlinux.org/title/Installation_guide)
 - [QEMU system invocation and accelerators](https://www.qemu.org/docs/master/system/invocation.html)
 - [Podman documentation](https://docs.podman.io/en/latest/)
+
+- [Physical/virtual conversion](https://libguestfs.org/virt-v2v.1.html)
+- [iPXE network boot](https://ipxe.org/howto/chainloading)
+- [Debian Live image recipes](https://live-team.pages.debian.net/live-manual/html/live-manual/customizing-package-installation.en.html)
+- [Local inference: llama.cpp](https://github.com/ggml-org/llama.cpp)
+- [Automation inventory: Ansible](https://docs.ansible.com/projects/ansible/latest/getting_started/get_started_inventory.html)
+- [Microsoft: answer files](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/update-windows-settings-and-scripts-create-your-own-answer-file-sxs?view=windows-11)
+- [Microsoft: Windows deployment](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-system-and-recovery-partitions?view=windows-11)
+- [Microsoft: winget import](https://learn.microsoft.com/en-us/windows/package-manager/winget/import)
 
 **Agent prompts are not access controls.** Safe mode asks for task confirmation; the account still has unrestricted sudo/root. Installing, configuring and recovering all require exact targets, backup where needed and observable verification. [Current capabilities](../README.md#a-workbench-not-a-one-click-promise) · [Getting started](GETTING-STARTED.md).

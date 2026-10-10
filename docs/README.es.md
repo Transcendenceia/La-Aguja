@@ -3,7 +3,7 @@
 [English](README.md). Inglés principal en el repositorio; español secundario. Web y guías operativas en ocho idiomas, sin cambiar la prioridad entre sus rutas.
 
 - [Primeros pasos 0.9.9](GETTING-STARTED.es.md): preparar, proteger, grabar y arrancar.
-- [Ocho misiones de la plataforma](PLATFORM.es.md): instalar, virtualizar, crear servicios, compilar, preparar servidores, migrar, experimentar y recuperar.
+- [Veinte misiones Linux y Windows](PLATFORM.es.md): instalar, configurar, virtualizar, desplegar Windows, fabricar imágenes, coordinar equipos, experimentar y recuperar.
 - [Procedimientos de rescate](SHOWCASE.es.md): referencia especializada, no el alcance completo de LA AGUJA.
 - [Problemas por capas](TROUBLESHOOTING.es.md).
 - [Capturas reales y sus límites](SCREENSHOTS.es.md).

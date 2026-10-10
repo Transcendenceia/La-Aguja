@@ -53,7 +53,7 @@
   "privacy": "Privacidad",
   "footer": "Código abierto · GPL-3.0-or-later · Tu red, sin relay de LA AGUJA.",
   "docTitle": "Documentación · LA AGUJA",
-  "docDescription": "Prepara un USB, arranca un Linux independiente, trabaja con IA, instala y configura sistemas, explora laboratorios virtuales, migra o recupera datos.",
+  "docDescription": "Arranca un Linux independiente desde USB y dale una misión a tu agente IA: construir sistemas, preparar Windows, crear un laboratorio virtual o coordinar equipos autorizados. Empieza por el hardware, no por el estado del sistema instalado.",
   "docUI": [
     "Saltar al manual",
     "Índice y búsqueda",
@@ -160,7 +160,7 @@
   "faq": [
     [
       "¿Es solo un disco de rescate?",
-      "Arranca un Linux independiente desde USB y pon a trabajar a tus agentes IA: instala sistemas, configura servidores, crea un laboratorio virtual o recupera datos. Un sistema instalado que funcione es opcional. Tu próximo proyecto, no."
+      "Arranca un Linux independiente desde USB y dale una misión a tu agente IA: construir sistemas, preparar Windows, crear un laboratorio virtual o coordinar equipos autorizados. Empieza por el hardware, no por el estado del sistema instalado."
     ],
     [
       "¿Necesito que Windows o Linux funcionen?",

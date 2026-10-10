@@ -53,7 +53,7 @@
   "privacy": "Privacidade",
   "footer": "Código aberto · GPL-3.0-or-later · A sua rede, sem relay LA AGUJA.",
   "docTitle": "Guia do utilizador · LA AGUJA",
-  "docDescription": "Preparar um USB, iniciar Linux independente, trabalhar com IA, instalar e configurar sistemas, explorar laboratórios virtuais, migrar ou recuperar dados.",
+  "docDescription": "Inicie Linux independente pelo USB e dê uma missão ao agente IA: construir sistemas, preparar Windows, criar um laboratório virtual ou coordenar máquinas autorizadas. Comece pelo hardware, não pelo estado do sistema instalado.",
   "docUI": [
     "Saltar para o guia",
     "Índice e pesquisa",
@@ -83,7 +83,7 @@
   "sections": [
     [
       "Uma plataforma de lançamento, não apenas um salva-vidas.",
-      "LA AGUJA transforma um PC compatível em uma oficina Linux antes de iniciar o sistema instalado, mesmo com o disco vazio. Dê uma missão ao agente: construir, configurar, experimentar, migrar ou recuperar.",
+      "Dê a um agente avançado um objetivo, não apenas um comando de reparo. Ele pode analisar hardware, escolher ferramentas, gerar e executar scripts no escopo autorizado e conferir o resultado. O sistema instalado não precisa iniciar, nem mesmo existir.",
       "A sessão live usa uma camada gravável em RAM sobre a imagem USB somente leitura. É Linux, não firmware, e o USB inteiro não é copiado para RAM. Os discos internos ficam intactos ao iniciar; você decide quando usá-los para gravação.",
       "Inclui clientes de IA com acesso root, SSH, Python, Git, ferramentas de discos, debootstrap e arch-install-scripts. Amplie com pacotes compatíveis: QEMU/KVM, motores de contêineres e ferramentas de compilação exigem instalação adicional, RAM/armazenamento suficientes e hardware compatível. Salve os resultados importantes explicitamente; a RAM é temporária. IA na nuvem exige rede e sua conta; não há modelo local incluído."
     ],
@@ -183,7 +183,7 @@
       "Comandos abaixo são de orientação. Não formates, instales bootloader ou escrevas partições em dispositivo adivinhado. Consulta manuais e trabalha em cópia quando adequado. Ferramentas tradicionais não exigem nuvem; não garantem toda recuperação."
     ],
     [
-      "Oito missões. Recuperar é só uma.",
+      "O que você poderia construir desde o boot?",
       "Use as ferramentas Linux incluídas ou adicione dependências do projeto. São missões adaptáveis, não funções de um clique nem cenários todos já testados."
     ],
     [
@@ -292,7 +292,7 @@
   "faq": [
     [
       "É apenas um disco de recuperação?",
-      "Inicie um Linux independente pelo USB e coloque agentes de IA para trabalhar: instalar sistemas, configurar servidores, criar um laboratório virtual ou recuperar dados. Um sistema instalado funcionando é opcional. Seu próximo projeto, não."
+      "Inicie Linux independente pelo USB e dê uma missão ao agente IA: construir sistemas, preparar Windows, criar um laboratório virtual ou coordenar máquinas autorizadas. Comece pelo hardware, não pelo estado do sistema instalado."
     ],
     [
       "Windows ou Linux precisam de funcionar?",

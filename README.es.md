@@ -1,6 +1,6 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk con nuestra mascota Agujita"></p>
 
-<p align="center"><strong>Tu IA. Tu equipo. Antes del sistema instalado.</strong><br>Un taller Linux arrancable para construir, configurar, experimentar y recuperar.</p>
+<p align="center"><strong>Una pequeña entrada. Grandes posibilidades.</strong><br>Un taller Linux arrancable para construir, configurar, experimentar y recuperar.</p>
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
@@ -12,7 +12,7 @@ El inglés es el idioma principal del repositorio y el español, el secundario. 
 
 **Tu PC operativo → Flash Imager → tu USB live → la máquina donde quieres construir.**
 
-El live usa una **capa de escritura en RAM sobre una imagen USB de solo lectura**; no copia todo el USB a RAM ni ejecuta IA en firmware. No cambia discos internos automáticamente al inicio. Guarda resultados útiles en el almacenamiento elegido: la RAM es temporal, pero escribir deliberadamente en discos sí persiste. La IA en nube necesita red y tu cuenta; las herramientas tradicionales pueden trabajar sin Internet. [Explora ocho misiones ambiciosas](docs/PLATFORM.es.md).
+El live usa una **capa de escritura en RAM sobre una imagen USB de solo lectura**; no copia todo el USB a RAM ni ejecuta IA en firmware. No cambia discos internos automáticamente al inicio. Guarda resultados útiles en el almacenamiento elegido: la RAM es temporal, pero escribir deliberadamente en discos sí persiste. La IA en nube necesita red y tu cuenta; las herramientas tradicionales pueden trabajar sin Internet. [Explora veinte misiones para Linux y Windows](docs/PLATFORM.es.md).
 
 Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí requiere Internet, cuenta compatible propia y cuota disponible. Las licencias y condiciones externas siguen siendo independientes: [NOTICE](NOTICE.es.md).
 
@@ -40,9 +40,13 @@ Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí
 | Compilar fuera del entorno del disco | [Fábrica de software](docs/PLATFORM.es.md#4-fábrica-de-software-independiente-del-disco) | Scripts reproducibles, pruebas y artefactos exportados |
 | Preparar un NAS o servidor de aplicaciones | [Inicio bare-metal](docs/PLATFORM.es.md#5-preparar-un-nas-o-servidor-de-aplicaciones-desde-bare-metal) | Servicios instalados comprobados desde cliente autorizado |
 | Migrar almacenamiento o probar otra configuración | [Migraciones y experimentos](docs/PLATFORM.es.md#6-taller-de-migraciones-fuera-de-ambos-sistemas) | Datos verificados, reversión y recetas repetibles |
+| Preparar y desplegar Windows | [Despliegue Windows](docs/PLATFORM.es.md#16-preparar-y-desplegar-una-instalación-oficial-windows) | Kit oficial y arranque Windows nativo verificado |
+| Configurar o probar Windows para otro rol | [Kit y laboratorio Windows](docs/PLATFORM.es.md#17-kit-repetible-para-el-rol-de-tu-windows) | Archivos revisados o invitados aislados, con validación nativa |
 | Diagnosticar o recuperar el sistema existente | [Procedimientos de rescate](docs/SHOWCASE.es.md) | Resultados observables y respaldos conservados |
 
 Son **ideas de trabajo y plantillas de prompts**, no testimonios ni casos de éxito inventados. Cada ejemplo incluye herramientas, entregables esperados y condiciones de parada.
+
+Más allá: migración físico→virtual, laboratorio PXE, imágenes Linux propias, inferencia local opcional, cómputo científico, recolección edge y coordinación de hosts. Un agente avanzado trabaja desde el objetivo y la evidencia viva, no desde un menú cerrado de reparaciones. Consulta las [veinte misiones](docs/PLATFORM.es.md).
 
 ## Primeros pasos
 

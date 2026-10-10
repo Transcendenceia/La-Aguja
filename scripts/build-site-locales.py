@@ -124,10 +124,10 @@ def home_sections(lang):
 
 def skill_section(lang):
     s = CONTENT[lang]['imagerSkill']
-    urls = [GH+'/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip',
-            GH+'/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz',
+    urls = [GH+'/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.zip',
+            GH+'/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.tar.gz',
             GH+'/blob/main/skills/flash-imager/references/harnesses.md',
-            GH+'/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1']
+            GH+'/releases/download/v0.9.10/SHA256SUMS-flash-imager-skill-1.0.2']
     links = ''.join(f'<a href="{url}">{esc(label)} ↗</a>' for url,label in zip(urls,s['links']))
     return f'<section class="downloads" id="agent-skill"><span class="step">02 / AGENT SKILL · 1.0.1</span><h2>{esc(s["title"])}</h2><p>{esc(s["text"])}</p><div class="installer-links">{links}</div><p>{esc(s["note"])}</p></section>'
 

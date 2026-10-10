@@ -146,6 +146,14 @@ def main():
                       "config_mode": a.config_mode,
                       "key_auth": a.config_mode != "default", "sudo_root": True, "harness_versions": True,
                       "dhcp": True, "configuration_partition": True, "data_partition": True}
+            safe_probe = (Path(__file__).with_name('verify-codex-safe.py')).read_bytes()
+            safe_result = subprocess.run(remote + ["python3 -"], env=remote_env,
+                input=safe_probe, capture_output=True, timeout=60)
+            (a.workdir / 'codex-safe.json').write_bytes(safe_result.stdout)
+            (a.workdir / 'codex-safe.err').write_bytes(safe_result.stderr)
+            if safe_result.returncode:
+                raise ValueError('Installed Codex Safe policy/sandbox failed')
+            report['codex_safe'] = json.loads(safe_result.stdout)
             # Browser dependencies/private RAM handoff only; no provider login.
             browser_code = "import sys,stat,shutil;sys.path.insert(0,'/usr/lib/aguja');import auth,browser;u='https://claude.com/cai/oauth/authorize?client_id=aguja-fixture&response_type=code&code=true&state=synthetic-fixture&redirect_uri=http%3A%2F%2F127.0.0.1%3A8123%2Fcallback';s=auth.Session();assert s.offer(u);assert auth.current()['url']==u;assert stat.S_IMODE(s.directory.stat().st_mode)==0o700;assert stat.S_IMODE((s.directory/'request.json').stat().st_mode)==0o600;assert all(shutil.which(x) for x in ('chromium','Xorg','xterm','openbox','xdotool','xauth','aguja-browser-launch'));assert __import__('pathlib').Path('/usr/lib/aguja/browser-session').is_file();assert 'QR' not in ' '.join(auth.terminal_lines(auth.current(),80,24));s.close();assert auth.current() is None"
             browser_check = subprocess.run(remote + ["python3 -c " + shlex.quote(browser_code)], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, timeout=30)
@@ -281,6 +289,13 @@ def main():
                 (a.workdir / 'restart-checks.err').write_text(result.stderr)
                 if result.returncode:
                     raise ValueError('Comprobaciones tras reiniciar fallaron')
+                safe_restarted = subprocess.run(remote + ["python3 -"], env=remote_env,
+                    input=safe_probe, capture_output=True, timeout=60)
+                (a.workdir / 'codex-safe-restart.json').write_bytes(safe_restarted.stdout)
+                (a.workdir / 'codex-safe-restart.err').write_bytes(safe_restarted.stderr)
+                if safe_restarted.returncode:
+                    raise ValueError('Codex Safe policy/sandbox did not survive reboot')
+                report['codex_safe_after_restart'] = json.loads(safe_restarted.stdout)
                 report['restart_and_cli_persistence'] = True
             (a.workdir / "result.json").write_text(json.dumps(report, indent=2))
             print(json.dumps(report), flush=True)

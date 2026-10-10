@@ -209,7 +209,7 @@ Los cuatro CLI están preinstalados en la imagen personal completa. Configurar d
 
 ## Control e idioma (0.9.7)
 
-Cada `aguja agent NOMBRE` muestra Seguro (predeterminado) e Inseguro (YOLO). Seguro pide confirmación para las herramientas; Inseguro conserva la ejecución autónoma. Ninguno elimina sudo. Escape cancela. Los ejecutables directos conservan sus opciones nativas.
+Cada `aguja agent NOMBRE` muestra Seguro (predeterminado) e Inseguro (YOLO). Seguro pide confirmación para las herramientas; Inseguro conserva la ejecución autónoma. Desde 0.9.10, Codex Seguro usa sandbox workspace-write, red deshabilitada y aprobación humana para salir, además de confirmar cada herramienta. El usuario conserva sudo fuera del sandbox. Escape cancela. Los ejecutables directos conservan sus opciones nativas.
 
 `aguja locale` permite cambiar idioma, teclado y variante. La configuración del Imager se aplica antes de desbloquear y las preferencias locales guardadas prevalecen al reiniciar. Solo esos datos no secretos quedan públicos; las credenciales siguen cifradas.
 

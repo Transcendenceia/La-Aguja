@@ -175,7 +175,7 @@
     [
       "Travailler avec un agent",
       "Définissez objectif, machine, disque exact, actions autorisées, destination de sauvegarde et conditions d’arrêt. Demandez l’état vivant et les preuves avant modification. Validez les fichiers récupérés ou le démarrage indépendamment du discours de l’agent.",
-      "aguja dispose de root/sudo complet. Le mode par défaut utilise les mécanismes de pleine puissance des outils ; demander une lecture seule ne crée pas un bac à sable. agent_mode=ask conserve leurs approbations sans retirer root. Contrôlez les actions destructives et gardez une copie de retour arrière."
+      "Codex sûr en 0.9.10 utilise un sandbox workspace-write sans réseau. Chaque outil demande une nouvelle confirmation humaine ; sortir du sandbox exige un accord humain. Le compte conserve sudo hors du sandbox. Les autres clients gardent leurs confirmations ; YOLO reste sans restrictions. Choisissez avec aguja agent NAME ; Échap annule. Aucun mode ne permet de dépasser votre demande."
     ],
     [
       "Outils de secours et commandes d’orientation",

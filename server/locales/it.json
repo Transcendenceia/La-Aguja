@@ -157,7 +157,7 @@
     ],
     [
       "Lavorare con un agente",
-      "Definisci obiettivo, computer/disco esatto, azioni autorizzate, backup e criteri di arresto. Chiedi stato reale e prove prima delle modifiche. Verifica dati/avvio indipendentemente dall’agente. aguja ha root/sudo completo; modalità standard a pieno accesso, richiesta di sola lettura non è sandbox. agent_mode=ask mantiene approvazioni senza togliere root. Controlla azioni distruttive e conserva rollback."
+      "Definisci obiettivo, computer/disco esatto, azioni autorizzate, backup e criteri di arresto. Chiedi stato reale e prove prima delle modifiche. Verifica dati/avvio indipendentemente dall’agente. Codex Sicuro in 0.9.10 usa un sandbox workspace-write senza rete. Ogni strumento richiede una nuova conferma umana; uscire dal sandbox richiede approvazione umana. L’account mantiene sudo fuori dal sandbox. Gli altri client mantengono le proprie conferme; YOLO resta senza restrizioni. Scegli con aguja agent NAME; Escape annulla. Nessuna modalità autorizza azioni oltre la tua richiesta."
     ],
     [
       "Strumenti e comandi",

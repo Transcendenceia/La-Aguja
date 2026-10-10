@@ -13,9 +13,9 @@ Estas son **propuestas prácticas y prompts adaptables**, no intervenciones ejec
 4. Pide al agente hechos observados, hipótesis, comandos propuestos y resultados comprobados por separado.
 5. Evita enviar archivos personales a IA. Proveedores requieren cuenta, red y cuota propias; un diagnóstico local puede hacerse sin nube.
 
-**Seguro confirma tareas; no es un sandbox. La cuenta aguja mantiene sudo/root completo.** Los prompts son instrucciones, no barreras de acceso. Sustituye nombres y rutas por identidades comprobadas antes de cualquier ejecución.
+**Codex Seguro en 0.9.10 añade sandbox workspace-write y confirmación por herramienta. La cuenta aguja mantiene sudo/root completo.** Los prompts son instrucciones, no barreras de acceso. Sustituye nombres y rutas por identidades comprobadas antes de cualquier ejecución.
 
-**Actualización del código:** Codex Seguro ahora añade sandbox `workspace-write` y aprobación humana; la imagen descargable 0.9.9 permanece sin cambios. [Política y alcance](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).
+**0.9.10:** Codex Seguro añade sandbox `workspace-write` y aprobación humana. Las imágenes antiguas 0.9.9 permanecen sin cambios. [Política y alcance](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).
 
 <a id="first-diagnosis"></a>
 
@@ -121,7 +121,7 @@ Estas son **propuestas prácticas y prompts adaptables**, no intervenciones ejec
 
 **Prompt**
 
-> Usa Flash Imager Agent Skill para preparar una imagen privada nueva desde la base 0.9.9 verificada. Pregunta idioma, teclado, clave pública SSH autorizada y red opcional. Mantén secretos fuera de chat/logs y usa protección cifrada con mi frase. Conserva la base, verifica salida e informa solo ajustes depurados y hashes. No grabes USB.
+> Usa Flash Imager Agent Skill para preparar una imagen privada nueva desde la base 0.9.10 verificada. Pregunta idioma, teclado, clave pública SSH autorizada y red opcional. Mantén secretos fuera de chat/logs y usa protección cifrada con mi frase. Conserva la base, verifica salida e informa solo ajustes depurados y hashes. No grabes USB.
 
 **Herramientas:** Flash Imager Agent Skill 1.0.1, Node.js 22+, arnés con archivos/terminal, IMG base verificada y espacio suficiente.
 

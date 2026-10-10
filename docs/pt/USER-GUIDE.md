@@ -181,7 +181,7 @@ findmnt
 
 Especifica objetivo, computador/disco exato, ações permitidas, cópia e condições de paragem. Pede estado atual e provas antes de mudar. Confirma ficheiros recuperados ou arranque independentemente do agente.
 
-aguja tem root/sudo completo. Modo padrão usa mecanismos de pleno acesso; pedir só leitura não cria sandbox. agent_mode=ask mantém aprovações do arnés sem retirar root. Revê operações destrutivas e conserva rollback.
+Codex Seguro em 0.9.10 usa sandbox workspace-write sem rede. Cada ferramenta exige uma nova confirmação humana; sair do sandbox exige aprovação humana. A conta mantém sudo fora do sandbox. Outros clientes mantêm as suas confirmações; YOLO continua sem restrições. Escolha com aguja agent NAME; Escape cancela. Nenhum modo autoriza ações fora do seu pedido.
 
 [↗](https://aguja.transcendenceia.net/pt/docs#trabajo-ia)
 

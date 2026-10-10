@@ -8,7 +8,7 @@ Las copias de trabajo pueden contener instrucciones del propietario: léelas tam
 ## 1. Orientación inicial por SSH o consola
 
 Usuario: `aguja`. `sudo -n` concede root completo en el hardware, sin contraseña sudo.
-No hay sandbox ni entorno de contenedores: cada cambio puede afectar al equipo real.
+La sesión live no es un contenedor. Desde 0.9.10, Codex Seguro añade sandbox workspace-write, red deshabilitada y aprobación humana para salir; su puerta PreToolUse confirma cada herramienta. Otros arneses conservan sus propias confirmaciones. Fuera del sandbox, el usuario mantiene sudo completo y cada cambio puede afectar al equipo real.
 La contraseña SSH de fábrica es pública y conocida, `aguja`; puede haber una personalizada
 o acceso solo por clave. Nunca imprimas credenciales personalizadas.
 

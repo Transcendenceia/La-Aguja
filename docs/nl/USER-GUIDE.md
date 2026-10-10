@@ -145,7 +145,7 @@ findmnt
 
 ## Met een agent werken
 
-Definieer doel, exact apparaat/schijf, toegestane acties, back-up en stopcriteria. Vraag actuele status en bewijs vóór wijzigen. Controleer bestanden/boot onafhankelijk. aguja heeft volledige root/sudo. Standaard gebruikt volledige-toegangsmechanismen; alleen-lezen-instructie is geen sandbox. agent_mode=ask behoudt goedkeuringen zonder root weg te nemen. Controleer destructieve acties en behoud terugvalkopie.
+Definieer doel, exact apparaat/schijf, toegestane acties, back-up en stopcriteria. Vraag actuele status en bewijs vóór wijzigen. Controleer bestanden/boot onafhankelijk. Codex Safe in 0.9.10 gebruikt een workspace-write-sandbox zonder netwerk. Elk hulpmiddel vereist een nieuwe menselijke bevestiging; de sandbox verlaten vereist menselijke goedkeuring. Het account behoudt sudo buiten de sandbox. Andere clients behouden hun bevestigingen; YOLO blijft onbeperkt. Kies met aguja agent NAME; Escape annuleert. Geen modus staat acties buiten je verzoek toe.
 
 [↗](https://aguja.transcendenceia.net/nl/docs#trabajo-ia)
 

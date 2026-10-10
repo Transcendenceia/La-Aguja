@@ -175,7 +175,7 @@
     [
       "Mit einem Agenten arbeiten",
       "Definiere Ziel, Computer, exakten Datenträger, erlaubte Aktionen, Sicherungsziel und Abbruchbedingungen. Verlange aktuellen Zustand und Belege vor Änderungen. Prüfe wiederhergestellte Dateien oder Bootverhalten unabhängig von der Antwort des Agenten.",
-      "aguja hat volle root-/sudo-Rechte. Standardstarter nutzen die Vollzugriffsmechanismen der Werkzeuge; eine Nur-Lese-Anweisung ist keine Sandbox. agent_mode=ask erhält deren Freigabeverhalten ohne root zu entfernen. Prüfe destruktive Aktionen und behalte eine Rückfallkopie."
+      "Codex Sicher in 0.9.10 nutzt eine workspace-write-Sandbox ohne Netzwerk. Jedes Werkzeug benötigt eine neue menschliche Bestätigung; das Verlassen der Sandbox erfordert menschliche Freigabe. Das Konto behält sudo außerhalb der Sandbox. Andere Clients behalten ihre Bestätigungen; YOLO bleibt unbeschränkt. Auswahl mit aguja agent NAME; Escape bricht ab. Kein Modus erlaubt Aktionen außerhalb deines Auftrags."
     ],
     [
       "Rettungswerkzeuge und Orientierung",

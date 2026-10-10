@@ -1,4 +1,4 @@
-# Primeros pasos · LA AGUJA 0.9.9
+# Primeros pasos · LA AGUJA 0.9.10
 
 [English](GETTING-STARTED.md) · [Documentación](README.es.md) · [Problemas](TROUBLESHOOTING.es.md) · [Ejemplos](SHOWCASE.es.md)
 
@@ -16,7 +16,7 @@ Si el original hace clics, se desconecta repetidamente o contiene datos irrempla
 
 ## 2. Descarga preparador e imagen
 
-[Descargas oficiales](https://aguja.transcendenceia.net/es) · [Imager 0.9.9](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9)
+[Descargas oficiales](https://aguja.transcendenceia.net/es) · [Imager 0.9.10](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.10)
 
 | Archivo | Función |
 | --- | --- |
@@ -26,7 +26,7 @@ Si el original hace clics, se desconecta repetidamente o contiene datos irrempla
 | ISO Rescue | Pruebas VM/arranque tipo medio óptico; no es el recorrido de preparación IMG configurable |
 | `.aguja` | Perfil privado reutilizable, no imagen de sistema operativo |
 
-Prefiere el catálogo firmado del Imager: verifica firma Ed25519, partes descargadas y hash completo. Para descarga manual: [imagen 0.9.9](https://aguja.transcendenceia.net/releases/aguja-0.9.9-amd64.img.zst), [ISO](https://aguja.transcendenceia.net/releases/aguja-0.9.9-amd64.iso) y [sumas publicadas](https://aguja.transcendenceia.net/releases/SHA256SUMS-rescue-0.9.9.txt). Compara el hash del nombre exacto. Calcular un hash sin referencia fiable no acredita procedencia.
+Prefiere el catálogo firmado del Imager: verifica firma Ed25519, partes descargadas y hash completo. Para descarga manual: [imagen 0.9.10](https://aguja.transcendenceia.net/releases/aguja-0.9.10-amd64.img.zst), [ISO](https://aguja.transcendenceia.net/releases/aguja-0.9.10-amd64.iso) y [sumas publicadas](https://aguja.transcendenceia.net/releases/SHA256SUMS-rescue-0.9.10.txt). Compara el hash del nombre exacto. Calcular un hash sin referencia fiable no acredita procedencia.
 
 Abre Imager como usuario normal. Grabar USB pide elevación local. Windows no ofrece firma Authenticode reconocida: revisa procedencia en vez de ignorar avisos rutinariamente. En Linux, da permiso de ejecución al AppImage; si falta FUSE usa el archivo portátil o la extracción documentada, no opciones para desactivar el sandbox. Véase la [guía de implementación](../desktop/README.es.md).
 
@@ -40,7 +40,7 @@ Abre Imager como usuario normal. Grabar USB pide elevación local. Windows no of
 2. Selecciona **idioma y teclado del live**, independientes del idioma de la aplicación. Comprueba el teclado antes de escribir una nueva frase de desbloqueo.
 3. Usa Ethernet DHCP en el primer arranque si puedes. Wi-Fi personal guardado es opcional; autenticación empresarial y portales cautivos pueden necesitar NetworkManager manual.
 4. Elige hostname reconocible y contraseña SSH única para esta intervención, o clave **pública** del operador autorizado. Nunca pegues la privada.
-5. Deja IA y red privada sin configurar si aún no las necesitas. La imagen completa 0.9.9 sigue incluyendo los cuatro CLI.
+5. Deja IA y red privada sin configurar si aún no las necesitas. La imagen completa 0.9.10 sigue incluyendo los cuatro CLI.
 
 Usuario SSH y contraseña pública de fábrica: `aguja`. Contraseña vacía con clave pública permite solo clave; sin clave conserva acceso de fábrica. Después, `aguja password` cambia y conserva la contraseña; `sudo passwd aguja` solo afecta a la sesión actual.
 
@@ -129,9 +129,9 @@ Abre el cliente elegido desde el launcher, por ejemplo:
 aguja agent codex
 ```
 
-Elige **Seguro** para confirmar tareas; Inseguro/YOLO es explícito. **Ambos mantienen sudo/root ilimitado. Seguro no es sandbox ni bloqueador forense de escritura.** Empieza con un [prompt de diagnóstico acotado](SHOWCASE.es.md#first-diagnosis), revisa comandos y detente antes de escrituras no autorizadas.
+Elige **Seguro** para confirmar tareas; Inseguro/YOLO es explícito. **Ambos mantienen sudo/root ilimitado. Codex Seguro en 0.9.10 tiene sandbox workspace-write y confirmación por herramienta; otros arneses conservan sus propias confirmaciones. No es un bloqueador forense de escritura.** Empieza con un [prompt de diagnóstico acotado](SHOWCASE.es.md#first-diagnosis), revisa comandos y detente antes de escrituras no autorizadas.
 
-**Actualización del código:** Codex Seguro ahora añade sandbox `workspace-write` y aprobación humana; la imagen descargable 0.9.9 permanece sin cambios. [Política y alcance](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).
+**0.9.10:** Codex Seguro añade sandbox `workspace-write` y aprobación humana. Las imágenes antiguas 0.9.9 permanecen sin cambios. [Política y alcance](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).
 
 ## 9. Verifica y cierra la intervención
 
@@ -139,4 +139,4 @@ En un primer arranque, registra versión, procedencia verificada de la imagen y 
 
 Termina transferencias, desmonta limpiamente volúmenes de recuperación y apaga antes de retirar medios. Retira solo accesos temporales creados para el trabajo, revoca claves innecesarias y revisa HOME persistente por tokens restantes. Conserva originales y copias hasta la aceptación del propietario. No borres accesos ajenos ni evidencia al limpiar.
 
-Siguiente: [ocho recorridos prácticos](SHOWCASE.es.md) · [problemas](TROUBLESHOOTING.es.md) · [evidencia de versión](RELEASE-0.9.9.md).
+Siguiente: [ocho recorridos prácticos](SHOWCASE.es.md) · [problemas](TROUBLESHOOTING.es.md) · [evidencia de versión](RELEASE-0.9.10.md).

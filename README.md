@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
-**Flash Imager 0.9.9 · Rescue Disk 0.9.9 · Experimental · x86-64**
+**Flash Imager 0.9.10 · Rescue Disk 0.9.10 · Experimental · x86-64**
 English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
 **Your computer does not need an installed OS to start its next project.** LA AGUJA boots an independent Linux from USB, including on a machine with a blank disk. Bring **Codex CLI, OpenCode, Claude Code and Antigravity**, root-capable Linux tools and optional SSH to the hardware: install and configure systems, bootstrap a server, build software, extend the session into a virtual lab, migrate storage or recover data. Recovery is one mission, not the whole product.
@@ -15,7 +15,7 @@ The live session uses a **writable RAM overlay over a read-only USB image**; it 
 
 No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requires Internet, your own compatible provider account and available quota. Third-party licences and terms remain separate: [NOTICE](NOTICE.md).
 
-> **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. In the 0.9.9 image, Safe asks for task confirmation but is **not a sandbox**. Current source adds a Codex sandbox: [policy and scope](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
+> **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. In the 0.9.9 image, Safe asks for task confirmation but is **not a sandbox**. Version 0.9.10 adds a Codex sandbox: [policy and scope](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
 
 ## See the actual product
 
@@ -49,7 +49,7 @@ Beyond those starting points: physical-to-virtual migration, a PXE lab, custom L
 
 ## Get started
 
-1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9). The EXE/AppImage is the preparer, not the rescue image.
+1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.10). The EXE/AppImage is the preparer, not the rescue image.
 2. **Select the image.** Use the signed catalogue, or decompress a manually downloaded `.img.zst` before selecting the `.img`. The ISO is useful for VM boot tests.
 3. **Set language, keyboard, networking and SSH.** Replace the public factory SSH password `aguja` with your own password or public key. AI and tailnet preparation are optional.
 4. **Protect the profile.** Use an encrypted capsule for secrets. Replace the public initial unlock phrase `aguja` and keep the new phrase outside the USB. This does not encrypt persistent HOME or all AGUJA_DATA.
@@ -67,9 +67,9 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Let an agent prepare the image
 
-**Flash Imager Agent Skill 1.0.1** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
+**Flash Imager Agent Skill 1.0.2** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Install for your harness](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/SHA256SUMS-flash-imager-skill-1.0.2) · [Install for your harness](skills/flash-imager/references/harnesses.md)
 
 Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw and manual loading. Portable format support does not certify every harness or OS.
 
@@ -88,7 +88,7 @@ Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, O
 
 **Extend it for the mission:** QEMU/KVM, container engines, compilers and SDKs can be added when compatible with the live kernel, hardware and resource budget. They are not promised as bundled or as one-click workflows. The platform provides an independent Linux and capable agents, not a built-in hypervisor, local AI model or automatic fleet orchestrator. [Requirements, prompts and deliverables](docs/PLATFORM.md).
 
-**New in 0.9.9:** local console mouse-wheel history, up to 10,000 lines in RAM without saved transcripts; scroll down to the prompt or press Esc to return. SSH keeps the client terminal behaviour. Imager checks working-space availability before copying a private image; Windows can choose another work folder. [Release notes](docs/RELEASE-0.9.9.md).
+**New in 0.9.10:** Codex Safe adds a workspace-write sandbox, network restrictions and human approval for every tool and sandbox escape. Preserved from 0.9.9: local console mouse-wheel history, up to 10,000 lines in RAM without saved transcripts; scroll down to the prompt or press Esc to return. SSH keeps the client terminal behaviour. Imager checks working-space availability before copying a private image; Windows can choose another work folder. [Release notes](docs/RELEASE-0.9.10.md).
 
 ### Local console or SSH
 

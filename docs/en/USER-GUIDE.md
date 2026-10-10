@@ -181,7 +181,7 @@ findmnt
 
 Specify the objective, exact computer and disk, authorised actions, backup destination and stopping conditions. Ask the agent to inspect live state, explain its findings and keep evidence before proposing changes. Starting an agent does not itself complete a rescue. Check the resulting files or boot behaviour independently.
 
-The aguja user has full sudo/root access. Default agent launchers use their available full-power mechanisms; a request for read-only work is not an enforced sandbox. agent_mode=ask keeps the harness’s own approval behaviour without removing root. Never treat an AI-generated command as proof of the correct device. Review destructive actions and preserve a rollback copy.
+Codex Safe in 0.9.10 uses a workspace-write sandbox with networking disabled. Each tool requires fresh human confirmation; leaving the sandbox requires human approval. The OS account retains sudo outside the sandbox. Other clients keep their own confirmation mechanisms; YOLO remains unrestricted. Choose through aguja agent NAME; Escape cancels. No mode authorises actions beyond your request.
 
 [↗](https://aguja.transcendenceia.net/en/docs#trabajo-ia)
 

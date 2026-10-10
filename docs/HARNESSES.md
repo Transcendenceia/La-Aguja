@@ -24,15 +24,14 @@ adicionales. Las operaciones que requieren salir del sandbox solicitan aprobaci�
 es un bloqueador forense de discos. La cuenta conserva sudo fuera del sandbox.
 YOLO sigue usando `--dangerously-bypass-approvals-and-sandbox`.
 
-Esta corrección se aplicó también en RAM a la VM inspeccionada. **Las imágenes 0.9.9
-ya descargadas no se modifican retroactivamente**: conservan la política anterior
-(`danger-full-access` + `never`, con puerta humana). Un parche en RAM no sobrevive
-al reinicio. La nueva política requiere construir una imagen desde este código;
-no se publicó ni sobrescribió una imagen 0.9.9 como parte de esta corrección.
+La corrección forma parte de la imagen **0.9.10**. La VM 0.9.9 inspeccionada recibió
+antes un parche en RAM: ese parche se pierde al reiniciar. Las imágenes antiguas
+0.9.9 no se cambian retroactivamente y conservan `danger-full-access` + `never`
+con puerta humana. Graba la nueva imagen para conservar la nueva política al arrancar.
 
-Current source: Codex Safe combines **workspace-write**, **on-request**, and a fresh
-human confirmation before every tool. Existing 0.9.9 images remain unchanged; the
-inspected VM received a RAM-only patch. The OS account retains sudo; YOLO is unchanged.
+The **0.9.10 image** combines workspace-write, on-request and fresh human confirmation
+before every Codex tool. Older images remain unchanged; the earlier RAM-only patch
+is not persistent. The OS account retains sudo outside the sandbox; YOLO is unchanged.
 
 ## Preparar y autorizar: recorrido actual
 

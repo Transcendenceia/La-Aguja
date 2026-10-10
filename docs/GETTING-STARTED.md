@@ -1,4 +1,4 @@
-# Getting started · LA AGUJA 0.9.9
+# Getting started · LA AGUJA 0.9.10
 
 [Español](GETTING-STARTED.es.md) · [Documentation](README.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Workflow ideas](SHOWCASE.md)
 
@@ -16,7 +16,7 @@ If the original disk clicks, repeatedly disconnects or contains irreplaceable da
 
 ## 2. Download the preparer and image
 
-[Official download page](https://aguja.transcendenceia.net/en) · [Imager 0.9.9 release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9)
+[Official download page](https://aguja.transcendenceia.net/en) · [Imager 0.9.10 release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.10)
 
 | File | Purpose |
 | --- | --- |
@@ -26,7 +26,7 @@ If the original disk clicks, repeatedly disconnects or contains irreplaceable da
 | Rescue ISO | Useful for VM/optical-style boot tests; not the configurable IMG preparation flow |
 | `.aguja` | Reusable private configuration profile, not an OS image |
 
-Prefer the Imager's signed catalogue: it verifies an Ed25519 signature, download parts and the complete image hash. For manual downloads use the [0.9.9 image](https://aguja.transcendenceia.net/releases/aguja-0.9.9-amd64.img.zst), [ISO](https://aguja.transcendenceia.net/releases/aguja-0.9.9-amd64.iso) and [published Rescue checksums](https://aguja.transcendenceia.net/releases/SHA256SUMS-rescue-0.9.9.txt). Compare the hash for the exact filename. A self-calculated hash without a trusted reference does not establish origin.
+Prefer the Imager's signed catalogue: it verifies an Ed25519 signature, download parts and the complete image hash. For manual downloads use the [0.9.10 image](https://aguja.transcendenceia.net/releases/aguja-0.9.10-amd64.img.zst), [ISO](https://aguja.transcendenceia.net/releases/aguja-0.9.10-amd64.iso) and [published Rescue checksums](https://aguja.transcendenceia.net/releases/SHA256SUMS-rescue-0.9.10.txt). Compare the hash for the exact filename. A self-calculated hash without a trusted reference does not establish origin.
 
 Launch the Imager as your normal user. USB writing requests local elevation. Windows packages have no recognised Authenticode signature; inspect provenance rather than routinely bypassing warnings. On Linux, grant the AppImage execute permission; use the portable archive or documented extraction route if FUSE is unavailable, not sandbox-disabling flags. See the [Imager implementation guide](../desktop/README.md).
 
@@ -40,7 +40,7 @@ Launch the Imager as your normal user. USB writing requests local elevation. Win
 2. Select **live language and keyboard**, independently of the application language. Check the keyboard before typing a new unlock phrase.
 3. Use automatic Ethernet DHCP for the first boot if possible. Saved personal Wi-Fi is optional; corporate authentication and captive portals may need manual NetworkManager setup.
 4. Choose a recognisable hostname and an SSH password unique to this intervention, or the authorised operator's **public** key. Never paste the private key.
-5. Leave AI and private networking unconfigured for the first test if you do not need them yet. The complete 0.9.9 image still contains all four CLIs.
+5. Leave AI and private networking unconfigured for the first test if you do not need them yet. The complete 0.9.10 image still contains all four CLIs.
 
 The SSH factory username and public password are both `aguja`. Blank password plus a public key means key-only access; blank password without a key retains factory access. Later, `aguja password` changes and persists it; `sudo passwd aguja` only affects the current session.
 
@@ -129,7 +129,7 @@ Start the chosen client through the launcher, for example:
 aguja agent codex
 ```
 
-Choose **Safe** for task confirmations; Unsafe/YOLO is explicit. **Both retain unrestricted sudo/root. The released 0.9.9 Safe mode is not a sandbox or forensic write blocker; [current source adds a Codex sandbox](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).** Start with a [bounded diagnosis prompt](SHOWCASE.md#first-diagnosis), inspect the proposed commands and stop before unapproved writes.
+Choose **Safe** for task confirmations; Unsafe/YOLO is explicit. **Both retain unrestricted sudo/root. The released 0.9.9 Safe mode is not a sandbox or forensic write blocker; [0.9.10 adds a Codex sandbox](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).** Start with a [bounded diagnosis prompt](SHOWCASE.md#first-diagnosis), inspect the proposed commands and stop before unapproved writes.
 
 ## 9. Verify the result and close the intervention
 
@@ -137,4 +137,4 @@ For a first boot, record the version, verified image source and observed hardwar
 
 Finish transfers, unmount recovery volumes cleanly and shut down before disconnecting media. Remove only the temporary access you created, revoke unneeded keys and review persistent HOME for remaining tokens. Preserve originals and backups until the owner accepts the outcome. Never clean up by deleting unrelated access or evidence.
 
-Next: [eight practical workflows](SHOWCASE.md) · [troubleshooting](TROUBLESHOOTING.md) · [current release evidence](RELEASE-0.9.9.md).
+Next: [eight practical workflows](SHOWCASE.md) · [troubleshooting](TROUBLESHOOTING.md) · [current release evidence](RELEASE-0.9.10.md).

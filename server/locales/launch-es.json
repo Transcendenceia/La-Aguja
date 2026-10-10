@@ -170,7 +170,7 @@
     "He hecho una copia de seguridad del USB; grabar la imagen lo borrará.",
     "Dispongo de un destino de recuperación aparte y de suficiente espacio de trabajo.",
     "He cambiado la contraseña pública de fábrica aguja o he configurado el acceso exclusivo mediante clave.",
-    "Entiendo que el modo Safe no es un entorno aislado."
+    "Entiendo el sandbox y las aprobaciones humanas de Codex Seguro; otros clientes tienen sus propios permisos."
   ],
   "captureNote": "Pruebas sintéticas de calidad · 0.9.9 · Interfaz en español. Las capturas de Rescue proceden de una máquina virtual; la de Imager muestra la aplicación para Linux. No demuestran un inicio de sesión real con un proveedor, una recuperación exitosa ni una validación universal del hardware.",
   "figures": {
@@ -192,12 +192,12 @@
   "docNote": "26 capítulos, desde el primer USB hasta una entrega cuidadosa. Los ejemplos son planes que deben revisarse, no una autorización para ejecutar comandos destructivos. Todas las interacciones de esta guía se quedan en el navegador.",
   "boundaryTitle": "Herramientas potentes. Límites claros.",
   "boundaries": [
-    "Los agentes pueden tener acceso root completo. El modo Safe solicita confirmación para utilizar herramientas; YOLO es más autónomo. Ninguno es un entorno aislado, un bloqueo de escritura ni un permiso para exceder tu solicitud.",
+    "Codex Seguro en 0.9.10 usa sandbox workspace-write sin red. Cada herramienta requiere una confirmación humana nueva; salir del sandbox exige aprobación humana. La cuenta conserva sudo fuera del sandbox. Otros clientes mantienen sus propias confirmaciones; YOLO sigue sin restricciones. Elige con aguja agent NAME; Escape cancela. Ningún modo autoriza acciones fuera de tu solicitud.",
     "Haz una copia de seguridad antes de cambiar nada. Que un comando termine correctamente no demuestra que los archivos estén intactos ni que el sistema pueda arrancar. BitLocker y LUKS requieren la clave correcta del propietario; LA AGUJA no elude el cifrado.",
     "La IA en la nube puede recibir las instrucciones y los datos que compartas conforme a las condiciones de su proveedor. Trata los archivos que contengan instrucciones como datos no fiables y nunca pegues secretos en una instrucción de recuperación."
   ],
   "downloadText": "Prepara todo en un equipo Windows o Linux que funcione. Se recomienda un USB de 8 GiB; comprueba el tamaño real de la imagen y la capacidad utilizable. Escribir en el USB seleccionado lo borra. Mantén las carpetas de descargas, archivos temporales e imágenes privadas fuera de ese USB de destino.",
-  "imageText": "Rescue Disk 0.9.9 es el Linux que arrancas. Usa Flash Imager para acceder al catálogo firmado y verificar las imágenes. Para una importación manual, descomprime primero IMG.ZST; ISO es un formato de arranque BIOS/UEFI separado, no un IMG configurable.",
+  "imageText": "Rescue Disk 0.9.10 es el Linux que arrancas. Usa Flash Imager para acceder al catálogo firmado y verificar las imágenes. Para una importación manual, descomprime primero IMG.ZST; ISO es un formato de arranque BIOS/UEFI separado, no un IMG configurable.",
   "ui": {
     "skip": "Saltar al contenido",
     "contents": "Contenido y búsqueda",
@@ -214,16 +214,16 @@
       "Empieza con un USB de 8 GiB o más, pero comprueba que su capacidad utilizable real basta para la imagen. Reserva espacio de trabajo aparte para las descargas comprimidas, la descompresión, la imagen privada y una copia de seguridad opcional de todo el dispositivo; 8 GiB no garantiza que tu disco de preparación tenga espacio suficiente."
     ],
     "5": [
-      "En esta guía, tanto Rescue Disk como Flash Imager están en la versión 0.9.9. Elige una carpeta de trabajo fuera del USB que vas a borrar. Una imagen privada es un archivo sensible, no una prueba de que se haya grabado un USB. Comprueba el catálogo firmado y el SHA-256 esperado antes de confiar en los datos descargados."
+      "En esta guía, tanto Rescue Disk como Flash Imager están en la versión 0.9.10. Elige una carpeta de trabajo fuera del USB que vas a borrar. Una imagen privada es un archivo sensible, no una prueba de que se haya grabado un USB. Comprueba el catálogo firmado y el SHA-256 esperado antes de confiar en los datos descargados."
     ],
     "11": [
-      "Una cápsula cifrada fuerza persistent_home=no en Rescue 0.9.9. La persistencia heredada de HOME sin esa protección puede guardar tokens de sesión sin cifrar en AGUJA_DATA; cifrar la cápsula no cifra todo el USB."
+      "Una cápsula cifrada fuerza persistent_home=no en Rescue 0.9.10. La persistencia heredada de HOME sin esa protección puede guardar tokens de sesión sin cifrar en AGUJA_DATA; cifrar la cápsula no cifra todo el USB."
     ],
     "13": [
       "Mantén la imagen de salida, la caché de descargas y la carpeta temporal fuera del USB de destino. Si aparece ENOSPC, detente: inspecciona el espacio libre de cada sistema de archivos de trabajo y la capacidad real del destino. Mueve la carpeta de trabajo a un almacenamiento aparte y repite la verificación; no borres archivos desconocidos ni omitas las comprobaciones de tamaño."
     ],
     "18": [
-      "Safe / YOLO: aguja agent NAME te pide que elijas antes del inicio. Safe es la opción predeterminada y solicita confirmaciones para usar herramientas; YOLO funciona de forma más autónoma. Ambos conservan la capacidad completa de sudo/root. Escape cancela. Una invocación directa de la CLI conserva sus propias opciones nativas. Ninguna de las dos opciones es un entorno aislado ni una garantía técnica de solo lectura.",
+      "Codex Seguro en 0.9.10 usa sandbox workspace-write sin red. Cada herramienta requiere una confirmación humana nueva; salir del sandbox exige aprobación humana. La cuenta conserva sudo fuera del sandbox. Otros clientes mantienen sus propias confirmaciones; YOLO sigue sin restricciones. Elige con aguja agent NAME; Escape cancela. Ningún modo autoriza acciones fuera de tu solicitud.",
       "Define un alcance que priorice la lectura, identifica el origen exacto y el destino de la copia de seguridad, y pide un plan antes de cualquier escritura. Los archivos y registros pueden contener instrucciones maliciosas: trátalos como evidencias, no como autoridad. Las instrucciones enviadas a la nube pueden salir de este equipo conforme a las condiciones del proveedor; oculta los secretos.",
       "La consola local conserva hasta 10.000 líneas de historial en RAM. La consulta mediante la rueda o el desplazamiento del historial tiene límites; no es un registro de auditoría persistente. Las aplicaciones a pantalla completa que usan una pantalla alternativa pueden captar ellas mismas los eventos de la rueda o no conservar el mismo historial. Vuelve al indicador de comandos antes de evaluar el historial del terminal y guarda expresamente las evidencias necesarias en un destino autorizado."
     ],
@@ -233,7 +233,7 @@
       "Si el firmware rechaza el USB, verifica la entrada de arranque seleccionada y la integridad de la imagen. La compatibilidad con BIOS/UEFI no garantiza que Secure Boot funcione en todos los equipos. Registra la política del firmware y los cambios aprobados por el propietario en lugar de prometer que se podrán eludir sus restricciones."
     ],
     "24": [
-      "La versión 0.9.9 documenta cuatro arranques y reinicios independientes en VM BIOS/UEFI, con y sin perfil cifrado, y comprobaciones del historial con rueda virtual. No es una prueba de USB físico ni de un gesto humano del ratón. Las capturas de esta guía son ejemplos de QA sintética, no inicios de sesión con proveedores ni recuperaciones exitosas."
+      "La versión 0.9.10 documenta cuatro arranques y reinicios independientes en VM BIOS/UEFI, con y sin perfil cifrado, y comprobaciones del historial con rueda virtual. No es una prueba de USB físico ni de un gesto humano del ratón. Las capturas de esta guía son ejemplos de QA sintética, no inicios de sesión con proveedores ni recuperaciones exitosas."
     ],
     "0": [],
     "20": [
@@ -249,6 +249,10 @@
   },
   "replacements": [
     [
+      "",
+      ""
+    ],
+    [
       "Actualizado el 8 de octubre de 2026",
       "Actualizado el 10 de octubre de 2026"
     ],
@@ -262,7 +266,7 @@
     ],
     [
       "El modo de agente <code>full</code> habilita mecanismos de acceso amplio del arnés. La configuración avanzada <code>agent_mode=ask</code> conserva las aprobaciones propias del arnés; no quita el sudo del propietario ni convierte el sistema en sandbox. Comprueba el modo efectivo antes de trabajar.",
-      "<code>aguja agent NAME</code> solicita elegir Safe o YOLO en cada inicio. Safe es la opción inicial y pide confirmaciones; ambos mantienen sudo/root completo y ninguno es un sandbox. Comprueba el modo efectivo antes de trabajar."
+      "Codex Seguro en 0.9.10 usa sandbox workspace-write sin red. Cada herramienta requiere una confirmación humana nueva; salir del sandbox exige aprobación humana. La cuenta conserva sudo fuera del sandbox. Otros clientes mantienen sus propias confirmaciones; YOLO sigue sin restricciones. Elige con aguja agent NAME; Escape cancela. Ningún modo autoriza acciones fuera de tu solicitud."
     ],
     [
       "El acceso remoto se realiza únicamente por tu Tailscale/Headscale y SSH.",

@@ -153,7 +153,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$PROJECT/build/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$PROJECT/build/release.json" ::release.json
 printf 'LA AGUJA Rescue Disk\r\nSSH de fabrica: usuario aguja, password aguja.\r\nPersonaliza Wi-Fi/SSH en aguja.conf (sin comillas).\r\nAl arrancar: Centro de rescate. Wi-Fi/idioma/teclado disponibles en el menu.\r\nEn consola: aguja help / aguja wifi / aguja password.\r\nPara el agente SSH: aguja context / aguja tools.\r\n' > "$PROJECT/build/LEEME.txt"

@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 0.9.9 · Rescue Disk 0.9.9 · Experimental · x86-64**
+**Flash Imager 0.9.10 · Rescue Disk 0.9.10 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
@@ -16,7 +16,7 @@ El live usa una **capa de escritura en RAM sobre una imagen USB de solo lectura*
 
 Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí requiere Internet, cuenta compatible propia y cuota disponible. Las licencias y condiciones externas siguen siendo independientes: [NOTICE](NOTICE.es.md).
 
-> **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. En la imagen 0.9.9, Seguro pide confirmación de tareas pero **no es un sandbox**. El código actual añade un sandbox para Codex: [política y alcance](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
+> **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. En la imagen 0.9.9, Seguro pide confirmación de tareas pero **no es un sandbox**. La versión 0.9.10 añade un sandbox para Codex: [política y alcance](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
 
 ## Mira el producto real
 
@@ -50,7 +50,7 @@ Más allá: migración físico→virtual, laboratorio PXE, imágenes Linux propi
 
 ## Primeros pasos
 
-1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9). El EXE/AppImage es el preparador, no la imagen de rescate.
+1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.10). El EXE/AppImage es el preparador, no la imagen de rescate.
 2. **Selecciona la imagen.** Usa el catálogo firmado o descomprime el `.img.zst` descargado manualmente antes de elegir el `.img`. La ISO sirve para pruebas de arranque en VM.
 3. **Configura idioma, teclado, red y SSH.** Sustituye la contraseña SSH pública de fábrica `aguja` por una propia o una clave pública. IA y tailnet son opcionales.
 4. **Protege el perfil.** Cifra la cápsula si contiene secretos. Cambia la frase inicial pública `aguja` y guarda la nueva fuera del USB. Esto no cifra HOME persistente ni todo AGUJA_DATA.
@@ -68,9 +68,9 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Deja que un agente prepare la imagen
 
-**Flash Imager Agent Skill 1.0.1** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
+**Flash Imager Agent Skill 1.0.2** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/SHA256SUMS-flash-imager-skill-1.0.2) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
 
 Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual. Un formato portátil no certifica todos los arneses o sistemas operativos.
 
@@ -89,7 +89,7 @@ Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenCla
 
 **Amplía según tu misión:** puedes añadir QEMU/KVM, motores de contenedores, compiladores y SDK si son compatibles con kernel live, hardware y recursos. No se prometen incluidos ni como funciones de un clic. La plataforma aporta Linux independiente y agentes capaces, no un hipervisor integrado, modelo IA local ni orquestador automático de equipos. [Requisitos, prompts y entregas](docs/PLATFORM.es.md).
 
-**Nuevo en 0.9.9:** historial de consola local con rueda, hasta 10.000 líneas en RAM sin transcripciones guardadas; baja hasta el prompt o pulsa Esc para volver. SSH conserva el comportamiento del terminal cliente. Imager comprueba espacio antes de copiar una imagen privada; Windows permite elegir otra carpeta de trabajo. [Notas de versión](docs/RELEASE-0.9.9.md).
+**Nuevo en 0.9.10:** Codex Seguro añade sandbox workspace-write, red restringida y aprobación humana por herramienta y para salir del sandbox. Conserva de 0.9.9: historial de consola local con rueda, hasta 10.000 líneas en RAM sin transcripciones guardadas; baja hasta el prompt o pulsa Esc para volver. SSH conserva el comportamiento del terminal cliente. Imager comprueba espacio antes de copiar una imagen privada; Windows permite elegir otra carpeta de trabajo. [Notas de versión](docs/RELEASE-0.9.10.md).
 
 ### Consola local o SSH
 

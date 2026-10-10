@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / 'server/public'
 LANGS = ['en', 'es', 'fr', 'de', 'pt', 'it', 'nl', 'zh']
 CONTENT = {lang: json.loads((ROOT / f'server/locales/{lang}.json').read_text()) for lang in LANGS}
+SOCIAL = json.loads((ROOT / 'server/locales/social-images.json').read_text())
 IDS = ['que-es','primer-usb','glosario','preparacion','descargas','imagen','red','ssh','ia-preparacion','tailnet','politicas','secretos','bitlocker','grabar','arranque','reinicios','ia-login','primer-diagnostico','trabajo-ia','herramientas','casos','profesional','problemas','terminar','validacion','referencias']
 GH = 'https://github.com/Transcendenceia/La-Aguja'
 IMAGER_VERSION = json.loads((ROOT / 'desktop/package.json').read_text())['version']
@@ -25,9 +26,10 @@ def language_nav(lang, suffix=''):
         f'<a href="/{code}{suffix}" lang="{code}" hreflang="{code}"'+ (' aria-current="page"' if code==lang else '') + f'>{CONTENT[code]["name"]}</a>' for code in LANGS) + '</nav>'
 
 def metadata(lang, suffix, title, description=''):
-    og_image = f'{ORIGIN}/assets/og-banner.png'
+    image = SOCIAL[lang]
+    og_image = f'{ORIGIN}/assets/{image["file"]}'
     og_meta = (
-        f'<meta property="og:site_name" content="LA AGUJA Rescue Disk">'
+        f'<meta property="og:site_name" content="LA AGUJA">'
         f'<meta property="og:type" content="website">'
         f'<meta property="og:url" content="{ORIGIN}/{lang}{suffix}">'
         f'<meta property="og:title" content="{esc(title)}">'
@@ -35,14 +37,14 @@ def metadata(lang, suffix, title, description=''):
         f'<meta property="og:image" content="{og_image}">'
         f'<meta property="og:image:secure_url" content="{og_image}">'
         f'<meta property="og:image:type" content="image/png">'
-        f'<meta property="og:image:width" content="1600">'
-        f'<meta property="og:image:height" content="900">'
-        f'<meta property="og:image:alt" content="Agujita · LA AGUJA Rescue Disk">'
+        f'<meta property="og:image:width" content="{image["width"]}">'
+        f'<meta property="og:image:height" content="{image["height"]}">'
+        f'<meta property="og:image:alt" content="{esc(image["alt"])}">'
         f'<meta name="twitter:card" content="summary_large_image">'
         f'<meta name="twitter:title" content="{esc(title)}">'
         f'<meta name="twitter:description" content="{esc(description)}">'
         f'<meta name="twitter:image" content="{og_image}">'
-        f'<meta name="twitter:image:alt" content="Agujita · LA AGUJA Rescue Disk">'
+        f'<meta name="twitter:image:alt" content="{esc(image["alt"])}">'
     )
     return (
         f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'

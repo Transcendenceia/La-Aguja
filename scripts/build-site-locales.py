@@ -25,12 +25,45 @@ def language_nav(lang, suffix=''):
         f'<a href="/{code}{suffix}" lang="{code}" hreflang="{code}"'+ (' aria-current="page"' if code==lang else '') + f'>{CONTENT[code]["name"]}</a>' for code in LANGS) + '</nav>'
 
 def metadata(lang, suffix, title, description=''):
-    return f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><title>{esc(title)}</title><meta name="description" content="{esc(description)}"><link rel="canonical" href="{ORIGIN}/{lang}{suffix}">' + ''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN}/{code}{suffix}">' for code in LANGS) + f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/en{suffix}"><link rel="stylesheet" href="/assets/locales-20261008.css"><link rel="stylesheet" href="/assets/support-20261009-v2.css">'
+    og_image = f'{ORIGIN}/assets/og-banner.png'
+    og_meta = (
+        f'<meta property="og:site_name" content="LA AGUJA Rescue Disk">'
+        f'<meta property="og:type" content="website">'
+        f'<meta property="og:url" content="{ORIGIN}/{lang}{suffix}">'
+        f'<meta property="og:title" content="{esc(title)}">'
+        f'<meta property="og:description" content="{esc(description)}">'
+        f'<meta property="og:image" content="{og_image}">'
+        f'<meta property="og:image:secure_url" content="{og_image}">'
+        f'<meta property="og:image:type" content="image/png">'
+        f'<meta property="og:image:width" content="1600">'
+        f'<meta property="og:image:height" content="900">'
+        f'<meta property="og:image:alt" content="Agujita · LA AGUJA Rescue Disk">'
+        f'<meta name="twitter:card" content="summary_large_image">'
+        f'<meta name="twitter:title" content="{esc(title)}">'
+        f'<meta name="twitter:description" content="{esc(description)}">'
+        f'<meta name="twitter:image" content="{og_image}">'
+        f'<meta name="twitter:image:alt" content="Agujita · LA AGUJA Rescue Disk">'
+    )
+    return (
+        f'<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        f'<meta name="color-scheme" content="dark">'
+        f'<title>{esc(title)}</title><meta name="description" content="{esc(description)}">'
+        f'{og_meta}'
+        f'<link rel="canonical" href="{ORIGIN}/{lang}{suffix}">'
+        + ''.join(f'<link rel="alternate" hreflang="{code}" href="{ORIGIN}/{code}{suffix}">' for code in LANGS)
+        + f'<link rel="alternate" hreflang="x-default" href="{ORIGIN}/en{suffix}">'
+        f'<link rel="stylesheet" href="/assets/locales-20261008.css">'
+        f'<link rel="stylesheet" href="/assets/support-20261009-v2.css">'
+    )
 
 # Use fixed original artwork and preserve the long Spanish reference separately.
 original = (PUBLIC / 'index.html').read_text()
 icon = re.search(r'<link rel="icon"[^>]+>', original).group()
 images = re.findall(r'<img[^>]+>', original)
+brand_image = next((img for img in images if 'brand-icon' in img), images[0])
+hero_image = next((img for img in images if 'hero-recovery' in img), None)
+if not hero_image:
+    hero_image = next((img for img in images if 'webp' in img or '1200' in img), images[2] if len(images) > 2 else images[1])
 spanish = (PUBLIC / 'docs.html').read_text()
 spanish = spanish.replace('Imager 0.9.1', 'Imager 0.9.2').replace('/assets/docs.js\"', '/assets/docs.js?v=multilingual-20261008\"')
 spanish = spanish.replace('href="/"', 'href="/es"').replace('href="/#application"', 'href="/es#application"').replace('href="/privacy"','href="/es/privacy"')
@@ -67,7 +100,7 @@ def translated_figures(identifier, lang, title):
 
 def common_header(lang, doc=False):
     c=CONTENT[lang]
-    return f'<header'+(' class="doc-header"' if doc else '')+f'><a class="brand" href="/{lang}">{images[0]}<span>LA AGUJA<small>TRANSCENDENCEIA / RESCUE DISK</small></span></a><nav class="site-nav" aria-label="{esc(c["nav"][1])}"><a href="/{lang}#application">{esc(c["nav"][0])}</a><a href="/{lang}/docs">{esc(c["nav"][1])}</a><a href="{GH}">{esc(c["nav"][2])}</a><a class="support-nav" href="/{lang}#donate"><img src="/assets/support-icon.svg" width="28" height="28" alt="" aria-hidden="true">{esc(c["donation"]["title"])}</a></nav></header>'
+    return f'<header'+(' class="doc-header"' if doc else '')+f'><a class="brand" href="/{lang}">{brand_image}<span>LA AGUJA<small>TRANSCENDENCEIA / RESCUE DISK</small></span></a><nav class="site-nav" aria-label="{esc(c["nav"][1])}"><a href="/{lang}#application">{esc(c["nav"][0])}</a><a href="/{lang}/docs">{esc(c["nav"][1])}</a><a href="{GH}">{esc(c["nav"][2])}</a><a class="support-nav" href="/{lang}#donate"><img src="/assets/support-icon.svg" width="28" height="28" alt="" aria-hidden="true">{esc(c["donation"]["title"])}</a></nav></header>'
 
 def home_sections(lang):
     c = CONTENT[lang]
@@ -99,11 +132,11 @@ def skill_section(lang):
 def home(lang):
     c=CONTENT[lang]
     hero=''.join(esc(x)+'<br>' for x in c['hero'][:2])+f'<span>{esc(c["hero"][2])}</span>'
-    mascot = re.sub(r'alt="[^"]*"',f'alt="{esc(c["recoveryAlt"])}"',images[1])
+    mascot = re.sub(r'alt="[^"]*"',f'alt="{esc(c["recoveryAlt"])}"',hero_image)
     installers=[(f'aguja-flash-imager-{IMAGER_VERSION}-win-x64.exe','Windows 10 / 11 (.exe)'),(f'aguja-flash-imager-{IMAGER_VERSION}-x86_64.AppImage','Linux AppImage'),(f'aguja-flash-imager-{IMAGER_VERSION}-amd64.deb','Debian / Ubuntu'),(f'aguja-flash-imager-{IMAGER_VERSION}-x64.tar.gz',c['portable'])]
     links=''.join(f'<a href="{GH}/releases/download/{IMAGER_TAG}/{name}">{esc(label)} ↗</a>' for name,label in installers)
     imageurls=[f'/releases/aguja-{RESCUE_VERSION}-amd64.img.zst',f'/releases/aguja-{RESCUE_VERSION}-amd64.iso',f'/releases/SHA256SUMS-rescue-{RESCUE_VERSION}.txt',GH+'/releases/tag/'+RESCUE_TAG]
-    return f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"",c["siteTitle"],c["lead"])}<link rel="stylesheet" href="/assets/app.css"><link rel="stylesheet" href="/assets/meaning-20261008-v1.css"><link rel="stylesheet" href="/assets/hero-recovery-20261009-v1.css">{icon}</head><body>{common_header(lang)}{language_nav(lang)}<main><section id="landing"><div class="landing-hero"><div class="hero-copy"><div class="eyebrow">{esc(c["eyebrow"])}</div><h1>{hero}</h1><p class="lead">{esc(c["lead"])}</p><div class="hero-actions"><a class="button-link" href="#application">{esc(c["actions"][0])} ↘</a><a class="button-link button-ghost" href="/{lang}/docs">{esc(c["actions"][1])} ↗</a></div><p class="hero-note">{esc(c["note"])}</p></div><aside class="needle-lab"><div class="panel-topline"><span>LA AGUJA / RESCUE DISK</span><i aria-hidden="true"></i></div><div class="needle-stage recovery-stage">{mascot}</div><div class="lab-caption"><span class="section-code">{esc(c["caption"][0])}</span><strong>{esc(c["caption"][1])}</strong><p>{esc(c["caption"][2])}</p></div></aside></div><div class="cards">'+''.join(f'<article><span class="step">{i+1:02}</span><h2>{esc(title)}</h2><p>{esc(text)}</p></article>' for i,(title,text) in enumerate(c['steps']))+f'</div>{home_sections(lang)}<section class="downloads" id="application"><span class="step">01 / FLASH IMAGER</span><h2>{esc(c["imagerTitle"])}</h2><p>{esc(c["imagerText"])}</p><div class="installer-links">{links}</div><p><a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-windows">SHA-256 · Windows {IMAGER_VERSION}</a> · <a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-linux">SHA-256 · Linux {IMAGER_VERSION}</a></p></section>{skill_section(lang)}<section class="downloads" id="images"><span class="step">03 / RESCUE DISK</span><h2>{esc(c["imagesTitle"])}</h2><p>{esc(c["imagesText"])}</p><div class="installer-links">'+''.join(f'<a href="{url}">{esc(label)}</a>' for url,label in zip(imageurls,c['imageLinks']))+f'</div><p>{esc(c["imageNote"])}</p></section>{donation_section(lang)}</section></main><footer><a href="https://www.transcendenceia.net">LA AGUJA / TRANSCENDENCEIA ↗</a><a href="/{lang}/privacy">{esc(c["privacy"])}</a><span>{esc(c["footer"])}</span></footer></body></html>'
+    return f'<!doctype html><html lang="{lang}"><head>{metadata(lang,"",c["siteTitle"],c["lead"])}<link rel="stylesheet" href="/assets/app.css"><link rel="stylesheet" href="/assets/meaning-20261008-v1.css"><link rel="stylesheet" href="/assets/hero-recovery-20261009-v1.css">{icon}</head><body>{common_header(lang)}{language_nav(lang)}<main><section id="landing"><div class="landing-hero"><div class="hero-copy"><div class="eyebrow">{esc(c["eyebrow"])}</div><h1>{hero}</h1><p class="lead">{esc(c["lead"])}</p><div class="hero-actions"><a class="button-link" href="#application">{esc(c["actions"][0])} ↘</a><a class="button-link button-ghost" href="/{lang}/docs">{esc(c["actions"][1])} ↗</a></div><p class="hero-note">{esc(c["note"])}</p></div><aside class="needle-lab"><div class="panel-topline"><span>LA AGUJA / RESCUE DISK</span><i aria-hidden="true"></i></div><div class="needle-stage needle-stage-recovery">{mascot}</div><div class="lab-caption"><span class="section-code">{esc(c["caption"][0])}</span><strong>{esc(c["caption"][1])}</strong><p>{esc(c["caption"][2])}</p></div></aside></div><div class="cards">'+''.join(f'<article><span class="step">{i+1:02}</span><h2>{esc(title)}</h2><p>{esc(text)}</p></article>' for i,(title,text) in enumerate(c['steps']))+f'</div>{home_sections(lang)}<section class="downloads" id="application"><span class="step">01 / FLASH IMAGER</span><h2>{esc(c["imagerTitle"])}</h2><p>{esc(c["imagerText"])}</p><div class="installer-links">{links}</div><p><a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-windows">SHA-256 · Windows {IMAGER_VERSION}</a> · <a href="{GH}/releases/download/{IMAGER_TAG}/SHA256SUMS-imager-{IMAGER_VERSION}-linux">SHA-256 · Linux {IMAGER_VERSION}</a></p></section>{skill_section(lang)}<section class="downloads" id="images"><span class="step">03 / RESCUE DISK</span><h2>{esc(c["imagesTitle"])}</h2><p>{esc(c["imagesText"])}</p><div class="installer-links">'+''.join(f'<a href="{url}">{esc(label)}</a>' for url,label in zip(imageurls,c['imageLinks']))+f'</div><p>{esc(c["imageNote"])}</p></section>{donation_section(lang)}</section></main><footer><a href="https://www.transcendenceia.net">LA AGUJA / TRANSCENDENCEIA ↗</a><a href="/{lang}/privacy">{esc(c["privacy"])}</a><span>{esc(c["footer"])}</span></footer></body></html>'
 
 def donation_section(lang):
     c=CONTENT[lang]['donation']
@@ -112,7 +145,7 @@ def donation_section(lang):
 def manual(lang):
     c=CONTENT[lang];ui=c['docUI']
     if lang=='es':
-        head=metadata(lang,'/docs',c['docTitle'],c['docDescription']); head=head[head.index('<link rel=\"canonical\"'):]
+        head=metadata(lang,'/docs',c['docTitle'],c['docDescription']); head=head[head.index('<meta property=\"og:site_name\"'):]
         return spanish.replace('</head>',head+'</head>').replace('</header>','</header>'+language_nav(lang,'/docs'),1)
     sections=c['sections']
     if len(sections)!=26: raise ValueError(lang+' requires 26 sections')

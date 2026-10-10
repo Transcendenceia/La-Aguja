@@ -22,6 +22,11 @@ export function createSite({publicDir=path.join(HERE,'public'),repository='Trans
   if(/^\/(account|auth|api|connect|v1)(\/|$)/.test(pathname)){res.writeHead(410,{'Content-Type':types['.json'],'Cache-Control':'no-store'});return res.end(req.method==='HEAD'?undefined:JSON.stringify({error:'LA AGUJA no usa cuentas ni relay propio. Usa tu Tailscale/Headscale y SSH.'}));}
   const fixed={'/':'en/index.html','/docs':'en/docs.html','/privacy':'en/privacy.html','/robots.txt':'robots.txt','/sitemap.xml':'sitemap.xml'};
   let file=fixed[pathname];
+  const ua=req.headers['user-agent']||'';
+  const al=req.headers['accept-language']||'';
+  const isSocialCrawler=/bot|facebookexternalhit|whatsapp|telegram|slack|discord|twitter|pinterest|linkedin|embed|preview|scraper|curl/i.test(ua);
+  const prefersSpanish=/(^|,\s*)es\b/i.test(al);
+  if(pathname==='/'&&(isSocialCrawler||prefersSpanish))file='es/index.html';
   const localeRoute=pathname.match(/^\/(en|es|fr|de|pt|it|nl|zh)(?:\/(docs|privacy))?\/?$/);
   if(localeRoute)file=localeRoute[1]+'/'+(localeRoute[2]||'index')+'.html';
   if(!file&&pathname.startsWith('/assets/')){

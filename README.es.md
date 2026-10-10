@@ -16,7 +16,7 @@ El live usa una **capa de escritura en RAM sobre una imagen USB de solo lectura*
 
 Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí requiere Internet, cuenta compatible propia y cuota disponible. Las licencias y condiciones externas siguen siendo independientes: [NOTICE](NOTICE.es.md).
 
-> **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. El modo Seguro pide confirmación de tareas; **no es un sandbox**. Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
+> **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. En la imagen 0.9.9, Seguro pide confirmación de tareas pero **no es un sandbox**. El código actual añade un sandbox para Codex: [política y alcance](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
 
 ## Mira el producto real
 

@@ -131,6 +131,8 @@ aguja agent codex
 
 Elige **Seguro** para confirmar tareas; Inseguro/YOLO es explícito. **Ambos mantienen sudo/root ilimitado. Seguro no es sandbox ni bloqueador forense de escritura.** Empieza con un [prompt de diagnóstico acotado](SHOWCASE.es.md#first-diagnosis), revisa comandos y detente antes de escrituras no autorizadas.
 
+**Actualización del código:** Codex Seguro ahora añade sandbox `workspace-write` y aprobación humana; la imagen descargable 0.9.9 permanece sin cambios. [Política y alcance](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).
+
 ## 9. Verifica y cierra la intervención
 
 En un primer arranque, registra versión, procedencia verificada de la imagen y límites observados de hardware/arranque. En un rescate posterior, abre muestras en destino y comprueba el resultado acordado, no solo el código de salida. Guarda evidencia autorizada fuera de RAM, sin secretos. El historial de consola no es un informe.

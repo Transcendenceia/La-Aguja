@@ -46,6 +46,18 @@ class RescueControlTests(unittest.TestCase):
         _,safe,env=harness.invocation('codex','safe')
         self.assertTrue(any('approval_hook.py' in a for a in safe))
         self.assertNotIn('--dangerously-bypass-approvals-and-sandbox',safe)
+        self.assertEqual(safe[safe.index('--sandbox')+1],'workspace-write')
+        self.assertEqual(safe[safe.index('--ask-for-approval')+1],'on-request')
+        self.assertIn('sandbox_workspace_write.network_access=false',safe)
+        self.assertIn('sandbox_workspace_write.writable_roots=[]',safe)
+        self.assertIn('approvals_reviewer="user"',safe)
+        self.assertNotIn('danger-full-access',safe)
+        for flag in ['--approve-for-me','--full-auto','--profile=automatic','--permission-profile=full',
+                     '--add-dir=/','--cd=/','-capproval_policy="never"','-sdanger-full-access',
+                     '-anever','-pautomatic','-Pfull','-C/']:
+            with self.assertRaises(ValueError):harness.invocation('codex','safe',[flag])
+        _,unsafe,_=harness.invocation('codex','unsafe')
+        self.assertIn('--dangerously-bypass-approvals-and-sandbox',unsafe)
         _,_,env=harness.invocation('opencode','safe')
         self.assertEqual(json.loads(env['OPENCODE_CONFIG_CONTENT'])['permission'],{'*':'ask'})
 

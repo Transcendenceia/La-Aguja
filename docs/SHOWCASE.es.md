@@ -15,6 +15,8 @@ Estas son **propuestas prácticas y prompts adaptables**, no intervenciones ejec
 
 **Seguro confirma tareas; no es un sandbox. La cuenta aguja mantiene sudo/root completo.** Los prompts son instrucciones, no barreras de acceso. Sustituye nombres y rutas por identidades comprobadas antes de cualquier ejecución.
 
+**Actualización del código:** Codex Seguro ahora añade sandbox `workspace-write` y aprobación humana; la imagen descargable 0.9.9 permanece sin cambios. [Política y alcance](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).
+
 <a id="first-diagnosis"></a>
 
 ## 1. Convierte «no arranca» en un diagnóstico

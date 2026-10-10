@@ -13,7 +13,7 @@ These are **practical proposals and adaptable prompts**, not executed interventi
 4. Ask the agent to separate observed facts, hypotheses, proposed commands and verified results.
 5. Avoid sending personal files to AI. Providers require your own account, network and quota; local diagnosis can work without cloud AI.
 
-**Safe confirms tasks; it is not a sandbox. The aguja account retains unrestricted sudo/root.** Prompts are instructions, not access boundaries. Replace names and paths with verified identities before any execution.
+**In the released 0.9.9 image, Safe confirms tasks but is not a sandbox; [current source adds a Codex sandbox](HARNESSES.md#corrección-de-codex-seguro--2026-10-10). The aguja account retains unrestricted sudo/root.** Prompts are instructions, not access boundaries. Replace names and paths with verified identities before any execution.
 
 <a id="first-diagnosis"></a>
 

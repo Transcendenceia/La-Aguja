@@ -15,7 +15,7 @@ The live session uses a **writable RAM overlay over a read-only USB image**; it 
 
 No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requires Internet, your own compatible provider account and available quota. Third-party licences and terms remain separate: [NOTICE](NOTICE.md).
 
-> **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. Safe mode asks for task confirmation; it is **not a sandbox**. Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
+> **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. In the 0.9.9 image, Safe asks for task confirmation but is **not a sandbox**. Current source adds a Codex sandbox: [policy and scope](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
 
 ## See the actual product
 

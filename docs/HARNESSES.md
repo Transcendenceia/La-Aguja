@@ -11,6 +11,29 @@ El launcher **no inicia acciones IA al arrancar**. Ejecuta el arnés elegido des
 o `aguja agent NOMBRE`; los binarios directos siguen disponibles con opciones normales.
 Desde 0.9.7 cada lanzamiento muestra **Seguro** primero y **Inseguro** después; no se recuerda una selección insegura. Seguro exige confirmación de herramientas: permisos `ask` en OpenCode/Antigravity, reglas `ask` en Claude y una puerta humana PreToolUse con broker privado en Codex. En Codex se exige una respuesta afirmativa nueva; Enter, Escape, EOF, fallo de broker o tiempo agotado deniegan la tarea. No cambia sudo ni pretende ser una frontera contra un usuario local que ejecute directamente un CLI o modifique su configuración. Inseguro conserva los modos full de la tabla.
 
+## Corrección de Codex Seguro · 2026-10-10
+
+El código actual usa **`--sandbox workspace-write --ask-for-approval on-request`** para
+Codex Seguro. La puerta humana `PreToolUse` sigue pidiendo una confirmación nueva antes
+de cada herramienta, incluso si esa herramienta cabe dentro del sandbox. `on-request`
+por sí solo no significa «preguntar antes de todo».
+
+La red está deshabilitada dentro del sandbox y no se heredan raíces de escritura
+adicionales. Las operaciones que requieren salir del sandbox solicitan aprobación
+**humana**, no revisión automática. Workspace y temporales son escribibles; esto no
+es un bloqueador forense de discos. La cuenta conserva sudo fuera del sandbox.
+YOLO sigue usando `--dangerously-bypass-approvals-and-sandbox`.
+
+Esta corrección se aplicó también en RAM a la VM inspeccionada. **Las imágenes 0.9.9
+ya descargadas no se modifican retroactivamente**: conservan la política anterior
+(`danger-full-access` + `never`, con puerta humana). Un parche en RAM no sobrevive
+al reinicio. La nueva política requiere construir una imagen desde este código;
+no se publicó ni sobrescribió una imagen 0.9.9 como parte de esta corrección.
+
+Current source: Codex Safe combines **workspace-write**, **on-request**, and a fresh
+human confirmation before every tool. Existing 0.9.9 images remain unchanged; the
+inspected VM received a RAM-only patch. The OS account retains sudo; YOLO is unchanged.
+
 ## Preparar y autorizar: recorrido actual
 
 El [manual con capturas](https://aguja.transcendenceia.net/docs#ia-preparacion) distingue

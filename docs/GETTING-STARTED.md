@@ -129,7 +129,7 @@ Start the chosen client through the launcher, for example:
 aguja agent codex
 ```
 
-Choose **Safe** for task confirmations; Unsafe/YOLO is explicit. **Both retain unrestricted sudo/root. Safe is not a sandbox or forensic write blocker.** Start with a [bounded diagnosis prompt](SHOWCASE.md#first-diagnosis), inspect the proposed commands and stop before unapproved writes.
+Choose **Safe** for task confirmations; Unsafe/YOLO is explicit. **Both retain unrestricted sudo/root. The released 0.9.9 Safe mode is not a sandbox or forensic write blocker; [current source adds a Codex sandbox](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).** Start with a [bounded diagnosis prompt](SHOWCASE.md#first-diagnosis), inspect the proposed commands and stop before unapproved writes.
 
 ## 9. Verify the result and close the intervention
 

@@ -4,17 +4,21 @@ import os
 from i18n import t
 
 BINS = {'codex': 'codex', 'claude': 'claude', 'antigravity': 'agy', 'opencode': 'opencode'}
-SAFE_INSTRUCTIONS = ('Before each rescue task, show the intended commands, target disks/files and expected '
+SAFE_INSTRUCTIONS = ('Before each tool call, show the intended commands, target disks/files and expected '
                      'changes, then ask for explicit confirmation. Do not treat a previous approval as '
-                     'approval for a new task. Keep command input, output and result visible. '
-                     'Do not include credentials in the transcript. Full sudo remains available after approval.')
+                     'approval for another tool call. Keep command input, output and result visible. '
+                     'Do not include credentials in the transcript. Request human approval when an action '
+                     'requires leaving the sandbox; never silently bypass it.')
 
 
 def choose_mode(name):
     import cockpit
+    description = ('Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.'
+                   if name == 'codex' else
+                   'Seguro es la opción inicial. Conservas sudo y todas las herramientas; cambia cuándo se pide permiso.')
     return cockpit.option_dialog(name + ' · ' + t('Modo de ejecución'),
         [(t('Seguro · confirmar las tareas'), 'safe'), (t('Inseguro · YOLO, sin confirmaciones'), 'unsafe')],
-        t('Seguro es la opción inicial. Conservas sudo y todas las herramientas; cambia cuándo se pide permiso.'))
+        t(description))
 
 
 def invocation(name, mode, extras=()):
@@ -25,6 +29,11 @@ def invocation(name, mode, extras=()):
             '--settings', '--setting-sources', '--disable', '--enable', '--remote', '--ask-for-approval', '--sandbox', '--config', '--mode'))
             or str(arg) in ('-a', '-s', '-c') for arg in extras):
         raise ValueError('Selecciona Inseguro en el diálogo para omitir las confirmaciones')
+    if name == 'codex' and mode == 'safe' and any(
+            str(arg).startswith(('--approve-for-me', '--full-auto', '--profile', '--permission-profile',
+                                 '--add-dir', '--cd', '-a', '-s', '-c', '-p', '-P', '-C'))
+            for arg in extras):
+        raise ValueError('Seguro no permite reemplazar el sandbox ni la aprobación humana')
     binary = BINS[name]
     args, env = [binary], {}
     if name == 'codex' and os.environ.get('TMUX') and os.environ.get('AGUJA_LOCAL_CONSOLE') == '1':
@@ -37,7 +46,10 @@ def invocation(name, mode, extras=()):
             env['OPENCODE_CONFIG_CONTENT'] = json.dumps({'permission': 'allow'})
     elif name == 'codex':
         # This is the pinned rescue CLI policy, not a promise about future versions.
-        args += ['--ask-for-approval', 'never', '--sandbox', 'danger-full-access',
+        args += ['--ask-for-approval', 'on-request', '--sandbox', 'workspace-write',
+                 '-c', 'sandbox_workspace_write.network_access=false',
+                 '-c', 'sandbox_workspace_write.writable_roots=[]',
+                 '-c', 'approvals_reviewer="user"',
                  '--dangerously-bypass-hook-trust',
                  '-c', 'hooks.PreToolUse=[{matcher=".*",hooks=[{type="command",command="/usr/bin/python3 /usr/lib/aguja/approval_hook.py",timeout=600}]}]',
                  '-c', 'developer_instructions=' + json.dumps(SAFE_INSTRUCTIONS)]

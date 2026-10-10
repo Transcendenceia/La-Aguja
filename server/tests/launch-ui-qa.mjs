@@ -31,12 +31,18 @@ try{
     await page.evaluate(()=>dispatchEvent(new Event('beforeprint')));assert.equal(await page.locator('details:not([open])').count(),0);await page.evaluate(()=>dispatchEvent(new Event('afterprint')));
    }
    assert.equal((await context.cookies()).length,0);assert.equal(await page.evaluate(()=>localStorage.length+sessionStorage.length),0);
-   if(lang==='en'||lang==='es'){await page.screenshot({path:output+'/'+lang+(suffix?'-docs':'-home')+'-'+width+'.png',fullPage:false});}
+   if(lang==='en'||lang==='es'){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:output+'/'+lang+(suffix?'-docs':'-home')+'-'+width+'.png',fullPage:false});}
    count++;
   }
   await context.close();
  }
  const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:960}});const page=await nojs.newPage();for(const lang of languages){await page.goto(base+'/'+lang+'/docs');assert.equal(await page.locator('.doc-section').count(),26);assert.equal(await page.locator('[data-plan]:visible').count(),3);assert.equal(await page.locator('.zoom-image').count(),5);}await nojs.close();
- assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);assert.deepEqual(external,[]);
- const result={ok:true,languages,widths:[1440,375,320],pages:count,nojs:true,copySuccess:'mock clipboard',copyFallback:true,modalEscapeAndFocus:true,externalRequests:external,errors,failures};fs.writeFileSync(output+'/result.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+ assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
+ // The existing edge proxy injects this beacon, also present on unchanged privacy pages.
+ // Local checks remain strict; live checks require an explicit, narrow expectation.
+ const edgeExpected=process.env.AGUJA_QA_EXPECT_EDGE_BEACON==='1';
+ if(edgeExpected)assert(process.env.AGUJA_QA_BASE,'edge expectation is live-only');
+ const isEdgeBeacon=url=>/^https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js\/v[a-zA-Z0-9]+$/.test(url);
+ assert.deepEqual(external.filter(url=>!edgeExpected||!isEdgeBeacon(url)),[]);
+ const result={ok:true,languages,widths:[1440,375,320],pages:count,nojs:true,copySuccess:'mock clipboard',copyFallback:true,modalEscapeAndFocus:true,externalRequests:[...new Set(external)],edgeBeaconRequests:external.filter(isEdgeBeacon).length,edgeBeaconExpected:edgeExpected,errors,failures};fs.writeFileSync(output+'/result.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));
 }finally{await browser.close();if(site)await site.close();}

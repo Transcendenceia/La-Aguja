@@ -71,6 +71,8 @@ def docs(l,c,b):
   if n==1:body+=checklist(c)
   if n==20:body+=planner(c)+f'<h3>{E(c["casesTitle"])}</h3><p>{E(c["casesNote"])}</p>'+cases(c)
   body+='</section>'
+ # SSH user@IP examples are commands, not mail addresses. Preserve them at the edge.
+ body=body.replace('<pre>','<!--email_off--><pre>').replace('</pre>','</pre><!--/email_off-->')
  return page(l,c,b,body+'</div></div>','/docs')
 if __name__=='__main__':
  for l in (sys.argv[1:] or LANGS):

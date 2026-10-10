@@ -17,7 +17,7 @@ test('social crawlers receive the matching localized banner without JavaScript',
  assert.equal(rCrawler.status,200);
  const htmlCrawler=await rCrawler.text();
  assert(htmlCrawler.includes('property="og:site_name" content="LA AGUJA"'));
- assert(htmlCrawler.includes('property="og:image" content="https://aguja.transcendenceia.net/assets/og-possibilities-es-20261010-v1.png"'));
+ assert(htmlCrawler.includes('property="og:image" content="https://aguja.transcendenceia.net/assets/og-possibilities-es-20261010-v2.png"'));
  assert(htmlCrawler.includes('name="twitter:card" content="summary_large_image"'));
  assert(htmlCrawler.includes('<html lang="es">'));
  const rAsset=await fetch(base+'/assets/og-banner.png');
@@ -25,7 +25,7 @@ test('social crawlers receive the matching localized banner without JavaScript',
  assert.equal(rAsset.headers.get('content-type'),'image/png');
  assert(Number(rAsset.headers.get('content-length'))>50000);
  for(const lang of ['en','es','fr','de','pt','it','nl','zh']){
-  const image='/assets/og-possibilities-'+lang+'-20261010-v1.png';
+  const image='/assets/og-possibilities-'+lang+'-20261010-v2.png';
   const asset=await fetch(base+image);assert.equal(asset.status,200);assert.equal(asset.headers.get('content-type'),'image/png');
   const png=Buffer.from(await asset.arrayBuffer());assert(png.length>50000);assert.equal(png.subarray(1,4).toString(),'PNG');
   const width=png.readUInt32BE(16),height=png.readUInt32BE(20);assert(width/height>1.89&&width/height<1.92);

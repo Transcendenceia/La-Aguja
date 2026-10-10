@@ -15,8 +15,9 @@ test('locale routes preserve anonymous access, content structure and localised n
     assert(html.includes(`href="/${lang}/docs"`)||lang==='es');
     if(route==='/docs'){
      assert.equal((html.match(/class="doc-section"/g)||[]).length,26);
-     assert(html.includes('aguja profile unlock'));assert(html.includes('Ctrl+Shift+V'));
-     assert(html.includes('0.9.2'));assert(html.includes('0.9.0'));
+     assert(html.includes('aguja profile unlock'));assert(html.replace(/<[^>]+>/g,'').replace(/\s+/g,'').includes('Ctrl+Shift+V'));
+     assert(html.includes('0.9.9'));assert(html.includes('ENOSPC'));assert(html.includes('YOLO'));assert(html.includes('10,000')||html.includes('10.000')||html.includes('10 000')||html.includes('10000')||html.includes('10 000'));
+     assert.equal((html.match(/class="zoom-image"/g)||[]).length,5);assert(html.includes('class="checklist"'));assert(html.includes('id="situation"'));assert(html.includes('property="og:image"'));
     }else if(route===''){
      assert(html.includes('v0.9.9/aguja-flash-imager-0.9.9-win-x64.exe'));
      assert(html.includes('/releases/aguja-0.9.9-amd64.img.zst'));assert(!html.includes('Tu LA AGUJA'));

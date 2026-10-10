@@ -1,143 +1,137 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk with Agujita, our mascot"></p>
 
-<p align="center"><strong>A small entry point. Full control.</strong><br>Rescue Linux with the tools your AI agent needs.</p>
+<p align="center"><strong>A small entry point. Full control.</strong><br>A rescue Linux with the tools your AI agent needs.</p>
 
-**English is the primary repository language. [Español](README.es.md) is the secondary language.**
+<p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/SHOWCASE.md">Explore workflows</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
-**LA AGUJA Rescue Disk** is experimental x86-64 live Linux for a USB drive. Boot before the installed operating system, inspect hardware, recover authorised data and work locally or over SSH. The complete Rescue 0.9.9 factory image includes Codex CLI, OpenCode, Claude Code and Antigravity, independently of whether you prepare credentials. Third-party clients retain their own licences and terms; see NOTICE.md. Cloud AI needs Internet and your own provider account; traditional tools can work offline.
+**Flash Imager 0.9.9 · Rescue Disk 0.9.9 · Experimental · x86-64**
+English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
-**Current versions:** Flash Imager **0.9.9** · Rescue Disk image **0.9.9**. [Release notes and downloads](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9).
+When a computer will not boot, your tools should not be trapped inside it. **LA AGUJA Rescue Disk** starts from a USB before the installed OS, bringing diagnostics, recovery tools, SSH and **Codex CLI, OpenCode, Claude Code and Antigravity** in the complete 0.9.9 factory image. Work at the machine or bring an authorised operator in over your LAN or your own Tailscale/Headscale network. AI authentication is optional; conventional tools can work offline.
 
-**Local console history:** use the mouse wheel to review long CLI output; wheel down returns to the prompt, or press Esc. Local sessions retain up to 10,000 terminal lines in RAM, without saving a transcript. SSH keeps its normal terminal behaviour.
+**Your working PC → Flash Imager → your rescue USB → the computer that needs help.**
 
-[Website and downloads](https://aguja.transcendenceia.net/en) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Latest Imager release](https://github.com/Transcendenceia/La-Aguja/releases/latest) · [TranscendenceIA](https://www.transcendenceia.net/proyectos/la-aguja-rescue-disk)
+No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requires Internet, your own compatible provider account and available quota. Third-party licences and terms remain separate: [NOTICE](NOTICE.md).
 
-<p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-en.svg" width="360" alt="Buy us a coffee · Ko-fi"></a></p>
+> **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. Safe mode asks for task confirmation; it is **not a sandbox**. Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
 
-## Start here
+## See the actual product
 
-### Let your AI agent prepare the image
+![Flash Imager 0.9.9 on Linux with English selected](server/public/docs-images/099/imager-en.png)
 
-Alongside the desktop installers, [Flash Imager Agent Skill 1.0.1](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) packages the same file-image preparation engine without Electron. Ask your agent to configure language, networking, SSH and optional AI/tailnet profiles; it creates a personalised `.img`, verifies the profile and hashes, and leaves the base image untouched. It does **not** write a USB automatically or rebuild the distribution.
+*Real packaged Linux Imager 0.9.9. English is selected; some Spanish labels remain in this build. No account authentication or physical USB write is demonstrated.*
 
-The open `SKILL.md` format has [installation guidance for Codex, Claude Code, OpenCode, Gemini CLI, Cursor and OpenClaw, plus manual loading for other harnesses](skills/flash-imager/references/harnesses.md). A file/shell-capable agent and Node.js 22+ are required. Format compatibility is not a claim that every harness or OS was tested. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Instructions and JSON interface](skills/flash-imager/SKILL.md).
+![Rescue Disk 0.9.9 cockpit in a Spanish QA VM](server/public/docs-images/099/rescue-dashboard.png)
 
-### Desktop and boot workflow
+*Real Rescue 0.9.9 capture in a synthetic QA VM, in Spanish. The visible hostname and QEMU NAT address are test data—not an address to connect to. A running cockpit is not evidence of a completed rescue.*
 
-1. Back up the USB before writing. **Windows has no integrated USB backup yet**; use an external tool. Linux offers an optional verified full-device backup.
-2. Download Flash Imager for Windows or Linux. Choose the image from its signed catalogue, or import a decompressed `.img`.
-3. Configure language, keyboard, Ethernet/Wi-Fi, hostname and your own SSH password or public key. AI preparation and private networking are optional.
-4. Encrypt the configuration capsule when it contains secrets; keep the unlock phrase outside the USB.
-5. Confirm the exact USB model, capacity and serial number. Wait for full read-back verification and test booting on your intended hardware.
-6. Boot the USB, unlock an encrypted profile with `aguja profile unlock` and inspect disks before changes.
+[Eight real captures, captions and evidence limits](docs/SCREENSHOTS.md).
+
+## Choose your first mission
+
+| You want to… | Start with… | What you should finish with |
+| --- | --- | --- |
+| Understand why a PC will not start | [First diagnosis](docs/SHOWCASE.md#first-diagnosis) | An inventory and a ranked plan, not a blind repair |
+| Recover family photos or work | [File rescue](docs/SHOWCASE.md#file-rescue) | Copies on a separate destination, checked for readability |
+| Preserve a failing disk | [Image first](docs/SHOWCASE.md#image-first) | A recovery image, map and honest unreadable-sector report |
+| Help someone remotely | [Remote workbench](docs/SHOWCASE.md#remote-workbench) | Verified SSH access and an agreed intervention log |
+| Rehearse before touching the original | [Rescue rehearsal](docs/SHOWCASE.md#rescue-rehearsal) | A plan tested on a copy, with remaining uncertainties |
+| Prepare media through an agent | [Flash Imager Agent Skill](skills/flash-imager/SKILL.md) | A verified private image file; no automatic USB write |
+
+These are **workflow ideas and prompt templates**, not customer testimonials or fabricated success stories. Each example includes tools, expected deliverables and stop conditions.
+
+## Get started
+
+1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9). The EXE/AppImage is the preparer, not the rescue image.
+2. **Select the image.** Use the signed catalogue, or decompress a manually downloaded `.img.zst` before selecting the `.img`. The ISO is useful for VM boot tests.
+3. **Set language, keyboard, networking and SSH.** Replace the public factory SSH password `aguja` with your own password or public key. AI and tailnet preparation are optional.
+4. **Protect the profile.** Use an encrypted capsule for secrets. Replace the public initial unlock phrase `aguja` and keep the new phrase outside the USB. This does not encrypt persistent HOME or all AGUJA_DATA.
+5. **Back up, then flash the exact USB.** Compare model, serial and actual capacity. Windows needs an external USB backup; Linux offers an optional verified full-device backup. Wait for full read-back verification.
+6. **Boot and inspect.** Unlock locally if required; confirm the live system and identify every disk before considering changes.
 
 ```sh
+aguja profile unlock   # only if the profile is encrypted
 aguja status
 aguja doctor
-lsblk -o NAME,SIZE,MODEL,FSTYPE,LABEL,MOUNTPOINTS
+lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 ```
 
-The Imager runs on the preparation computer; Rescue Disk runs on the computer being examined. An EXE or AppImage is not the rescue image. Booting does **not** automatically mount, repair, install or write to internal disks.
+[Detailed first-boot guide](docs/GETTING-STARTED.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)
 
-## Local or remote rescue, without a project account
+### Let an agent prepare the image
 
-No LA AGUJA account is required for the website, documentation, downloads or preparation. Images and the signed catalogue are hosted on our official website; Imager and source are on GitHub.
+**Flash Imager Agent Skill 1.0.1** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
 
-- **Local:** use the rescue cockpit, console and diagnostics directly.
-- **LAN:** connect with `ssh aguja@IP` using the actual address and verify the host fingerprint.
-- **Optional tailnet:** configure your own Tailscale/Headscale key. The live registers after boot, networking and profile unlock. It does not enrol your preparation PC or use our relay or hosted console.
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Install for your harness](skills/flash-imager/references/harnesses.md)
 
-Normal OpenSSH over your authorised tailnet is the default. Tailscale SSH is an advanced, separate option needing compatible SSH policies. Your control plane and ACLs determine client access.
+Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw and manual loading. Portable format support does not certify every harness or OS.
 
-Tailnet identity is in RAM and registers again after reboot. A one-use key may not permit another boot; use valid, scoped reusable keys for repeated boots, and remove old nodes/keys afterwards. This option requires image support for `tailscale-profile-v1`.
+## A workbench, not a one-click promise
 
-## AI authentication and permissions
-
-Locally, `aguja login codex`, `aguja login claude` or `aguja login antigravity` can open sandboxed Chromium on the official sign-in flow with the original PTY. Copying focuses the console; paste explicitly with Ctrl+Shift+V. Closing returns to the original terminal. No QR or automatic consent.
-
-OpenCode keeps `opencode auth login`. SSH/serial/headless sessions use native provider methods; a remote localhost callback is not automatically forwarded. API keys and selective import of compatible portable sessions are separate paths. The complete keychain, history, hooks and MCP configuration are not copied. A portable file does not prove session validity.
-
-The `aguja` account has **unrestricted sudo/root**. The launcher proposes Safe task confirmation by default; YOLO requires explicitly choosing Unsafe. Neither mode removes root access. A read-only instruction is not a sandbox. Provider costs, quotas and transmitted data depend on your account and terms.
-
-## Configuration and storage
-
-- **AGUJA_CFG:** FAT32; edit `aguja.conf` from another operating system.
-- **AGUJA_DATA:** ext4 workspace and USB-specific SSH host key.
-- Read-only squashfs root plus RAM overlay; no automatic internal-disk modification.
-- `persistent_home=no`: HOME and tokens disappear at reboot.
-- `persistent_home=yes`: HOME and tokens persist **unencrypted** on USB.
-- Capsule encryption protects a locked profile, **not all AGUJA_DATA** or loaded secrets against root. Private images and `.aguja` templates may contain credentials.
-
-Factory SSH user and public password: `aguja`. Set your own password or public key. A blank password with a public key enables key-only access; without a key it preserves factory access. `aguja password` persists a change; `sudo passwd aguja` only changes the running session. Do not publish personal keys or profiles.
-
-## Included tools
-
-| Area | Tools |
+| Area | Included capabilities |
 | --- | --- |
-| Base | Debian 13 amd64, live-boot, systemd; no conventional desktop |
-| Network | NetworkManager, DHCP, Wi-Fi, OpenSSH, Avahi/mDNS |
-| AI | Personal complete image: Codex CLI, OpenCode, Claude Code and Antigravity; authentication optional |
+| Live base | Debian 13 amd64, BIOS/UEFI paths, read-only squashfs + RAM overlay; no conventional desktop |
 | Recovery | GNU ddrescue, TestDisk/PhotoRec, rsync |
 | Hardware | smartctl, nvme-cli, hdparm, lshw, PCI/USB inventory |
-| Storage | ext4, Btrfs, XFS, NTFS, exFAT, FAT; LUKS, LVM, RAID, BitLocker tools requiring the correct key |
+| Storage | ext4, Btrfs, XFS, NTFS, exFAT, FAT; LUKS, LVM, RAID, BitLocker tooling with the correct key |
+| Connectivity | NetworkManager, Ethernet/Wi-Fi, OpenSSH, Avahi/mDNS, optional own tailnet |
+| AI clients | Codex CLI, OpenCode, Claude Code, Antigravity; installation is independent of credential preparation |
 | Operations | Zsh, tmux, Python, curl, git, jq, ripgrep, nano |
 
-**LA AGUJA** is the brand and is never translated. **Agujita**, the chrome needle with amber eyes and curled moustache, is the mascot. Technical identifiers remain unchanged. [Brand language](docs/BRAND-LANGUAGE.md).
+**New in 0.9.9:** local console mouse-wheel history, up to 10,000 lines in RAM without saved transcripts; scroll down to the prompt or press Esc to return. SSH keeps the client terminal behaviour. Imager checks working-space availability before copying a private image; Windows can choose another work folder. [Release notes](docs/RELEASE-0.9.9.md).
 
-## Documentation in eight languages
+### Local console or SSH
 
-| Language | Website | User guide | Repository |
-| --- | --- | --- | --- |
-| **English** | [Open](https://aguja.transcendenceia.net/en) | [Read](https://aguja.transcendenceia.net/en/docs) | [Guide](docs/en/USER-GUIDE.md) |
-| **Español** | [Abrir](https://aguja.transcendenceia.net/es) | [Manual ampliado](https://aguja.transcendenceia.net/es/docs) | [Manual](docs/es/USER-GUIDE.md) |
-| Français | [Ouvrir](https://aguja.transcendenceia.net/fr) | [Guide](https://aguja.transcendenceia.net/fr/docs) | [Guide](docs/fr/USER-GUIDE.md) |
-| Deutsch | [Öffnen](https://aguja.transcendenceia.net/de) | [Anleitung](https://aguja.transcendenceia.net/de/docs) | [Anleitung](docs/de/USER-GUIDE.md) |
-| Português | [Abrir](https://aguja.transcendenceia.net/pt) | [Guia](https://aguja.transcendenceia.net/pt/docs) | [Guia](docs/pt/USER-GUIDE.md) |
-| Italiano | [Aprire](https://aguja.transcendenceia.net/it) | [Guida](https://aguja.transcendenceia.net/it/docs) | [Guida](docs/it/USER-GUIDE.md) |
-| Nederlands | [Openen](https://aguja.transcendenceia.net/nl) | [Handleiding](https://aguja.transcendenceia.net/nl/docs) | [Handleiding](docs/nl/USER-GUIDE.md) |
+Connect using `ssh aguja@IP` with the actual live address and verified host fingerprint. Optional Tailscale/Headscale registers the live after boot, networking and profile unlock—not the preparation PC. Normal OpenSSH over tailnet is the default; Tailscale SSH is a separate advanced option needing compatible policy.
 
-| 简体中文 | [打开](https://aguja.transcendenceia.net/zh) | [指南](https://aguja.transcendenceia.net/zh/docs) | [指南](docs/zh/USER-GUIDE.md) |
+Tailnet identity is **RAM-only** and registers again after reboot. A one-use key may not work twice. For repeat boots use appropriately scoped, valid reusable keys under your administration; remove obsolete nodes and keys afterwards. Your ACLs and control plane determine access.
 
-Each operational guide covers 26 stages: preparation, SSH, encryption, BitLocker, AI, recovery, troubleshooting and closure. The original extended Spanish reference remains available. Print the current page for a PDF in its language; the separately released historical PDF is Spanish. Screenshots retain actual versions and synthetic-test provenance.
+### Sign in to your AI provider
 
-[Imager development](desktop/README.md) · [Document index](docs/README.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
+Locally, `aguja login codex`, `aguja login claude` or `aguja login antigravity` can open sandboxed Chromium on the official sign-in flow with the original PTY. Copying focuses the console; paste explicitly with Ctrl+Shift+V. OpenCode uses `opencode auth login`. No automatic consent and no QR in this login flow.
 
-## Build and test
+SSH/serial/headless sessions use native provider methods; a remote localhost callback is not automatically forwarded. API keys and selective portable-session import are alternatives, not proof of valid authentication. The complete keychain, history, hooks and MCP configuration are not copied. Provider costs, quotas and data transmission remain your responsibility.
 
-On Debian 13 amd64 with sudo, Internet and at least 15 GB free:
+### Know what persists
 
-```sh
-sudo apt-get install debootstrap squashfs-tools grub-pc-bin grub-efi-amd64-bin xorriso mtools dosfstools gdisk jq fonts-dejavu-core ffmpeg nodejs npm
-npm ci
-npm run branding
-sudo bash scripts/build-rootfs.sh
-sudo bash scripts/build-image.sh
-python3 -m unittest discover -s tests -v
-```
+| Location or option | Behaviour |
+| --- | --- |
+| AGUJA_CFG | FAT32 configuration, including editable `aguja.conf`; plaintext values are readable from the USB |
+| AGUJA_DATA | ext4 workspace and USB-specific SSH host key; not wholly encrypted by capsule protection |
+| `persistent_home=no` | HOME and session tokens disappear on reboot |
+| `persistent_home=yes` | HOME and tokens persist **unencrypted** on the USB |
+| Encrypted capsule | Protects the locked profile, not loaded secrets against root |
 
-Outputs include ISO, IMG, package inventory and checksums. Never guess a physical device for a write test; use synthetic images and virtual USBs.
+Encrypted profiles force `persistent_home=no` at boot. The unencrypted persistence option applies to older/plaintext configurations.
 
-```sh
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m unittest discover -s tests
-cd desktop
-npm ci
-npm test
-cd ../server
-npm test
-```
+Private images and `.aguja` templates may contain credentials. Never publish them. `aguja password` persists an SSH password change; `sudo passwd aguja` only changes the running session. Blank SSH password **with** a public key enables key-only access; **without** a key it preserves public factory access.
 
-Translations live in `server/locales/`. Rebuild with `python3 scripts/build-site-locales.py`. Do not translate brands, commands, keys or paths. Keep technical limits consistent across languages.
+## Documentation and languages
 
-## Tested scope and limits
+| Read next | English | Español |
+| --- | --- | --- |
+| Prepare and boot | [Getting started](docs/GETTING-STARTED.md) | [Primeros pasos](docs/GETTING-STARTED.es.md) |
+| Prompts, tools and deliverables | [Showcase](docs/SHOWCASE.md) | [Ejemplos](docs/SHOWCASE.es.md) |
+| Diagnose by layer | [Troubleshooting](docs/TROUBLESHOOTING.md) | [Solución de problemas](docs/TROUBLESHOOTING.es.md) |
+| Real product captures | [Gallery](docs/SCREENSHOTS.md) | [Galería](docs/SCREENSHOTS.es.md) |
+| All references and history | [Documentation index](docs/README.md) | [Índice](docs/README.es.md) |
 
-Preparation, package and VM results are version-specific, not certification of every physical computer. Read-back checks bytes, not all boot firmware. No universal signed Secure Boot chain or recognised Windows Authenticode signature is currently offered. Windows also lacks integrated USB backup and automatic AGUJA_DATA expansion on larger media. Check provider login and inference independently from installed CLIs or synthetic screenshots.
+Website and operational guides: [English](https://aguja.transcendenceia.net/en/docs) · [Español](https://aguja.transcendenceia.net/es/docs) · [Français](https://aguja.transcendenceia.net/fr/docs) · [Deutsch](https://aguja.transcendenceia.net/de/docs) · [Português](https://aguja.transcendenceia.net/pt/docs) · [Italiano](https://aguja.transcendenceia.net/it/docs) · [Nederlands](https://aguja.transcendenceia.net/nl/docs) · [简体中文](https://aguja.transcendenceia.net/zh/docs).
 
-## Open source
+## Develop and verify
 
-Project-owned code, documentation and artwork: **GPL-3.0-or-later**. Earlier MIT grants remain valid. Third-party components retain their licences and terms; the entire medium is not relicensed as GPL. [LICENSE](LICENSE) · [NOTICE](NOTICE.md) · [Publishing](docs/PUBLISHING.md).
+[Build and test guide](docs/DEVELOPMENT.md) · [Imager implementation](desktop/README.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Publishing](docs/PUBLISHING.md)
+
+Published 0.9.9 evidence includes BIOS/UEFI VM boot/reboot with and without encrypted profiles, virtual-wheel history checks, runtime/Imager tests and packaged-app checks. These are **version-specific results**, not fresh tests performed for this README or certification of physical hardware. No physical USB write, universal hardware support or real-account AI inference is established by these screenshots. There is no universal signed Secure Boot chain or recognised Windows Authenticode signature. Windows also lacks integrated USB backup and automatic AGUJA_DATA expansion.
+
+## Open source, with a name and a face
+
+Project-owned code, documentation and artwork are **GPL-3.0-or-later**. Earlier MIT grants remain valid; third-party components keep their own licences and terms. The entire medium is not relicensed as GPL. [LICENSE](LICENSE) · [NOTICE](NOTICE.md).
+
+**LA AGUJA** is the brand; **Agujita**, the chrome needle with amber eyes and a curled moustache, is the mascot. Names and technical identifiers are not translated. [Brand language](docs/BRAND-LANGUAGE.md) · [TranscendenceIA](https://www.transcendenceia.net/proyectos/la-aguja-rescue-disk).
 
 ## Support the project
 
-LA AGUJA helps recover computers, memories and work. If it helped you, [buy us a coffee on Ko-fi](https://ko-fi.com/transcendenceia) to help keep this free project alive. Donations are optional; all rescue tools remain available.
+Behind a broken computer are memories, work and people. If LA AGUJA helps you, a coffee helps keep the project moving. Donations are optional; the rescue tools remain available.
+
+<p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-en.svg" width="360" alt="Buy us a coffee · Ko-fi"></a></p>

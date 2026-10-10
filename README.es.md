@@ -1,259 +1,136 @@
-[English](README.md) · **Español**
+<p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk con nuestra mascota Agujita"></p>
 
-<p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk — AI-first rescue Linux, con nuestra mascota Agujita"></p>
+<p align="center"><strong>Una entrada pequeña. Control completo.</strong><br>Un Linux de rescate con las herramientas que necesita tu agente IA.</p>
 
-<p align="center"><strong>Una entrada pequeña. Control completo.</strong><br>El Linux de rescate en el que el agente IA lleva las herramientas.</p>
+<p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/SHOWCASE.es.md">Explorar ejemplos</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**LA AGUJA Rescue Disk** es un entorno live x86-64 para un pendrive: arranca antes del sistema instalado,
-conecta Ethernet por DHCP o Wi-Fi guardado/asistido, activa SSH listo para usar y ofrece
-**Codex CLI, OpenCode, Claude Code y Antigravity**, preinstalados, sin escritorio de ventanas. Los clientes externos conservan sus licencias y condiciones; véase NOTICE.es.md.
+**Flash Imager 0.9.9 · Rescue Disk 0.9.9 · Experimental · x86-64**
 
-Estado: **Imager público 0.9.9 · imagen de rescate 0.9.9 · experimental; código abierto**. [Manual de producto con capturas](https://aguja.transcendenceia.net/es/docs) · VALIDATION.md. Una imagen construida no significa compatibilidad de todo el hardware.
+El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
-**Historial en consola local:** usa la rueda del ratón para revisar respuestas largas. Baja hasta el prompt o pulsa Esc para volver. Hasta 10.000 líneas en RAM, sin guardar transcripciones; SSH conserva su comportamiento normal. [Notas y descargas 0.9.9](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9).
+Cuando un ordenador no arranca, tus herramientas no deberían quedarse atrapadas dentro. **LA AGUJA Rescue Disk** arranca desde un USB antes del sistema instalado y reúne diagnóstico, recuperación, SSH y **Codex CLI, OpenCode, Claude Code y Antigravity** en la imagen de fábrica completa 0.9.9. Trabaja frente al equipo o permite la intervención de un operador autorizado por LAN o tu propia red Tailscale/Headscale. La autenticación IA es opcional; las herramientas tradicionales pueden funcionar sin Internet.
 
-<p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-es.svg" width="360" alt="Invítanos a un café · Ko-fi"></a></p>
+**Tu PC operativo → Flash Imager → tu USB de rescate → el equipo que necesita ayuda.**
 
-## Flash Imager Windows/Linux → tu Rescue Disk → tu tailnet
+Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí requiere Internet, cuenta compatible propia y cuota disponible. Las licencias y condiciones externas siguen siendo independientes: [NOTICE](NOTICE.es.md).
 
-### También como skill para tu agente
+> **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. El modo Seguro pide confirmación de tareas; **no es un sandbox**. Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
 
-[Flash Imager Agent Skill 1.0.1](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) permite pedirle a un agente que prepare una imagen `.img` personalizada con el motor real del Imager, sin Electron. Configura idioma, red, SSH y perfiles opcionales de IA/tailnet; verifica el perfil y los hashes, conserva la base y **no graba un USB automáticamente** ni reconstruye la distro.
+## Mira el producto real
 
-[Instalación por arnés](skills/flash-imager/references/harnesses.md): Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita acceso a archivos/terminal y Node 22+. El formato portátil no certifica todos los arneses o sistemas operativos. [ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Skill e interfaz JSON](skills/flash-imager/SKILL.md).
+![Flash Imager 0.9.9 en Linux y español](server/public/docs-images/099/imager.png)
 
-### Aplicación de escritorio
+*Captura real del Imager Linux 0.9.9 empaquetado, en español. No demuestra autenticación de cuentas ni grabación de un USB físico.*
 
-[Aplicación y descargas](https://aguja.transcendenceia.net/) · [Guía Windows/Linux](desktop/README.md).
+![Cockpit de Rescue Disk 0.9.9 en una VM QA española](server/public/docs-images/099/rescue-dashboard.png)
 
-Prepara idioma/teclado, Ethernet/Wi-Fi, SSH y herramientas IA. **Preparar y grabar USB** crea una imagen privada nueva automáticamente, verifica identidad/capacidad del USB y exige confirmación nativa antes de escribir. Linux ofrece respaldo opcional; **Windows todavía no implementa respaldo USB integrado**, por lo que debe hacerse externamente antes. La verificación de lectura no prueba arranque universal.
+*Captura real de Rescue 0.9.9 en una VM QA con datos sintéticos, en español. El hostname y la IP NAT de QEMU son datos de prueba, no una dirección a la que conectarte. Ver el panel no demuestra un rescate terminado.*
 
-El acceso remoto nuevo usa **Tailscale o Headscale propios**. Habilita la opción, pega una auth/pre-auth key, URL HTTPS Headscale opcional (vacío: Tailscale oficial) y nombre de nodo opcional. El live se inscribe al arrancar con red y perfil desbloqueado; el Imager no inscribe tu PC ni prepara un túnel propietario. OpenSSH normal por tailnet es predeterminado; Tailscale SSH es avanzado y exige políticas SSH compatibles. El cliente debe estar en la misma tailnet autorizada.
+[Ocho capturas reales, contexto y límites](docs/SCREENSHOTS.es.md). Las capturas con inglés seleccionado conservan algunas etiquetas españolas de la versión real.
 
-La identidad vive en RAM: cada reinicio necesita reinscripción, una clave de un uso no garantiza repetir. Usa una reutilizable, vigente y limitada cuando necesites varios arranques, y retira nodos/claves al terminar. Cifra la cápsula del USB; esto no cifra todo AGUJA_DATA ni protege secretos frente a root después del desbloqueo. Las imágenes antiguas sin `tailscale-profile-v1` se rechazan antes de prepararse con esta opción.
+## Elige tu primera misión
 
-No hay cuenta de LA AGUJA: las imágenes son públicas en nuestra web y el Imager y el código están en GitHub. Las cuentas IA y la administración de la tailnet son independientes.
+| Quieres… | Empieza por… | Con qué deberías terminar |
+| --- | --- | --- |
+| Entender por qué no arranca un PC | [Primer diagnóstico](docs/SHOWCASE.es.md#first-diagnosis) | Inventario y plan priorizado, no reparación a ciegas |
+| Recuperar fotos o trabajo | [Rescatar archivos](docs/SHOWCASE.es.md#file-rescue) | Copias legibles en un destino distinto |
+| Preservar un disco averiado | [Imagen primero](docs/SHOWCASE.es.md#image-first) | Imagen, mapa e informe honesto de sectores ilegibles |
+| Ayudar a distancia | [Taller remoto](docs/SHOWCASE.es.md#remote-workbench) | SSH comprobado y registro de intervención acordado |
+| Ensayar antes de tocar el original | [Ensayo de rescate](docs/SHOWCASE.es.md#rescue-rehearsal) | Plan probado sobre una copia, con incertidumbres explícitas |
+| Preparar medios mediante un agente | [Flash Imager Agent Skill](skills/flash-imager/SKILL.md) | Imagen privada verificada; sin grabación USB automática |
 
-**Mini navegador OAuth local:** `aguja login codex|claude|antigravity` conserva el callback oficial y la misma PTY mientras muestra Chromium normal con sandbox. Si copias un código, toma foco la consola y tú pegas explícitamente con Ctrl+Shift+V. Cerrar devuelve al terminal original. OpenCode usa su login nativo; SSH/serie/sin pantalla conserva URL/método nativo. El nuevo recorrido no usa QR y no autoriza cuentas de IA automáticamente.
+Son **ideas de trabajo y plantillas de prompts**, no testimonios ni casos de éxito inventados. Cada ejemplo incluye herramientas, entregables esperados y condiciones de parada.
 
-API e importación selectiva de sesiones nativas portables continúan; no se copia todo el llavero, historial, hooks ni MCP del PC. Un archivo portable no prueba vigencia. Costes, cuotas y datos enviados dependen del proveedor. El usuario `aguja` dispone de sudo/root completo; una instrucción de «solo lectura» no es un sandbox.
+## Primeros pasos
 
-Los informes de versiones previas se conservan en [docs/](docs/) como evidencia histórica, no como descripción del nuevo recorrido.
-
-## Dos maneras de rescatar
-
-1. **Desde otro equipo:** arranca LA AGUJA Rescue Disk, conecta por `ssh aguja@IP`, usa `sudo -n bash`
-   o inicia un arnés con `aguja agent codex`. No requiere OpenClaw en el USB.
-2. **Desde la consola del equipo averiado:** elige un agente en el cockpit de texto,
-   autentica tu proveedor y trabaja sobre el hardware directamente.
-
-**Acceso completo:** la cuenta `aguja` dispone de `sudo` ilimitado. El selector propone
-Seguro para confirmar las tareas; YOLO requiere elegir explícitamente Inseguro.
-La selección no elimina el acceso root.
-No hay reparación, instalación ni escritura sobre discos internos al arrancar.
-
-## Login oficial en el propio disco
-
-Desde consola local, `aguja login codex|claude|antigravity` puede abrir el navegador
-mínimo con el dominio oficial y una consola unida a la misma PTY. Copiar solo cambia
-el foco; tú pegas con Ctrl+Shift+V. No usa QR ni sustituye el callback o consentimiento
-del proveedor. OpenCode conserva `opencode auth login` nativo. En SSH/serie no se
-promete el mismo recorrido gráfico ni un callbacklocalhost reenviado automáticamente.
-
-## Configurar el USB
-
-**Listo al arrancar:** consola con autologin, usuario SSH `aguja`, contraseña pública de
-fábrica `aguja`, bienvenida con IP actual y hostname `.local`. Wi-Fi guardado se activa;
-sin red, el panel abre un selector interactivo y permite trabajar offline.
-`aguja password` configura una contraseña personalizada y la guarda en el USB.
-
-Abre la partición **AGUJA_CFG** desde Linux/Windows/macOS y edita `aguja.conf`:
-
-```ini
-[aguja]
-hostname = aguja
-wifi_ssid = MiRed
-wifi_password = MiClaveWifi
-wifi_security = wpa-psk
-wifi_country = ES
-wifi_hidden = no
-ssh_password = aguja
-ssh_public_key =
-ssh_port = 22
-persistent_home = no
-default_harness = menu
-agent_mode = ask
-```
-
-Valores **literales, sin comillas**. No se ejecutan como shell. CRLF y UTF-8 BOM funcionan.
-Los espacios iniciales/finales se recortan; no se admiten valores multilínea.
-La imagen pública no trae **credenciales personales**, claves privadas/públicas personales ni tokens.
-La contraseña de fábrica `aguja` es pública por diseño. Una personalizada prevalece;
-un valor vacío sin clave pública mantiene el acceso de fábrica (compatible con USBs anteriores).
-Un valor vacío **con** clave pública permite solo esa clave. `sudo passwd aguja` cambia la
-contraseña de la sesión; `aguja password` también la conserva para próximos arranques.
-
-Las credenciales del archivo son texto plano por diseño: cualquiera con acceso físico al USB
-puede leerlas. Puedes usar solo `ssh_public_key` y dejar `ssh_password` vacío.
-Las conexiones Wi-Fi empresariales/portal cautivo requieren configurar NetworkManager manualmente.
-
-## Cockpit
-
-Panel a pantalla completa con Agujita animada, IP que se actualiza al conectar y comando SSH
-listo para copiar. La vista gráfica dibuja directamente sobre el framebuffer, sin escritorio
-ni navegador; si el hardware no lo permite, mantiene una consola de texto adaptable.
-`aguja.local` y el servicio `_ssh._tcp` se anuncian con Avahi en la LAN;
-el panel muestra el nombre real anunciado si hay colisión. mDNS requiere soporte en el
-controlador y multicast en la LAN: la IP sigue siendo la alternativa.
-
-Zsh está preconfigurada con Tab, menú de completado, sugerencias de historial y resaltado;
-no necesita Oh My Zsh, fuentes especiales ni descargas al arrancar. Flechas/números controlan
-el panel. El login SSH interactivo muestra un resumen y el comando para leer la guía del agente.
-
-Desde 0.3.1, el panel presenta tareas seleccionables (↑↓/Enter), filtros por sesión,
-fallos y sondeos (S/F/B), detalle con salida filtrada y retorno al directo (L).
-`aguja run --label "Título" -- comando` da contexto al trabajo remoto.
-Los sondeos Git sobre carpetas sin repositorio se agrupan sin cambiar sus códigos;
-los errores reales siguen visibles. [Uso y privacidad](docs/ACTIVITY.md).
-
-Desde 0.3.0, la pantalla anuncia las conexiones SSH autenticadas y muestra sesiones,
-comandos y procesos descendientes en vivo, con salida de diagnósticos permitidos. Los datos
-son una vista acotada en RAM, no una transcripción persistente. Las entradas de teclado no
-se registran; los argumentos y scripts en la línea de comandos son visibles y desplegables,
-con valores de credenciales enmascarados. Scripts recibidos por stdin y transferencias conservan
-su funcionamiento pero no exponen sus contenidos en la pantalla. Consulta
-[ACTIVITY.md](docs/ACTIVITY.md) para alcance y límites comprobados.
+1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.9). El EXE/AppImage es el preparador, no la imagen de rescate.
+2. **Selecciona la imagen.** Usa el catálogo firmado o descomprime el `.img.zst` descargado manualmente antes de elegir el `.img`. La ISO sirve para pruebas de arranque en VM.
+3. **Configura idioma, teclado, red y SSH.** Sustituye la contraseña SSH pública de fábrica `aguja` por una propia o una clave pública. IA y tailnet son opcionales.
+4. **Protege el perfil.** Cifra la cápsula si contiene secretos. Cambia la frase inicial pública `aguja` y guarda la nueva fuera del USB. Esto no cifra HOME persistente ni todo AGUJA_DATA.
+5. **Respalda y graba el USB exacto.** Compara modelo, serie y capacidad real. Windows necesita respaldo USB externo; Linux ofrece copia completa verificada opcional. Espera la verificación íntegra de lectura.
+6. **Arranca e inspecciona.** Desbloquea localmente si corresponde, comprueba el live e identifica cada disco antes de plantear cambios.
 
 ```sh
-aguja                  # panel interactivo
-aguja status           # IP, discos, conexión SSH y huella pública
-aguja status --json    # estado sin secretos para un agente remoto
-aguja status --disks   # añadir inventario de discos
-aguja activity --json  # sesiones, eventos y procesos SSH; estado temporal sin secretos
-aguja wifi             # seleccionar red y guardarla en el USB
-aguja password         # contraseña SSH personalizada y persistente
-aguja help             # instrucciones de uso
-aguja tools            # inventario por categorías
-aguja context          # guía completa para quien entra por SSH
-aguja doctor           # comprobar configuración y componentes sin mostrar secretos
-aguja agent codex      # también antigravity | claude | opencode
-sudo -n bash           # root real, sin contraseña
-aguja mount-ro /dev/nvme0n1p2 /mnt/target
-aguja config           # editar el archivo del USB; reinicia para reaplicarlo
+aguja profile unlock   # solo si el perfil está cifrado
+aguja status
+aguja doctor
+lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 ```
 
-Los agentes arrancan como usuario normal con root disponible a través de sudo: esto evita
-la incompatibilidad de Claude Code con su modo sin permisos ejecutado directamente como root.
-Las sesiones IA necesitan Internet, una cuenta compatible y tu propia autenticación.
-No se promete una inferencia local/offline; las herramientas tradicionales sí funcionan offline.
+[Guía detallada del primer arranque](docs/GETTING-STARTED.es.md) · [Solución de problemas](docs/TROUBLESHOOTING.es.md)
 
-## Qué lleva
+### Deja que un agente prepare la imagen
 
-| Capa | Herramientas |
-|---|---|
-| Base | Debian 13 mínimo, kernel amd64, live-boot, glibc, systemd; sin GUI |
-| Red | NetworkManager/nmtui, Ethernet DHCP, Wi-Fi WPA2/WPA3, SSH, Avahi/mDNS |
-| IA | Codex, Google `agy`, Claude Code, OpenCode; versiones fijadas |
+**Flash Imager Agent Skill 1.0.1** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
+
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/aguja-flash-imager-skill-1.0.1.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.9/SHA256SUMS-flash-imager-skill-1.0.1) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+
+Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual. Un formato portátil no certifica todos los arneses o sistemas operativos.
+
+## Un taller, no una promesa de un clic
+
+| Área | Capacidades incluidas |
+| --- | --- |
+| Base live | Debian 13 amd64, recorridos BIOS/UEFI, squashfs de solo lectura + overlay RAM; sin escritorio convencional |
 | Recuperación | GNU ddrescue, TestDisk/PhotoRec, rsync |
-| Hardware | smartctl, nvme-cli, hdparm, lshw, pciutils, usbutils |
-| Sistemas de archivos | ext4, Btrfs, XFS, NTFS, exFAT, FAT |
-| Volúmenes | LUKS, LVM, mdadm, Dislocker (requiere clave BitLocker) |
-| Instalación | debootstrap, arch-install-scripts, GRUB BIOS/UEFI, efibootmgr, wimlib |
-| Operación | Zsh + completado/sugerencias/colores, tmux, Python, curl, git, jq, ripgrep, nano |
+| Hardware | smartctl, nvme-cli, hdparm, lshw, inventario PCI/USB |
+| Almacenamiento | ext4, Btrfs, XFS, NTFS, exFAT, FAT; herramientas LUKS, LVM, RAID y BitLocker con la clave correcta |
+| Conectividad | NetworkManager, Ethernet/Wi-Fi, OpenSSH, Avahi/mDNS, tailnet propia opcional |
+| Clientes IA | Codex CLI, OpenCode, Claude Code, Antigravity; instalados independientemente de preparar credenciales |
+| Operación | Zsh, tmux, Python, curl, git, jq, ripgrep, nano |
 
-Firmware incluido para Intel, Realtek, Atheros, Broadcom y MediaTek. Eso amplía la compatibilidad,
-no garantiza todo chip Wi-Fi ni drivers propietarios. El tamaño real está en la validación.
-El núcleo es mínimo; cuatro agentes y firmware hacen imposible una imagen de unas pocas decenas de MB.
-Los arneses se empaquetan como binarios nativos: Node/npm se usan solo durante la construcción,
-no se arrastran sus cachés ni todas las variantes de arquitectura al USB.
+**Nuevo en 0.9.9:** historial de consola local con rueda, hasta 10.000 líneas en RAM sin transcripciones guardadas; baja hasta el prompt o pulsa Esc para volver. SSH conserva el comportamiento del terminal cliente. Imager comprueba espacio antes de copiar una imagen privada; Windows permite elegir otra carpeta de trabajo. [Notas de versión](docs/RELEASE-0.9.9.md).
 
-## Almacenamiento y arranque
+### Consola local o SSH
 
-- Imagen híbrida BIOS + UEFI x86-64. **No se ofrece una cadena Secure Boot firmada universal**.
-- Raíz squashfs de solo lectura + overlay en RAM: no altera el OS instalado.
-- **AGUJA_CFG**: FAT32 visible, `aguja.conf` editable desde otro sistema.
-- **AGUJA_DATA**: ext4; workspace y host key SSH propia del USB.
-- `persistent_home=no`: HOME y tokens desaparecen al reiniciar.
-- `persistent_home=yes`: HOME/tokens se guardan en el USB **sin cifrar**.
-- La partición de datos se asocia al mismo disco del medio live, no a un disco interno con una etiqueta parecida.
+Conecta con `ssh aguja@IP` usando la dirección real del live y verificando su huella. Tailscale/Headscale opcional registra el live tras arrancar, disponer de red y desbloquear el perfil, no el PC preparador. OpenSSH por tailnet es el valor predeterminado; Tailscale SSH es una opción avanzada distinta que necesita políticas compatibles.
 
-## Construir y preparar
+La identidad tailnet vive **solo en RAM** y se registra de nuevo tras reiniciar. Una clave de un uso puede no servir dos veces. Para varios arranques usa claves reutilizables vigentes y limitadas bajo tu administración; retira después nodos y claves obsoletos. ACL y control plane determinan el acceso.
 
-En un host Debian 13 amd64 con sudo, al menos 15 GB libres y acceso a Internet:
+### Entra en tu proveedor IA
 
-```sh
-sudo apt-get install debootstrap squashfs-tools grub-pc-bin grub-efi-amd64-bin xorriso mtools dosfstools gdisk jq fonts-dejavu-core ffmpeg nodejs npm
-npm ci
-npm run branding
-sudo bash scripts/build-rootfs.sh
-sudo bash scripts/build-image.sh
-python3 -m unittest discover -s tests -v
-```
+Localmente, `aguja login codex`, `aguja login claude` o `aguja login antigravity` pueden abrir Chromium con sandbox en el login oficial y con la PTY original. Copiar enfoca la consola; pega expresamente con Ctrl+Shift+V. OpenCode usa `opencode auth login`. Sin consentimiento automático y sin QR en este recorrido.
 
-Se generan `dist/aguja-<VERSION>-amd64.iso`, `.img`, inventario de paquetes y `SHA256SUMS`.
-La ISO es útil para VMs; la **IMG** añade particiones configurables al USB.
-Usa [la guía de grabación](docs/USB.md) y nunca adivines `/dev/sdX`.
+SSH/serie/sin pantalla conservan métodos nativos; no se reenvía automáticamente un callback localhost remoto. Las claves API y la importación selectiva de sesiones portables son alternativas, no pruebas de autenticación vigente. No se copia todo el llavero, historial, hooks ni configuración MCP. Costes, cuotas y datos enviados dependen de tu cuenta y proveedor.
 
-## Agujita · nuestra mascota
+### Qué se conserva
 
-<p align="center"><img src="branding/mascot/aguja-animated.gif" height="300" alt="Agujita parpadea, mira a los lados, se sorprende, ríe y guiña un ojo"></p>
+| Ubicación u opción | Comportamiento |
+| --- | --- |
+| AGUJA_CFG | Configuración FAT32, incluido `aguja.conf` editable; valores en texto plano legibles desde el USB |
+| AGUJA_DATA | Workspace ext4 y host key SSH propia del USB; la cápsula no cifra toda la partición |
+| `persistent_home=no` | HOME y tokens de sesión desaparecen al reiniciar |
+| `persistent_home=yes` | HOME y tokens persisten **sin cifrar** en el USB |
+| Cápsula cifrada | Protege el perfil bloqueado, no secretos cargados frente a root |
 
-La aguja de metal, los ojos ámbar y el bigote rizado son la identidad del producto.
-**LA AGUJA Rescue Disk** es la marca; **Agujita** es el personaje. Ocho expresiones, un bucle de
-96 fotogramas a 12 fps, iconos con transparencia y portada para la presentación.
-GRUB muestra la marca estática; Plymouth anima la mascota durante el arranque,
-sin instalar un escritorio. Diagnóstico y `nomodeset` conservan el arranque en texto.
+Las imágenes privadas y plantillas `.aguja` pueden contener credenciales. No las publiques. `aguja password` conserva un cambio de contraseña SSH; `sudo passwd aguja` solo cambia la sesión. Contraseña vacía **con** clave pública permite solo clave; **sin** clave mantiene el acceso público de fábrica.
 
-- [Vista interactiva local: marca, splash y expresiones](branding/preview/index.html)
-- Guía de identidad y recursos
+## Documentación e idiomas
 
-Los identificadores técnicos (`aguja`, `aguja.conf`, etiquetas `AGUJA_*` y nombres
-de imagen) se conservan para compatibilidad; el nombre visible es **LA AGUJA Rescue Disk**.
+| Siguiente lectura | English | Español |
+| --- | --- | --- |
+| Preparar y arrancar | [Getting started](docs/GETTING-STARTED.md) | [Primeros pasos](docs/GETTING-STARTED.es.md) |
+| Prompts, herramientas y entregables | [Showcase](docs/SHOWCASE.md) | [Ejemplos](docs/SHOWCASE.es.md) |
+| Diagnóstico por capas | [Troubleshooting](docs/TROUBLESHOOTING.md) | [Solución de problemas](docs/TROUBLESHOOTING.es.md) |
+| Capturas reales | [Gallery](docs/SCREENSHOTS.md) | [Galería](docs/SCREENSHOTS.es.md) |
+| Referencias e historial | [Documentation index](docs/README.md) | [Índice](docs/README.es.md) |
 
-## Documentación
+Web y guías operativas: [English](https://aguja.transcendenceia.net/en/docs) · [Español](https://aguja.transcendenceia.net/es/docs) · [Français](https://aguja.transcendenceia.net/fr/docs) · [Deutsch](https://aguja.transcendenceia.net/de/docs) · [Português](https://aguja.transcendenceia.net/pt/docs) · [Italiano](https://aguja.transcendenceia.net/it/docs) · [Nederlands](https://aguja.transcendenceia.net/nl/docs) · [简体中文](https://aguja.transcendenceia.net/zh/docs).
 
-Empieza en el [manual de usuarios con 26 apartados y capturas](https://aguja.transcendenceia.net/es/docs):
-[primer USB](https://aguja.transcendenceia.net/es/docs#primer-usb),
-[glosario](https://aguja.transcendenceia.net/es/docs#glosario),
-[IA paso a paso](https://aguja.transcendenceia.net/es/docs#ia-preparacion),
-[diez ejemplos de uso](https://aguja.transcendenceia.net/es/docs#casos) y
-[ruta profesional](https://aguja.transcendenceia.net/es/docs#profesional).
-Puedes imprimir/guardar PDF desde la guía. [Copia del manual](docs/USER-GUIDE.md) ·
-[Índice de documentos actuales e históricos](docs/README.md).
+## Desarrollar y verificar
 
+[Construcción y pruebas](docs/DEVELOPMENT.es.md) · [Implementación Imager](desktop/README.es.md) · [Contribuir](CONTRIBUTING.es.md) · [Seguridad](SECURITY.es.md) · [Publicación](docs/PUBLISHING.md)
 
-- Arquitectura y decisiones
-- [Guía instalada de consola](runtime/QUICKSTART.md)
-- [Instrucciones instaladas para el agente SSH](runtime/AGENT-CONTEXT.md)
-- [USB, copia y rollback](docs/USB.md)
-- [Rescate y acceso remoto](docs/RESCUE.md)
-- [Instalar sistemas operativos](docs/INSTALL.md)
-- [Arneses y autenticación](docs/HARNESSES.md)
-- Pruebas y límites
-- Roadmap
-- Licencias y publicación
+La evidencia publicada de 0.9.9 incluye arranque/reinicio BIOS/UEFI en VM con y sin perfil cifrado, rueda virtual, pruebas runtime/Imager y aplicación empaquetada. Son **resultados de esa versión**, no pruebas repetidas para este README ni certificación de hardware físico. Estas capturas no acreditan grabación USB física, compatibilidad universal ni inferencia con cuentas reales. No hay cadena Secure Boot firmada universal ni firma Windows Authenticode reconocida. Windows tampoco ofrece respaldo USB integrado ni expansión automática de AGUJA_DATA.
 
-## Idiomas
+## Código abierto, con nombre y rostro
 
-El idioma principal del repositorio es inglés y el secundario español. La web y las guías operativas de 26 apartados están disponibles en inglés, español, francés, alemán, portugués, italiano, neerlandés y chino simplificado. [Índice multilingüe](docs/README.md). El manual español ampliado se conserva íntegro; los documentos técnicos históricos mantienen su idioma y versión.
+Código, documentación y arte propios: **GPL-3.0-or-later**. Las concesiones MIT anteriores siguen vigentes; los componentes externos conservan sus licencias y condiciones. No se relicencia todo el medio como GPL. [LICENSE](LICENSE) · [NOTICE](NOTICE.es.md).
 
-## Código abierto y desarrollo
-
-GPL-3.0-or-later para el código y recursos propios; véase [LICENSE](LICENSE) y [NOTICE.md](NOTICE.md) para las licencias externas y concesiones MIT anteriores. [Contribuir](CONTRIBUTING.md) · [Seguridad](SECURITY.md) · [Publicación reproducible](docs/PUBLISHING.md).
-
-```sh
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python -m unittest discover -s tests
-cd desktop
-npm ci
-npm test
-```
-
-La web no ejecuta terminales remotos ni almacena cuentas. Las imágenes y el catálogo firmado se sirven desde la web oficial; el Imager y las fuentes están en GitHub Releases; el catálogo conserva firma Ed25519 y cada imagen se verifica antes de prepararse.
+**LA AGUJA** es la marca; **Agujita**, la aguja cromada de ojos ámbar y bigote rizado, es la mascota. No se traducen nombres ni identificadores técnicos. [Lenguaje de marca](docs/BRAND-LANGUAGE.md) · [TranscendenceIA](https://www.transcendenceia.net/proyectos/la-aguja-rescue-disk).
 
 ## Apoya el proyecto
 
-Cuando un equipo falla, detrás hay recuerdos, trabajo y personas que no quieren perderlos. LA AGUJA nace para ayudarles a recuperarlos. Si te acompañó en un momento difícil, tu café nos ayuda a seguir cuidando este proyecto libre. Gracias por sostenerlo.
+Detrás de un equipo averiado hay recuerdos, trabajo y personas. Si LA AGUJA te ayuda, un café ayuda a que el proyecto siga adelante. Donar es opcional; las herramientas de rescate siguen disponibles.
 
-[Invítanos a un café en Ko-fi](https://ko-fi.com/transcendenceia). Donar es opcional: todas las herramientas siguen disponibles.
+<p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-es.svg" width="360" alt="Invítanos a un café · Ko-fi"></a></p>

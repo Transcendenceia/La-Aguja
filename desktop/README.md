@@ -1,4 +1,4 @@
-# LA AGUJA Flash Imager · Windows and Linux 0.9.4
+# LA AGUJA Flash Imager · Windows and Linux 0.9.9
 
 [Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
 
@@ -28,7 +28,7 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-0.9.4-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-0.9.9-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 
@@ -78,7 +78,7 @@ npm run build:win
 - **Select profile folder** explicitly selects a custom or accessible WSL profile directory, without auto-scanning WSL users or launching WSL. This does not export a whole OS keyring. A CLI being installed or authenticated does not by itself guarantee a portable auth file or token validity.
 - Failed re-imports refresh the renderer status and invalidate prepared images; file replacement with symlinks is still rejected.
 
-The Rescue Disk image remains 0.9.0. These changes concern the desktop preparer and its bundled profile helper, not the boot image.
+Historical 0.9.3 import changes concerned the desktop preparer, not the then-current Rescue 0.9.0. The current catalogue provides Rescue Disk 0.9.9.
 
 ## Imager 0.9.4 · native Windows sessions
 
@@ -90,10 +90,10 @@ The Rescue Disk image remains 0.9.0. These changes concern the desktop preparer 
 
 Native backend references: [Codex storage](https://github.com/openai/codex/blob/main/codex-rs/login/src/auth/storage.rs), [Codex encrypted store](https://github.com/openai/codex/blob/main/codex-rs/secrets/src/local.rs), [Claude storage](https://code.claude.com/docs/en/authentication), [OpenCode auth](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/auth/index.ts), [Antigravity auth](https://antigravity.google/docs/cli/install/).
 
-## Cambios 0.9.7
+## 0.9.7 changes retained
 
-El desbloqueo cifrado al arrancar es el valor inicial, con contraseña pública editable `aguja`. Arranque directo requiere selección expresa. Idioma/teclado se importan del equipo y pueden corregirse; los perfiles cifrados con idioma requieren Rescue Disk 0.9.7 para aplicarlo antes del desbloqueo. La página de apoyo usa un QR local y abre Ko-fi solo al pulsar el enlace. No incluye claves de Ko-fi.
+Unlock-at-boot encryption is initially selected, with the public editable phrase `aguja`. Direct boot requires an explicit choice. Imported language/keyboard can be corrected; encrypted language profiles require Rescue 0.9.7+ to apply them before unlock. Support uses a local QR and opens Ko-fi only on a click; no Ko-fi secrets are bundled.
 
-## Cambios 0.9.9
+## 0.9.9 changes
 
-Comprueba el espacio disponible antes de copiar la imagen privada y muestra cuánto falta. En Windows, al preparar y grabar, permite elegir otra carpeta de trabajo si el volumen inicial no tiene espacio; cancelar no inicia la grabación. Un archivo de destino existente no se sobrescribe. El catálogo ofrece Rescue Disk 0.9.9, con historial y rueda de ratón integrados en las consolas locales.
+Checks available space before copying the private image and reports the shortfall. Windows preparation/flashing can choose another working folder if the initial volume is full; cancelling does not start writing. Existing output files are not overwritten. The catalogue provides Rescue Disk 0.9.9 with mouse-wheel history in local consoles. Encrypted profiles force `persistent_home=no` at boot; capsule protection does not encrypt all AGUJA_DATA.

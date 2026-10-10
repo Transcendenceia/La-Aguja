@@ -21,6 +21,6 @@ npm test
 
 The website is informational, without accounts, user database or relay. Images and signed catalogue are on the official website; Imager packages are on GitHub. Network/SSH/AI profiles are processed locally. Do not restore mandatory project accounts or upload private configurations.
 
-Translations are reviewed JSON files in `server/locales/`. Run `python3 scripts/build-site-locales.py` to rebuild pages and repository guides. Preserve commands, identifiers, brand names and technical limits. The extended Spanish manual is retained separately; historical screenshots must keep their actual versions and synthetic-test provenance.
+Translations are reviewed JSON files in `server/locales/`. Run `python3 scripts/build-site-locales.py` → `python3 scripts/build-launch-pages.py` to rebuild pages and repository guides. Preserve commands, identifiers, brand names and technical limits. The extended Spanish manual is retained separately; historical screenshots must keep their actual versions and synthetic-test provenance.
 
 Do not test writing on an owner's disks without explicit authorisation and verified identity. Use synthetic images and virtual USBs for QA.

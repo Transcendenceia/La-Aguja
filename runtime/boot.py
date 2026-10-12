@@ -141,6 +141,7 @@ def main(profile_override=None):
                  f"Port {c['ssh_port']}\nHostKey {key}\nPermitRootLogin no\n"
                  f"PasswordAuthentication {'no' if locked else 'yes'}\nKbdInteractiveAuthentication no\n"
                  "PermitEmptyPasswords no\nAllowUsers aguja\n"
+                 "Banner /usr/share/aguja/SSH-WELCOME.txt\n"
                  "ForceCommand /usr/lib/aguja/ssh_session.py\n", 0o644)
     metadata = {k: c[k] for k in ("default_harness", "agent_mode", "ssh_port", "persistent_home")}
     metadata["ssh_auth_mode"] = auth_mode

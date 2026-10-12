@@ -12,6 +12,13 @@ VERSION=$(cat "$PROJECT/VERSION")
 AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 cmp -s "$PROJECT/VERSION" "$ROOT/usr/share/aguja/VERSION" || { echo 'Instala la versión actual en rootfs antes de empaquetar'; exit 1; }
 cmp -s "$PROJECT/runtime/aguja" "$ROOT/usr/local/bin/aguja" || { echo 'Instala el diagnóstico actual antes de empaquetar'; exit 1; }
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt; do
+    cmp -s "$PROJECT/runtime/$guide" "$ROOT/usr/share/aguja/$guide" || { echo 'Instala las guías actuales'; exit 1; }
+done
+for binary in qemu-system-x86_64 qemu-img qemu-nbd; do
+    chroot "$ROOT" /bin/sh -c 'command -v "$1" >/dev/null' sh "$binary" || { echo 'Falta virtualización nativa'; exit 1; }
+done
+chroot "$ROOT" dpkg-query -W -f='${Status}\n' qemu-system-gui ovmf seabios | awk ' $0 != "install ok installed" { failed=1 } END { exit failed }'
 # Reject unprivileged copies that strip ownership/setuid from the factory.
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/bin/sudo") == 0:0:4755 ]] || { echo 'Restaura propietarios y permisos de la rootfs (sudo)'; exit 1; }
 [[ $(stat -c '%u:%a' "$ROOT/usr/lib/dbus-1.0/dbus-daemon-launch-helper") == 0:4754 ]] || { echo 'Restaura propietarios y permisos de la rootfs (D-Bus)'; exit 1; }
@@ -85,6 +92,9 @@ unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja | cmp -
 for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$PROJECT/runtime/console-history.conf"; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/lib/aguja/$(basename "$runtime")" | cmp -s "$runtime" - || { echo 'Runtime empaquetado no coincide'; exit 1; }
 done
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt; do
+    unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
+done
 # Non-Python helpers, service units and pinned network binaries must survive
 # the squashfs stage too; a matching marker alone does not prove support.
 for unit in aguja-tailscale.service aguja-tailscaled.service aguja-network-check.service aguja-network-check.timer; do
@@ -153,7 +163,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$PROJECT/build/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$PROJECT/build/release.json" ::release.json
 printf 'LA AGUJA Rescue Disk\r\nSSH de fabrica: usuario aguja, password aguja.\r\nPersonaliza Wi-Fi/SSH en aguja.conf (sin comillas).\r\nAl arrancar: Centro de rescate. Wi-Fi/idioma/teclado disponibles en el menu.\r\nEn consola: aguja help / aguja wifi / aguja password.\r\nPara el agente SSH: aguja context / aguja tools.\r\n' > "$PROJECT/build/LEEME.txt"

@@ -134,3 +134,19 @@ por una política distinta: trabaja dentro del alcance acordado y conserva rever
 ## 6. Acceso remoto
 
 Usa OpenSSH por LAN o por tu Tailscale/Headscale. No existe relay ni conector propietario. Mantén la comprobación de huellas y las políticas de tu tailnet.
+
+## Herramientas nativas, virtualización y alternativas
+
+QEMU x86/KVM (o TCG), qemu-img, qemu-nbd, OVMF/UEFI y SeaBIOS están
+incluidos desde 0.9.11. Lee `/usr/share/aguja/TOOLBOX.md` antes de crear una VM
+o incorporar herramientas bajo demanda. Allí hay ideas como REA/MCP, Rizin,
+Unblob, Volatility, btop, lnav y otras: son referencias, no paquetes instalados.
+Puedes investigar y usar alternativas actuales si lo incluido no funciona;
+verifica fuentes, dependencias y recursos, limita CPU/RAM y respeta el alcance
+autorizado. No consumas el overlay RAM con grandes descargas; comprueba `free -h`,
+`df -h` y `findmnt`. Evita acceso simultáneo anfitrión/VM al mismo volumen.
+
+La bienvenida SSH orienta incluso conexiones de comandos sin PTY, por el canal
+de diagnóstico del cliente (banner), sin añadir bytes al stdout de SCP/SFTP/rsync.
+Guía rápida: `/usr/share/aguja/QUICKSTART.md`; contexto: `aguja context`; inventario:
+`aguja tools`; documentación pública: https://aguja.transcendenceia.net/docs.

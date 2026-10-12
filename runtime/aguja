@@ -157,12 +157,14 @@ def tools():
         "Hardware": ("smartctl", "nvme", "lshw", "lspci", "lsusb", "hdparm"),
         "Particiones y sistemas de archivos": ("lsblk", "blkid", "parted", "sgdisk", "e2fsck", "btrfs", "xfs_repair", "ntfs-3g"),
         "Volúmenes y cifrado": ("cryptsetup", "lvm", "mdadm", "dislocker"),
+        "Virtualización nativa (KVM si está disponible; TCG como alternativa)": ("qemu-system-x86_64", "qemu-img", "qemu-nbd"),
         "Instalación": ("debootstrap", "pacstrap", "grub-install", "efibootmgr", "wimlib-imagex"),
     }
     for label, binaries in groups.items():
         print(label + ":")
         print("  " + "  ".join(binary + (" [no disponible]" if not shutil.which(binary) else "") for binary in binaries))
     print("\nGuía: aguja help / Contexto para el agente: aguja context")
+    print("Virtualización y herramientas opcionales (no instaladas): /usr/share/aguja/TOOLBOX.md")
 
 
 def main():

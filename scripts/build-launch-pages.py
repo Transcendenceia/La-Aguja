@@ -35,7 +35,7 @@ COMMANDS={1:'aguja status\naguja doctor\nlsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,
 FIGURES={4:['imager'],14:['rescue-dashboard'],16:['rescue-console'],18:['rescue-safe-mode','rescue-wheel']}
 def paras(items):return ''.join('<p>'+E(x)+'</p>' for x in items)
 def current(s):
- s=re.sub(r'(?<!\d)0\.9\.(?:0|1|2|9)(?!\d)',VERSION,s)
+ s=re.sub(r'(?<!\d)0\.9\.(?:0|1|2|9|10)(?!\d)',VERSION,s)
  return s.replace('Flash Imager Linux 0.8.2','Flash Imager Linux '+VERSION).replace('Flash Imager Windows 0.8.2','Flash Imager Windows '+VERSION)
 def head(l,c,b,suffix):
  image=SOCIAL[l];image_url=ORIGIN+'/assets/'+image['file']

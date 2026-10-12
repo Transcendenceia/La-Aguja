@@ -163,6 +163,19 @@ def main():
             report.update(local_browser_dependencies=True, owner_only_volatile_auth=True,
                           native_loopback_callback_unchanged=True, synthetic_auth_fixture_only=True,
                           provider_consent_and_inference_tested=False)
+            toolbox_probe = (Path(__file__).with_name('verify-live-toolbox.py')).read_bytes()
+            toolbox_result = subprocess.run(remote + ["python3 -"], env=remote_env,
+                input=toolbox_probe, capture_output=True, timeout=60)
+            (a.workdir / 'toolbox.json').write_bytes(toolbox_result.stdout)
+            (a.workdir / 'toolbox.err').write_bytes(toolbox_result.stderr)
+            if toolbox_result.returncode:
+                raise ValueError('Native virtualization or agent orientation failed')
+            report['toolbox'] = json.loads(toolbox_result.stdout)
+            probe = subprocess.run(remote + ["printf AGUJA_STDOUT_PROBE"], env=remote_env,
+                stdin=subprocess.DEVNULL, capture_output=True, timeout=15)
+            assert probe.returncode == 0 and probe.stdout == b'AGUJA_STDOUT_PROBE'
+            assert b'LA AGUJA Rescue Disk' in probe.stderr and b'TOOLBOX' in probe.stderr
+            report['ssh_banner_preserves_stdout'] = True
             onboarding = "set -e; test $(getent passwd aguja | cut -d: -f7) = /bin/zsh; systemctl is-active avahi-daemon; aguja status --json; aguja tools; test -s /usr/share/aguja/QUICKSTART.md; test -s /usr/share/aguja/AGENT-CONTEXT.md; test -s /etc/avahi/services/aguja-ssh.service; zsh -ic '[[ ${_comps[aguja]} == _aguja ]] && whence _zsh_autosuggest_start && whence _zsh_highlight'; avahi-browse -kprt _ssh._tcp"
             result = subprocess.run(remote + [onboarding], env=remote_env, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=60)
             (a.workdir / "onboarding.txt").write_text(result.stdout)

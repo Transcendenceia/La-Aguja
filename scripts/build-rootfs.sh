@@ -40,6 +40,7 @@ apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-s
   firmware-realtek firmware-iwlwifi firmware-atheros firmware-brcm80211 firmware-mediatek firmware-misc-nonfree \
   curl wget git jq ripgrep tmux nano less bash-completion zsh zsh-autosuggestions zsh-syntax-highlighting \
   avahi-daemon avahi-utils libnss-mdns python3 python3-pil python3-qrcode python3-cryptography nodejs npm \
+  qemu-system-x86 qemu-system-gui qemu-utils ovmf seabios \
   gddrescue testdisk smartmontools nvme-cli hdparm pciutils usbutils lshw \
   parted gdisk dosfstools e2fsprogs btrfs-progs xfsprogs ntfs-3g exfatprogs \
   cryptsetup lvm2 mdadm dislocker wimtools debootstrap arch-install-scripts \
@@ -48,6 +49,7 @@ apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-s
   chromium chromium-sandbox xserver-xorg-core xserver-xorg-input-libinput xserver-xorg-video-all \
   xinit openbox xclip x11-utils xauth dbus-x11 xterm xdotool
 getent passwd aguja >/dev/null || useradd -m -s /bin/bash -G sudo aguja
+getent group kvm >/dev/null && usermod -a -G kvm aguja
 printf 'aguja ALL=(ALL:ALL) NOPASSWD: ALL\n' > /etc/sudoers.d/aguja
 chmod 440 /etc/sudoers.d/aguja
 passwd -l root

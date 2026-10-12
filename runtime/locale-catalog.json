@@ -195,7 +195,6 @@
       "Nombre del equipo": "Hostname",
       "Será el nombre de tu disco de rescate en la red.": "Your rescue disk's name on the network.",
       "↙ Importar mi red activa": "↙ Import active network",
-      "Linux te pedirá permiso local para leer la contraseña guardada.": "Linux will request local permission to read the saved password.",
       "Nombre de la red": "Network name",
       "Contraseña": "Password",
       "Mostrar contraseña Wi-Fi": "Show Wi-Fi password",
@@ -880,7 +879,8 @@
       "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "No permission to save the private image in this folder. Choose another folder; the USB has not been written.",
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "The destination drive cannot store a file of this size. Choose a folder on an NTFS or exFAT drive.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Not enough space for the private image: {required} GiB free is required, but only {available} GiB is available. Choose a folder on another drive or free up space; the USB has not been written.",
-      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Safe: confirm every tool, workspace-write sandbox, human approval to leave it."
+      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Safe: confirm every tool, workspace-write sandbox, human approval to leave it.",
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows and Linux will request local permission to read the saved password."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -925,7 +925,6 @@
       "Nombre del equipo": "主机名",
       "Será el nombre de tu disco de rescate en la red.": "救援磁盘在网络中的名称。",
       "↙ Importar mi red activa": "↙ 导入当前网络",
-      "Linux te pedirá permiso local para leer la contraseña guardada.": "Linux 将请求本地权限以读取已保存的密码。",
       "Nombre de la red": "网络名称",
       "Contraseña": "密码",
       "Mostrar contraseña Wi-Fi": "显示 Wi-Fi 密码",
@@ -1610,7 +1609,8 @@
       "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "无权在此文件夹保存。请选择其他文件夹；尚未写入 USB。",
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "此驱动器无法保存此大小的文件。请选择 NTFS 或 exFAT 驱动器。",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "空间不足：需要 {required} GiB 可用空间，目前只有 {available} GiB。请选择其他驱动器或释放空间；尚未写入 USB。",
-      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex 安全模式：每个工具均需确认，使用 workspace-write 沙盒，离开沙盒需人工批准。"
+      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex 安全模式：每个工具均需确认，使用 workspace-write 沙盒，离开沙盒需人工批准。",
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows 和 Linux 会请求本地授权，以读取已保存的密码。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -1655,7 +1655,6 @@
       "Nombre del equipo": "Nom de l’ordinateur",
       "Será el nombre de tu disco de rescate en la red.": "Le nom de votre disque de secours sur le réseau.",
       "↙ Importar mi red activa": "↙ Importer mon réseau actif",
-      "Linux te pedirá permiso local para leer la contraseña guardada.": "Linux vous demandera une autorisation locale pour lire le mot de passe enregistré.",
       "Nombre de la red": "Nom du réseau",
       "Contraseña": "Mot de passe",
       "Mostrar contraseña Wi-Fi": "Afficher le mot de passe Wi-Fi",
@@ -2340,7 +2339,8 @@
       "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Permission refusée dans ce dossier. Choisissez un autre dossier ; la clé USB n’a pas été écrite.",
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Ce lecteur ne peut pas stocker un fichier de cette taille. Choisissez un lecteur NTFS ou exFAT.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espace insuffisant : {required} GiB libres requis, {available} GiB disponibles. Choisissez un autre lecteur ou libérez de l’espace ; la clé USB n’a pas été écrite.",
-      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex sûr : confirmation pour chaque outil, sandbox workspace-write et accord humain pour en sortir."
+      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex sûr : confirmation pour chaque outil, sandbox workspace-write et accord humain pour en sortir.",
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows et Linux demanderont une autorisation locale pour lire le mot de passe enregistré."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -2385,7 +2385,6 @@
       "Nombre del equipo": "Nome do computador",
       "Será el nombre de tu disco de rescate en la red.": "O nome do seu disco de resgate na rede.",
       "↙ Importar mi red activa": "↙ Importar minha rede ativa",
-      "Linux te pedirá permiso local para leer la contraseña guardada.": "O Linux pedirá uma permissão local para ler a senha salva.",
       "Nombre de la red": "Nome da rede",
       "Contraseña": "Senha",
       "Mostrar contraseña Wi-Fi": "Mostrar senha do Wi-Fi",
@@ -3070,7 +3069,8 @@
       "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Sem permissão para guardar nesta pasta. Escolha outra pasta; o USB não foi gravado.",
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Esta unidade não suporta este tamanho de ficheiro. Escolha uma unidade NTFS ou exFAT.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espaço insuficiente: são necessários {required} GiB livres e há {available} GiB disponíveis. Escolha outra unidade ou liberte espaço; o USB não foi gravado.",
-      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Seguro: confirmação por ferramenta, sandbox workspace-write e aprovação humana para sair."
+      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Seguro: confirmação por ferramenta, sandbox workspace-write e aprovação humana para sair.",
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows e Linux pedirão permissão local para ler a palavra-passe guardada."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -3115,7 +3115,6 @@
       "Nombre del equipo": "Rechnername",
       "Será el nombre de tu disco de rescate en la red.": "Der Name deines Rettungsdatenträgers im Netzwerk.",
       "↙ Importar mi red activa": "↙ Aktives Netzwerk importieren",
-      "Linux te pedirá permiso local para leer la contraseña guardada.": "Linux bittet um eine lokale Erlaubnis, das gespeicherte Passwort zu lesen.",
       "Nombre de la red": "Netzwerkname",
       "Contraseña": "Passwort",
       "Mostrar contraseña Wi-Fi": "WLAN-Passwort anzeigen",
@@ -3800,7 +3799,8 @@
       "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Keine Speicherberechtigung in diesem Ordner. Wähle einen anderen Ordner; der USB wurde nicht beschrieben.",
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Dieses Laufwerk unterstützt die Dateigröße nicht. Wähle ein NTFS- oder exFAT-Laufwerk.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Nicht genug Platz: {required} GiB frei erforderlich, {available} GiB verfügbar. Wähle ein anderes Laufwerk oder gib Platz frei; der USB wurde nicht beschrieben.",
-      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Sicher: jedes Werkzeug bestätigen, workspace-write-Sandbox und menschliche Freigabe zum Verlassen."
+      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Sicher: jedes Werkzeug bestätigen, workspace-write-Sandbox und menschliche Freigabe zum Verlassen.",
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows und Linux bitten um lokale Erlaubnis, das gespeicherte Passwort zu lesen."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -3845,7 +3845,6 @@
       "Nombre del equipo": "Nome del computer",
       "Será el nombre de tu disco de rescate en la red.": "Il nome del tuo disco di soccorso nella rete.",
       "↙ Importar mi red activa": "↙ Importa la mia rete attiva",
-      "Linux te pedirá permiso local para leer la contraseña guardada.": "Linux chiederà un’autorizzazione locale per leggere la password salvata.",
       "Nombre de la red": "Nome della rete",
       "Contraseña": "Password",
       "Mostrar contraseña Wi-Fi": "Mostra password Wi-Fi",
@@ -4530,7 +4529,8 @@
       "No hay permiso para guardar la imagen privada en esa carpeta. Elige otra carpeta; el USB no se ha grabado.": "Non hai il permesso di salvare in questa cartella. Scegli un’altra cartella; la chiavetta USB non è stata scritta.",
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Questa unità non supporta un file di queste dimensioni. Scegli un’unità NTFS o exFAT.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Spazio insufficiente: servono {required} GiB liberi, ma sono disponibili {available} GiB. Scegli un’altra unità o libera spazio; la chiavetta USB non è stata scritta.",
-      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Sicuro: conferma per ogni strumento, sandbox workspace-write e approvazione umana per uscirne."
+      "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Sicuro: conferma per ogni strumento, sandbox workspace-write e approvazione umana per uscirne.",
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows e Linux chiederanno il permesso locale per leggere la password salvata."
     }
   }
 }

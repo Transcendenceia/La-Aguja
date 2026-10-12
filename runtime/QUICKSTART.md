@@ -218,3 +218,12 @@ Cada `aguja agent NOMBRE` muestra Seguro (predeterminado) e Inseguro (YOLO). Seg
 La actividad muestra comando, actor, estado y salida, enmascarando únicamente credenciales. La ventana de actividad es acotada (2048 eventos, 100 tareas); no sustituye un archivo de auditoría completo. La entrada de contraseñas y protocolos binarios no se graba.
 
 Las consultas del propio monitor devuelven el estado íntegro al solicitante. En el panel se registran como consultas, no se duplica recursivamente el historial dentro del historial.
+
+## Virtualización y herramientas por descubrir
+
+QEMU/KVM o TCG, qemu-img/qemu-nbd, OVMF/UEFI y SeaBIOS vienen incluidos desde
+0.9.11. No se inicia ninguna VM automáticamente. Consulta el presupuesto de
+RAM/disco y `/usr/share/aguja/TOOLBOX.md`: incluye ejemplos y sugerencias opcionales
+(REA, Rizin, Unblob, Volatility, btop, lnav, etc.), sin descargarlas. Los agentes
+pueden investigar e instalar otras herramientas según la misión y los recursos.
+La bienvenida SSH muestra estos caminos también al conectarse sin terminal.

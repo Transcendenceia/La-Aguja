@@ -10,6 +10,7 @@ const bitlocker=require('./bitlocker.cjs');
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
 const nativeImport=require('./windows-native-import.cjs');
+const {importActiveWifi}=require('./windows-wifi.cjs');
 const {withPrivilegedHelper}=require('./linux-privileged.cjs');
 const {userEnvironment}=require('./windows-environment.cjs');
 const {flashWindows}=require('./windows-flash.cjs');
@@ -189,28 +190,7 @@ function installIPC(){
  handle('import-locale',async()=>exclusive(importLocale));
  handle('generate-password',async()=>({password:secretPassword()}));
  handle('import-wifi',async()=>exclusive(async()=>{
-  if(isWindows){
-   const psScript=`
-$net = netsh wlan show interfaces
-$ssidMatch = ($net | Select-String -Pattern '^\\s*SSID\\s*:\\s*(.+)$')
-if ($ssidMatch) {
-    $ssid = $ssidMatch.Matches[0].Groups[1].Value.Trim()
-    $profile = netsh wlan show profile name="$ssid" key=clear
-    $keyMatch = ($profile | Select-String -Pattern '^\\s*(?:Contenido de la clave|Key Content)\\s*:\\s*(.+)$')
-    $key = if ($keyMatch) { $keyMatch.Matches[0].Groups[1].Value.Trim() } else { "" }
-    [PSCustomObject]@{
-        ssid = $ssid
-        password = $key
-        security = "wpa-psk"
-        country = "ES"
-        hidden = $false
-    } | ConvertTo-Json
-}
-`;
-   const output=await run('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-Command',psScript],null,{phase:'wifi'});
-   if(!output.trim())throw new Error('No se detectó ninguna red Wi-Fi activa.');
-   return {wifi:JSON.parse(output.trim())};
-  }
+  if(isWindows)return importActiveWifi();
   if(process.platform!=='linux')throw new Error('La importación Wi-Fi está disponible en Linux y Windows.');
   const script=app.isPackaged?path.join(ROOT,'wifi-helper.py'):path.join(__dirname,'wifi-helper.py');
   const data=JSON.parse(await withPrivilegedHelper(script,staged=>run('/usr/bin/pkexec',['/usr/bin/python3','-I',staged],null,{phase:'wifi'})));

@@ -12,3 +12,13 @@ test('all launch locales have equivalent plans, cases, safety additions and inte
  }
 });
 test('interactive layer has no persistence or network APIs',()=>{const js=read('../public/launch-20261009-v1.js');assert(!/fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|WebSocket/.test(js));assert(js.includes('navigator.clipboard.writeText'));assert(js.includes('range.selectNodeContents'));assert(js.includes('dialog.showModal'));});
+test('skill downloads are versioned independently of the live image and portable Linux names match publication',()=>{
+ const version=read('../../skills/flash-imager/SKILL.md').match(/^  version: "([^"]+)"$/m)[1];
+ const image=read('../../VERSION').trim();
+ for(const lang of languages){
+  const h=read('../public/'+lang+'/index.html');
+  for(const name of ['aguja-flash-imager-skill-'+version+'.zip','aguja-flash-imager-skill-'+version+'.tar.gz','SHA256SUMS-flash-imager-skill-'+version])assert(h.includes('/releases/download/flash-imager-skill-v'+version+'/'+name),lang+' '+name);
+  assert(h.includes('/aguja-flash-imager-'+image+'-linux-x64.tar.gz'),lang+' portable Linux');
+  assert(!h.includes('/aguja-flash-imager-'+image+'-x64.tar.gz'),lang+' obsolete filename');
+ }
+});

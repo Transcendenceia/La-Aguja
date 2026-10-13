@@ -35,7 +35,7 @@ Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí
 | Quieres… | Empieza por… | Con qué deberías terminar |
 | --- | --- | --- |
 | Instalar y configurar Linux en un SSD vacío | [Constructor de sistemas](docs/PLATFORM.es.md#1-de-ssd-vacío-a-linux-configurado) | Sistema configurado y primer arranque verificado |
-| Ejecutar invitados sin instalar el anfitrión | [Datacenter de bolsillo](docs/PLATFORM.es.md#2-datacenter-de-bolsillo-sin-instalar-el-anfitrión) | Laboratorio con recursos acotados, QEMU añadido e imágenes guardadas |
+| Ejecutar invitados sin instalar el anfitrión | [Datacenter de bolsillo](docs/PLATFORM.es.md#2-datacenter-de-bolsillo-sin-instalar-el-anfitrión) | Laboratorio con recursos acotados, QEMU incluido e imágenes guardadas |
 | Usar un PC disponible para una demo LAN o taller | [Servicios pop-up](docs/PLATFORM.es.md#3-taller-lan-o-estación-de-demos-pop-up) | Servicio temporal probado y cierre limpio |
 | Compilar fuera del entorno del disco | [Fábrica de software](docs/PLATFORM.es.md#4-fábrica-de-software-independiente-del-disco) | Scripts reproducibles, pruebas y artefactos exportados |
 | Preparar un NAS o servidor de aplicaciones | [Inicio bare-metal](docs/PLATFORM.es.md#5-preparar-un-nas-o-servidor-de-aplicaciones-desde-bare-metal) | Servicios instalados comprobados desde cliente autorizado |
@@ -68,9 +68,9 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Deja que un agente prepare la imagen
 
-**Flash Imager Agent Skill 1.0.2** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
+**Flash Imager Agent Skill 1.0.3** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/SHA256SUMS-flash-imager-skill-1.0.2) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.3/aguja-flash-imager-skill-1.0.3.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.3/aguja-flash-imager-skill-1.0.3.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.3/SHA256SUMS-flash-imager-skill-1.0.3) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
 
 Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual. Un formato portátil no certifica todos los arneses o sistemas operativos.
 
@@ -87,7 +87,7 @@ Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenCla
 | Operación | Zsh, tmux, Python, curl, git, jq, ripgrep, nano |
 | Construcción de sistemas | debootstrap, arch-install-scripts, herramientas de particionado/archivos y GRUB |
 
-**Amplía según tu misión:** puedes añadir QEMU/KVM, motores de contenedores, compiladores y SDK si son compatibles con kernel live, hardware y recursos. No se prometen incluidos ni como funciones de un clic. La plataforma aporta Linux independiente y agentes capaces, no un hipervisor integrado, modelo IA local ni orquestador automático de equipos. [Requisitos, prompts y entregas](docs/PLATFORM.es.md).
+**Virtualización incluida desde 0.9.11:** QEMU x86, qemu-img/qemu-nbd, OVMF y SeaBIOS. Usa KVM solo si hardware, firmware y kernel live lo permiten; TCG es una alternativa más lenta. **Amplía según tu misión:** motores de contenedores, compiladores, SDK y análisis especializado siguen siendo opcionales. Comprueba compatibilidad y CPU/RAM/almacenamiento antes de instalarlos. No se incluyen modelos IA locales ni un orquestador automático de equipos. [Requisitos, prompts y entregas](docs/PLATFORM.es.md).
 
 **Nuevo en 0.9.10:** Codex Seguro añade sandbox workspace-write, red restringida y aprobación humana por herramienta y para salir del sandbox. Conserva de 0.9.9: historial de consola local con rueda, hasta 10.000 líneas en RAM sin transcripciones guardadas; baja hasta el prompt o pulsa Esc para volver. SSH conserva el comportamiento del terminal cliente. Imager comprueba espacio antes de copiar una imagen privada; Windows permite elegir otra carpeta de trabajo. [Notas de versión](docs/RELEASE-0.9.10.md).
 

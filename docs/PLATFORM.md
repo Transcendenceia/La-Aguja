@@ -17,9 +17,9 @@ The live Linux uses a read-only USB filesystem plus a **writable RAM overlay**. 
 | Debian 13 amd64; root/sudo; shell, tmux, Python, Node.js, Git, SSH | Compilers, SDKs and project-specific dependencies |
 | debootstrap, arch-install-scripts, partition/filesystem tools, GRUB utilities | Official distro media and distribution-specific packages |
 | Codex CLI, OpenCode, Claude Code, Antigravity | Your compatible provider account and Internet for cloud inference |
-| Storage, network, diagnostics and recovery tools | QEMU and usable KVM for guests; a container engine for containers |
+| Storage, network, diagnostics and recovery tools; QEMU x86, qemu-img/qemu-nbd, OVMF and SeaBIOS (from 0.9.11) | Hardware/kernel support for KVM acceleration; a container engine for containers |
 
-QEMU, a container engine, a local AI model and an automatic VM/cluster orchestrator are **not advertised as bundled**. Check the running release, package availability, CPU/firmware, live-kernel support, RAM and storage before adding them. Cloud accounts and loaded secrets should not be introduced into untrusted guests. These are mission recipes, not claims that all twenty scenarios were executed in 0.9.9.
+QEMU and BIOS/UEFI guest firmware are **bundled from 0.9.11**. KVM acceleration depends on CPU/firmware and live-kernel support; TCG is a slower alternative. A container engine, local AI model and automatic VM/cluster orchestrator remain **optional, not bundled**. Check the running release, available tools, RAM and storage before starting a lab or adding dependencies. Cloud accounts and loaded secrets should not be introduced into untrusted guests. These are mission recipes, not claims that all twenty scenarios were executed in any release.
 
 ## 1. From blank SSD to a configured Linux
 
@@ -39,9 +39,9 @@ QEMU, a container engine, a local AI model and an automatic VM/cluster orchestra
 
 **Prompt:**
 
-> Plan a disposable two-guest Linux lab from this live session. Check CPU virtualisation, firmware, /dev/kvm, available RAM and separate storage first. QEMU is an additional dependency: verify and install it only within the approved live scope. Use official guest media, file-backed guest disks and isolated networking, never raw internal disks. Set CPU and memory budgets. Verify guest boot and a test connection, then save guest images and scripts before ending the live session.
+> Plan a disposable two-guest Linux lab from this live session. Check CPU virtualisation, firmware, /dev/kvm, available RAM and separate storage first. Verify the included QEMU and BIOS/UEFI firmware with aguja tools; do not reinstall them by default. Use official guest media, file-backed guest disks and isolated networking, never raw internal disks. Set CPU and memory budgets. Verify guest boot and a test connection, then save guest images and scripts before ending the live session.
 
-**Tools and requirements:** Additional QEMU, a usable KVM accelerator for the accelerated plan, enough resources for live host plus guests, and external image storage. QEMU can emulate without KVM, but that is a different, potentially much slower budget. Booting LA AGUJA itself in a QA VM does not demonstrate hosting guests from it.
+**Tools and requirements:** Included QEMU and BIOS/UEFI firmware (0.9.11+), a usable KVM accelerator for the accelerated plan, enough resources for live host plus guests, and external image storage. QEMU can emulate with TCG without KVM, but that is a different, potentially much slower budget. Release 0.9.11 verified BIOS/UEFI guests under TCG inside the live; that does not certify KVM on every physical machine or this two-guest mission.
 
 **Finish with:** Booted guests, resource limits, network diagram and saved image paths. Stop or reduce scope when resources or kernel support are inadequate. Possible next experiments: compare two distributions, test a database upgrade against a disposable copy, or demonstrate a web/API/database stack.
 
@@ -99,7 +99,7 @@ QEMU, a container engine, a local AI model and an automatic VM/cluster orchestra
 
 **Prompt:**
 
-> Design a reproducible experiment comparing two configurations of a synthetic Linux server. Inventory the extra image-building or QEMU tools needed. Use official base media, file-backed snapshots and an isolated test network. Record baseline hashes, scripts, resource budgets and before/after measurements. Save the recipe and results externally. No personal credentials, raw host disks or production network access inside the test guests.
+> Design a reproducible experiment comparing two configurations of a synthetic Linux server. Verify the included QEMU and image tools and identify any additional build dependencies. Use official base media, file-backed snapshots and an isolated test network. Record baseline hashes, scripts, resource budgets and before/after measurements. Save the recipe and results externally. No personal credentials, raw host disks or production network access inside the test guests.
 
 **Tools and requirements:** Extra VM/image/build tools, sufficient RAM and separate storage. An untrusted guest deserves isolation; a snapshot is not a complete security boundary. Building an image on amd64 does not mean LA AGUJA boots ARM or Apple Silicon.
 
@@ -111,7 +111,7 @@ QEMU, a container engine, a local AI model and an automatic VM/cluster orchestra
 
 > Turn my authorised computer into a proposed VM migration. Identify the original and a separate image destination, make a recovery baseline and choose suitable conversion tools. Work on a copy. List boot, driver and licence changes, and test a guest without raw-host disk access. Do not retire the physical machine until applications and data are verified.
 
-**Tools and requirements:** Included imaging/storage tools; additional QEMU/hypervisor and suitable libguestfs/virt-v2v or platform-specific conversion tooling. A supported virt-p2v workflow may require its own boot media and conversion server, not merely installing a command here. Windows additionally needs guest drivers and licence/activation review.
+**Tools and requirements:** Included imaging/storage tools and QEMU; additional libguestfs/virt-v2v or platform-specific conversion tooling, and another hypervisor only if the target requires it. A supported virt-p2v workflow may require its own boot media and conversion server, not merely installing a command here. Windows additionally needs guest drivers and licence/activation review.
 
 **Expected result and stopping conditions:** A booting converted guest, application/data checks and a retained physical rollback. Stop if an image is partial, conversion is unsupported or licensing cannot be satisfied.
 

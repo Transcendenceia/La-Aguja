@@ -4,15 +4,24 @@ import gzip
 import hashlib
 import io
 import json
+import re
 import sys
 import tarfile
 import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '1.0.2'
+skill_text = (ROOT/'skills/flash-imager/SKILL.md').read_text()
+version_match = re.search(r'^  version: "(\d+\.\d+\.\d+)"$', skill_text, re.MULTILINE)
+if not version_match:
+    raise ValueError('Missing skill metadata.version')
+VERSION = version_match.group(1)
 
 def build(output):
+    cli_text = (ROOT/'skills/flash-imager/scripts/imager.cjs').read_text()
+    cli_match = re.search(r"^const VERSION = '([^']+)';$", cli_text, re.MULTILINE)
+    if not cli_match or cli_match.group(1) != VERSION:
+        raise ValueError('CLI version differs from skill metadata.version')
     output.mkdir(parents=True, exist_ok=True)
     files = {}
     def add(source, destination):

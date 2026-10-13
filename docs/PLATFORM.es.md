@@ -17,9 +17,9 @@ El Linux live usa un sistema de archivos de solo lectura en USB y una **capa de 
 | Debian 13 amd64; root/sudo; shell, tmux, Python, Node.js, Git, SSH | Compiladores, SDK y dependencias del proyecto |
 | debootstrap, arch-install-scripts, particionado, sistemas de archivos y GRUB | Medios oficiales y paquetes propios de cada distribución |
 | Codex CLI, OpenCode, Claude Code, Antigravity | Tu cuenta compatible y conexión para inferencia en nube |
-| Herramientas de discos, red, diagnóstico y recuperación | QEMU con KVM utilizable para invitados; motor de contenedores |
+| Herramientas de discos, red, diagnóstico y recuperación; QEMU x86, qemu-img/qemu-nbd, OVMF y SeaBIOS (desde 0.9.11) | Soporte del hardware/kernel para acelerar con KVM; motor de contenedores |
 
-QEMU, un motor de contenedores, un modelo IA local y un orquestador automático de VM/clúster **no se anuncian como incluidos**. Comprueba versión en ejecución, paquetes, CPU/firmware, soporte del kernel live, RAM y almacenamiento antes de añadirlos. No introduzcas cuentas en nube ni secretos del anfitrión en invitados no confiables. Son recetas de misiones, no afirmaciones de que estos veinte escenarios se ejecutaran en 0.9.9.
+QEMU y el firmware BIOS/UEFI para invitados **se incluyen desde 0.9.11**. La aceleración KVM depende de CPU/firmware y kernel live; TCG es una alternativa más lenta. Un motor de contenedores, un modelo IA local y un orquestador automático de VM/clúster siguen siendo **opcionales, no incluidos**. Comprueba versión en ejecución, herramientas disponibles, RAM y almacenamiento antes de iniciar un laboratorio o añadir dependencias. No introduzcas cuentas en nube ni secretos del anfitrión en invitados no confiables. Son recetas de misiones, no afirmaciones de que estos veinte escenarios se ejecutaran en ninguna versión.
 
 ## 1. De SSD vacío a Linux configurado
 
@@ -39,9 +39,9 @@ QEMU, un motor de contenedores, un modelo IA local y un orquestador automático 
 
 **Prompt:**
 
-> Diseña desde esta sesión live un laboratorio desechable con dos invitados Linux. Comprueba virtualización CPU, firmware, /dev/kvm, RAM disponible y almacenamiento aparte. QEMU es una dependencia adicional: verifícala e instálala solo dentro del alcance live aprobado. Usa medios oficiales, discos virtuales como archivos y red aislada, nunca discos internos en bruto. Fija presupuestos de CPU y RAM. Verifica arranque y una conexión de prueba y guarda imágenes y scripts antes de cerrar el live.
+> Diseña desde esta sesión live un laboratorio desechable con dos invitados Linux. Comprueba virtualización CPU, firmware, /dev/kvm, RAM disponible y almacenamiento aparte. Verifica QEMU y el firmware BIOS/UEFI incluidos con aguja tools; no los reinstales por defecto. Usa medios oficiales, discos virtuales como archivos y red aislada, nunca discos internos en bruto. Fija presupuestos de CPU y RAM. Verifica arranque y una conexión de prueba y guarda imágenes y scripts antes de cerrar el live.
 
-**Herramientas y requisitos:** QEMU adicional, KVM utilizable para el plan acelerado, recursos para anfitrión live e invitados y almacenamiento externo de imágenes. QEMU puede emular sin KVM, pero implica otro presupuesto, potencialmente mucho más lento. Haber arrancado LA AGUJA en una VM QA no demuestra alojar invitados desde ella.
+**Herramientas y requisitos:** QEMU y firmware BIOS/UEFI incluidos (0.9.11+), KVM utilizable para el plan acelerado, recursos para anfitrión live e invitados y almacenamiento externo de imágenes. QEMU puede emular con TCG sin KVM, pero implica otro presupuesto, potencialmente mucho más lento. La 0.9.11 verificó invitados BIOS/UEFI bajo TCG dentro del live; eso no certifica KVM en todo equipo físico ni esta misión de dos invitados.
 
 **Entrega y verificación:** Invitados arrancados, límites de recursos, mapa de red y rutas de imágenes guardadas. Detente o reduce alcance si faltan recursos o soporte del kernel. Ideas siguientes: comparar dos distribuciones, probar una actualización de base de datos sobre una copia desechable o demostrar una pila web/API/base de datos.
 
@@ -99,7 +99,7 @@ QEMU, un motor de contenedores, un modelo IA local y un orquestador automático 
 
 **Prompt:**
 
-> Diseña un experimento reproducible comparando dos configuraciones de un servidor Linux sintético. Inventaría herramientas adicionales de imágenes o QEMU. Usa medios base oficiales, snapshots como archivos y una red de pruebas aislada. Registra hashes iniciales, scripts, presupuesto de recursos y mediciones antes/después. Guarda receta y resultados externamente. Sin credenciales personales, discos anfitrión en bruto ni acceso a red de producción en invitados.
+> Diseña un experimento reproducible comparando dos configuraciones de un servidor Linux sintético. Verifica QEMU y las herramientas de imágenes incluidas e identifica dependencias de construcción adicionales. Usa medios base oficiales, snapshots como archivos y una red de pruebas aislada. Registra hashes iniciales, scripts, presupuesto de recursos y mediciones antes/después. Guarda receta y resultados externamente. Sin credenciales personales, discos anfitrión en bruto ni acceso a red de producción en invitados.
 
 **Herramientas y requisitos:** Herramientas VM/imágenes/compilación adicionales, RAM y almacenamiento aparte. Un invitado no confiable requiere aislamiento; un snapshot no es una frontera completa de seguridad. Crear una imagen desde amd64 no implica que LA AGUJA arranque ARM ni Apple Silicon.
 
@@ -111,7 +111,7 @@ QEMU, un motor de contenedores, un modelo IA local y un orquestador automático 
 
 > Diseña la migración a VM de mi equipo autorizado. Identifica original y destino aparte, conserva una base recuperable y elige herramientas de conversión adecuadas. Trabaja sobre copia. Enumera cambios de arranque, drivers y licencia y prueba un invitado sin acceso a discos anfitrión en bruto. No retires el físico hasta verificar aplicaciones y datos.
 
-**Herramientas y requisitos:** Imágenes/discos incluidos; QEMU/hipervisor y libguestfs/virt-v2v u otra conversión específica adicionales. Un procedimiento compatible virt-p2v puede necesitar sus propios medios de arranque y servidor de conversión, no solo instalar un comando aquí. Windows requiere además drivers invitados y revisión de licencia/activación.
+**Herramientas y requisitos:** Imágenes/discos y QEMU incluidos; libguestfs/virt-v2v u otra conversión específica adicionales, y otro hipervisor solo si el destino lo requiere. Un procedimiento compatible virt-p2v puede necesitar sus propios medios de arranque y servidor de conversión, no solo instalar un comando aquí. Windows requiere además drivers invitados y revisión de licencia/activación.
 
 **Entrega esperada y condiciones de parada:** Invitado convertido que arranca, aplicaciones/datos verificados y reversión física conservada. Detente ante imagen parcial, conversión no soportada o licencia insuficiente.
 

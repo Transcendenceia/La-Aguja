@@ -34,7 +34,7 @@ No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requir
 | You want to… | Start with… | What you should finish with |
 | --- | --- | --- |
 | Install and configure Linux on a blank SSD | [System builder](docs/PLATFORM.md#1-from-blank-ssd-to-a-configured-linux) | A configured OS and verified first boot |
-| Run guests without installing a host OS | [Pocket datacenter](docs/PLATFORM.md#2-a-pocket-datacenter-on-a-pc-with-no-host-installation) | A resource-budgeted lab with QEMU added and guest images saved |
+| Run guests without installing a host OS | [Pocket datacenter](docs/PLATFORM.md#2-a-pocket-datacenter-on-a-pc-with-no-host-installation) | A resource-budgeted lab using included QEMU and saved guest images |
 | Use a spare PC for a LAN demo or workshop | [Pop-up services](docs/PLATFORM.md#3-a-pop-up-lan-workshop-or-demo-station) | A tested temporary service and clean shutdown |
 | Build and package software outside the disk environment | [Software factory](docs/PLATFORM.md#4-a-software-factory-independent-of-the-disk) | Reproducible scripts, test results and exported artifacts |
 | Prepare a NAS or application server | [Bare-metal bootstrap](docs/PLATFORM.md#5-bootstrap-a-nas-or-application-server-from-bare-metal) | Installed services verified from an authorised client |
@@ -67,9 +67,9 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Let an agent prepare the image
 
-**Flash Imager Agent Skill 1.0.2** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
+**Flash Imager Agent Skill 1.0.3** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/aguja-flash-imager-skill-1.0.2.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.10/SHA256SUMS-flash-imager-skill-1.0.2) · [Install for your harness](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.3/aguja-flash-imager-skill-1.0.3.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.3/aguja-flash-imager-skill-1.0.3.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.3/SHA256SUMS-flash-imager-skill-1.0.3) · [Install for your harness](skills/flash-imager/references/harnesses.md)
 
 Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw and manual loading. Portable format support does not certify every harness or OS.
 
@@ -86,7 +86,7 @@ Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, O
 | Operations | Zsh, tmux, Python, curl, git, jq, ripgrep, nano |
 | System building | debootstrap, arch-install-scripts, partition/filesystem tools and GRUB utilities |
 
-**Extend it for the mission:** QEMU/KVM, container engines, compilers and SDKs can be added when compatible with the live kernel, hardware and resource budget. They are not promised as bundled or as one-click workflows. The platform provides an independent Linux and capable agents, not a built-in hypervisor, local AI model or automatic fleet orchestrator. [Requirements, prompts and deliverables](docs/PLATFORM.md).
+**Virtualization is included from 0.9.11:** QEMU x86, qemu-img/qemu-nbd, OVMF and SeaBIOS. Use KVM only when the hardware, firmware and live kernel support it; TCG is a slower fallback. **Extend it for the mission:** container engines, compilers, SDKs and specialist analysis tools remain optional. Check compatibility and CPU/RAM/storage before installing them. No local AI model or automatic fleet orchestrator is bundled. [Requirements, prompts and deliverables](docs/PLATFORM.md).
 
 **New in 0.9.10:** Codex Safe adds a workspace-write sandbox, network restrictions and human approval for every tool and sandbox escape. Preserved from 0.9.9: local console mouse-wheel history, up to 10,000 lines in RAM without saved transcripts; scroll down to the prompt or press Esc to return. SSH keeps the client terminal behaviour. Imager checks working-space availability before copying a private image; Windows can choose another work folder. [Release notes](docs/RELEASE-0.9.10.md).
 

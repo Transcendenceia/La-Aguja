@@ -85,7 +85,7 @@
       "Une rampe de lancement, pas seulement une bouée.",
       "Donnez à un agent avancé un objectif, pas seulement une commande de réparation. Il peut analyser le matériel, choisir des outils, générer et exécuter des scripts dans le périmètre autorisé et vérifier le résultat. Le système installé n’a pas besoin de démarrer, ni même d’exister.",
       "La session live utilise une couche inscriptible en RAM sur l’image USB en lecture seule. Il s’agit de Linux, pas du firmware ; toute la clé USB n’est pas copiée en RAM. Les disques internes restent intacts au démarrage ; vous choisissez ensuite de les utiliser.",
-      "Inclus : clients IA avec accès root, SSH, Python, Git, outils de stockage, debootstrap et arch-install-scripts. Ajoutez des paquets compatibles : QEMU/KVM, moteurs de conteneurs et outils de compilation nécessitent une installation supplémentaire, assez de RAM et de stockage et un matériel compatible. Enregistrez explicitement les résultats importants ; la RAM est temporaire. L’IA cloud exige le réseau et votre compte ; aucun modèle local n’est inclus."
+      "Inclus : clients IA avec accès root, SSH, Python, Git, outils de stockage, debootstrap et arch-install-scripts. Ajoutez des paquets compatibles : Depuis 0.9.11, QEMU x86, qemu-img/qemu-nbd, OVMF et SeaBIOS sont inclus ; utilisez KVM si disponible, sinon TCG, plus lent. Les moteurs de conteneurs et outils de compilation restent des ajouts optionnels ; vérifiez RAM, stockage et compatibilité. Enregistrez explicitement les résultats importants ; la RAM est temporaire. L’IA cloud exige le réseau et votre compte ; aucun modèle local n’est inclus."
     ],
     [
       "Votre première clé USB",

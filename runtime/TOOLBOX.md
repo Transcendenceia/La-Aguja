@@ -1,7 +1,7 @@
 # LA AGUJA · Virtualización y herramientas bajo demanda
 
-La Aguja es un entorno live de rescate con agentes IA, no una instalación en el
-sistema interno. La imagen incluye una base operativa; **este catálogo opcional
+La Aguja es una plataforma Linux live con agentes IA para construir, configurar,
+investigar y rescatar; no una instalación automática en el sistema interno. La imagen incluye una base operativa; **este catálogo opcional
 no descarga ni preinstala las herramientas sugeridas**. No es una lista cerrada:
 investiga alternativas si una herramienta falla o no resuelve la misión.
 
@@ -14,7 +14,7 @@ aguja tools
 lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 findmnt
 free -h
-df -h / /tmp /aguja/data
+df -h / /tmp /data
 ```
 
 La raíz escribible es un overlay en RAM. Instalar, extraer firmware, generar
@@ -42,14 +42,17 @@ Comprueba el inventario con `aguja tools` y versiones con `--version`.
   no reutilices las variables de otra VM. Consulta los archivos realmente instalados:
   `dpkg -L ovmf | rg 'CODE|VARS'`. BIOS es la opción predeterminada de QEMU x86.
 
-Ejemplo sin disco físico, adaptando RAM/CPU al presupuesto medido:
+Ejemplo sin disco físico, adaptando RAM/CPU al presupuesto medido. Comprueba
+primero que `/data` sea AGUJA_DATA montada y tenga espacio; si no, elige otro
+almacenamiento autorizado. La ISO debe existir y la imagen qcow2 debe ser nueva:
 
 ```sh
 # ISO e imagen de laboratorio propios, en un destino con espacio verificado.
-qemu-img create -f qcow2 /aguja/data/lab.qcow2 20G
+mkdir -p /data/workspace/lab
+qemu-img create -f qcow2 /data/workspace/lab/lab.qcow2 20G
 qemu-system-x86_64 -accel kvm -m 2048 -smp 2 \
-  -drive file=/aguja/data/lab.qcow2,format=qcow2 \
-  -cdrom /aguja/data/lab.iso -boot d -nic user
+  -drive file=/data/workspace/lab/lab.qcow2,format=qcow2 \
+  -cdrom /data/workspace/lab/lab.iso -boot d -nic user
 # Si KVM no está disponible, sustituye -accel kvm por -accel tcg.
 ```
 

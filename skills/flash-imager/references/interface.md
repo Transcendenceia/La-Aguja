@@ -1,4 +1,4 @@
-# File-image interface · 1.0.1
+# File-image interface · 1.0.3
 
 Use Node.js >=22. The downloadable ZIP is self-contained; no npm install, Electron, root, mtools or mounts are required. From the source checkout install the existing Imager dependency with `npm ci --prefix desktop`. Preparation uses its pure-JavaScript GPT/FAT32 engine on regular `.img` files. The output parent must already exist and be private. Existing files, symlinks and device sources are refused; the factory image is preserved. Keep enough space for a full copy.
 
@@ -23,7 +23,7 @@ A harness process API can send the JSON bytes directly to stdin. Avoid command s
 
 ## Download / inspect
 
-Download: `{"version":"0.9.0","output_path":"/absolute/private/base.img"}`. Select a version actually returned by `catalog`. The official publication pin is bundled; expiry/signature failures stop downloading. This handles raw images or signed multipart raw images exactly like the desktop Imager. Manually imported `.img.zst` must first be decompressed; compressed files and ISO are not accepted by preparation.
+Download: `{"version":"<version returned by catalog>","output_path":"/absolute/private/base.img"}`. Select a version actually returned by `catalog`. The official publication pin is bundled; expiry/signature failures stop downloading. This handles raw images or signed multipart raw images exactly like the desktop Imager. Manually imported `.img.zst` must first be decompressed; compressed files and ISO are not accepted by preparation.
 
 Inspect: `{"image_path":"/absolute/base.img","image_sha256":"<trusted 64 lowercase hex>"}`. Omitting the expected hash calculates it but does not authenticate origin. Inspect reports GPT release marker capabilities and explicitly returns `signature_verified:false`.
 

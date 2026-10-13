@@ -53,9 +53,12 @@ test('real file preparation, encrypted runtime interoperability, no overwrite an
 test('standalone distributable prepares an image without checkout or npm install', {skip:process.platform==='win32'},()=>{
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-agent-bundle-'));
   try {
-    const output=path.join(dir,'assets');execFileSync('python3',[path.join(ROOT,'scripts/package-imager-skill.py'),output]);
-    const extracted=path.join(dir,'standalone');execFileSync('python3',['-c','import sys,zipfile;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])',path.join(output,'aguja-flash-imager-skill-1.0.2.zip'),extracted]);
-    const script=path.join(extracted,'flash-imager/scripts/imager.cjs');assert.equal(call('doctor',undefined,script).status,0);
+    const output=path.join(dir,'assets');const built=JSON.parse(execFileSync('python3',[path.join(ROOT,'scripts/package-imager-skill.py'),output]).toString());
+    const extracted=path.join(dir,'standalone');execFileSync('python3',['-c','import sys,zipfile;zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])',built.archives.find(p=>p.endsWith('.zip')),extracted]);
+    const script=path.join(extracted,'flash-imager/scripts/imager.cjs');const doctor=call('doctor',undefined,script);assert.equal(doctor.status,0);
+    const manifest=JSON.parse(fs.readFileSync(path.join(extracted,'flash-imager/BUNDLE-MANIFEST.json')));
+    const skillVersion=fs.readFileSync(path.join(extracted,'flash-imager/SKILL.md'),'utf8').match(/^  version: "([^"]+)"$/m)[1];
+    assert.equal(doctor.result.version,manifest.skill_version);assert.equal(manifest.skill_version,skillVersion);
     const source=synthetic(dir),r=request(source,path.join(dir,'standalone-private.img'));
     assert.equal(call('prepare',r,script).status,0);assert(fs.existsSync(r.output_path));
     const second=path.join(dir,'second');execFileSync('python3',[path.join(ROOT,'scripts/package-imager-skill.py'),second]);

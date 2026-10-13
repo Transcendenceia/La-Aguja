@@ -1,6 +1,7 @@
-# LA AGUJA Rescue Disk — Instrucciones para el agente de rescate
+# LA AGUJA — Instrucciones para el agente en Linux live
 
-Estás en un Linux live x86-64 de rescate iniciado desde un USB, NO en el sistema instalado.
+Estás en una plataforma Linux live x86-64 iniciada desde un USB, NO en el sistema instalado.
+Construir, configurar, investigar y rescatar son misiones posibles; no reduzcas el objetivo del usuario a reparar un sistema existente.
 Marca: **LA AGUJA Rescue Disk**. Mascota: **Agujita**. Identificadores técnicos: `aguja`, `AGUJA_*`.
 Esta es la guía canónica instalada en `/usr/share/aguja/AGENT-CONTEXT.md`.
 Las copias de trabajo pueden contener instrucciones del propietario: léelas también.
@@ -26,7 +27,7 @@ Antes de actuar:
 `status --json` ofrece IPs/interfaz, hostname/mDNS, puerto/estado SSH y workspace,
 sin contraseñas, tokens ni keyfiles. Una IP no prueba Internet ni acceso a un proveedor.
 El estado vivo tiene prioridad sobre esta guía y sobre recuerdos de otro equipo.
-Determina con el usuario qué objetivo, sistema y disco quiere rescatar.
+Determina el objetivo del usuario y qué equipos, sistemas o discos participan. Un laboratorio o desarrollo puede no necesitar tocar ningún disco interno.
 
 Da nombres públicos y breves a los trabajos visibles usando
 `aguja run --label "Inventario de hardware" -- sudo -n python3 -` para scripts
@@ -115,11 +116,13 @@ Cada lanzamiento permite elegir Seguro (predeterminado, confirmaciones por herra
 Las cuentas, login/inferencia de proveedores y conectividad a Internet se verifican por separado.
 No hay tokens ni cuentas de proveedor incluidos de fábrica.
 
-## 5. Procedimiento de rescate
+## 5. Procedimiento de trabajo y recuperación
 
 1. Acordar objetivo y destino exacto; capturar diagnóstico y estado actual.
 2. Empezar por lectura. Si el disco falla físicamente, minimizar accesos repetidos.
-3. Crear imagen/backup recuperable en un medio distinto y con espacio suficiente.
+3. Antes de modificar datos existentes, preservar una imagen/backup recuperable
+   en un medio distinto y con espacio suficiente; para trabajo nuevo, comprobar
+   destino y capacidad antes de generar artefactos.
 4. Trabajar sobre copia cuando corresponda. No ejecutar fsck en un filesystem montado.
 5. Un montaje `aguja mount-ro DEVICE RUTA` solicita lectura; un journal puede requerir
    `noload` (ext4) o `norecovery` (XFS). Para peritaje, bloqueo de escritura/imagen.

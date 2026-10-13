@@ -9,7 +9,7 @@ Gib einem fortgeschrittenen Agenten ein Ziel, nicht nur einen Reparaturbefehl. E
 
 Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.
 
-Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: QEMU/KVM, Container-Engines oder Build-Werkzeuge erfordern zusätzliche Installation, genügend RAM und Speicher sowie passende Hardware. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten.
+Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: Seit 0.9.11 sind QEMU x86, qemu-img/qemu-nbd, OVMF und SeaBIOS enthalten; nutze KVM, wenn verfügbar, sonst das langsamere TCG. Container-Engines und Build-Werkzeuge bleiben optionale Ergänzungen; prüfe RAM, Speicher und Kompatibilität. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten.
 
 [↗](https://aguja.transcendenceia.net/de/docs#que-es)
 

@@ -9,7 +9,7 @@ Geef een geavanceerde agent een doel, niet alleen een reparatiecommando. Hij kan
 
 De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.
 
-Inbegrepen: AI-clients met root-toegang, SSH, Python, Git, schijfhulpmiddelen, debootstrap en arch-install-scripts. Breid uit met geschikte pakketten: QEMU/KVM, container-engines en build-tools vereisen extra installatie, genoeg RAM/opslag en geschikte hardware. Sla belangrijke resultaten bewust op; RAM is tijdelijk. Cloud-AI vereist netwerk en je eigen account; er is geen lokaal model inbegrepen.
+Inbegrepen: AI-clients met root-toegang, SSH, Python, Git, schijfhulpmiddelen, debootstrap en arch-install-scripts. Breid uit met geschikte pakketten: Vanaf 0.9.11 zijn QEMU x86, qemu-img/qemu-nbd, OVMF en SeaBIOS inbegrepen; gebruik KVM indien beschikbaar, anders het tragere TCG. Container-engines en build-tools blijven optionele aanvullingen; controleer RAM, opslag en compatibiliteit. Sla belangrijke resultaten bewust op; RAM is tijdelijk. Cloud-AI vereist netwerk en je eigen account; er is geen lokaal model inbegrepen.
 
 [↗](https://aguja.transcendenceia.net/nl/docs#que-es)
 

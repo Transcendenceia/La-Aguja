@@ -1,9 +1,9 @@
 ---
 name: flash-imager
-description: Prepare a personalised La Aguja bootable disk image on request, using the Flash Imager engine without its GUI. Use for rescue USB image configuration, network, language, SSH and optional AI or tailnet profiles; not for generating pictures.
+description: Prepare a personalised La Aguja bootable disk image on request, using the Flash Imager engine without its GUI. Use for Linux live USB image configuration, network, language, SSH and optional AI or tailnet profiles; not for generating pictures or operating an already booted machine.
 license: GPL-3.0-or-later
 metadata:
-  version: "1.0.1"
+  version: "1.0.3"
 ---
 
 # Flash Imager for AI agents
@@ -11,6 +11,8 @@ metadata:
 Create the requested **file image**, not a physical disk write. Work through the harness's available file and shell tools; the procedure does not depend on a model, provider, MCP server or UI. Reply in the user's language.
 
 Requires Node.js 22+, file/shell access and space for both images. Network is needed for downloads, not local preparation. No root or Electron is needed.
+
+The skill version, bundled Imager engine version and selected live image version are separate. Use `doctor`, `BUNDLE-MANIFEST.json` when installed from a bundle, and `catalog` to identify them; do not infer image capabilities from the skill number. QEMU and optional-tool guidance belong to the live environment, not this image-preparation interface.
 
 1. Locate this skill directory and run `node <skill-dir>/scripts/imager.cjs doctor`. The release ZIP includes the engine; in a repository checkout run `npm ci --prefix desktop` if its dependency is missing. For discovery paths and manual loading in other harnesses read [references/harnesses.md](references/harnesses.md). Without execution/file access, provide the configuration plan, not a claim of a created image.
 2. Translate the request into supported settings: hostname, locale/keyboard, DHCP or static Ethernet, optional Wi-Fi, SSH public key/password, and optional provider or Tailscale/Headscale configuration. Read [references/interface.md](references/interface.md) for the input contract; run `locales` for valid language/keyboard values. Use the caller's authorised settings and ask only for essentials that are missing, such as an SSH public key. Leave optional authentication off unless requested. A preparer harness and the agents inside the live image are different: the image currently supports Codex, Claude, Antigravity and OpenCode profiles, not arbitrary additional harness installations.

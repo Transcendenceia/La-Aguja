@@ -9,7 +9,7 @@
   "intro": [
     "Give an advanced agent an objective, not just a repair command. It can inspect the available hardware, choose tools, generate and run scripts within your authorised scope, and check the result. The installed OS does not need to start — or even exist.",
     "The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.",
-    "Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU/KVM, container engines or build tools need additional installation, enough RAM/storage and hardware support. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model."
+    "Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU x86, qemu-img/qemu-nbd, OVMF and SeaBIOS are included from 0.9.11; use KVM when supported, or slower TCG otherwise. Container engines and build tools remain optional additions; check RAM, storage and compatibility. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model."
   ],
   "plannerTitle": "Choose a mission, then build a plan.",
   "plannerNote": "These are starting plans, not executed deployments. The page never connects to your computer or runs commands.",
@@ -29,10 +29,10 @@
     },
     {
       "title": "Build a virtual lab",
-      "intro": "Add QEMU and use KVM where CPU, firmware and live kernel support it. Run disposable guests from image files on separate storage; rehearse a server, test two distributions or demo a small stack. Budget RAM and verify /dev/kvm first.",
+      "intro": "Use the included QEMU and use KVM where CPU, firmware and live kernel support it. Run disposable guests from image files on separate storage; rehearse a server, test two distributions or demo a small stack. Budget RAM and verify /dev/kvm first.",
       "steps": [
         "Check RAM, CPU virtualisation, firmware and /dev/kvm.",
-        "Add QEMU; keep guest images on separate storage and isolate the network.",
+        "Use the included QEMU; keep guest images on separate storage and isolate the network.",
         "Start a disposable guest and verify it; save images before ending the live session."
       ],
       "stop": "resources or virtualisation support are insufficient."
@@ -69,7 +69,7 @@
     [
       "02 / POCKET DATACENTER",
       "A virtual lab before any host OS is installed",
-      "Add QEMU and use KVM where CPU, firmware and live kernel support it. Run disposable guests from image files on separate storage; rehearse a server, test two distributions or demo a small stack. Budget RAM and verify /dev/kvm first."
+      "Use the included QEMU and use KVM where CPU, firmware and live kernel support it. Run disposable guests from image files on separate storage; rehearse a server, test two distributions or demo a small stack. Budget RAM and verify /dev/kvm first."
     ],
     [
       "03 / POP-UP SERVICES",

@@ -9,7 +9,7 @@ Give an advanced agent an objective, not just a repair command. It can inspect t
 
 The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.
 
-Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU/KVM, container engines or build tools need additional installation, enough RAM/storage and hardware support. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model.
+Included: root-capable AI clients, SSH, Python, Git, storage tools, debootstrap and arch-install-scripts. Extend the session with compatible packages: QEMU x86, qemu-img/qemu-nbd, OVMF and SeaBIOS are included from 0.9.11; use KVM when supported, or slower TCG otherwise. Container engines and build tools remain optional additions; check RAM, storage and compatibility. Save important outputs deliberately; RAM state is temporary. Cloud AI requires networking and your own account, not an included local model.
 
 [↗](https://aguja.transcendenceia.net/en/docs#que-es)
 

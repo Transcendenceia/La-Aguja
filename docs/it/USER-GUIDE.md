@@ -9,7 +9,7 @@ Dai a un agente avanzato un obiettivo, non solo un comando di riparazione. Può 
 
 La sessione live usa uno strato scrivibile in RAM sopra l’immagine USB di sola lettura. È Linux, non firmware; l’intera USB non viene copiata in RAM. I dischi interni restano intatti all’avvio; decidi tu quando scriverci.
 
-Include client IA con accesso root, SSH, Python, Git, strumenti per dischi, debootstrap e arch-install-scripts. Aggiungi pacchetti compatibili: QEMU/KVM, motori di container e strumenti di compilazione richiedono installazione aggiuntiva, RAM/spazio sufficienti e hardware compatibile. Salva esplicitamente i risultati importanti; la RAM è temporanea. L’IA cloud richiede rete e il tuo account; nessun modello locale è incluso.
+Include client IA con accesso root, SSH, Python, Git, strumenti per dischi, debootstrap e arch-install-scripts. Aggiungi pacchetti compatibili: Dalla versione 0.9.11 sono inclusi QEMU x86, qemu-img/qemu-nbd, OVMF e SeaBIOS; usa KVM se disponibile oppure TCG, più lento. I motori di container e gli strumenti di compilazione restano aggiunte opzionali; verifica RAM, spazio e compatibilità. Salva esplicitamente i risultati importanti; la RAM è temporanea. L’IA cloud richiede rete e il tuo account; nessun modello locale è incluso.
 
 [↗](https://aguja.transcendenceia.net/it/docs#que-es)
 

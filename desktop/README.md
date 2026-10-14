@@ -6,6 +6,8 @@ Prepare a Rescue Disk from a working computer: network, language/keyboard, SSH, 
 
 ## 1.0 profiles, existing USBs and updates
 
+The numbered preparation flow has seven steps and ends at **Create disk**. **Profiles and USB** and **Updates** are separate, unnumbered tools below the preparation steps; they have no wizard Back/Continue controls. Returning restores the previous preparation step and settings. On Windows, **BitLocker on this PC** appears above manually supplied disk recovery keys.
+
 - **Encrypted disks** is a separate step before Create disk; manual BitLocker/LUKS keys and detected BitLocker use the same protected recovery capsule.
 - **Profiles and USB** saves/loads encrypted `.aguja` templates. Templates are portable configuration, not a copy of every local login: imported provider sessions are checked and explicitly selected again during preparation.
 - Select an exact LA AGUJA USB, read/decrypt its CFG, change settings in the normal sections, then return and save. Reading never writes edits. Saving confirms identity, rejects stale snapshots, preserves original stored bytes in a backup, verifies all replacements and leaves workspace/boot generations/unrelated files alone. An interrupted edit is recovered before boot consumes the capsule.

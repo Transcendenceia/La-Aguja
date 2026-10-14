@@ -17,3 +17,7 @@
 .recovery-entry .recovery-remove{margin-top:12px}
 #disk-recovery-card details{margin-top:16px}
 #disk-recovery-card code{display:block;overflow-wrap:anywhere;margin:10px 0}
+
+#tools{border-top:1px solid var(--line);margin-top:18px;padding-top:12px;gap:4px}.tool{border:0;background:none;color:var(--muted);text-align:left;padding:10px 12px;border-radius:9px}.tool.active{background:#233143;color:var(--cyan)}
+
+.sidebar{overflow-y:auto}.sidebar-bottom,.support-button{flex-shrink:0}

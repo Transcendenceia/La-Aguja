@@ -1100,7 +1100,8 @@
       "Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.": "A generation will be saved on DATA for the next boot; no reboot now. Factory and previous are kept.",
       "No se pudieron consultar los repositorios del sistema.": "Could not check OS repositories.",
       "No se pudieron consultar todos los proveedores.": "Could not check all providers.",
-      "No se pudo verificar el catálogo firmado.": "Could not verify the signed catalog."
+      "No se pudo verificar el catálogo firmado.": "Could not verify the signed catalog.",
+      "Volver a la preparación": "Return to preparation"
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -2050,7 +2051,8 @@
       "Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.": "版本将保存到 DATA 并在下次启动时应用；现在不会重启。出厂和上一版本将保留。",
       "No se pudieron consultar los repositorios del sistema.": "无法检查系统软件源。",
       "No se pudieron consultar todos los proveedores.": "无法检查所有提供方。",
-      "No se pudo verificar el catálogo firmado.": "无法验证已签名的目录。"
+      "No se pudo verificar el catálogo firmado.": "无法验证已签名的目录。",
+      "Volver a la preparación": "返回准备流程"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -3000,7 +3002,8 @@
       "Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.": "Une génération sera enregistrée dans DATA pour le prochain démarrage ; aucun redémarrage maintenant. Usine et version précédente sont conservées.",
       "No se pudieron consultar los repositorios del sistema.": "Impossible de vérifier les dépôts système.",
       "No se pudieron consultar todos los proveedores.": "Impossible de vérifier tous les fournisseurs.",
-      "No se pudo verificar el catálogo firmado.": "Impossible de vérifier le catalogue signé."
+      "No se pudo verificar el catálogo firmado.": "Impossible de vérifier le catalogue signé.",
+      "Volver a la preparación": "Revenir à la préparation"
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -3950,7 +3953,8 @@
       "Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.": "Uma geração será guardada em DATA para o próximo arranque; não reinicia agora. Fábrica e anterior são mantidas.",
       "No se pudieron consultar los repositorios del sistema.": "Não foi possível consultar os repositórios do sistema.",
       "No se pudieron consultar todos los proveedores.": "Não foi possível consultar todos os fornecedores.",
-      "No se pudo verificar el catálogo firmado.": "Não foi possível verificar o catálogo assinado."
+      "No se pudo verificar el catálogo firmado.": "Não foi possível verificar o catálogo assinado.",
+      "Volver a la preparación": "Voltar à preparação"
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -4900,7 +4904,8 @@
       "Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.": "Eine Generation wird für den nächsten Start auf DATA gespeichert; kein sofortiger Neustart. Werkzustand und vorherige Version bleiben erhalten.",
       "No se pudieron consultar los repositorios del sistema.": "Systemquellen konnten nicht geprüft werden.",
       "No se pudieron consultar todos los proveedores.": "Nicht alle Anbieter konnten geprüft werden.",
-      "No se pudo verificar el catálogo firmado.": "Signierter Katalog konnte nicht geprüft werden."
+      "No se pudo verificar el catálogo firmado.": "Signierter Katalog konnte nicht geprüft werden.",
+      "Volver a la preparación": "Zurück zur Vorbereitung"
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -5850,7 +5855,8 @@
       "Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.": "Una generazione verrà salvata su DATA per il prossimo avvio; nessun riavvio ora. Fabbrica e precedente restano disponibili.",
       "No se pudieron consultar los repositorios del sistema.": "Impossibile controllare i repository di sistema.",
       "No se pudieron consultar todos los proveedores.": "Impossibile controllare tutti i fornitori.",
-      "No se pudo verificar el catálogo firmado.": "Impossibile verificare il catalogo firmato."
+      "No se pudo verificar el catálogo firmado.": "Impossibile verificare il catalogo firmato.",
+      "Volver a la preparación": "Torna alla preparazione"
     }
   }
 }

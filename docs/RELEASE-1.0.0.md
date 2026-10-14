@@ -27,3 +27,9 @@ Release evidence distinguishes source tests, real native Imagers, virtual USB/BI
 ## Español
 
 La 1.0 añade actualización opcional del Imager, perfiles cifrados reutilizables y edición de configuración del pendrive sin regrabar. **Discos cifrados** tiene un apartado propio. El live avisa de actualizaciones y permite guardarlas en DATA como generaciones verificadas, independientes de las claves y del workspace. Se aplican al siguiente arranque, también en otra máquina; fábrica y anterior permanecen disponibles. No hay instalación ni reinicio automático. Los USB anteriores necesitan prepararse con la imagen 1.0 para incorporar el nuevo arranque; editar el CFG no sustituye esa preparación.
+
+## Imager navigation correction
+
+The preparation wizard ends at Create disk (step 07). Profiles/USB configuration and Imager updates are independent unnumbered tools. Their return action preserves the selected preparation step and entered settings, including across language changes. Windows shows local BitLocker before manual disk recovery keys. This correction rebuilds the Imager packages only; the tested Rescue image, boot generations and standalone automation skill are unchanged.
+
+Español: el asistente termina en Crear disco (07); perfiles, edición USB y actualizaciones quedan fuera del flujo. BitLocker local aparece antes de las claves manuales.

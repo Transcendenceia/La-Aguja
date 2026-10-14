@@ -105,3 +105,7 @@ Windows solicita cierre ordenado solo a aplicaciones que usan archivos del USB c
 «Claves de recuperación de discos» permite añadir BitLocker o LUKS1/LUKS2 de otro equipo desde cualquiera de los dos sistemas. Las claves usan la protección elegida para las credenciales y se conservan en los perfiles cifrados exportados. El modo sin cifrar sigue guardándolas sin cifrar de forma explícita.
 
 Compatible con Rescue 0.9.11, sin reconstruir su imagen: al preparar, se incluye una cápsula adicional y una herramienta en /config. Usa `sudo python3 /config/aguja-recovery.py list` para listar sin mostrar secretos, `export` para guardarlos solo en RAM privada o `open 1 /dev/DEVICE` para abrir el dispositivo exacto en solo lectura. Claves cifradas: pide la contraseña de la imagen. No elige discos, monta sistemas de archivos ni cambia cifrado automáticamente.
+
+## Flujo de preparación 1.0
+
+Los siete pasos terminan en **Crear disco**. **Perfiles y USB** y **Actualizaciones** son herramientas independientes, sin numeración y fuera del asistente; no muestran Atrás/Continuar. Al volver se conserva el paso y la configuración. En Windows, **BitLocker de este PC** va antes de las claves de recuperación manuales.

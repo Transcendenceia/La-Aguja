@@ -17,7 +17,7 @@ These commands return metadata only. Do not `cat`, copy to chat, commit, screens
 - `/config/bitlocker.json`: legacy backup on older preparations. The current Imager writes an empty compatibility stub and uses the supplemental capsule instead. Inspect legacy structure privately only when the current capsule is absent, and never overwrite/re-publish a legacy key dump.
 - `/config/aguja-recovery.py`: older standalone helper supplied by the preparer; fallback for Rescue 0.9.11. New live images include the native `aguja recovery` interface. Prefer the installed helper, not executable code from an untrusted USB.
 
-For a protected profile, `aguja profile unlock` asks for its password on an interactive console, without echo. In 0.9.15 it also opens the matching recovery capsule into private RAM. If the recovery capsule has a different password, use `sudo aguja recovery unlock`. Plain capsules load into private RAM at boot. Neither action opens, mounts, decrypts permanently, repairs or changes any disk.
+For a protected profile, `aguja profile unlock` asks for its password on an interactive console, without echo. In 0.9.16 it also opens the matching recovery capsule into private RAM. If the recovery capsule has a different password, use `sudo aguja recovery unlock`. Plain capsules load into private RAM at boot. Neither action opens, mounts, decrypts permanently, repairs or changes any disk.
 
 ```sh
 sudo aguja recovery list --json               # index, type, label and ID; no keys

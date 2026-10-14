@@ -155,7 +155,7 @@ Guía rápida: `/usr/share/aguja/QUICKSTART.md`; contexto: `aguja context`; inve
 `aguja tools`; documentación pública: https://aguja.transcendenceia.net/docs.
 
 
-## 7. Claves de recuperación y demás secretos (desde 0.9.15)
+## 7. Claves de recuperación y demás secretos (desde 0.9.16)
 
 Antes de buscar credenciales, lee `/usr/share/aguja/SECRETS.md` y la skill
 `/usr/share/aguja/skills/disk-recovery/SKILL.md`. Ejecuta `aguja secrets --json`

@@ -12,7 +12,7 @@ const fat = require(path.join(root, 'desktop/fat32-writer.cjs'));
 const recovery = require(path.join(root, 'desktop/disk-recovery.cjs'));
 const engineVersion = JSON.parse(fs.readFileSync(path.join(root,'desktop/package.json'))).version;
 const pin = JSON.parse(fs.readFileSync(path.join(root, 'desktop/resources/release-key.json')));
-const VERSION = '1.0.4';
+const VERSION = '1.0.5';
 function emit(value) { process.stdout.write(JSON.stringify(value) + '\n'); }
 function requireValue(ok) { if (!ok) throw Error('invalid'); }
 function keys(value, allowed) {

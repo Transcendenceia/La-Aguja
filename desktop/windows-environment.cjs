@@ -6,7 +6,7 @@ async function userEnvironment(run,base=process.env){
  // Query only known non-secret location variables; never run shell profiles or
  // enumerate environment values (which may contain provider keys).
  const script='$ErrorActionPreference="Stop";[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false);$result=@{};foreach($key in @('+['Path',...KEYS].map(k=>"'"+k+"'").join(',')+')){$u=[Environment]::GetEnvironmentVariable($key,"User");$m=[Environment]::GetEnvironmentVariable($key,"Machine");if($key -eq "Path"){$result[$key]=@($u,$m)-join ";"}elseif($u){$result[$key]=$u}elseif($m){$result[$key]=$m}};$result|ConvertTo-Json -Compress';
- let values;try{values=JSON.parse((await run(windowsPowerShell(base),powershellArgs(script),null,{timeout:10000})).replace(/^\ufeff/,''));}catch{return {...base};}
+ let values;try{values=JSON.parse((await run(windowsPowerShell(base),powershellArgs(script),null,{timeout:10000})).replace(/^\ufeff/,''));}catch{values={};}
  const env={...base};
  for(const key of KEYS)if(!env[key]&&typeof values?.[key]==='string'&&values[key].length<32768)env[key]=values[key];
  const current=Object.entries(base).find(([k])=>k.toLowerCase()==='path')?.[1]||'';

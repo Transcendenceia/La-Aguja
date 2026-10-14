@@ -1,4 +1,4 @@
-# Claves de recuperación y credenciales privadas · 0.9.15
+# Claves de recuperación y credenciales privadas · 0.9.16
 
 La Aguja se puede preparar desde un PC distinto al que se rescatará. En el Imager Linux/Windows, añade entradas manuales **BitLocker o LUKS**, con etiqueta del equipo/disco e identificador opcional. El sistema del preparador y su cifrado no determinan qué entradas puedes guardar.
 

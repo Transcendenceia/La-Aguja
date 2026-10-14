@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createSite} from '../app.mjs';
+const currentVersion=fs.readFileSync(new URL('../../VERSION',import.meta.url),'utf8').trim();
 const languages=['en','es','fr','de','pt','it','nl','zh'];
 test('locale routes preserve anonymous access, content structure and localised navigation',async()=>{
  const site=createSite();await new Promise(r=>site.server.listen(0,'127.0.0.1',r));
@@ -19,8 +20,8 @@ test('locale routes preserve anonymous access, content structure and localised n
      assert(html.includes('0.9.11'));assert(html.includes('ENOSPC'));assert(html.includes('YOLO'));assert(html.includes('10,000')||html.includes('10.000')||html.includes('10 000')||html.includes('10000')||html.includes('10 000'));
      assert.equal((html.match(/class="zoom-image"/g)||[]).length,5);assert(html.includes('class="checklist"'));assert(html.includes('id="situation"'));assert(html.includes('property="og:image"'));
     }else if(route===''){
-     assert(html.includes('v0.9.11/aguja-flash-imager-0.9.11-win-x64.exe'));
-     assert(html.includes('/releases/aguja-0.9.11-amd64.img.zst'));assert(!html.includes('Tu LA AGUJA'));
+     assert(html.includes(`v${currentVersion}/aguja-flash-imager-${currentVersion}-win-x64.exe`));
+     assert(html.includes(`/releases/aguja-${currentVersion}-amd64.img.zst`));assert(!html.includes('Tu LA AGUJA'));
     }
    }
   }

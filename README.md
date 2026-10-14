@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
-**Flash Imager 0.9.15 · Rescue Disk 0.9.15 · Experimental · x86-64**
+**Flash Imager 0.9.16 · Rescue Disk 0.9.16 · Experimental · x86-64**
 English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
 **Your computer does not need an installed OS to start its next project.** LA AGUJA boots an independent Linux from USB, including on a machine with a blank disk. Bring **Codex CLI, OpenCode, Claude Code and Antigravity**, root-capable Linux tools and optional SSH to the hardware: install and configure systems, bootstrap a server, build software, extend the session into a virtual lab, migrate storage or recover data. Recovery is one mission, not the whole product.
@@ -49,7 +49,7 @@ Beyond those starting points: physical-to-virtual migration, a PXE lab, custom L
 
 ## Get started
 
-1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.15). The EXE/AppImage is the preparer, not the rescue image.
+1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.16). The EXE/AppImage is the preparer, not the rescue image.
 2. **Select the image.** Use the signed catalogue, or decompress a manually downloaded `.img.zst` before selecting the `.img`. The ISO is useful for VM boot tests.
 3. **Set language, keyboard, networking and SSH.** Replace the public factory SSH password `aguja` with your own password or public key. AI and tailnet preparation are optional.
 4. **Protect the profile.** Use an encrypted capsule for secrets. Replace the public initial unlock phrase `aguja` and keep the new phrase outside the USB. This does not encrypt persistent HOME or all AGUJA_DATA.
@@ -67,9 +67,9 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Let an agent prepare the image
 
-**Flash Imager Agent Skill 1.0.4** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
+**Flash Imager Agent Skill 1.0.5** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.4/aguja-flash-imager-skill-1.0.4.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.4/aguja-flash-imager-skill-1.0.4.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.4/SHA256SUMS-flash-imager-skill-1.0.4) · [Install for your harness](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.5/aguja-flash-imager-skill-1.0.5.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.5/aguja-flash-imager-skill-1.0.5.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.5/SHA256SUMS-flash-imager-skill-1.0.5) · [Install for your harness](skills/flash-imager/references/harnesses.md)
 
 Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw and manual loading. Portable format support does not certify every harness or OS.
 
@@ -147,6 +147,6 @@ Every machine can become the start of something new. If LA AGUJA helps you build
 
 <p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-en.svg" width="360" alt="Buy us a coffee · Ko-fi"></a></p>
 
-**New in 0.9.15:** complete Imager localization, manual BitLocker/LUKS keys for another computer, exclusive Windows USB access and hidden writer, plus live metadata-only secret inventory and agent recovery context. [Recovery guide](docs/DISK-RECOVERY.md).
+**New in 0.9.16:** complete Imager localization, manual BitLocker/LUKS keys for another computer, exclusive Windows USB access and hidden writer, plus live metadata-only secret inventory and agent recovery context. [Recovery guide](docs/DISK-RECOVERY.md).
 
 **Included since 0.9.11:** Windows Wi-Fi import requests scoped UAC and preserves WPA3. Rescue Disk includes QEMU/KVM, TCG, qemu-img/qemu-nbd, OVMF and SeaBIOS. SSH orientation and an [optional tools guide](runtime/TOOLBOX.md) help agents investigate and install alternatives on demand—without bundling the suggested specialist tools. [Release notes](docs/RELEASE-0.9.11.md).

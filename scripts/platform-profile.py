@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Structured private desktop helper: JSON stdin, safe metadata JSON lines stdout."""
+import base64
 import hashlib
 import json
 import os
@@ -107,6 +108,16 @@ def prepare(request):
     sealed = seal(capsule, protection)
     if len(sealed) > MAX_CAPSULE * 2:
         raise ValueError('Perfil demasiado grande')
+    recovery_files = request.get('recovery_files', {})
+    if not isinstance(recovery_files, dict) or set(recovery_files) - {'aguja-recovery.json', 'aguja-recovery.py', 'RECOVERY-KEYS.txt', 'bitlocker.json'}:
+        raise ValueError('Archivos de claves de recuperación no válidos')
+    addons = {}
+    for name, encoded in recovery_files.items():
+        if not isinstance(encoded, str) or len(encoded) > 350000:
+            raise ValueError('Archivo de claves demasiado grande')
+        addons[name] = base64.b64decode(encoded, validate=True)
+        if len(addons[name]) > 256 * 1024:
+            raise ValueError('Archivo de claves demasiado grande')
     original_stat = source.stat()
     # No destination overwrite, no root privileges and no block device access.
     fd, temp = tempfile.mkstemp(prefix='.aguja-image-', dir=output.parent)
@@ -125,6 +136,15 @@ def prepare(request):
             subprocess.run(['mcopy', '-i', temp + '@@' + str(offset), '::/aguja-profile.json', str(readback)], check=True, capture_output=True)
             if readback.read_bytes() != sealed:
                 raise OSError('Verificación del perfil no coincide')
+            for index, (name, content) in enumerate(addons.items()):
+                item = Path(work) / ('recovery-' + str(index))
+                checked = Path(work) / ('recovery-check-' + str(index))
+                item.write_bytes(content)
+                os.chmod(item, 0o600)
+                subprocess.run(['mcopy', '-o', '-i', temp + '@@' + str(offset), str(item), '::/' + name], check=True, capture_output=True)
+                subprocess.run(['mcopy', '-i', temp + '@@' + str(offset), '::/' + name, str(checked)], check=True, capture_output=True)
+                if checked.read_bytes() != content:
+                    raise OSError('No coincide la verificación de las claves de recuperación')
             if public_locale and capsule.get('locale'):
                 selection = Path(work) / 'locale.json'
                 selection.write_text(json.dumps(capsule['locale']))

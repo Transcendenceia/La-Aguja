@@ -87,3 +87,13 @@ Ejecuta el Imager con el mismo usuario de Windows que inició sesión en el CLI.
 ## Imager 0.9.12 · ventanas al terminar
 
 Actualización exclusiva de los imagers Windows y Linux; Rescue Disk continúa en 0.9.11. Al terminar la grabación y la verificación por lectura, una ventana nativa confirma «Tu pendrive está listo». Expulsa el USB desde el sistema antes de desconectarlo. Si falla la preparación, la autorización, la escritura o la verificación, una ventana de error muestra la causa disponible y deja claro que el USB no está listo. Cancelar la confirmación no genera un falso éxito ni un error. El estado en la interfaz sigue disponible al cerrar la ventana.
+
+## Imager 0.9.13
+
+Traducción de todos los apartados, mensajes dinámicos, confirmaciones y opciones de idioma/teclado; los valores y claves escritos no cambian de contenido.
+
+Windows solicita cierre ordenado solo a aplicaciones que usan archivos del USB confirmado, cierra sus ventanas del Explorador y bloquea/desmonta los volúmenes antes de borrar. No mata servicios, procesos críticos, el grabador ni aplicaciones ajenas. Si Windows no permite liberar un bloqueo, no se borra el USB y se informa del fallo. PowerShell queda oculto; UAC sigue siendo la autorización normal de Windows.
+
+«Claves de recuperación de discos» permite añadir BitLocker o LUKS1/LUKS2 de otro equipo desde cualquiera de los dos sistemas. Las claves usan la protección elegida para las credenciales y se conservan en los perfiles cifrados exportados. El modo sin cifrar sigue guardándolas sin cifrar de forma explícita.
+
+Compatible con Rescue 0.9.11, sin reconstruir su imagen: al preparar, se incluye una cápsula adicional y una herramienta en /config. Usa `sudo python3 /config/aguja-recovery.py list` para listar sin mostrar secretos, `export` para guardarlos solo en RAM privada o `open 1 /dev/DEVICE` para abrir el dispositivo exacto en solo lectura. Claves cifradas: pide la contraseña de la imagen. No elige discos, monta sistemas de archivos ni cambia cifrado automáticamente.

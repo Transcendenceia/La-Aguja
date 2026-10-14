@@ -1,7 +1,7 @@
 {
   "name": "aguja-companion",
   "productName": "LA AGUJA Flash Imager",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "private": true,
   "author": {
     "name": "Transcendence IA",
@@ -52,7 +52,9 @@
       "image-storage.cjs",
       "windows-wifi.cjs",
       "windows-wifi.ps1",
-      "flash-result.cjs"
+      "flash-result.cjs",
+      "disk-recovery.cjs",
+      "flash-confirm.cjs"
     ],
     "extraResources": [
       {
@@ -70,7 +72,8 @@
           "profile.py",
           "config.py",
           "locale-catalog.json",
-          "i18n.py"
+          "i18n.py",
+          "recovery_keys.py"
         ]
       },
       {

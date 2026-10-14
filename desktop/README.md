@@ -1,8 +1,28 @@
-# LA AGUJA Flash Imager · Windows and Linux 0.9.12
+# LA AGUJA Flash Imager · Windows and Linux 0.9.13
 
 [Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
 
 Prepare a Rescue Disk from a working computer: network, language/keyboard, SSH, AI tools and optional Windows BitLocker recovery keys. Optional remote access uses your own Tailscale/Headscale, not a project tunnel. No LA AGUJA account is required.
+
+## Imager 0.9.13 · languages, exclusive USB access and recovery keys
+
+All sections, live status messages and native confirmations follow the selected application language. Language/keyboard option labels also refresh; user-entered values, keys, disk identities and selected layouts stay unchanged.
+
+Windows closes only Explorer windows on the confirmed USB and uses Restart Manager to request an orderly close from eligible applications holding its files. Services, critical processes, the writer and unrelated applications are not force-killed. Every target volume must be locked/dismounted and an exclusive raw handle acquired before partition erasure. If a remaining lock cannot be released, flashing stops with an error. PowerShell workers are hidden; the normal Windows UAC consent remains visible.
+
+**Disk recovery keys** accepts BitLocker recovery passwords and LUKS1/LUKS2 passphrases/recovery keys from another computer on either Windows or Linux. A label identifies each computer/disk; UUID/recovery ID is optional. BitLocker groups are validated; LUKS whitespace is preserved. The selected image-protection mode also protects these keys. Plain mode intentionally stores plaintext credentials.
+
+A supplemental recovery capsule and tool are added to the private image’s AGUJA_CFG partition, leaving the Rescue 0.9.11 boot/profile schema intact. On the target computer:
+
+```sh
+sudo python3 /config/aguja-recovery.py list
+sudo python3 /config/aguja-recovery.py export
+sudo python3 /config/aguja-recovery.py open 1 /dev/DEVICE
+```
+
+Encrypted keys prompt for the image unlock password. `list` hides key values. `export` creates `/run/aguja-recovery/keys.json` in private RAM (0600); reboot removes it. `open` requires an explicit key number and block device, defaults to read-only and checks a supplied LUKS UUID. `--writable` is explicit. There is no automatic target selection, decryption, mounting, rekeying or local BitLocker suspension. BitLocker operations for the preparation PC remain separate.
+
+Exported encrypted reusable profiles retain manual recovery keys; importing restores them without exposing them in status text.
 
 ## Imager 0.9.12 · completion dialogs
 
@@ -34,7 +54,7 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-0.9.12-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-0.9.13-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 

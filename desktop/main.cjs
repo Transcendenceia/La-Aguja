@@ -7,6 +7,7 @@ if(app.commandLine?.hasSwitch && !app.commandLine.hasSwitch('user-data-dir') && 
 const core=require('./core.cjs');
 const storage=require('./image-storage.cjs');
 const bitlocker=require('./bitlocker.cjs');
+const recovery=require('./disk-recovery.cjs');
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
 const nativeImport=require('./windows-native-import.cjs');
@@ -15,6 +16,7 @@ const {withPrivilegedHelper}=require('./linux-privileged.cjs');
 const {userEnvironment}=require('./windows-environment.cjs');
 const {flashWindows}=require('./windows-flash.cjs');
 const {flashResultDialog}=require('./flash-result.cjs');
+const {flashConfirmDialog}=require('./flash-confirm.cjs');
 const {AITools,provider,powershellArgs,windowsPowerShell,openWindowsLoginTerminal}=require('./ai-tools.cjs');
 const isWindows=process.platform==='win32';
 const i18n=require('./ui/i18n.js');
@@ -51,7 +53,7 @@ function run(command,args,input=null,{timeout=120000,limit=4*1024*1024,phase='wo
  const proc=spawn(command,args,{stdio:['pipe','pipe','pipe'],env:childEnv,windowsHide:true});let stdout='',stderr='',pending='',ended=false;const stdoutDecoder=new StringDecoder('utf8'),stderrDecoder=new StringDecoder('utf8');
  const finish=(error,value)=>{if(ended)return;ended=true;clearTimeout(timer);error?reject(error):resolve(value);};
  const timer=setTimeout(()=>{proc.kill('SIGTERM');finish(new Error('La operación tardó demasiado. Puedes volver a intentarlo.'));},timeout);
- proc.stdout.on('data',data=>{const decoded=stdoutDecoder.write(data);stdout+=decoded;pending+=decoded;let newline;while((newline=pending.indexOf('\n'))>=0){const line=pending.slice(0,newline);pending=pending.slice(newline+1);try{const value=JSON.parse(line);const captions={verify:'Comprobando imagen…',backup:'Respaldando USB…',write:'Grabando USB…',readback:'Verificando lectura del USB…',expand:'Ampliando la partición de datos…'};if(value.type==='progress'&&phase==='flash'&&captions[value.stage])progress('flash',{message:captions[value.stage]});}catch{}}if(stdout.length>limit){proc.kill();finish(new Error('La respuesta no es válida.'));}});
+ proc.stdout.on('data',data=>{const decoded=stdoutDecoder.write(data);stdout+=decoded;pending+=decoded;let newline;while((newline=pending.indexOf('\n'))>=0){const line=pending.slice(0,newline);pending=pending.slice(newline+1);try{const value=JSON.parse(line);const captions={exclusive:'Liberando volúmenes del USB para uso exclusivo…',verify:'Comprobando imagen…',backup:'Respaldando USB…',write:'Grabando USB…',readback:'Verificando lectura del USB…',expand:'Ampliando la partición de datos…'};if(value.type==='progress'&&phase==='flash'&&captions[value.stage])progress('flash',{message:captions[value.stage]});}catch{}}if(stdout.length>limit){proc.kill();finish(new Error('La respuesta no es válida.'));}});
  proc.stderr.on('data',data=>{stderr+=stderrDecoder.write(data);if(stderr.length>limit)stderr=stderr.slice(-limit);});
  proc.on('error',()=>finish(new Error('Falta una herramienta local necesaria.')));
  proc.on('close',code=>{stdout+=stdoutDecoder.end();stderr+=stderrDecoder.end();if(code!==0){
@@ -74,8 +76,8 @@ async function chooseSave(title,defaultPath,extensions){const out=await showSave
 function secretPassword(){return crypto.randomBytes(18).toString('base64url');}
 function validateProvider(p){provider(p);return p;}
 function providerFound(p){return aiTools.resolve(p);}
-function profileEncrypt(capsule,passphrase){if(typeof passphrase!=='string'||passphrase.length<1||passphrase.length>1024)throw new Error('La contraseña del perfil necesita entre 1 y 1024 caracteres.');const salt=crypto.randomBytes(16),iv=crypto.randomBytes(12);const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const cipher=crypto.createCipheriv('aes-256-gcm',key,iv);const data=Buffer.concat([cipher.update(JSON.stringify(capsule),'utf8'),cipher.final()]);key.fill(0);return {schema:1,format:'aguja-profile-aes256gcm',salt:salt.toString('base64'),iv:iv.toString('base64'),tag:cipher.getAuthTag().toString('base64'),data:data.toString('base64')};}
-function profileDecrypt(envelope,passphrase){if(envelope.format!=='aguja-profile-aes256gcm'||typeof passphrase!=='string'||JSON.stringify(envelope).length>1048576)throw new Error('Perfil cifrado no válido.');try{const salt=Buffer.from(envelope.salt,'base64'),iv=Buffer.from(envelope.iv,'base64'),tag=Buffer.from(envelope.tag,'base64');if(salt.length!==16||iv.length!==12||tag.length!==16)throw Error();const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const decipher=crypto.createDecipheriv('aes-256-gcm',key,iv);decipher.setAuthTag(tag);const data=Buffer.concat([decipher.update(Buffer.from(envelope.data,'base64')),decipher.final()]);key.fill(0);return core.validateCapsule(JSON.parse(data));}catch{throw new Error('La contraseña del perfil no coincide o el archivo fue alterado.');}}
+function profileEncrypt(capsule,passphrase,diskRecovery=[]){const keys=recovery.normalizeRecovery(diskRecovery);if(keys.length)capsule={...capsule,disk_recovery:keys};if(typeof passphrase!=='string'||passphrase.length<1||passphrase.length>1024)throw new Error('La contraseña del perfil necesita entre 1 y 1024 caracteres.');const salt=crypto.randomBytes(16),iv=crypto.randomBytes(12);const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const cipher=crypto.createCipheriv('aes-256-gcm',key,iv);const data=Buffer.concat([cipher.update(JSON.stringify(capsule),'utf8'),cipher.final()]);key.fill(0);return {schema:1,format:'aguja-profile-aes256gcm',salt:salt.toString('base64'),iv:iv.toString('base64'),tag:cipher.getAuthTag().toString('base64'),data:data.toString('base64')};}
+function profileDecrypt(envelope,passphrase){if(envelope.format!=='aguja-profile-aes256gcm'||typeof passphrase!=='string'||JSON.stringify(envelope).length>1048576)throw new Error('Perfil cifrado no válido.');try{const salt=Buffer.from(envelope.salt,'base64'),iv=Buffer.from(envelope.iv,'base64'),tag=Buffer.from(envelope.tag,'base64');if(salt.length!==16||iv.length!==12||tag.length!==16)throw Error();const key=crypto.scryptSync(passphrase,salt,32,{N:32768,r:8,p:1,maxmem:64*1024**2});const decipher=crypto.createDecipheriv('aes-256-gcm',key,iv);decipher.setAuthTag(tag);const data=Buffer.concat([decipher.update(Buffer.from(envelope.data,'base64')),decipher.final()]);key.fill(0);const decoded=JSON.parse(data),keys=recovery.normalizeRecovery(decoded.disk_recovery||[]);return {...core.validateCapsule(decoded),...(keys.length?{disk_recovery:keys}:{})};}catch{throw new Error('La contraseña del perfil no coincide o el archivo fue alterado.');}}
 async function loadVerifiedCatalog({refresh=false,timeoutMs=20000}={}) {
  const pin=JSON.parse(await fs.promises.readFile(path.join(__dirname,'resources','release-key.json'),'utf8'));
  // Only signed envelopes are cached in memory, and expiry/signature are checked
@@ -93,20 +95,21 @@ function prepareInput(input,{pendingRemote=false}={}) {
  // proprietary relay credentials even if an old renderer/profile requests it.
  capsule.remote={enabled:false};
  for(const [p,settings]of Object.entries(capsule.providers))if(settings.mode==='import'){if(!approvedImports[p])throw new Error('Importa primero la autenticación de '+p+'.');}
- const bitlockerData=input?.bitlocker&&Array.isArray(input.bitlocker)&&input.bitlocker.length>0?bitlocker.buildBitLockerPayload(input.bitlocker):null;
- const fingerprint=crypto.createHash('sha256').update(JSON.stringify({capsule,protection,image:selectedImage.sha256,bitlocker:bitlockerData})).digest('hex');
- return {capsule,protection,fingerprint,bitlocker:bitlockerData};
+ const diskRecovery=recovery.normalizeRecovery([...(input.diskRecovery||[]),...(Array.isArray(input.bitlocker)?input.bitlocker.map(k=>({type:'bitlocker',label:'Windows '+bitlocker.cleanMountPoint(k.mountPoint),identifier:String(k.keyProtectorId||''),key:k.recoveryPassword})):[])]);
+ const fingerprint=crypto.createHash('sha256').update(JSON.stringify({capsule,protection,image:selectedImage.sha256,diskRecovery})).digest('hex');
+ return {capsule,protection,fingerprint,diskRecovery};
 }
 async function prepareImage(settings,output) {
  if(output===selectedImage.path)throw new Error('La imagen privada debe tener otro nombre.');
  prepared=null;progress('prepare',{message:'Preparando tu imagen privada…'});
+ const addonFiles=recovery.recoveryFiles(settings.diskRecovery,settings.protection,path.join(ROOT,'runtime','recovery_keys.py'));
+ // Replace legacy plaintext BitLocker metadata in the new copy only.
+ addonFiles['bitlocker.json']=Buffer.from(JSON.stringify({schema:1,volumes:[],source:'See aguja-recovery.json'}));
  if(isWindows){
-  await provisioning.prepareWindows({source:selectedImage.path,output,sha256:selectedImage.sha256,capsule:settings.capsule,protection:settings.protection,approved:approvedImports,bitlocker:settings.bitlocker});
+  await provisioning.prepareWindows({source:selectedImage.path,output,sha256:selectedImage.sha256,capsule:settings.capsule,protection:settings.protection,approved:approvedImports,addonFiles});
  }else{
-  const result=await helper('prepare',{image_path:selectedImage.path,output_path:output,image_sha256:selectedImage.sha256,capsule:provisioning.materialize(settings.capsule,approvedImports),protection:settings.protection});
-  if(settings.bitlocker){
-   fat32.writeFat32File(output,'AGUJA_CFG','bitlocker.json',Buffer.from(JSON.stringify(settings.bitlocker,null,2),'utf8'));
-  }
+  const result=await helper('prepare',{image_path:selectedImage.path,output_path:output,image_sha256:selectedImage.sha256,capsule:provisioning.materialize(settings.capsule,approvedImports),protection:settings.protection,recovery_files:Object.fromEntries(Object.entries(addonFiles).map(([name,data])=>[name,data.toString('base64')]))});
+
  }
  const checked=await core.hashFile(output,d=>progress('verify',d));
  await fs.promises.chmod(output,0o600).catch(()=>{});
@@ -197,7 +200,7 @@ function installIPC(){
   selectedImage={path:filename,...imported};prepared=null;
   return {image:{name:path.basename(filename),...imported}};
  }));
- handle('import-locale',async()=>exclusive(importLocale));
+ handle('import-locale',async()=>importLocale());
  handle('generate-password',async()=>({password:secretPassword()}));
  handle('import-wifi',async()=>exclusive(async()=>{
   if(isWindows)return importActiveWifi();
@@ -255,8 +258,8 @@ function installIPC(){
  }));
  handle('invalidate-prepared',async()=>{if(working)throw new Error('Espera a que termine la operación actual.');prepared=null;return {invalidated:true};});
  handle('prepare',async(input)=>exclusive(async()=>{prepareInput(input,{pendingRemote:true});const output=await chooseSave('Guardar imagen privada configurada',path.join(app.getPath('downloads'),'aguja-personal.img'),['img']);if(!output)return {canceled:true};const settings=prepareInput(input);return {prepared:await prepareImage(settings,output)};}));
- handle('export-profile',async(input)=>{const capsule=core.validateCapsule(input.capsule);capsule.remote={enabled:false};const encrypted=profileEncrypt(capsule,input.passphrase);const file=await chooseSave('Guardar perfil cifrado',path.join(app.getPath('documents'),'aguja-perfil.aguja'),['aguja']);if(!file)return {canceled:true};await fs.promises.writeFile(file,JSON.stringify(encrypted),{flag:'wx',mode:0o600});return {name:path.basename(file)};});
- handle('import-profile',async(passphrase)=>{const pick=await showOpenDialog(win,{title:'Abrir perfil cifrado',properties:['openFile'],filters:[{name:'Perfil de LA AGUJA',extensions:['aguja']}]});if(pick.canceled)return {canceled:true};const st=await fs.promises.stat(pick.filePaths[0]);if(st.size>1048576)throw new Error('El perfil es demasiado grande.');return {capsule:profileDecrypt(JSON.parse(await fs.promises.readFile(pick.filePaths[0],'utf8')),passphrase)};});
+ handle('export-profile',async(input)=>{const capsule=core.validateCapsule(input.capsule);capsule.remote={enabled:false};const encrypted=profileEncrypt(capsule,input.passphrase,input.diskRecovery||[]);const file=await chooseSave('Guardar perfil cifrado',path.join(app.getPath('documents'),'aguja-perfil.aguja'),['aguja']);if(!file)return {canceled:true};await fs.promises.writeFile(file,JSON.stringify(encrypted),{flag:'wx',mode:0o600});return {name:path.basename(file)};});
+ handle('import-profile',async(passphrase)=>{const pick=await showOpenDialog(win,{title:'Abrir perfil cifrado',properties:['openFile'],filters:[{name:'Perfil de LA AGUJA',extensions:['aguja']}]});if(pick.canceled)return {canceled:true};const st=await fs.promises.stat(pick.filePaths[0]);if(st.size>1048576)throw new Error('El perfil es demasiado grande.');const capsule=profileDecrypt(JSON.parse(await fs.promises.readFile(pick.filePaths[0],'utf8')),passphrase),diskRecovery=capsule.disk_recovery||[];delete capsule.disk_recovery;return {capsule,diskRecovery};});
  handle('disks',async()=>({disks:await availableDisks()}));
  handle('flash',async(input)=>exclusive(async()=>{
   if(isWindows&&input?.backup===true)throw new Error('El respaldo previo de USB aún no está disponible en Windows. No se ha grabado nada.');
@@ -264,8 +267,7 @@ function installIPC(){
   if(selectedImage.bytes>disk.size || prepared?.fingerprint===settings.fingerprint&&prepared.bytes>disk.size)throw new Error('La imagen no cabe en este USB. Elige uno con más capacidad.');
   const ready=prepared?.fingerprint===settings.fingerprint;
   const backup=input.backup===true;
-  const action=backup?'Respaldar y grabar este USB':'Borrar y grabar este USB';
-  const answer=await showMessageBox(win,{type:'warning',title:'Grabar '+disk.model,message:'¿Borrar y grabar este USB?',detail:`Modelo: ${disk.model}\nCapacidad: ${(disk.size/1024**3).toFixed(2)} GiB\nDispositivo: ${disk.device}\nSerie: ${disk.serial}\n\n${ready?'Tu imagen privada está lista.':'Prepararemos tu imagen privada automáticamente.'} ${backup?'Se hará y verificará un respaldo antes de borrar.':'Se borrará el contenido anterior SIN RESPALDO.'} Después se verificará la grabación. Ningún disco interno es elegible.`,buttons:['Cancelar',action],defaultId:0,cancelId:0});
+  const answer=await dialog.showMessageBox(win,flashConfirmDialog(disk,{backup,ready,windows:isWindows},translate));
   if(answer.response!==1)return {canceled:true};
   let backupDir=null;
   if(backup){const pick=await showOpenDialog(win,{title:'Destino del respaldo completo del USB',properties:['openDirectory','createDirectory']});if(pick.canceled)return {canceled:true};backupDir=pick.filePaths[0];}

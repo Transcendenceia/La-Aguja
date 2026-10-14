@@ -6,6 +6,7 @@ const {windowsPowerShell}=require('./ai-tools.cjs');
 // disk identity and image digest/path, never capsule contents or credentials.
 const LAUNCHER=String.raw`param([switch]$Elevated)
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
 $OutputEncoding = [Console]::OutputEncoding
 # PS5.1's Out-Default/host may retain the OEM code page for redirected output.
@@ -79,9 +80,9 @@ try {
     $request = Get-Content -LiteralPath $requestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     $request | Add-Member -NotePropertyName SupervisorPID -NotePropertyValue $PID
     [System.IO.File]::WriteAllText($requestPath,($request | ConvertTo-Json -Compress),(New-Object System.Text.UTF8Encoding($false)))
-    $arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $PSCommandPath + '" -Elevated'
+    $arguments = '-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File "' + $PSCommandPath + '" -Elevated'
     $launchAttempted = $true
-    $child = Start-Process -FilePath $exe -ArgumentList $arguments -Verb RunAs -PassThru
+    $child = Start-Process -FilePath $exe -ArgumentList $arguments -Verb RunAs -WindowStyle Hidden -PassThru
     $seen = 0
     do {
         try {

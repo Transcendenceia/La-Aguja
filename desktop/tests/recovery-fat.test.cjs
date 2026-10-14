@@ -1,0 +1,21 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto'),{execFileSync}=require('node:child_process');
+const fat=require('../fat32-writer.cjs'),provisioning=require('../provisioning.cjs'),{recoveryFiles}=require('../disk-recovery.cjs');
+const root=path.resolve(__dirname,'../..'),runtime=path.join(root,'runtime/recovery_keys.py');
+const keys=[{type:'bitlocker',label:'Different Windows PC',identifier:'SYNTHETIC-ID',key:Array(8).fill('000011').join('-')},{type:'luks',label:'Different Linux PC',identifier:'',key:'  SYNTHETIC LUKS recovery  '}];
+function factory(dir){const image=path.join(dir,'factory.img'),part=path.join(dir,'cfg.fat');for(const [p,n]of [[image,96*1024**2],[part,64*1024**2]]){fs.writeFileSync(p,'');fs.truncateSync(p,n);}execFileSync('/usr/sbin/sgdisk',['-o','-n','1:2048:+64M','-t','1:0700','-c','1:AGUJA_CFG',image],{stdio:'pipe'});execFileSync('/usr/sbin/mkfs.vfat',['-F','32','-n','AGUJA_CFG',part],{stdio:'pipe'});const fd=fs.openSync(image,'r+'),data=fs.readFileSync(part);fs.writeSync(fd,data,0,data.length,1048576);fs.closeSync(fd);fat.writeFat32File(image,'AGUJA_CFG','release.json',JSON.stringify({features:['platform-profile-v1','locale-profile-v1','locale-preunlock-v1','i18n-catalog-v1','tailscale-profile-v1']}));return image;}
+for(const engine of ['linux','windows'])for(const mode of ['plain','encrypted'])test(`${engine} ${mode} FAT preparation preserves legacy profile and carries usable manual keys`,{skip:process.platform==='win32'},async()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-recovery-fat-'));
+ try{
+  const source=factory(dir),output=path.join(dir,'prepared.img'),sha=crypto.createHash('sha256').update(fs.readFileSync(source)).digest('hex'),protection={mode,passphrase:'SYNTHETIC-UNLOCK'};
+  const capsule={schema:1,hostname:'aguja-fixture',locale:{language:'en_US.UTF-8',keyboard:'us',variant:''},network:{ethernet:{method:'auto'},wifi:{ssid:'',password:'',security:'wpa-psk',country:'ES',hidden:false}},ssh:{password:'SYNTHETIC-SSH',public_key:'',port:22},providers:{},remote:{enabled:false},tailscale:{enabled:false}},files=recoveryFiles(keys,protection,runtime);
+  if(engine==='windows')await provisioning.prepareWindows({source,output,sha256:sha,capsule,protection,addonFiles:files});
+  else{const receipt=execFileSync('/usr/bin/python3',['-I',path.join(root,'scripts/platform-profile.py')],{input:JSON.stringify({op:'prepare',image_path:source,output_path:output,image_sha256:sha,capsule,protection,recovery_files:Object.fromEntries(Object.entries(files).map(([name,data])=>[name,data.toString('base64')]))}),encoding:'utf8'}).trim().split('\n').map(line=>JSON.parse(line)).at(-1);assert.equal(receipt.ok,true);}
+  assert.equal(crypto.createHash('sha256').update(fs.readFileSync(source)).digest('hex'),sha);
+  const fd=fs.openSync(output,'r');try{const part=fat.findGptPartition(fd,'AGUJA_CFG'),params=fat.parseFat32Params(fd,part.offset);for(const [name,data]of Object.entries(files))assert(fat.readFat32File(fd,params,name).equals(data),name);
+   const raw=fat.readFat32File(fd,params,'aguja-recovery.json');if(mode==='encrypted')for(const entry of keys)assert(!raw.includes(entry.key));
+   const script='import sys,json,importlib.util;s=importlib.util.spec_from_file_location("recovery",sys.argv[1]);m=importlib.util.module_from_spec(s);s.loader.exec_module(m);assert m.open_envelope(sys.stdin.buffer.read(),"SYNTHETIC-UNLOCK")==json.loads(sys.argv[2]);print("opened")';assert.equal(execFileSync('/usr/bin/python3',['-I','-c',script,runtime,JSON.stringify(keys)],{input:raw}).toString().trim(),'opened');
+   const profile=fat.readFat32File(fd,params,'aguja-profile.json'),legacy='import sys;sys.path.insert(0,sys.argv[1]);from profile import open_capsule;c=open_capsule(sys.stdin.buffer.read(),"SYNTHETIC-UNLOCK");assert c["hostname"]=="aguja-fixture";assert "disk_recovery" not in c;print("legacy-compatible")';assert.equal(execFileSync('/usr/bin/python3',['-I','-c',legacy,path.join(root,'runtime')],{input:profile}).toString().trim(),'legacy-compatible');
+  }finally{fs.closeSync(fd);}
+ }finally{fs.rmSync(dir,{recursive:true,force:true});}
+});

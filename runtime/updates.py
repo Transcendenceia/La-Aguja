@@ -136,6 +136,20 @@ def check():
   atomic(Path('/run/aguja-update-status.json'),{'available_count':count,'checked_at':result['checked_at'],'partial':bool(result['errors'])});Path('/run/aguja-update-status.json').chmod(0o644)
   return result
 
+def data_partuuid(device):
+ value=subprocess.check_output(['blkid','-s','PARTUUID','-o','value',device],text=True).strip()
+ if re.fullmatch('[a-fA-F0-9-]{36}',value):return value.lower()
+ # Fresh Windows media grows DATA while the whole ISO disk is mounted. The
+ # kernel may not refresh partition GUID properties until reboot; the synced
+ # GPT already contains the preserved GUID used on that next boot.
+ number=Path('/sys/class/block/'+Path(device).name+'/partition').read_text().strip()
+ parent=subprocess.check_output(['lsblk','-ndo','PKNAME',device],text=True).strip()
+ if number!='5' or not re.fullmatch('[A-Za-z0-9_-]+',parent):raise ValueError('Identidad DATA no válida')
+ text=subprocess.check_output(['sgdisk','-i',number,'/dev/'+parent],text=True)
+ match=re.search(r'Partition unique GUID:\s*([a-fA-F0-9-]{36})',text)
+ if not match:raise ValueError('Identidad DATA no válida')
+ return match[1].lower()
+
 def boot_pointer(s):
  # GRUB resolves this DATA partition as a sibling of the boot medium, not by
  # searching labels across every internal disk attached to the rescue target.
@@ -158,7 +172,7 @@ def boot_pointer(s):
   if device.startswith('/dev/loop'):device=subprocess.check_output(['losetup','-n','-O','BACK-FILE',device],text=True).strip()
   # boot.py records the observed sibling DATA block path even for loop views.
   device=Path('/run/aguja-data-device').read_text().strip()
-  partuuid=subprocess.check_output(['blkid','-s','PARTUUID','-o','value',device],text=True).strip()
+  partuuid=data_partuuid(device)
   if not re.fullmatch('[a-fA-F0-9-]{36}',partuuid):raise ValueError('Identidad DATA no válida')
   text+=f"menuentry 'LA AGUJA · {label}' --id aguja-{'current' if field=='active' else 'previous'} {{\n linux ($aguja_drive,gpt5)/updates/{g}/live/vmlinuz boot=live components live-media=/dev/disk/by-partuuid/{partuuid} live-media-path=/updates/{g}/live aguja.generation={g} aguja.sha256={m['files']['filesystem.squashfs']} quiet splash console=tty0 console=ttyS0,115200n8\n initrd ($aguja_drive,gpt5)/updates/{g}/live/initrd.img\n}}\n"
  return text.encode()

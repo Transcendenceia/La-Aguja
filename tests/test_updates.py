@@ -80,4 +80,12 @@ class Generations(unittest.TestCase):
   with patch.object(Path,'read_text',return_value='/dev/fixture5'),patch('subprocess.check_output',side_effect=command):
    with self.assertRaises(ValueError):u.verify_persistent_target()
   self.assertFalse((self.cfg/'aguja-update.cfg').exists())
+ def test_first_boot_guid_uses_synced_gpt_when_kernel_metadata_is_stale(self):
+  guid='12345678-1234-1234-1234-123456789abc'
+  with patch.object(Path,'read_text',return_value='5'),patch('subprocess.check_output',side_effect=['','fixture','Partition unique GUID: '+guid.upper()]):
+   self.assertEqual(u.data_partuuid('/dev/fixture5'),guid)
+ def test_invalid_gpt_identity_is_refused_without_activation(self):
+  with patch.object(Path,'read_text',return_value='5'),patch('subprocess.check_output',side_effect=['','fixture','Partition info unavailable']):
+   with self.assertRaises(ValueError):u.data_partuuid('/dev/fixture5')
+  self.assertFalse((self.cfg/'aguja-update.cfg').exists())
 if __name__=='__main__':unittest.main()

@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Prepara tu USB con Flash Imager",
-  "imagerText": "La aplicación para Windows y Linux descarga y verifica la imagen, prepara el USB y guarda tu configuración. También permite preparar acceso SSH, agentes IA y tu propia red Tailscale o Headscale. En Windows puede gestionar claves de BitLocker disponibles. Versión 0.9.9; grabar el USB borra su contenido.",
+  "imagerText": "LA AGUJA 1.0 incorpora perfiles reutilizables, edición de configuración sin regrabar y actualizaciones persistentes del live. Tu entorno, listo para el próximo equipo. El asistente termina en 07 · Crear disco. Perfiles y USB y Actualizaciones del Imager son herramientas independientes.",
   "portable": "Linux portátil",
   "imagesTitle": "Descarga la imagen de La Aguja",
-  "imagesText": "Rescue Disk 0.9.9 es el Linux que arranca en el equipo. Las imágenes están en nuestra web; el Imager y el código, en GitHub. El Imager verifica la firma del catálogo y el SHA-256 de la descarga. No necesitas una cuenta de LA AGUJA.",
+  "imagesText": "Rescue Disk 1.0.0 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
   "imageLinks": [
     "Imagen USB comprimida (.img.zst) ↗",
     "ISO BIOS/UEFI ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "Tu configuración permanece bajo tu control.",
   "privacyParagraphs": [
     "La web de LA AGUJA es informativa: no crea cuentas, no solicita login, no aloja túneles ni consolas remotas y no utiliza analítica o cookies de cuenta propias.",
-    "Las imágenes y el catálogo firmado se descargan desde la web de LA AGUJA. El Imager y el código están en GitHub, que procesa las peticiones conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
+    "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
     "Flash Imager procesa localmente imágenes y perfiles de red, SSH, IA y Tailscale/Headscale. No envía esos perfiles al sitio. Las imágenes privadas pueden contener secretos: controla su almacenamiento y con quién las compartes.",
     "Tailscale/Headscale y los proveedores IA tienen cuentas y condiciones propias. Su uso opcional no constituye un registro en LA AGUJA.",
     "Las descargas revelan la solicitud de red al alojamiento, no tus claves ni el contenido de las imágenes locales."

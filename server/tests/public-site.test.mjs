@@ -13,7 +13,20 @@ test('homepage/manual/assets/health are anonymous and never set account cookies'
 test('retired account, relay and console endpoints cannot establish sessions',()=>fixture(async base=>{for(const route of ['/account','/auth/login','/connect/fixture','/v1/devices','/v1/account/tunnels']){const r=await fetch(base+route);assert.equal(r.status,410);assert.equal(r.headers.get('set-cookie'),null);}assert.equal((await fetch(base+'/v1/devices',{method:'POST'})).status,405);}));
 test('legacy downloads redirect to GitHub, not a local private release store',()=>fixture(async base=>{for(const [route,end] of [['/releases/SHA256SUMS','SHA256SUMS'],['/v1/catalog','catalog.json']]){const r=await fetch(base+route,{redirect:'manual'});assert.equal(r.status,302);assert.equal(r.headers.get('location'),'https://github.com/Transcendenceia/La-Aguja/releases/latest/download/'+end);}}));
 test('sensitive files, traversal and old account assets are not served',()=>fixture(async base=>{for(const route of ['/assets/../accounts.mjs','/assets/%2e%2e%2findex.mjs','/assets/account.js','/assets/../.env','/devices.json'])assert.equal((await fetch(base+route)).status,404,route);}));
-test('homepage images use the official web and other downloads use the intended GitHub repository',()=>fixture(async base=>{const text=await(await fetch(base+'/')).text();assert(!text.includes('href="/account'));assert(!text.includes('id="connection"'));const links=[...text.matchAll(/href="([^"]*\/releases\/[^\"]+)"/g)].map(m=>m[1]);assert(links.length>=8);const images=new Set([`/releases/aguja-${currentVersion}-amd64.iso`,`/releases/aguja-${currentVersion}-amd64.img.zst`]);assert.equal(links.filter(link=>images.has(link)).length,2);for(const link of links)assert(images.has(link)||link===`/releases/SHA256SUMS-rescue-${currentVersion}.txt`||link.startsWith('https://github.com/Transcendenceia/La-Aguja/releases/'));}));
+test('all localized download cards use existing 1.0 release asset names and the independent skill tag',()=>fixture(async base=>{
+ const repo='https://github.com/Transcendenceia/La-Aguja/releases/';
+ const skillVersion=fs.readFileSync(new URL('../../skills/flash-imager/SKILL.md',import.meta.url),'utf8').match(/^  version: "([^"]+)"$/m)[1];
+ const productAssets=[`aguja-flash-imager-${currentVersion}-win-x64.exe`,`aguja-flash-imager-${currentVersion}-x86_64.AppImage`,`aguja-flash-imager-${currentVersion}-amd64.deb`,`aguja-flash-imager-${currentVersion}-linux-x64.tar.gz`,`SHA256SUMS-imager-${currentVersion}-windows`,`SHA256SUMS-imager-${currentVersion}-linux`,`aguja-${currentVersion}-amd64.img.zst`,`aguja-${currentVersion}-amd64.iso`,'SHA256SUMS'];
+ const skillAssets=[`aguja-flash-imager-skill-${skillVersion}.zip`,`aguja-flash-imager-skill-${skillVersion}.tar.gz`,`SHA256SUMS-flash-imager-skill-${skillVersion}`];
+ const expected=new Set([...productAssets.map(n=>repo+`download/v${currentVersion}/`+n),...skillAssets.map(n=>repo+`download/flash-imager-skill-v${skillVersion}/`+n),repo+`tag/v${currentVersion}`]);
+ for(const lang of ['en','es','fr','de','pt','it','nl','zh']){
+  const html=await(await fetch(base+'/'+lang)).text();
+  const links=[...html.matchAll(/href="([^"]*\/releases\/[^"]+)"/g)].map(m=>m[1]);
+  assert.deepEqual(new Set(links),expected,lang+' download contract');
+  assert(!/href="\/releases\//.test(html),'No legacy proxy or nonexistent rescue checksum asset');
+  assert(html.includes('id="version-1"'));assert(html.includes('.aguja'));assert(html.includes('1.0.0'));
+ }
+}));
 test('social crawlers receive the matching localized banner without JavaScript',()=>fixture(async base=>{
  const rCrawler=await fetch(base+'/',{headers:{'User-Agent':'WhatsApp/2.23.23.77 i'}});
  assert.equal(rCrawler.status,200);

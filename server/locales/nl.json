@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Bereid je USB voor met Flash Imager",
-  "imagerText": "De app voor Windows en Linux downloadt en controleert het image, schrijft de USB en bewaart instellingen. Je kunt SSH, AI-agenten en je eigen Tailscale- of Headscale-netwerk voorbereiden. Op Windows kan hij beschikbare BitLocker-sleutels beheren. Versie 0.9.9; schrijven wist de inhoud van de USB.",
+  "imagerText": "LA AGUJA 1.0 biedt herbruikbare profielen, configuratiebewerking zonder opnieuw schrijven en blijvende live-updates. Je omgeving staat klaar voor de volgende computer. De wizard eindigt bij 07 · Schijf maken. Profielen/USB en Imager-updates zijn aparte hulpmiddelen.",
   "portable": "Draagbaar Linux-pakket",
   "imagesTitle": "Download het La Aguja-image",
-  "imagesText": "Rescue Disk 0.9.9 is de Linux die op de computer start. Images staan op onze website; Imager en broncode op GitHub. De Imager controleert de catalogushandtekening en SHA-256 van de download. Geen LA AGUJA-account nodig.",
+  "imagesText": "Rescue Disk 1.0.0 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
   "imageLinks": [
     "Gecomprimeerd USB-image (.img.zst) ↗",
     "BIOS/UEFI ISO ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "Je configuratie blijft onder jouw controle.",
   "privacyParagraphs": [
     "De LA AGUJA-website geeft informatie: geen accounts, aanmelding, tunnels, externe consoles, eigen accountcookies of analyse.",
-    "Images en ondertekende catalogus komen van LA AGUJA. Imager en broncode staan op GitHub, onder diens privacybeleid. Hosting kan noodzakelijke technische toegangslogs bewaren.",
+    "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
     "Flash Imager verwerkt images en netwerk-, SSH-, AI- en Tailscale/Headscale-profielen lokaal en stuurt die niet naar deze website. Private images kunnen geheimen bevatten: beheer opslag en delen zorgvuldig.",
     "Tailscale/Headscale en AI-aanbieders hebben eigen accounts en voorwaarden. Hun optionele gebruik is geen registratie bij LA AGUJA.",
     "Downloads tonen de netwerkaanvraag aan de host, niet je sleutels of de inhoud van lokale images."
@@ -136,7 +136,7 @@
       "Linux starten verwijdert BitLocker niet. Vraag de juiste volumesleutel aan de eigenaar. Profielzin en SSH-wachtwoord zijn geen BitLocker-sleutels. LA AGUJA omzeilt versleuteling niet. Windows Imager kan beschikbare sleutels bekijken en expliciet gekozen sleutels in private image opnemen. Bescherm profiel en bewaar andere kopie. Een sleutel zien bewijst geen ontgrendeld volume. Windows-screenshot is historische 0.8.1, geen nieuwe native 0.9.2-test."
     ],
     [
-      "Stap 6 · Voorbereiden, schrijven, controleren",
+      "Stap 7 · Voorbereiden, schrijven en controleren",
       "Controleer image, bescherming en overzicht. Private image maken produceert bestand; USB voorbereiden/schrijven beschrijft ook apparaat. Vergelijk model, serie en echte capaciteit in native bevestiging; annuleer bij twijfel. Geef UAC/Polkit alleen voor gewenste actie. Wacht zonder loskoppelen op schrijven en volledige terugleescontrole, controleer resultaat. Correcte bytes garanderen geen firmware: test hardwareboot. Externe Windows-USB-back-up moet vooraf gedaan zijn."
     ],
     [

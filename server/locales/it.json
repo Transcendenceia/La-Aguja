@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Prepara la USB con Flash Imager",
-  "imagerText": "L’app per Windows e Linux scarica e verifica l’immagine, scrive la USB e salva le impostazioni. Puoi preparare SSH, agenti IA e la tua rete Tailscale o Headscale. Su Windows può gestire chiavi BitLocker disponibili. Versione 0.9.9; la scrittura cancella il contenuto della USB.",
+  "imagerText": "LA AGUJA 1.0 aggiunge profili riutilizzabili, modifica della configurazione senza riscrittura e aggiornamenti live persistenti. Il tuo ambiente resta pronto per il prossimo computer. La procedura termina a 07 · Crea disco. Profili/USB e aggiornamenti Imager sono strumenti separati.",
   "portable": "Linux portatile",
   "imagesTitle": "Scarica l’immagine di La Aguja",
-  "imagesText": "Rescue Disk 0.9.9 è il Linux che si avvia sul computer. Le immagini sono sul nostro sito; Imager e codice su GitHub. L’Imager verifica la firma del catalogo e lo SHA-256 del download. Nessun account LA AGUJA necessario.",
+  "imagesText": "Rescue Disk 1.0.0 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
   "imageLinks": [
     "Immagine USB compressa (.img.zst) ↗",
     "ISO BIOS/UEFI ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "La tua configurazione resta sotto il tuo controllo.",
   "privacyParagraphs": [
     "Il sito LA AGUJA è informativo: non crea account, richiede login, ospita tunnel o console remote, né usa cookie di account o analisi propri.",
-    "Immagini e catalogo firmato vengono dal sito LA AGUJA. Imager e codice sono su GitHub, soggetto alla propria informativa. L’hosting può conservare registri tecnici necessari al servizio.",
+    "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
     "Flash Imager elabora localmente immagini e profili di rete, SSH, IA e Tailscale/Headscale, senza inviarli a questo sito. Le immagini private possono contenere segreti: controllane conservazione e condivisione.",
     "Tailscale/Headscale e fornitori IA hanno account e condizioni propri. Il loro uso facoltativo non è una registrazione LA AGUJA.",
     "Le richieste di download rivelano la richiesta di rete all’hosting, non le chiavi o il contenuto delle immagini locali."
@@ -136,7 +136,7 @@
       "Avviare Linux non rimuove BitLocker. Ottieni dal proprietario la chiave corretta per il volume. Frase del profilo e password SSH non sono chiavi BitLocker. LA AGUJA non aggira la cifratura. Imager Windows può consultare chiavi disponibili e includere solo quelle selezionate esplicitamente nell’immagine privata. Proteggi il profilo e tieni altra copia. Vedere la chiave non prova sblocco. La schermata Windows è storica 0.8.1, non nuovo test nativo 0.9.2."
     ],
     [
-      "Passo 6 · Preparare, scrivere, verificare",
+      "Passo 7 · Preparare, scrivere e verificare",
       "Rivedi immagine, protezione e riepilogo. Creare immagine privata genera file; preparare e scrivere USB scrive anche il dispositivo. Conferma modello, seriale e capacità reale nel dialogo nativo; annulla nel dubbio. Autorizza UAC/Polkit per l’azione voluta. Attendi scrittura e rilettura completa senza scollegare. Verifica risultato. Byte corretti non garantiscono firmware: prova avvio reale. Backup USB Windows già eseguito esternamente."
     ],
     [

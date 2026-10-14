@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "使用 Flash Imager 准备 U 盘",
-  "imagerText": "Windows 和 Linux 应用负责下载、验证镜像，写入 U 盘并保存设置。也可准备 SSH、AI 智能体和自己的 Tailscale 或 Headscale 网络。在 Windows 上可管理可用的 BitLocker 密钥。版本 0.9.9；写入会清除 U 盘内容。",
+  "imagerText": "LA AGUJA 1.0 带来可复用配置、无需重写镜像的 USB 配置编辑，以及持久化 live 更新。工作环境随时准备好迎接下一台电脑。 向导在 07 · 创建磁盘结束。配置档案/USB 和 Imager 更新是独立工具。",
   "portable": "Linux 便携版",
   "imagesTitle": "下载 La Aguja 镜像",
-  "imagesText": "Rescue Disk 0.9.9 是在目标电脑上启动的 Linux。镜像由官网提供，Imager 和源码在 GitHub。Imager 验证目录签名及下载内容的 SHA-256。无需 LA AGUJA 账户。",
+  "imagesText": "Rescue Disk 1.0.0 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
   "imageLinks": [
     "压缩 USB 镜像（.img.zst）↗",
     "BIOS/UEFI ISO ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "你的配置始终由你掌控。",
   "privacyParagraphs": [
     "LA AGUJA 网站仅提供信息，不创建账户、不要求登录、不托管隧道或远程控制台，也不使用自己的账户 Cookie 或分析工具。",
-    "镜像和已签名目录来自 LA AGUJA 网站。Imager 和源代码托管在 GitHub，适用其隐私政策。网站托管方可能保存运营所需的技术访问日志。",
+    "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
     "Flash Imager 在本地处理镜像及网络、SSH、AI 和 Tailscale/Headscale 配置，不会把这些配置上传到本网站。私人镜像可能包含机密，请控制其存储和共享。",
     "Tailscale/Headscale 和 AI 提供商有独立账户和条款。可选使用这些服务不等于注册 LA AGUJA。",
     "下载请求会向托管方显示网络请求，而不是你的密钥或本地镜像内容。"
@@ -136,7 +136,7 @@
       "启动 Linux 不会移除 BitLocker。向所有者取得与目标卷对应的恢复密钥。配置口令和 SSH 密码不是 BitLocker 密钥，LA AGUJA 不破解加密。Windows Imager 可检查可用密钥，并仅在明确选择后加入私人镜像。保护配置并另存恢复副本。显示密钥不证明卷已解锁。Windows 截图是历史 0.8.1 证据，不是新的原生 0.9.2 执行。"
     ],
     [
-      "步骤 6 · 准备、写入与验证",
+      "步骤 7 · 准备、写入与验证",
       "检查镜像、保护模式及摘要。创建私人镜像只生成文件；准备并写入 USB 还会写目标设备。在原生确认中比较型号、序列号、实际容量；不确定就取消。仅对预期操作授权 UAC/Polkit。等待完整写入和回读，不要拔出 USB，并检查结果。字节验证不代表所有固件兼容，应测试目标硬件。Windows USB 备份必须事先外部完成。"
     ],
     [

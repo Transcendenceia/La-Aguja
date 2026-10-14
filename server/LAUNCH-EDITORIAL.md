@@ -26,3 +26,20 @@ Prueba 8 idiomas × landing/docs × 1440/375/320 px, no overflow ocultado, cajas
 `server/qa-evidence/` contiene evidencia local para revisión; NO incluir en el paquete de producción. No es certificación completa de accesibilidad. Revisar capturas y realizar comprobación final en dominio desplegado a cargo del integrador.
 
 Edge QA: Cloudflare already injects a beacon/challenge into public HTML (also on unchanged privacy pages). Origin checks remain byte-exact; public checks record these transformations separately. Live browser QA must explicitly set `AGUJA_QA_EXPECT_EDGE_BEACON=1`; all other external destinations remain rejected. Command blocks use Cloudflare’s documented `email_off` comments so SSH examples remain readable without JavaScript. No zone settings or CSP are changed.
+
+## Web update · 1.0.0 · 15 October 2026
+
+Current home/guide facts are reviewed in `server/locales/release-1.0.json`, in all eight existing languages. The wizard ends at Create disk (07); profiles/USB editing and Imager updates are separate tools. Live updates persist verified generations on DATA for the next boot; ordinary RAM-overlay package changes remain temporary. Capsule encryption does not encrypt DATA.
+
+Generate the current static candidate in this order:
+
+```sh
+python3 scripts/build-site-locales.py --privacy-only
+python3 scripts/build-launch-pages.py
+```
+
+The first command changes only the eight localized privacy pages (plus the unchanged sitemap); it does not regenerate historical repository guides. The second owns the sixteen localized home/guide pages. The older Spanish `public/docs.html` is a reference source, not the public `/es/docs` route; release chapter overrides supersede its obsolete current instructions. Captures remain labelled synthetic QA 0.9.9 in Spanish, never relabelled as 1.0 screenshots.
+
+Images, catalogue, packages and checksums now link directly to the exact GitHub release assets. The automation skill uses its independent `flash-imager-skill-v1.1.0` release. Source contract checks cover every download card in every language; publication also checks the public release inventory and HEAD availability. Those checks are not new full-file download hashes, hardware tests or provider inference.
+
+Deploy only the 24 revised localized HTML files with a live hash baseline and verified backup. Preserve binaries, Caddy, application code, assets, access policy and service PID.

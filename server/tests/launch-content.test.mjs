@@ -6,7 +6,7 @@ const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
 function shape(x){if(Array.isArray(x))return x.map(shape);if(x&&typeof x==='object')return Object.fromEntries(Object.entries(x).map(([k,v])=>[k,shape(v)]));return typeof x;}
 test('all launch locales have equivalent plans, cases, safety additions and interaction labels',()=>{
  const source=JSON.parse(read('../locales/launch-en.json'));
- for(const lang of languages){const c=JSON.parse(read('../locales/launch-'+lang+'.json'));assert.deepEqual(shape(c),shape(source),lang);assert.equal(c.cases.length,20);assert.equal(c.plans.length,4);assert.equal(c.checks.length,6);
+ for(const lang of languages){const c=JSON.parse(read('../locales/launch-'+lang+'.json'));const {replacements,...localized}=c;const {replacements:sourceReplacements,...reference}=source;assert.deepEqual(shape(localized),shape(reference),lang);for(const pair of replacements)assert.deepEqual(pair.map(x=>typeof x),['string','string']);assert.equal(c.cases.length,20);assert.equal(c.plans.length,4);assert.equal(c.checks.length,6);
   for(const suffix of ['index','docs']){const h=read('../public/'+lang+'/'+suffix+'.html');if(suffix==='index')assert(h.includes('hero-recovery-20261009-v1.webp'));assert(h.includes('/assets/og-possibilities-'+lang+'-20261010-v2.png'));assert(h.includes('property="og:image"'));assert(h.includes('name="twitter:card"'));assert(h.includes('launch-20261009-v1.js'));assert.equal((h.match(/data-plan>/g)||[]).length,4);assert(!h.includes('<script>'));const ids=[...h.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length,lang+' duplicate ids');for(const m of h.matchAll(/href="#([^"]+)"/g))assert(ids.includes(m[1]),lang+' broken '+m[1]);}
   const docs=read('../public/'+lang+'/docs.html');for(const name of ['rescue-dashboard','rescue-console','rescue-wheel','rescue-safe-mode','imager'])assert(docs.includes('/assets/docs/099/'+name+'.png'));for(const text of ['ENOSPC','YOLO','RAM','BitLocker','aguja profile unlock','SHA-256','workspace-write','0.9.11'])assert(docs.includes(text),lang+' '+text);assert(!docs.includes('0.9.2'));assert(!docs.includes('0.9.0'));assert(!docs.includes('0.9.110'),lang+' version prefix corruption');
  }
@@ -20,5 +20,16 @@ test('skill downloads are versioned independently of the live image and portable
   for(const name of ['aguja-flash-imager-skill-'+version+'.zip','aguja-flash-imager-skill-'+version+'.tar.gz','SHA256SUMS-flash-imager-skill-'+version])assert(h.includes('/releases/download/flash-imager-skill-v'+version+'/'+name),lang+' '+name);
   assert(h.includes('/aguja-flash-imager-'+image+'-linux-x64.tar.gz'),lang+' portable Linux');
   assert(!h.includes('/aguja-flash-imager-'+image+'-x64.tar.gz'),lang+' obsolete filename');
+ }
+});
+
+test('1.0 chapters preserve translated structure, executable update commands and historical captures',()=>{
+ const release=JSON.parse(read('../locales/release-1.0.json'));const reference=shape(release.en);
+ for(const lang of languages){
+  assert.deepEqual(shape(release[lang]),reference,lang+' release structure');
+  const docs=read('../public/'+lang+'/docs.html');
+  for(const command of ['aguja update menu','aguja update status --json','aguja update check --json','aguja update rollback','aguja secrets --json','sudo aguja recovery list --json'])assert(docs.includes(command),lang+' '+command);
+  assert(docs.includes(release[lang].create));assert(docs.includes('VALIDATION-1.0.0.md'));assert(docs.includes('UPDATES.md'));
+  assert(docs.includes('0.9.9'),lang+' historical capture provenance');
  }
 });

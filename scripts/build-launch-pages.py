@@ -16,6 +16,7 @@ ORIGIN='https://aguja.transcendenceia.net'
 E=html.escape
 BASE={l:json.loads((ROOT/f'server/locales/{l}.json').read_text()) for l in LANGS}
 SOCIAL=json.loads((ROOT/'server/locales/social-images.json').read_text())
+RELEASE=json.loads((ROOT/'server/locales/release-1.0.json').read_text())
 # The historic Spanish guide has richer structured content than its locale JSON.
 spanish=(PUBLIC/'docs.html').read_text()
 ES_BODIES={}
@@ -60,18 +61,30 @@ def home(l,c,b):
  s=b['imagerSkill'];d=b['donation']
  urls=[GH+f'/releases/download/{SKILL_TAG}/aguja-flash-imager-skill-{SKILL_VERSION}.zip',GH+f'/releases/download/{SKILL_TAG}/aguja-flash-imager-skill-{SKILL_VERSION}.tar.gz',GH+f'/blob/main/skills/flash-imager/references/harnesses.md',GH+f'/releases/download/{SKILL_TAG}/SHA256SUMS-flash-imager-skill-{SKILL_VERSION}']
  body+=f'<section id="agent-skill"><span class="eyebrow">02 / AGENT SKILL · {SKILL_VERSION}</span><h2>{E(s["title"])}</h2><p>{E(s["text"])}</p><div class="installer-links">'+''.join(f'<a href="{u}">{E(label)} ↗</a>' for u,label in zip(urls,s['links']))+f'</div><p>{E(s["note"])}</p></section><section id="images"><span class="eyebrow">03 / RESCUE DISK · {VERSION}</span><h2>{E(b["imagesTitle"])}</h2><p>{E(c["imageText"])}</p><div class="installer-links">'
- urls=[f'/releases/aguja-{VERSION}-amd64.img.zst',f'/releases/aguja-{VERSION}-amd64.iso',f'/releases/SHA256SUMS-rescue-{VERSION}.txt',GH+f'/releases/tag/v{VERSION}']
+ urls=[GH+f'/releases/download/v{VERSION}/aguja-{VERSION}-amd64.img.zst',GH+f'/releases/download/v{VERSION}/aguja-{VERSION}-amd64.iso',GH+f'/releases/download/v{VERSION}/SHA256SUMS',GH+f'/releases/tag/v{VERSION}']
  body+=''.join(f'<a href="{u}">{E(label)}</a>' for u,label in zip(urls,b['imageLinks']))+f'</div></section><section id="questions"><h2>{E(b["faqTitle"])}</h2>'+''.join('<details><summary>'+E(q)+'</summary><p>'+E(a)+'</p></details>' for q,a in b['faq'])+f'</section><section id="donate"><div class="support-heading"><img src="/assets/support-icon.svg" width="48" height="48" alt=""><h2>{E(d["title"])}</h2></div><p>{E(d["message"])}</p><details><summary>Ko-fi · {E(d["title"])}</summary><img class="support-qr" src="/assets/donation-qr.png" width="260" height="260" alt="Ko-fi QR"><p><a href="https://ko-fi.com/transcendenceia" target="_blank" rel="noopener noreferrer">Ko-fi · Transcendence IA ↗</a></p><p>{E(d["optional"])}</p></details></section>'
+ release=RELEASE[l]
+ news=f'<section id="version-1"><span class="eyebrow">LA AGUJA · {VERSION}</span><h2>{E(release["title"])}</h2>'+paras(release['intro'])+'<div class="feature-grid">'+''.join('<article><h3>'+E(t)+'</h3><p>'+E(p)+'</p></article>' for t,p in release['features'])+f'</div><a href="/{l}/docs#reinicios">{E(c["ui"]["readGuide"])} →</a></section>'
+ body=body.replace('<section class="intro">',news+'<section class="intro">',1)
  return page(l,c,b,body)
 def reviewed(s,c):
  for old,new in c.get("replacements",[]):s=s.replace(old,new)
  return current(s)
 def docs(l,c,b):
+ release=RELEASE[l]
+ for n,section in release['sections'].items(): b['sections'][int(n)]=section
+ b['sections'][13][0]=release['create']
  body=f'<section class="guide-intro"><span class="eyebrow">RESCUE DISK + FLASH IMAGER · {VERSION}</span><h1>{E(b["docUI"][2])}</h1><p class="lead">{E(current(b["docDescription"]))}</p><p>{E(c["docNote"])}</p><div class="actions"><a class="button" href="#primer-usb">{E(c["ui"]["firstUsb"])} ↓</a><button class="secondary print-guide" type="button" hidden>{E(c["ui"]["print"])}</button></div></section><div class="guide-layout"><aside class="contents"><details open><summary>{E(c["ui"]["contents"])}</summary><div class="search-controls" hidden><label for="doc-search">{E(c["ui"]["search"])}</label><input type="search" id="doc-search" placeholder="SSH, BitLocker, ENOSPC…"><p id="search-status" role="status" aria-live="polite"></p></div><nav aria-label="{E(c["ui"]["contents"])}">'+''.join(f'<a data-doc-link href="#{i}">{n+1:02} · {E(s[0])}</a>' for n,(i,s) in enumerate(zip(IDS,b['sections'])))+'</nav></details></aside><div class="chapters">'
  assert len(b['sections'])==26
  for n,(i,s) in enumerate(zip(IDS,b['sections'])):
   ps=[reviewed(p,c) for p in s[1:] if not re.search(r'0\.8\.[01]',p)]
-  body+=f'<section class="doc-section" id="{i}"><span class="eyebrow">{n+1:02} / 26</span><h2>{E(s[0])}</h2>'+(reviewed(ES_BODIES[i],c) if l=='es' else paras(ps))+paras(c['additions'].get(str(n),[]))
+  content=paras(s[1:]) if str(n) in release['sections'] else (reviewed(ES_BODIES[i],c) if l=='es' else paras(ps))
+  if n==0:content=paras(c['intro'])
+  body+=f'<section class="doc-section" id="{i}"><span class="eyebrow">{n+1:02} / 26</span><h2>{E(s[0])}</h2>'+content+paras(c['additions'].get(str(n),[]))
+  if n==1:body+=paras(release['wizard'])
+  if n==15:body+='<pre><code>aguja update menu\naguja update status --json\naguja update check --json\naguja update rollback</code></pre>'
+  if n==12:body+='<pre><code>aguja secrets --json\nsudo aguja recovery status --json\nsudo aguja recovery list --json</code></pre>'
+  if n==24:body+=f'<p><a href="{GH}/releases/download/v{VERSION}/VALIDATION-{VERSION}.md">GitHub · {VERSION} · Validation ↗</a> · <a href="{GH}/releases/download/v{VERSION}/UPDATES.md">aguja update · README ↗</a></p>'
   if n in COMMANDS and (l!='es' or '<pre' not in ES_BODIES[i]):body+='<pre><code>'+E(COMMANDS[n])+'</code></pre>'
   if str(n) in c['prompts']:body+='<div class="prompt"><h3>'+E(c['promptLabel'])+'</h3><pre><code>'+E(c['prompts'][str(n)])+'</code></pre></div>'
   for image in FIGURES.get(n,[]):body+=figure(c,image)

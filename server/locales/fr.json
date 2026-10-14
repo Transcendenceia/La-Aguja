@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Préparez votre clé USB avec Flash Imager",
-  "imagerText": "L’application Windows et Linux télécharge et vérifie l’image, écrit la clé et enregistre vos réglages. Elle peut préparer SSH, les agents IA et votre réseau Tailscale ou Headscale. Sous Windows, elle peut gérer les clés BitLocker disponibles. Version 0.9.9 ; l’écriture efface le contenu de la clé.",
+  "imagerText": "LA AGUJA 1.0 ajoute des profils réutilisables, la modification de configuration sans réécriture et des mises à jour persistantes du live. Votre environnement reste prêt pour le prochain ordinateur. L’assistant se termine à 07 · Créer le disque. Profils/USB et mises à jour Imager sont des outils séparés.",
   "portable": "Linux portable",
   "imagesTitle": "Téléchargez l’image de La Aguja",
-  "imagesText": "Rescue Disk 0.9.9 est le Linux qui démarre sur le PC. Les images sont sur notre site ; l’Imager et le code sur GitHub. L’Imager vérifie la signature du catalogue et le SHA-256 du téléchargement. Aucun compte LA AGUJA n’est nécessaire.",
+  "imagesText": "Rescue Disk 1.0.0 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
   "imageLinks": [
     "Image USB compressée (.img.zst) ↗",
     "ISO BIOS/UEFI ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "Votre configuration reste sous votre contrôle.",
   "privacyParagraphs": [
     "Le site LA AGUJA est informatif : il ne crée aucun compte, ne demande aucune connexion, n’héberge ni tunnel ni console distante et n’utilise pas ses propres cookies de compte ou outils d’analyse.",
-    "Les images et le catalogue signé sont téléchargés depuis LA AGUJA. L’Imager et le code sont hébergés sur GitHub, qui applique sa propre politique de confidentialité. L’hébergement peut conserver les journaux techniques nécessaires au service.",
+    "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
     "Flash Imager traite localement les images et profils réseau, SSH, IA et Tailscale/Headscale. Ces profils ne sont pas envoyés à ce site. Les images personnalisées peuvent contenir des secrets : maîtrisez leur stockage et leur partage.",
     "Tailscale/Headscale et les fournisseurs IA ont leurs propres comptes et conditions. Leur utilisation facultative n’est pas une inscription à LA AGUJA.",
     "Les requêtes de téléchargement révèlent votre requête réseau à l’hébergeur, pas vos clés ni le contenu de vos images locales."
@@ -148,7 +148,7 @@
       "Sous Windows, l’Imager peut examiner les clés disponibles et inclure explicitement celles choisies dans une image privée. Chiffrez le profil et gardez une autre copie. Voir une clé ne prouve pas le déverrouillage du volume. La capture Windows publiée date de 0.8.1, pas d’un nouveau test natif 0.9.2."
     ],
     [
-      "Étape 6 · Préparer, écrire, vérifier",
+      "Étape 7 · Préparer, écrire et vérifier",
       "Relisez image, protection et résumé. Créer une image privée produit un fichier ; préparer et écrire la clé écrit aussi le périphérique choisi. Comparez modèle, série et capacité dans la confirmation native. En cas de doute, annulez. Accordez UAC/Polkit uniquement pour l’opération voulue.",
       "Attendez la relecture complète sans débrancher. Vérifiez le résultat annoncé. Une relecture correcte contrôle les octets, pas tous les firmwares : testez le démarrage sur votre matériel. La sauvegarde USB Windows doit avoir été faite séparément."
     ],

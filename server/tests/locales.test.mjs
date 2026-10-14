@@ -21,7 +21,7 @@ test('locale routes preserve anonymous access, content structure and localised n
      assert.equal((html.match(/class="zoom-image"/g)||[]).length,5);assert(html.includes('class="checklist"'));assert(html.includes('id="situation"'));assert(html.includes('property="og:image"'));
     }else if(route===''){
      assert(html.includes(`v${currentVersion}/aguja-flash-imager-${currentVersion}-win-x64.exe`));
-     assert(html.includes(`/releases/aguja-${currentVersion}-amd64.img.zst`));assert(!html.includes('Tu LA AGUJA'));
+     assert(html.includes(`/releases/download/v${currentVersion}/aguja-${currentVersion}-amd64.img.zst`));assert(!html.includes('Tu LA AGUJA'));
     }
    }
   }

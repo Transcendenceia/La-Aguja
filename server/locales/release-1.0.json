@@ -1,0 +1,490 @@
+{
+  "en": {
+    "title": "Your USB grows with your projects.",
+    "intro": [
+      "LA AGUJA 1.0 brings reusable profiles, configuration editing without reflashing, and persistent live updates. Keep your working environment ready for the next computer."
+    ],
+    "features": [
+      [
+        "A seven-step preparation",
+        "The wizard ends at 07 · Create disk. Profiles and USB configuration, and Imager updates, are separate tools."
+      ],
+      [
+        "Configure once, reuse deliberately",
+        "Save and open encrypted .aguja profiles, or read and edit an existing USB configuration without rewriting its image."
+      ],
+      [
+        "Keep updates on your USB",
+        "Choose OS, Codex, Claude Code, Antigravity or OpenCode updates. Verified generations on DATA take effect on the next boot; factory and a previous generation remain available."
+      ],
+      [
+        "Your recovery keys, protected",
+        "Add BitLocker or LUKS keys for another computer. Windows offers local BitLocker first, before manual keys."
+      ]
+    ],
+    "wizard": [
+      "Follow Image, Network, SSH access, AI, Private network, Encrypted disks and Create disk. The wizard has seven steps, not nine. Profiles/USB and Imager updates sit outside it; returning preserves your settings."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0: downloads, profiles and USB settings",
+        "Download the Windows EXE or Linux AppImage, DEB or portable archive from the official 1.0.0 release. Open it as your normal user; privileged disk operations ask for UAC/Polkit.",
+        "Profiles and USB configuration saves/opens encrypted .aguja profiles and reads, decrypts and edits an existing USB CFG without reflashing. Check the exact device before saving. DATA and boot generations are preserved. Editing an old USB does not upgrade its live system.",
+        "Imager updates checks the signed catalogue and downloads a verified package only when you choose. It does not replace or run the application automatically."
+      ],
+      "11": [
+        "Secrets and reusable profiles",
+        "Network, SSH, AI and recovery data are processed locally. Choose encrypted protection and keep the unlock password outside the USB. Encryption protects the selected capsules, not the whole USB or DATA.",
+        "Reusable .aguja profiles preserve recovery keys. Provider sessions are included only when explicitly selected. Encrypted capsules disable legacy persistent HOME; do not put cleartext tokens or recovery keys on DATA."
+      ],
+      "12": [
+        "Step 6 · Encrypted disks: BitLocker and LUKS",
+        "In Windows, local BitLocker appears above manual recovery keys. It reads available information/keys with your authorization; it does not suspend BitLocker or decrypt the source disk.",
+        "For another computer, add its BitLocker recovery key or LUKS passphrase manually. Preserve LUKS spaces exactly. Both paths use the same protected recovery capsule.",
+        "In the live, profile unlock also opens a matching recovery capsule in private RAM. If its password differs, use sudo aguja recovery unlock. The inventory lists metadata, never key values. Opening a volume requires the correct key and exact target; it is read-only by default, not an automatic repair."
+      ],
+      "15": [
+        "Reboots and persistent live updates",
+        "Open aguja update menu and choose OS packages, native AI clients, both, or a signed Rescue release. Notifications only check: no automatic installation or restart.",
+        "The manager builds a verified system generation on USB DATA, separately from configuration, sessions and workspace. It takes effect at the next boot, even on another computer. Factory and a previous generation remain selectable; rollback changes the next boot selection.",
+        "You need a writable USB, free DATA space and enough RAM. Ordinary apt or client self-updates in the RAM session remain temporary. Older USBs must be prepared again with image 1.0 to gain this infrastructure; back up personal DATA first. Editing CFG alone does not add it.",
+        "Tailnet node identity remains temporary across reboots. Persistent OS updates do not promise persistent provider login or permanent network identity."
+      ],
+      "24": [
+        "Validation of 1.0 and its limits",
+        "The release documents Linux/Windows Imager checks, encrypted profiles and CFG editing, BIOS/UEFI virtual USB boots, persistent generations and rollback. The linked release validation records the tested scope.",
+        "Screenshots retain their labelled historical versions and synthetic QA data. Neither these checks nor a client version prove provider authentication/inference, successful customer recovery, universal hardware support or Secure Boot compatibility."
+      ]
+    },
+    "create": "Step 7 · Prepare, flash and verify",
+    "image": "Rescue Disk 1.0.0 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
+    "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service."
+  },
+  "es": {
+    "title": "Tu USB evoluciona con tus proyectos.",
+    "intro": [
+      "LA AGUJA 1.0 incorpora perfiles reutilizables, edición de configuración sin regrabar y actualizaciones persistentes del live. Tu entorno, listo para el próximo equipo."
+    ],
+    "features": [
+      [
+        "Preparación en siete pasos",
+        "El asistente termina en 07 · Crear disco. Perfiles y USB y Actualizaciones del Imager son herramientas independientes."
+      ],
+      [
+        "Configura una vez, reutiliza con criterio",
+        "Guarda y abre perfiles .aguja cifrados o lee y edita la configuración de un USB existente sin reescribir la imagen."
+      ],
+      [
+        "Las actualizaciones viajan en el USB",
+        "Elige actualizar el sistema, Codex, Claude Code, Antigravity u OpenCode. Las generaciones verificadas en DATA se aplican al siguiente arranque; fábrica y una anterior siguen disponibles."
+      ],
+      [
+        "Tus claves de recuperación, protegidas",
+        "Añade claves BitLocker o LUKS de otro equipo. En Windows, BitLocker de este PC aparece antes de las claves manuales."
+      ]
+    ],
+    "wizard": [
+      "Recorre Imagen, Red, Acceso SSH, IA, Red privada, Discos cifrados y Crear disco. Son siete pasos, no nueve. Perfiles y USB y Actualizaciones están fuera del asistente; al volver se conservan tus ajustes."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0: descargas, perfiles y configuración USB",
+        "Descarga el EXE Windows o AppImage, DEB o archivo portátil Linux de la release oficial 1.0.0. Ábrelo como usuario normal; las operaciones privilegiadas sobre discos piden UAC/Polkit.",
+        "Perfiles y USB permite guardar y abrir perfiles .aguja cifrados y leer, descifrar y editar el CFG de un USB existente sin regrabar. Comprueba el dispositivo exacto antes de guardar. Se conservan DATA y las generaciones de arranque. Editar un USB antiguo no actualiza su sistema live.",
+        "Actualizaciones del Imager consulta el catálogo firmado y descarga un paquete verificado solo si lo eliges. No sustituye ni ejecuta la aplicación automáticamente."
+      ],
+      "11": [
+        "Secretos y perfiles reutilizables",
+        "Red, SSH, IA y claves de recuperación se procesan localmente. Elige protección cifrada y conserva la contraseña fuera del USB. El cifrado protege las cápsulas seleccionadas, no todo el USB ni DATA.",
+        "Los perfiles .aguja reutilizables conservan las claves de recuperación. Las sesiones de proveedores solo se incluyen cuando las seleccionas explícitamente. Las cápsulas cifradas desactivan el HOME persistente heredado; no guardes tokens ni claves en claro en DATA."
+      ],
+      "12": [
+        "Paso 6 · Discos cifrados: BitLocker y LUKS",
+        "En Windows, BitLocker de este PC aparece encima de las claves manuales. Consulta información y claves disponibles con tu autorización; no suspende BitLocker ni descifra el disco de origen.",
+        "Para otro equipo, añade manualmente su clave de recuperación BitLocker o frase LUKS. Conserva exactamente los espacios de LUKS. Ambas vías usan la misma cápsula de recuperación protegida.",
+        "En el live, desbloquear el perfil abre también la cápsula compatible en RAM privada. Si usa otra contraseña, ejecuta sudo aguja recovery unlock. El inventario muestra metadatos, nunca valores de claves. Abrir un volumen requiere la clave correcta y el destino exacto: es de solo lectura por defecto, no una reparación automática."
+      ],
+      "15": [
+        "Reinicios y actualizaciones persistentes del live",
+        "Abre aguja update menu y elige paquetes del sistema, clientes IA nativos, ambos o una release Rescue firmada. Las notificaciones solo consultan: no hay instalación ni reinicio automático.",
+        "El gestor construye una generación verificada del sistema en DATA del USB, separada de configuración, sesiones y workspace. Se aplica al siguiente arranque, también en otro equipo. Fábrica y una generación anterior siguen seleccionables; rollback cambia la selección del próximo arranque.",
+        "Necesitas un USB escribible, espacio libre en DATA y RAM suficiente. El apt ordinario y las autoactualizaciones de clientes en la sesión RAM siguen siendo temporales. Los USB anteriores deben prepararse de nuevo con la imagen 1.0; respalda antes los datos personales de DATA. Editar solo CFG no añade esta infraestructura.",
+        "La identidad del nodo de tailnet sigue siendo temporal entre reinicios. La persistencia del sistema no promete conservar la sesión de un proveedor ni una identidad de red permanente."
+      ],
+      "24": [
+        "Validación de la 1.0 y sus límites",
+        "La release documenta pruebas del Imager Linux/Windows, perfiles cifrados y edición CFG, arranques de USB virtual BIOS/UEFI, generaciones persistentes y rollback. El documento de validación enlazado detalla el alcance ensayado.",
+        "Las capturas mantienen sus versiones históricas indicadas y datos sintéticos de QA. Estas pruebas y la versión de un cliente no demuestran autenticación o inferencia del proveedor, rescates exitosos de clientes, compatibilidad universal ni Secure Boot."
+      ]
+    },
+    "create": "Paso 7 · Preparar, grabar y verificar",
+    "image": "Rescue Disk 1.0.0 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
+    "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio."
+  },
+  "fr": {
+    "title": "Votre clé USB évolue avec vos projets.",
+    "intro": [
+      "LA AGUJA 1.0 ajoute des profils réutilisables, la modification de configuration sans réécriture et des mises à jour persistantes du live. Votre environnement reste prêt pour le prochain ordinateur."
+    ],
+    "features": [
+      [
+        "Sept étapes de préparation",
+        "L’assistant se termine à 07 · Créer le disque. Profils/USB et mises à jour Imager sont des outils séparés."
+      ],
+      [
+        "Configurer puis réutiliser",
+        "Enregistrez et ouvrez des profils .aguja chiffrés, ou modifiez la configuration d’une clé existante sans réécrire l’image."
+      ],
+      [
+        "Des mises à jour sur la clé",
+        "Choisissez le système, Codex, Claude Code, Antigravity ou OpenCode. Les générations vérifiées sur DATA prennent effet au prochain démarrage ; l’usine et une précédente restent disponibles."
+      ],
+      [
+        "Vos clés de récupération protégées",
+        "Ajoutez les clés BitLocker ou LUKS d’un autre PC. Sous Windows, BitLocker local précède les clés manuelles."
+      ]
+    ],
+    "wizard": [
+      "Suivez Image, Réseau, SSH, IA, Réseau privé, Disques chiffrés et Créer le disque : sept étapes, pas neuf. Profils/USB et mises à jour sont hors assistant ; le retour conserve vos réglages."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0 : téléchargements, profils et USB",
+        "Téléchargez l’EXE Windows ou l’AppImage, DEB ou archive Linux de la release officielle 1.0.0. Lancez-le en utilisateur normal ; les opérations privilégiées demandent UAC/Polkit.",
+        "Profils/USB enregistre et ouvre les profils .aguja chiffrés et lit, déchiffre et modifie le CFG d’une clé existante sans la réécrire. Vérifiez le périphérique exact ; DATA et les générations sont conservés. Modifier une ancienne clé ne met pas son système live à niveau.",
+        "La mise à jour Imager consulte le catalogue signé et télécharge un paquet vérifié sur demande, sans remplacement ni exécution automatique."
+      ],
+      "11": [
+        "Secrets et profils réutilisables",
+        "Réseau, SSH, IA et clés sont traités localement. Choisissez le chiffrement et gardez le mot de passe hors de la clé. Il protège les capsules sélectionnées, pas toute la clé ni DATA.",
+        "Les profils .aguja conservent les clés de récupération. Les sessions des fournisseurs sont incluses seulement si vous les sélectionnez. Une capsule chiffrée désactive l’ancien HOME persistant ; ne stockez pas de jetons ou clés en clair sur DATA."
+      ],
+      "12": [
+        "Étape 6 · Disques chiffrés : BitLocker et LUKS",
+        "Sous Windows, BitLocker local se trouve au-dessus des clés manuelles. La lecture autorisée des informations et clés disponibles ne suspend pas BitLocker et ne déchiffre pas le disque source.",
+        "Pour un autre PC, saisissez sa clé BitLocker ou phrase LUKS ; préservez exactement les espaces LUKS. Les deux chemins utilisent la même capsule protégée.",
+        "Déverrouiller le profil ouvre aussi la capsule compatible en RAM privée. Si le mot de passe diffère, utilisez sudo aguja recovery unlock. L’inventaire affiche les métadonnées, jamais les clés. L’ouverture exige la bonne clé et la cible exacte ; lecture seule par défaut, sans réparation automatique."
+      ],
+      "15": [
+        "Redémarrages et mises à jour persistantes",
+        "Ouvrez aguja update menu : système, clients IA natifs, les deux ou release Rescue signée. Les notifications vérifient seulement ; aucune installation ni aucun redémarrage automatique.",
+        "Une génération vérifiée est construite sur DATA, séparée de la configuration, des sessions et du workspace. Elle s’applique au prochain démarrage, même sur un autre PC. L’usine et une génération précédente restent sélectionnables ; rollback choisit le prochain démarrage.",
+        "Il faut une clé inscriptible, de l’espace DATA et de la RAM. apt ordinaire et auto-mises à jour dans la session RAM restent temporaires. Les anciennes clés doivent être recréées avec l’image 1.0 ; sauvegardez DATA auparavant. Modifier CFG seul ne suffit pas.",
+        "L’identité du nœud tailnet reste temporaire après redémarrage. La persistance du système ne garantit ni session fournisseur ni identité réseau permanente."
+      ],
+      "24": [
+        "Validation de la 1.0 et limites",
+        "La release documente Imager Linux/Windows, profils chiffrés, édition CFG, démarrages USB virtuels BIOS/UEFI, générations persistantes et rollback. Le document lié précise le périmètre testé.",
+        "Les captures gardent leurs versions historiques et données synthétiques. Ces tests et une version de client ne prouvent pas une authentification/inférence fournisseur, une récupération client réussie, une compatibilité matérielle universelle ou Secure Boot."
+      ]
+    },
+    "create": "Étape 7 · Préparer, écrire et vérifier",
+    "image": "Rescue Disk 1.0.0 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
+    "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service."
+  },
+  "de": {
+    "title": "Dein USB-Stick wächst mit deinen Projekten.",
+    "intro": [
+      "LA AGUJA 1.0 bietet wiederverwendbare Profile, Konfigurationsänderungen ohne erneutes Schreiben und dauerhafte Live-Updates. Deine Umgebung bleibt für den nächsten Rechner bereit."
+    ],
+    "features": [
+      [
+        "Vorbereitung in sieben Schritten",
+        "Der Assistent endet bei 07 · Datenträger erstellen. Profile/USB und Imager-Updates sind getrennte Werkzeuge."
+      ],
+      [
+        "Einrichten und gezielt wiederverwenden",
+        "Verschlüsselte .aguja-Profile speichern/öffnen oder die Konfiguration eines vorhandenen USB-Sticks ohne Neuschreiben ändern."
+      ],
+      [
+        "Updates reisen auf dem USB-Stick mit",
+        "System, Codex, Claude Code, Antigravity oder OpenCode auswählen. Geprüfte Generationen auf DATA gelten beim nächsten Start; Werksstand und eine vorherige bleiben verfügbar."
+      ],
+      [
+        "Geschützte Wiederherstellungsschlüssel",
+        "BitLocker- oder LUKS-Schlüssel eines anderen PCs hinzufügen. Unter Windows steht lokales BitLocker vor manuellen Schlüsseln."
+      ]
+    ],
+    "wizard": [
+      "Image, Netzwerk, SSH, KI, Privates Netzwerk, Verschlüsselte Datenträger und Datenträger erstellen: sieben Schritte, nicht neun. Profile/USB und Updates liegen außerhalb; bei Rückkehr bleiben Einstellungen erhalten."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0: Downloads, Profile und USB",
+        "Windows-EXE oder Linux-AppImage, DEB oder Archiv aus Release 1.0.0 herunterladen. Als normaler Benutzer öffnen; privilegierte Datenträgeraktionen fragen UAC/Polkit an.",
+        "Profile/USB speichert und öffnet verschlüsselte .aguja-Profile und liest, entschlüsselt und bearbeitet CFG vorhandener Sticks ohne Neuschreiben. Exaktes Gerät prüfen. DATA und Boot-Generationen bleiben erhalten. CFG-Bearbeitung aktualisiert kein altes Live-System.",
+        "Imager-Updates prüft den signierten Katalog und lädt auf Wunsch ein verifiziertes Paket, ohne automatisches Ersetzen oder Ausführen."
+      ],
+      "11": [
+        "Geheimnisse und wiederverwendbare Profile",
+        "Netzwerk, SSH, KI und Schlüssel werden lokal verarbeitet. Verschlüsselung wählen und Passwort außerhalb des USB-Sticks aufbewahren. Geschützt werden ausgewählte Kapseln, nicht der ganze Stick oder DATA.",
+        "Wiederverwendbare .aguja-Profile bewahren Wiederherstellungsschlüssel. Anbietersitzungen werden nur ausdrücklich ausgewählt übernommen. Verschlüsselte Kapseln deaktivieren das alte persistente HOME; keine Klartext-Tokens oder Schlüssel auf DATA speichern."
+      ],
+      "12": [
+        "Schritt 6 · Verschlüsselte Datenträger: BitLocker und LUKS",
+        "Windows zeigt lokales BitLocker oberhalb manueller Schlüssel. Das genehmigte Lesen verfügbarer Informationen/Schlüssel setzt BitLocker nicht aus und entschlüsselt den Quelldatenträger nicht.",
+        "Für andere PCs BitLocker-Schlüssel oder LUKS-Passphrase manuell hinzufügen; LUKS-Leerzeichen exakt erhalten. Beide Wege verwenden dieselbe geschützte Kapsel.",
+        "Profilentsperrung öffnet auch eine passende Kapsel im privaten RAM. Bei anderem Passwort sudo aguja recovery unlock nutzen. Das Inventar zeigt Metadaten, nie Schlüsselwerte. Öffnen verlangt richtigen Schlüssel und exaktes Ziel: standardmäßig nur lesend, keine automatische Reparatur."
+      ],
+      "15": [
+        "Neustarts und dauerhafte Live-Updates",
+        "aguja update menu bietet Systempakete, native KI-Clients, beides oder signierte Rescue-Releases. Hinweise prüfen nur; keine automatische Installation oder Neustarts.",
+        "Eine geprüfte Systemgeneration wird auf DATA getrennt von Konfiguration, Sitzungen und Workspace erstellt. Sie gilt beim nächsten Start, auch auf einem anderen PC. Werksstand und vorherige Generation bleiben wählbar; rollback wählt den nächsten Start.",
+        "Beschreibbarer Stick, freier DATA-Speicher und genügend RAM erforderlich. Normales apt und Client-Selbstupdates im RAM bleiben temporär. Alte Sticks mit Image 1.0 neu vorbereiten; persönliche DATA vorher sichern. CFG-Bearbeitung allein ergänzt die Infrastruktur nicht.",
+        "Die Tailnet-Knotenidentität bleibt nach Neustarts temporär. Systempersistenz garantiert keine Anbietersitzung oder dauerhafte Netzwerkidentität."
+      ],
+      "24": [
+        "Validierung von 1.0 und Grenzen",
+        "Die Release dokumentiert Linux-/Windows-Imager, verschlüsselte Profile, CFG-Bearbeitung, virtuelle BIOS-/UEFI-USB-Starts, persistente Generationen und Rollback. Das verlinkte Prüfprotokoll nennt den Umfang.",
+        "Aufnahmen behalten ihre historischen Versionen und synthetischen Daten. Tests und Client-Version belegen keine Anbieteranmeldung/Inferenz, erfolgreiche Kundenrettung, universelle Hardware oder Secure Boot."
+      ]
+    },
+    "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
+    "image": "Rescue Disk 1.0.0 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren."
+  },
+  "pt": {
+    "title": "O teu USB evolui com os teus projetos.",
+    "intro": [
+      "LA AGUJA 1.0 traz perfis reutilizáveis, edição da configuração sem regravar e atualizações persistentes do live. O teu ambiente fica pronto para o próximo computador."
+    ],
+    "features": [
+      [
+        "Preparação em sete passos",
+        "O assistente termina em 07 · Criar disco. Perfis/USB e atualizações do Imager são ferramentas separadas."
+      ],
+      [
+        "Configurar e reutilizar",
+        "Guarda e abre perfis .aguja encriptados ou edita a configuração de um USB existente sem reescrever a imagem."
+      ],
+      [
+        "Atualizações que viajam no USB",
+        "Escolhe sistema, Codex, Claude Code, Antigravity ou OpenCode. Gerações verificadas em DATA entram no próximo arranque; fábrica e uma anterior continuam disponíveis."
+      ],
+      [
+        "Chaves de recuperação protegidas",
+        "Adiciona chaves BitLocker ou LUKS de outro PC. No Windows, BitLocker local aparece antes das chaves manuais."
+      ]
+    ],
+    "wizard": [
+      "Segue Imagem, Rede, SSH, IA, Rede privada, Discos encriptados e Criar disco: sete passos, não nove. Perfis/USB e atualizações ficam fora do assistente; ao voltar, os ajustes são preservados."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0: transferências, perfis e USB",
+        "Obtém EXE Windows ou AppImage, DEB ou arquivo Linux da release oficial 1.0.0. Abre como utilizador normal; operações privilegiadas pedem UAC/Polkit.",
+        "Perfis/USB guarda e abre perfis .aguja encriptados e lê, desencripta e edita CFG de USB existente sem regravar. Confirma o dispositivo exato. DATA e gerações são preservados. Editar CFG não atualiza um live antigo.",
+        "Atualizações do Imager consulta o catálogo assinado e transfere um pacote verificado se escolheres, sem substituição ou execução automática."
+      ],
+      "11": [
+        "Segredos e perfis reutilizáveis",
+        "Rede, SSH, IA e chaves são processados localmente. Escolhe encriptação e guarda a palavra-passe fora do USB. Protege cápsulas selecionadas, não todo o USB ou DATA.",
+        "Os perfis .aguja preservam chaves de recuperação. Sessões de fornecedores só são incluídas por seleção explícita. Cápsulas encriptadas desativam HOME persistente antigo; não guardes tokens ou chaves em claro em DATA."
+      ],
+      "12": [
+        "Passo 6 · Discos encriptados: BitLocker e LUKS",
+        "No Windows, BitLocker local fica acima das chaves manuais. Consultar informação/chaves disponíveis com autorização não suspende BitLocker nem desencripta o disco de origem.",
+        "Para outro PC, adiciona a chave BitLocker ou frase LUKS manualmente; preserva os espaços LUKS exatos. Ambas as vias usam a mesma cápsula protegida.",
+        "Desbloquear o perfil abre a cápsula compatível em RAM privada. Se a palavra-passe diferir, usa sudo aguja recovery unlock. O inventário mostra metadados, nunca chaves. Abrir exige a chave correta e o destino exato: só leitura por predefinição, sem reparação automática."
+      ],
+      "15": [
+        "Reinícios e atualizações persistentes",
+        "Abre aguja update menu: sistema, clientes IA nativos, ambos ou release Rescue assinada. Notificações só consultam; não instalam nem reiniciam automaticamente.",
+        "Uma geração verificada é construída em DATA, separada de configuração, sessões e workspace. Aplica-se no próximo arranque, mesmo noutro PC. Fábrica e uma anterior ficam selecionáveis; rollback escolhe o próximo arranque.",
+        "É necessário USB gravável, espaço DATA e RAM. apt normal e autoatualizações na sessão RAM continuam temporários. USB antigos precisam de nova preparação com imagem 1.0; faz primeiro backup de DATA. Editar apenas CFG não adiciona esta infraestrutura.",
+        "A identidade do nó tailnet continua temporária entre reinícios. Persistência do sistema não garante login do fornecedor nem identidade permanente."
+      ],
+      "24": [
+        "Validação da 1.0 e limites",
+        "A release documenta Imager Linux/Windows, perfis encriptados, edição CFG, USB virtual BIOS/UEFI, gerações persistentes e rollback. A validação ligada descreve o âmbito ensaiado.",
+        "Capturas mantêm versões históricas e dados sintéticos. Testes e versão do cliente não provam autenticação/inferência, recuperação de clientes, hardware universal ou Secure Boot."
+      ]
+    },
+    "create": "Passo 7 · Preparar, gravar e verificar",
+    "image": "Rescue Disk 1.0.0 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
+    "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço."
+  },
+  "it": {
+    "title": "La tua USB cresce con i tuoi progetti.",
+    "intro": [
+      "LA AGUJA 1.0 aggiunge profili riutilizzabili, modifica della configurazione senza riscrittura e aggiornamenti live persistenti. Il tuo ambiente resta pronto per il prossimo computer."
+    ],
+    "features": [
+      [
+        "Preparazione in sette passi",
+        "La procedura termina a 07 · Crea disco. Profili/USB e aggiornamenti Imager sono strumenti separati."
+      ],
+      [
+        "Configura e riutilizza",
+        "Salva e apri profili .aguja cifrati o modifica la configurazione di una USB esistente senza riscrivere l’immagine."
+      ],
+      [
+        "Aggiornamenti sulla USB",
+        "Scegli sistema, Codex, Claude Code, Antigravity o OpenCode. Generazioni verificate su DATA entrano al prossimo avvio; fabbrica e una precedente restano disponibili."
+      ],
+      [
+        "Chiavi di recupero protette",
+        "Aggiungi chiavi BitLocker o LUKS di un altro PC. In Windows, BitLocker locale precede le chiavi manuali."
+      ]
+    ],
+    "wizard": [
+      "Immagine, Rete, SSH, IA, Rete privata, Dischi cifrati e Crea disco: sette passi, non nove. Profili/USB e aggiornamenti sono esterni alla procedura; tornando, le impostazioni restano."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0: download, profili e USB",
+        "Scarica EXE Windows o AppImage, DEB o archivio Linux dalla release ufficiale 1.0.0. Avvia come utente normale; operazioni privilegiate richiedono UAC/Polkit.",
+        "Profili/USB salva e apre profili .aguja cifrati e legge, decifra e modifica CFG di USB esistenti senza riscrittura. Verifica il dispositivo esatto. DATA e generazioni restano intatti. Modificare CFG non aggiorna un vecchio live.",
+        "Aggiornamenti Imager consulta il catalogo firmato e scarica un pacchetto verificato solo su scelta, senza sostituire o eseguire automaticamente."
+      ],
+      "11": [
+        "Segreti e profili riutilizzabili",
+        "Rete, SSH, IA e chiavi sono elaborati localmente. Scegli la cifratura e conserva la password fuori dalla USB. Protegge le capsule selezionate, non tutta la USB o DATA.",
+        "I profili .aguja conservano le chiavi di recupero. Sessioni dei fornitori incluse solo con selezione esplicita. Capsule cifrate disabilitano il vecchio HOME persistente; niente token o chiavi in chiaro su DATA."
+      ],
+      "12": [
+        "Passo 6 · Dischi cifrati: BitLocker e LUKS",
+        "In Windows, BitLocker locale precede le chiavi manuali. Leggere informazioni/chiavi disponibili con autorizzazione non sospende BitLocker né decifra il disco sorgente.",
+        "Per un altro PC inserisci chiave BitLocker o frase LUKS manualmente; conserva esattamente gli spazi LUKS. Entrambi usano la stessa capsula protetta.",
+        "Sbloccare il profilo apre la capsula compatibile in RAM privata. Con password diversa usa sudo aguja recovery unlock. L’inventario mostra metadati, mai chiavi. Aprire richiede chiave corretta e destinazione esatta: sola lettura predefinita, non riparazione automatica."
+      ],
+      "15": [
+        "Riavvii e aggiornamenti live persistenti",
+        "Apri aguja update menu: pacchetti sistema, client IA nativi, entrambi o release Rescue firmata. Notifiche di sola verifica; nessuna installazione o riavvio automatico.",
+        "Una generazione verificata viene costruita su DATA, separata da configurazione, sessioni e workspace. Vale al prossimo avvio, anche su un altro PC. Fabbrica e una precedente restano selezionabili; rollback sceglie il prossimo avvio.",
+        "Servono USB scrivibile, spazio DATA e RAM. apt normale e autoaggiornamenti nella sessione RAM restano temporanei. Vecchie USB vanno ripreparate con immagine 1.0; prima salva DATA. Modificare solo CFG non aggiunge l’infrastruttura.",
+        "L’identità del nodo tailnet resta temporanea ai riavvii. Persistenza del sistema non garantisce sessioni del fornitore o identità di rete permanente."
+      ],
+      "24": [
+        "Validazione della 1.0 e limiti",
+        "La release documenta Imager Linux/Windows, profili cifrati, modifica CFG, avvii USB virtuali BIOS/UEFI, generazioni persistenti e rollback. Il documento collegato specifica l’ambito testato.",
+        "Le schermate mantengono versioni storiche e dati sintetici. Test e versione del client non provano autenticazione/inferenza, recuperi clienti riusciti, hardware universale o Secure Boot."
+      ]
+    },
+    "create": "Passo 7 · Preparare, scrivere e verificare",
+    "image": "Rescue Disk 1.0.0 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
+    "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio."
+  },
+  "nl": {
+    "title": "Je USB groeit mee met je projecten.",
+    "intro": [
+      "LA AGUJA 1.0 biedt herbruikbare profielen, configuratiebewerking zonder opnieuw schrijven en blijvende live-updates. Je omgeving staat klaar voor de volgende computer."
+    ],
+    "features": [
+      [
+        "Voorbereiden in zeven stappen",
+        "De wizard eindigt bij 07 · Schijf maken. Profielen/USB en Imager-updates zijn aparte hulpmiddelen."
+      ],
+      [
+        "Instellen en bewust hergebruiken",
+        "Bewaar en open versleutelde .aguja-profielen of bewerk een bestaande USB-configuratie zonder het image te herschrijven."
+      ],
+      [
+        "Updates reizen mee op USB",
+        "Kies systeem, Codex, Claude Code, Antigravity of OpenCode. Gecontroleerde generaties op DATA gelden na herstart; fabriek en een vorige blijven beschikbaar."
+      ],
+      [
+        "Beschermde herstelsleutels",
+        "Voeg BitLocker- of LUKS-sleutels van een andere pc toe. Windows toont lokale BitLocker vóór handmatige sleutels."
+      ]
+    ],
+    "wizard": [
+      "Image, Netwerk, SSH, AI, Privénetwerk, Versleutelde schijven en Schijf maken: zeven stappen, geen negen. Profielen/USB en updates staan erbuiten; terugkeren bewaart instellingen."
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0: downloads, profielen en USB",
+        "Download Windows-EXE of Linux-AppImage, DEB of archief uit officiële release 1.0.0. Open als gewone gebruiker; bevoorrechte schijfacties vragen UAC/Polkit.",
+        "Profielen/USB bewaart en opent versleutelde .aguja-profielen en leest, ontsleutelt en bewerkt CFG van bestaande USB zonder herschrijven. Controleer het exacte apparaat. DATA en generaties blijven behouden. CFG bewerken werkt een oud live-systeem niet bij.",
+        "Imager-updates controleert de ondertekende catalogus en downloadt alleen op verzoek een geverifieerd pakket, zonder automatisch vervangen of uitvoeren."
+      ],
+      "11": [
+        "Geheimen en herbruikbare profielen",
+        "Netwerk, SSH, AI en sleutels worden lokaal verwerkt. Kies versleuteling en bewaar het wachtwoord buiten USB. Het beschermt geselecteerde capsules, niet de hele USB of DATA.",
+        "Herbruikbare .aguja-profielen bewaren herstelsleutels. Providersessies worden alleen expliciet geselecteerd meegenomen. Versleutelde capsules schakelen oud persistent HOME uit; geen onversleutelde tokens of sleutels op DATA."
+      ],
+      "12": [
+        "Stap 6 · Versleutelde schijven: BitLocker en LUKS",
+        "Windows toont lokale BitLocker boven handmatige sleutels. Geautoriseerd lezen van beschikbare informatie/sleutels schort BitLocker niet op en ontsleutelt de bronschijf niet.",
+        "Voor een andere pc voeg je BitLocker-sleutel of LUKS-wachtzin handmatig toe; behoud LUKS-spaties exact. Beide gebruiken dezelfde beschermde capsule.",
+        "Profielontgrendeling opent een passende capsule in privé-RAM. Bij ander wachtwoord gebruik sudo aguja recovery unlock. Inventaris toont metadata, nooit sleutels. Openen vraagt juiste sleutel en exact doel: standaard alleen lezen, geen automatische reparatie."
+      ],
+      "15": [
+        "Herstarts en blijvende live-updates",
+        "Open aguja update menu: systeempakketten, native AI-clients, beide of ondertekende Rescue-release. Meldingen controleren alleen; geen automatische installatie of herstart.",
+        "Een geverifieerde generatie wordt op DATA gebouwd, los van configuratie, sessies en workspace. Ze geldt na de volgende start, ook op een andere pc. Fabriek en een vorige blijven selecteerbaar; rollback kiest de volgende start.",
+        "Schrijfbare USB, vrije DATA en voldoende RAM nodig. Gewone apt en clientzelfupdates in RAM blijven tijdelijk. Oude USB opnieuw voorbereiden met image 1.0; maak eerst DATA-back-up. Alleen CFG bewerken voegt dit niet toe.",
+        "De tailnet-node-identiteit blijft tijdelijk na herstart. Systeempersistentie garandeert geen providersessie of permanente netwerkidentiteit."
+      ],
+      "24": [
+        "Validatie van 1.0 en grenzen",
+        "De release beschrijft Linux-/Windows-Imager, versleutelde profielen, CFG-bewerking, virtuele BIOS-/UEFI-USB-starts, blijvende generaties en rollback. Het gekoppelde document vermeldt de testomvang.",
+        "Afbeeldingen behouden historische versies en synthetische gegevens. Tests en clientversie bewijzen geen providerlogin/inferentie, geslaagd klantherstel, universele hardware of Secure Boot."
+      ]
+    },
+    "create": "Stap 7 · Voorbereiden, schrijven en controleren",
+    "image": "Rescue Disk 1.0.0 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen."
+  },
+  "zh": {
+    "title": "让 USB 随你的项目一起成长。",
+    "intro": [
+      "LA AGUJA 1.0 带来可复用配置、无需重写镜像的 USB 配置编辑，以及持久化 live 更新。工作环境随时准备好迎接下一台电脑。"
+    ],
+    "features": [
+      [
+        "七步完成准备",
+        "向导在 07 · 创建磁盘结束。配置档案/USB 和 Imager 更新是独立工具。"
+      ],
+      [
+        "配置一次，按需复用",
+        "保存和打开加密的 .aguja 配置，或编辑现有 USB 的配置而不重写镜像。"
+      ],
+      [
+        "更新随 USB 一起走",
+        "选择更新系统、Codex、Claude Code、Antigravity 或 OpenCode。DATA 上经验证的系统代在下次启动生效；出厂和上一代仍可选择。"
+      ],
+      [
+        "保护恢复密钥",
+        "添加其他电脑的 BitLocker 或 LUKS 密钥。Windows 先显示本机 BitLocker，再显示手动密钥。"
+      ]
+    ],
+    "wizard": [
+      "依次为镜像、网络、SSH、AI、私有网络、加密磁盘和创建磁盘：共七步，不是九步。配置档案/USB 和更新位于向导之外，返回时保留设置。"
+    ],
+    "sections": {
+      "4": [
+        "Flash Imager 1.0：下载、配置档案与 USB",
+        "从官方 1.0.0 发行版下载 Windows EXE 或 Linux AppImage、DEB、便携压缩包。以普通用户运行；磁盘特权操作会请求 UAC/Polkit。",
+        "配置档案/USB 可保存和打开加密 .aguja 配置，读取、解密和编辑现有 USB 的 CFG，无需重写镜像。保存前确认具体设备。DATA 和启动系统代保留；编辑 CFG 不会升级旧 live 系统。",
+        "Imager 更新检查签名目录，仅在你选择时下载已验证的软件包，不自动替换或运行应用。"
+      ],
+      "11": [
+        "机密与可复用配置",
+        "网络、SSH、AI 和恢复密钥在本地处理。选择加密，并把解锁密码保存在 USB 之外。加密保护所选配置胶囊，不加密整个 USB 或 DATA。",
+        "可复用 .aguja 配置保留恢复密钥。仅明确选择时才包含供应商会话。加密胶囊会禁用旧式持久 HOME；不要把明文令牌或密钥放在 DATA。"
+      ],
+      "12": [
+        "步骤 6 · 加密磁盘：BitLocker 与 LUKS",
+        "Windows 中，本机 BitLocker 位于手动密钥上方。经授权读取可用信息或密钥不会暂停 BitLocker，也不会解密源磁盘。",
+        "其他电脑的 BitLocker 恢复密钥或 LUKS 口令需手动添加；完整保留 LUKS 空格。两种方式使用同一受保护的恢复胶囊。",
+        "解锁配置也会在私有 RAM 中打开匹配的恢复胶囊。密码不同时用 sudo aguja recovery unlock。清单只显示元数据，不显示密钥。打开卷需要正确密钥和准确目标，默认只读，不会自动修复。"
+      ],
+      "15": [
+        "重启与持久化 live 更新",
+        "打开 aguja update menu，选择系统软件包、原生 AI 客户端、两者或签名 Rescue 发行版。通知只检查，不自动安装或重启。",
+        "管理器在 USB DATA 上构建经验证的系统代，与配置、会话和工作区分离。下次启动生效，换电脑也适用。出厂和上一代仍可选择；rollback 只更改下次启动选择。",
+        "需要可写 USB、足够 DATA 空间和 RAM。RAM 会话中的普通 apt 或客户端自更新仍是临时的。旧 USB 必须用 1.0 镜像重新准备；先备份个人 DATA。仅编辑 CFG 不会加入此启动基础设施。",
+        "每次重启后 tailnet 节点身份仍是临时的。系统持久化不保证保留供应商登录或永久网络身份。"
+      ],
+      "24": [
+        "1.0 的验证范围与限制",
+        "发行版记录了 Linux/Windows Imager、加密配置、CFG 编辑、虚拟 USB BIOS/UEFI 启动、持久系统代及回滚测试。链接的验证文档列明实际测试范围。",
+        "截图保留标明的历史版本和合成测试数据。测试或客户端版本不证明供应商登录/推理、客户数据恢复成功、通用硬件兼容或 Secure Boot 支持。"
+      ]
+    },
+    "create": "步骤 7 · 准备、写入与验证",
+    "image": "Rescue Disk 1.0.0 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
+    "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。"
+  }
+}

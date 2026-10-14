@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "Prepare o USB com Flash Imager",
-  "imagerText": "A aplicação para Windows e Linux descarrega e verifica a imagem, grava o USB e guarda as definições. Pode preparar SSH, agentes IA e a sua rede Tailscale ou Headscale. Em Windows pode gerir chaves BitLocker disponíveis. Versão 0.9.9; gravar o USB apaga o seu conteúdo.",
+  "imagerText": "LA AGUJA 1.0 traz perfis reutilizáveis, edição da configuração sem regravar e atualizações persistentes do live. O teu ambiente fica pronto para o próximo computador. O assistente termina em 07 · Criar disco. Perfis/USB e atualizações do Imager são ferramentas separadas.",
   "portable": "Linux portátil",
   "imagesTitle": "Descarregue a imagem de La Aguja",
-  "imagesText": "Rescue Disk 0.9.9 é o Linux que inicia no computador. Imagens no nosso site; Imager e código no GitHub. O Imager verifica a assinatura do catálogo e o SHA-256 da descarga. Não precisa de conta LA AGUJA.",
+  "imagesText": "Rescue Disk 1.0.0 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
   "imageLinks": [
     "Imagem USB comprimida (.img.zst) ↗",
     "ISO BIOS/UEFI ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "A tua configuração permanece sob o teu controlo.",
   "privacyParagraphs": [
     "O site LA AGUJA é informativo: não cria contas, pede autenticação, aloja túneis ou consolas remotas, nem utiliza cookies de conta ou analítica próprios.",
-    "Imagens e catálogo assinado vêm do site LA AGUJA. Imager e código estão no GitHub, sujeito à sua política de privacidade. O alojamento pode conservar registos técnicos necessários ao serviço.",
+    "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
     "O Flash Imager processa localmente imagens e perfis de rede, SSH, IA e Tailscale/Headscale. Não envia os perfis a este site. As imagens privadas podem conter segredos: controla o armazenamento e a partilha.",
     "Tailscale/Headscale e os fornecedores IA têm contas e condições próprias. O seu uso opcional não é registo na LA AGUJA.",
     "As transferências revelam a requisição de rede ao alojamento, não as chaves nem o conteúdo das imagens locais."
@@ -148,7 +148,7 @@
       "No Windows, o Imager pode consultar chaves disponíveis e incluir as explicitamente escolhidas na imagem privada. Protege o perfil e guarda outra cópia. Ver a chave não prova o volume desbloqueado. Captura Windows histórica 0.8.1, não nova execução nativa 0.9.2."
     ],
     [
-      "Passo 6 · Preparar, gravar, verificar",
+      "Passo 7 · Preparar, gravar e verificar",
       "Revê imagem, proteção e resumo. Criar imagem privada gera ficheiro; preparar e gravar também escreve no dispositivo. Confirma modelo, série e capacidade real no diálogo nativo. Cancela se houver dúvida. Autoriza apenas a operação pretendida em UAC/Polkit.",
       "Aguarda escrita e leitura completa sem desligar USB. Confere o resultado. Verificação de bytes não garante firmware: testa arranque no teu equipamento. A cópia USB Windows deve estar feita externamente."
     ],

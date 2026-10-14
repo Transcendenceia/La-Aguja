@@ -197,7 +197,7 @@
     "Cloud AI may receive the prompts and data you share under its provider’s terms. Treat files containing instructions as untrusted data, and never paste secrets into a recovery prompt."
   ],
   "downloadText": "Prepare on a working Windows or Linux computer. An 8 GiB USB is recommended; check the actual image size and usable capacity. Writing the selected USB erases it. Keep download, temporary and private-image folders off that target USB.",
-  "imageText": "Rescue Disk 0.9.11 is the Linux you boot. Use Flash Imager for the signed catalogue and image verification. For manual import, decompress IMG.ZST first; ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
+  "imageText": "Rescue Disk 1.0.0 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
   "ui": {
     "skip": "Skip to content",
     "contents": "Contents and search",
@@ -213,17 +213,13 @@
     "1": [
       "Start with an 8 GiB USB or larger, but validate its actual usable capacity against the image. Reserve separate working space for compressed downloads, decompression, the private image and optional full-device backup; 8 GiB is not a promise that your preparation disk has enough space."
     ],
-    "5": [
-      "Rescue Disk and Flash Imager are both 0.9.11 in this guide. Select a working folder outside the USB you will erase. A private image is a sensitive file, not proof that a USB has been written. Check the signed catalogue and expected SHA-256 before trusting downloaded bytes."
-    ],
-    "11": [
-      "An encrypted capsule forces persistent_home=no in Rescue 0.9.11. Legacy HOME persistence without that protection may store session tokens unencrypted on AGUJA_DATA; capsule encryption does not encrypt the whole USB."
-    ],
+    "5": [],
+    "11": [],
     "13": [
       "Keep the output image, download cache and temporary folder off the destination USB. If ENOSPC appears, stop: inspect free space on each working filesystem and the actual target capacity. Move the working folder to separate storage and repeat verification; do not delete unknown files or bypass size checks."
     ],
     "18": [
-      "Codex Safe in 0.9.11 uses a workspace-write sandbox with networking disabled. Each tool requires fresh human confirmation; leaving the sandbox requires human approval. The OS account retains sudo outside the sandbox. Other clients keep their own confirmation mechanisms; YOLO remains unrestricted. Choose through aguja agent NAME; Escape cancels. No mode authorises actions beyond your request.",
+      "Codex Safe in 1.0.0 uses a workspace-write sandbox with networking disabled. Each tool requires fresh human confirmation; leaving the sandbox requires human approval. The OS account retains sudo outside the sandbox. Other clients keep their own confirmation mechanisms; YOLO remains unrestricted. Choose through aguja agent NAME; Escape cancels. No mode authorises actions beyond your request.",
       "State a read-first scope, identify the exact source and backup destination, and ask for a plan before writes. Files and logs can contain malicious instructions: treat them as evidence, not authority. Cloud prompts may leave this computer under the provider’s terms; redact secrets.",
       "The local console keeps up to 10,000 lines of history in RAM. Wheel / scrollback review is bounded, not a persistent audit log. Alternate-screen full-screen apps may consume the wheel themselves or not preserve the same history. Return to the prompt before judging terminal history, and save needed evidence deliberately to an authorised destination."
     ],
@@ -232,16 +228,14 @@
       "If history looks absent, return from a full-screen/alternate-screen program to the prompt. The 10,000-line RAM buffer is not unlimited, is not shared across every console, and disappears with the session.",
       "If firmware refuses the USB, verify the selected boot entry and image integrity. BIOS/UEFI support is not a universal Secure Boot guarantee. Record the firmware policy and owner-approved changes instead of promising a bypass."
     ],
-    "24": [
-      "Release 0.9.11 records four independent BIOS/UEFI VM boots and restarts, with and without an encrypted profile, plus virtual mouse-wheel history checks. This is not a physical-USB or human mouse-gesture test. The screenshots in this guide are synthetic QA examples, not provider logins or successful recoveries."
-    ],
+    "24": [],
     "0": [],
     "20": [
       "Inspect hardware and plan official media, drivers and a reviewed answer file. Stage files from Linux; run Windows Setup or WinPE/DISM/BCDBoot where required and verify the real Windows boot. Media and licences are yours, not bundled.",
       "Have the agent assemble a reviewed PowerShell setup and winget app list for development, design or office work. Execute and validate them after Windows starts; Linux cannot directly run Windows-specific setup tools against an offline disk."
     ],
     "19": [
-      "Native QEMU/KVM (TCG fallback), qemu-img/qemu-nbd, OVMF/UEFI and SeaBIOS are included in Rescue Disk 0.9.11. SSH welcomes interactive users and command-only agents with orientation and offline guide paths. /usr/share/aguja/TOOLBOX.md suggests optional tools including REA/MCP, Rizin, Unblob, Volatility, btop and lnav; these suggestions are not downloaded or installed. Agents can research alternatives and install selectively, after checking the host RAM, storage and mission scope."
+      "Native QEMU/KVM (TCG fallback), qemu-img/qemu-nbd, OVMF/UEFI and SeaBIOS are included in Rescue Disk 1.0.0. SSH welcomes interactive users and command-only agents with orientation and offline guide paths. /usr/share/aguja/TOOLBOX.md suggests optional tools including REA/MCP, Rizin, Unblob, Volatility, btop and lnav; these suggestions are not downloaded or installed. Agents can research alternatives and install selectively, after checking the host RAM, storage and mission scope."
     ],
     "6": [
       "On Windows, Import active network requests UAC for this Wi-Fi query only. Accept to read the saved key; cancellation remains retryable. Enterprise networks and unavailable/protected keys fail clearly instead of importing an empty password."

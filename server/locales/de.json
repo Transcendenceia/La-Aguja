@@ -39,10 +39,10 @@
     ]
   ],
   "imagerTitle": "USB mit Flash Imager vorbereiten",
-  "imagerText": "Die App für Windows und Linux lädt und prüft das Image, beschreibt den USB-Stick und speichert deine Einstellungen. SSH, KI-Agenten und dein Tailscale-/Headscale-Netz lassen sich vorbereiten. Unter Windows können verfügbare BitLocker-Schlüssel verwaltet werden. Version 0.9.9; das Schreiben löscht den Inhalt des USB-Sticks.",
+  "imagerText": "LA AGUJA 1.0 bietet wiederverwendbare Profile, Konfigurationsänderungen ohne erneutes Schreiben und dauerhafte Live-Updates. Deine Umgebung bleibt für den nächsten Rechner bereit. Der Assistent endet bei 07 · Datenträger erstellen. Profile/USB und Imager-Updates sind getrennte Werkzeuge.",
   "portable": "Portables Linux-Paket",
   "imagesTitle": "La-Aguja-Image herunterladen",
-  "imagesText": "Rescue Disk 0.9.9 ist das Linux, das auf dem Rechner startet. Images liegen auf unserer Website, Imager und Code auf GitHub. Der Imager prüft Katalogsignatur und SHA-256 des Downloads. Kein LA-AGUJA-Konto erforderlich.",
+  "imagesText": "Rescue Disk 1.0.0 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
   "imageLinks": [
     "Komprimiertes USB-Abbild (.img.zst) ↗",
     "BIOS/UEFI ISO ↗",
@@ -75,7 +75,7 @@
   "privacyTitle": "Deine Konfiguration bleibt unter deiner Kontrolle.",
   "privacyParagraphs": [
     "Die LA AGUJA Website informiert. Sie erstellt keine Konten, verlangt keine Anmeldung, hostet keine Tunnel oder Fernkonsolen und verwendet keine eigenen Konto-Cookies oder Analysewerkzeuge.",
-    "Abbilder und signierter Katalog kommen von der LA AGUJA Website. Imager und Quellcode werden auf GitHub bereitgestellt, das seine eigene Datenschutzrichtlinie anwendet. Das Hosting kann notwendige technische Zugriffsprotokolle speichern.",
+    "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
     "Flash Imager verarbeitet Abbilder sowie Netzwerk-, SSH-, KI- und Tailscale/Headscale-Profile lokal. Diese Profile werden nicht an diese Website gesendet. Private Abbilder können Geheimnisse enthalten: kontrolliere Speicherung und Weitergabe.",
     "Tailscale/Headscale und KI-Anbieter haben eigene Konten und Bedingungen. Ihre optionale Nutzung ist keine Registrierung bei LA AGUJA.",
     "Downloadanfragen zeigen dem Hosting-Anbieter deine Netzwerkanfrage, nicht deine Schlüssel oder den Inhalt lokaler Abbilder."
@@ -148,7 +148,7 @@
       "Unter Windows kann der Imager verfügbare Schlüssel prüfen und ausdrücklich ausgewählte Schlüssel in ein privates Abbild aufnehmen. Verschlüssele das Profil und behalte eine weitere Kopie. Ein angezeigter Schlüssel beweist kein entsperrtes Volume. Der Windows-Screenshot stammt aus 0.8.1, nicht aus einem neuen nativen 0.9.2-Test."
     ],
     [
-      "Schritt 6 · Vorbereiten, schreiben, prüfen",
+      "Schritt 7 · Vorbereiten, schreiben und prüfen",
       "Prüfe Abbild, Schutzmodus und Zusammenfassung. Privates Abbild erstellen erzeugt eine Datei; USB vorbereiten und schreiben beschreibt zusätzlich das gewählte Gerät. Vergleiche Modell, Seriennummer und echte Größe in der nativen Bestätigung. Bei Unsicherheit abbrechen. UAC/Polkit nur für die beabsichtigte Aktion zulassen.",
       "Warte ohne Abziehen auf die vollständige Rückleseprüfung und prüfe deren Ergebnis. Korrekte Bytes garantieren nicht jeden Firmware-Start: teste auf deiner Hardware. Die externe Windows-USB-Sicherung muss vorher erfolgt sein."
     ],

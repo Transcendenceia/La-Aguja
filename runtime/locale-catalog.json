@@ -880,7 +880,17 @@
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "The destination drive cannot store a file of this size. Choose a folder on an NTFS or exFAT drive.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Not enough space for the private image: {required} GiB free is required, but only {available} GiB is available. Choose a folder on another drive or free up space; the USB has not been written.",
       "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Safe: confirm every tool, workspace-write sandbox, human approval to leave it.",
-      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows and Linux will request local permission to read the saved password."
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows and Linux will request local permission to read the saved password.",
+      "USB listo": "USB ready",
+      "Tu pendrive está listo.": "Your USB drive is ready.",
+      "La grabación y la lectura de comprobación terminaron correctamente.": "Writing and readback verification completed successfully.",
+      "El respaldo anterior quedó guardado y verificado.": "The previous backup was saved and verified.",
+      "Expulsa el USB desde tu sistema antes de desconectarlo.": "Eject the USB drive from your system before unplugging it.",
+      "No se pudo completar la grabación": "Writing could not be completed",
+      "No se ha completado la preparación del USB.": "USB preparation did not complete.",
+      "El USB no está listo. No lo uses para arrancar hasta completar una nueva grabación verificada.": "The USB drive is not ready. Do not boot from it until a new verified write completes.",
+      "Aceptar": "OK",
+      "La grabación no devolvió una lectura verificada.": "Writing did not return a verified readback."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -1610,7 +1620,17 @@
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "此驱动器无法保存此大小的文件。请选择 NTFS 或 exFAT 驱动器。",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "空间不足：需要 {required} GiB 可用空间，目前只有 {available} GiB。请选择其他驱动器或释放空间；尚未写入 USB。",
       "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex 安全模式：每个工具均需确认，使用 workspace-write 沙盒，离开沙盒需人工批准。",
-      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows 和 Linux 会请求本地授权，以读取已保存的密码。"
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows 和 Linux 会请求本地授权，以读取已保存的密码。",
+      "USB listo": "USB 就绪",
+      "Tu pendrive está listo.": "你的 USB 盘已就绪。",
+      "La grabación y la lectura de comprobación terminaron correctamente.": "写入及回读验证已成功完成。",
+      "El respaldo anterior quedó guardado y verificado.": "之前的备份已保存并验证。",
+      "Expulsa el USB desde tu sistema antes de desconectarlo.": "拔下 USB 盘前，请先在系统中将其弹出。",
+      "No se pudo completar la grabación": "无法完成写入",
+      "No se ha completado la preparación del USB.": "USB 准备未完成。",
+      "El USB no está listo. No lo uses para arrancar hasta completar una nueva grabación verificada.": "USB 盘尚未就绪。请完成新的写入并通过验证后再用它启动。",
+      "Aceptar": "确定",
+      "La grabación no devolvió una lectura verificada.": "写入未返回通过验证的回读结果。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -2340,7 +2360,17 @@
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Ce lecteur ne peut pas stocker un fichier de cette taille. Choisissez un lecteur NTFS ou exFAT.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espace insuffisant : {required} GiB libres requis, {available} GiB disponibles. Choisissez un autre lecteur ou libérez de l’espace ; la clé USB n’a pas été écrite.",
       "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex sûr : confirmation pour chaque outil, sandbox workspace-write et accord humain pour en sortir.",
-      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows et Linux demanderont une autorisation locale pour lire le mot de passe enregistré."
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows et Linux demanderont une autorisation locale pour lire le mot de passe enregistré.",
+      "USB listo": "USB prêt",
+      "Tu pendrive está listo.": "Votre clé USB est prête.",
+      "La grabación y la lectura de comprobación terminaron correctamente.": "L’écriture et la vérification par relecture ont réussi.",
+      "El respaldo anterior quedó guardado y verificado.": "La sauvegarde précédente a été enregistrée et vérifiée.",
+      "Expulsa el USB desde tu sistema antes de desconectarlo.": "Éjectez la clé USB depuis votre système avant de la débrancher.",
+      "No se pudo completar la grabación": "L’écriture n’a pas pu être terminée",
+      "No se ha completado la preparación del USB.": "La préparation de la clé USB n’est pas terminée.",
+      "El USB no está listo. No lo uses para arrancar hasta completar una nueva grabación verificada.": "La clé USB n’est pas prête. Ne démarrez pas dessus avant une nouvelle écriture vérifiée.",
+      "Aceptar": "OK",
+      "La grabación no devolvió una lectura verificada.": "L’écriture n’a pas fourni de relecture vérifiée."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -3070,7 +3100,17 @@
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Esta unidade não suporta este tamanho de ficheiro. Escolha uma unidade NTFS ou exFAT.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Espaço insuficiente: são necessários {required} GiB livres e há {available} GiB disponíveis. Escolha outra unidade ou liberte espaço; o USB não foi gravado.",
       "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Seguro: confirmação por ferramenta, sandbox workspace-write e aprovação humana para sair.",
-      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows e Linux pedirão permissão local para ler a palavra-passe guardada."
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows e Linux pedirão permissão local para ler a palavra-passe guardada.",
+      "USB listo": "USB pronto",
+      "Tu pendrive está listo.": "A tua pen USB está pronta.",
+      "La grabación y la lectura de comprobación terminaron correctamente.": "A gravação e a verificação por leitura terminaram com sucesso.",
+      "El respaldo anterior quedó guardado y verificado.": "A cópia de segurança anterior foi guardada e verificada.",
+      "Expulsa el USB desde tu sistema antes de desconectarlo.": "Ejeta a pen USB no teu sistema antes de a desligar.",
+      "No se pudo completar la grabación": "Não foi possível concluir a gravação",
+      "No se ha completado la preparación del USB.": "A preparação da pen USB não foi concluída.",
+      "El USB no está listo. No lo uses para arrancar hasta completar una nueva grabación verificada.": "A pen USB não está pronta. Não arranques a partir dela até concluir uma nova gravação verificada.",
+      "Aceptar": "OK",
+      "La grabación no devolvió una lectura verificada.": "A gravação não devolveu uma leitura verificada."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -3800,7 +3840,17 @@
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Dieses Laufwerk unterstützt die Dateigröße nicht. Wähle ein NTFS- oder exFAT-Laufwerk.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Nicht genug Platz: {required} GiB frei erforderlich, {available} GiB verfügbar. Wähle ein anderes Laufwerk oder gib Platz frei; der USB wurde nicht beschrieben.",
       "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Sicher: jedes Werkzeug bestätigen, workspace-write-Sandbox und menschliche Freigabe zum Verlassen.",
-      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows und Linux bitten um lokale Erlaubnis, das gespeicherte Passwort zu lesen."
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows und Linux bitten um lokale Erlaubnis, das gespeicherte Passwort zu lesen.",
+      "USB listo": "USB bereit",
+      "Tu pendrive está listo.": "Dein USB-Stick ist bereit.",
+      "La grabación y la lectura de comprobación terminaron correctamente.": "Schreiben und Rückleseprüfung wurden erfolgreich abgeschlossen.",
+      "El respaldo anterior quedó guardado y verificado.": "Die vorherige Sicherung wurde gespeichert und geprüft.",
+      "Expulsa el USB desde tu sistema antes de desconectarlo.": "Wirf den USB-Stick im System aus, bevor du ihn abziehst.",
+      "No se pudo completar la grabación": "Schreiben konnte nicht abgeschlossen werden",
+      "No se ha completado la preparación del USB.": "Die Vorbereitung des USB-Sticks wurde nicht abgeschlossen.",
+      "El USB no está listo. No lo uses para arrancar hasta completar una nueva grabación verificada.": "Der USB-Stick ist nicht bereit. Starte erst davon, wenn ein neuer Schreibvorgang mit Prüfung abgeschlossen ist.",
+      "Aceptar": "OK",
+      "La grabación no devolvió una lectura verificada.": "Der Schreibvorgang lieferte keine geprüfte Rücklesung."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -4530,7 +4580,17 @@
       "La unidad de destino no admite un archivo de este tamaño. Elige una carpeta en una unidad NTFS o exFAT.": "Questa unità non supporta un file di queste dimensioni. Scegli un’unità NTFS o exFAT.",
       "No hay espacio suficiente para la imagen privada: se necesitan {required} GiB libres y hay {available} GiB. Elige una carpeta en otra unidad o libera espacio; el USB no se ha grabado.": "Spazio insufficiente: servono {required} GiB liberi, ma sono disponibili {available} GiB. Scegli un’altra unità o libera spazio; la chiavetta USB non è stata scritta.",
       "Codex Seguro: confirmación por herramienta, sandbox workspace-write y aprobación humana para salir.": "Codex Sicuro: conferma per ogni strumento, sandbox workspace-write e approvazione umana per uscirne.",
-      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows e Linux chiederanno il permesso locale per leggere la password salvata."
+      "Windows y Linux te pedirán permiso local para leer la contraseña guardada.": "Windows e Linux chiederanno il permesso locale per leggere la password salvata.",
+      "USB listo": "USB pronto",
+      "Tu pendrive está listo.": "La tua chiavetta USB è pronta.",
+      "La grabación y la lectura de comprobación terminaron correctamente.": "La scrittura e la verifica tramite rilettura sono state completate correttamente.",
+      "El respaldo anterior quedó guardado y verificado.": "Il backup precedente è stato salvato e verificato.",
+      "Expulsa el USB desde tu sistema antes de desconectarlo.": "Espelli la chiavetta USB dal sistema prima di scollegarla.",
+      "No se pudo completar la grabación": "Impossibile completare la scrittura",
+      "No se ha completado la preparación del USB.": "La preparazione della chiavetta USB non è stata completata.",
+      "El USB no está listo. No lo uses para arrancar hasta completar una nueva grabación verificada.": "La chiavetta USB non è pronta. Non usarla per avviare il sistema finché una nuova scrittura verificata non sarà completata.",
+      "Aceptar": "OK",
+      "La grabación no devolvió una lectura verificada.": "La scrittura non ha restituito una rilettura verificata."
     }
   }
 }

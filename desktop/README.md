@@ -1,8 +1,14 @@
-# LA AGUJA Flash Imager · Windows and Linux 0.9.9
+# LA AGUJA Flash Imager · Windows and Linux 0.9.12
 
 [Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
 
 Prepare a Rescue Disk from a working computer: network, language/keyboard, SSH, AI tools and optional Windows BitLocker recovery keys. Optional remote access uses your own Tailscale/Headscale, not a project tunnel. No LA AGUJA account is required.
+
+## Imager 0.9.12 · completion dialogs
+
+This desktop-only update continues to use Rescue Disk 0.9.11. No Rescue image rebuild is required.
+
+After flashing, a native window confirms that the USB is ready **only after successful read-back verification**. Eject it in your operating system before unplugging it. Failed preparation, denied permissions, writing or verification show a native error window with the public failure reason; the USB is not marked ready. Canceling the confirmation shows neither success nor error. The existing inline status remains available after closing the dialog. All supported application languages are included.
 
 ## Prepare a disk
 
@@ -28,7 +34,7 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-0.9.9-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-0.9.12-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 

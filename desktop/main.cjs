@@ -14,6 +14,7 @@ const {importActiveWifi}=require('./windows-wifi.cjs');
 const {withPrivilegedHelper}=require('./linux-privileged.cjs');
 const {userEnvironment}=require('./windows-environment.cjs');
 const {flashWindows}=require('./windows-flash.cjs');
+const {flashResultDialog}=require('./flash-result.cjs');
 const {AITools,provider,powershellArgs,windowsPowerShell,openWindowsLoginTerminal}=require('./ai-tools.cjs');
 const isWindows=process.platform==='win32';
 const i18n=require('./ui/i18n.js');
@@ -33,7 +34,16 @@ function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|
 function progress(phase,detail={}){if(win&&!win.isDestroyed())win.webContents.send('progress',{phase,...detail,...(detail.message?{message:translate(detail.message)}:{})});}
 function handle(channel,callback){ipcMain.handle(channel,async(event,...args)=>{
  if(event.sender!==win.webContents || event.senderFrame!==win.webContents.mainFrame)throw new Error('Origen no autorizado.');
- try{return receipt(true,await callback(...args));}catch(e){return receipt(false,{},translate(message(e)));}
+ let result;
+ try{result=receipt(true,await callback(...args));}catch(e){result=receipt(false,{},translate(message(e)));}
+ if(channel==='flash'){
+  const options=flashResultDialog(result,translate);
+  if(options&&!win.isDestroyed()){
+   // Preserve the actual write result even if the window closes while notifying.
+   try{await dialog.showMessageBox(win,options);}catch{}
+  }
+ }
+ return result;
 });}
 async function exclusive(fn){if(working)throw new Error('Espera a que termine la operación actual.');working=true;try{return await fn();}finally{working=false;}}
 function run(command,args,input=null,{timeout=120000,limit=4*1024*1024,phase='working',env={}}={}){return new Promise((resolve,reject)=>{

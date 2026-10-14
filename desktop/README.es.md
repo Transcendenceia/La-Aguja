@@ -83,3 +83,7 @@ Las pruebas Electron pueden usar `--no-sandbox` solo en el contenedor de QA que 
 Antigravity importa su entrada nativa del Administrador de credenciales; Codex lee su archivo, llavero directo o perfil cifrado `codex_auth.age`, respetando el almacén configurado. Claude Code y OpenCode conservan sus archivos y rutas de configuración nativos. Se extrae solo la sesión del proveedor elegido, sin modificarla ni copiar otros secretos, historial, hooks o MCP.
 
 Ejecuta el Imager con el mismo usuario de Windows que inició sesión en el CLI. No necesitas elevar la interfaz. Los tokens se mantienen en memoria del proceso principal y llegan al perfil privado por una tubería, sin archivos temporales de credenciales. Linux no cambia. El formato válido no certifica vigencia ni inferencia real de la cuenta.
+
+## Imager 0.9.12 · ventanas al terminar
+
+Actualización exclusiva de los imagers Windows y Linux; Rescue Disk continúa en 0.9.11. Al terminar la grabación y la verificación por lectura, una ventana nativa confirma «Tu pendrive está listo». Expulsa el USB desde el sistema antes de desconectarlo. Si falla la preparación, la autorización, la escritura o la verificación, una ventana de error muestra la causa disponible y deja claro que el USB no está listo. Cancelar la confirmación no genera un falso éxito ni un error. El estado en la interfaz sigue disponible al cerrar la ventana.

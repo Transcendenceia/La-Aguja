@@ -26,7 +26,7 @@ test('Windows recheck refreshes persisted tool locations without querying secret
  let query;
  const env=await userEnvironment(async(command,args)=>{query=args.at(-1);return JSON.stringify({Path:'C:\\new tools;C:\\machine tools',CODEX_HOME:'C:\\custom codex',PNPM_HOME:'C:\\pnpm',OPENAI_API_KEY:'SYNTHETIC-MUST-NOT-IMPORT'});},{Path:'C:\\old tools',CLAUDE_CONFIG_DIR:'C:\\explicit claude'});
  assert.equal(env.PATH,'C:\\old tools;C:\\new tools;C:\\machine tools');assert.equal(env.CODEX_HOME,'C:\\custom codex');assert.equal(env.CLAUDE_CONFIG_DIR,'C:\\explicit claude');assert.equal(env.OPENAI_API_KEY,undefined);assert(!Object.hasOwn(env,'Path'));assert(!query.includes('OPENAI_API_KEY'));assert(!query.includes('$PROFILE'));
- assert.deepEqual(await userEnvironment(async()=>{throw Error('SYNTHETIC-PRIVATE');},{Path:'old'}),{Path:'old'});
+ assert.deepEqual(await userEnvironment(async()=>{throw Error('SYNTHETIC-PRIVATE');},{Path:'old'}),{PATH:'old'});
 });
 test('native Windows detection finds pnpm, npm custom prefixes, Bun and Scoop outside stale PATH',{skip:process.platform!=='win32'},()=>{
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-native-windows-lookup-'));

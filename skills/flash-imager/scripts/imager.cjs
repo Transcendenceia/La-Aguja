@@ -9,8 +9,10 @@ const root = fs.existsSync(bundled) ? bundled : path.resolve(__dirname, '../../.
 const core = require(path.join(root, 'desktop/core.cjs'));
 const provisioning = require(path.join(root, 'desktop/provisioning.cjs'));
 const fat = require(path.join(root, 'desktop/fat32-writer.cjs'));
+const recovery = require(path.join(root, 'desktop/disk-recovery.cjs'));
+const engineVersion = JSON.parse(fs.readFileSync(path.join(root,'desktop/package.json'))).version;
 const pin = JSON.parse(fs.readFileSync(path.join(root, 'desktop/resources/release-key.json')));
-const VERSION = '1.0.3';
+const VERSION = '1.0.4';
 function emit(value) { process.stdout.write(JSON.stringify(value) + '\n'); }
 function requireValue(ok) { if (!ok) throw Error('invalid'); }
 function keys(value, allowed) {
@@ -41,11 +43,11 @@ function destination(value) {
 async function catalog() {
   return core.verifyManifest(await core.getHTTPS(pin.catalog_url), pin);
 }
-function readProfile(image) {
+function readProfile(image, filename='aguja-profile.json') {
   const fd = fs.openSync(image, 'r');
   try {
     const p = fat.findGptPartition(fd), params = fat.parseFat32Params(fd, p.offset);
-    return fat.readFat32File(fd, params, 'aguja-profile.json');
+    return fat.readFat32File(fd, params, filename);
   } finally { fs.closeSync(fd); }
 }
 function privateConfig(c, imports) {
@@ -53,10 +55,11 @@ function privateConfig(c, imports) {
     Object.values(c.providers).some(p => p.api_key) || c.tailscale?.enabled);
 }
 async function prepare(r) {
-  keys(r, ['image_path','output_path','image_sha256','capsule','protection','import_providers','allow_plain_secrets']);
+  keys(r, ['image_path','output_path','image_sha256','capsule','protection','import_providers','allow_plain_secrets','disk_recovery']);
   const source = sourceFile(r.image_path), output = destination(r.output_path);
   const expected = core.sha(r.image_sha256);
   const capsule = core.validateCapsule(r.capsule);
+  const diskRecovery = recovery.normalizeRecovery(r.disk_recovery || []);
   // These values must also survive the live runtime's literal INI reader.
   for (const v of [capsule.ssh.password,capsule.ssh.public_key,...Object.values(capsule.network.wifi || {}).filter(v=>typeof v==='string')]) requireValue(v === v.trim());
   const oc = capsule.providers.opencode;
@@ -68,7 +71,7 @@ async function prepare(r) {
   requireValue(Array.isArray(imports) && imports.length <= 4 && new Set(imports).size === imports.length);
   requireValue(imports.every(id => Object.hasOwn(provisioning.IMPORTS, id)));
   requireValue(Object.entries(capsule.providers).every(([id,p]) => (p.mode === 'import') === imports.includes(id)));
-  if (privateConfig(capsule, imports) && protection.mode !== 'encrypted') requireValue(r.allow_plain_secrets === true);
+  if ((privateConfig(capsule, imports) || diskRecovery.length) && protection.mode !== 'encrypted') requireValue(r.allow_plain_secrets === true);
   const approved = {};
   for (const id of imports) {
     const discovered = provisioning.discover(id);
@@ -81,7 +84,9 @@ async function prepare(r) {
   fs.chmodSync(work, 0o700);
   try {
     emit({type:'progress',stage:'prepare'});
-    await provisioning.prepareWindows({source,output:temp,sha256:expected,capsule,protection,approved});
+    const addonFiles=recovery.recoveryFiles(diskRecovery,protection,path.join(root,'runtime/recovery_keys.py'));
+    addonFiles['bitlocker.json']=Buffer.from(JSON.stringify({schema:1,volumes:[],source:'See aguja-recovery.json'}));
+    await provisioning.prepareWindows({source,output:temp,sha256:expected,capsule,protection,approved,addonFiles});
     fs.chmodSync(temp, 0o600);
     const raw = readProfile(temp);
     requireValue(raw && JSON.parse(raw).protection === protection.mode);
@@ -95,17 +100,20 @@ async function prepare(r) {
         requireValue(JSON.stringify(opened) === JSON.stringify(provisioning.materialize(capsule,approved)));
       } finally { key.fill(0); }
     }
+    const recoveryRaw=readProfile(temp,'aguja-recovery.json');
+    requireValue(recoveryRaw && recoveryRaw.equals(addonFiles['aguja-recovery.json']));
+    for(const name of ['aguja-recovery.py','RECOVERY-KEYS.txt','bitlocker.json'])requireValue(readProfile(temp,name).equals(addonFiles[name]));
     const checked = await core.hashFile(temp);
     requireValue((await core.hashFile(source)).sha256 === expected);
     fs.linkSync(temp, output); // Atomic: never replace an existing file.
-    return {ok:true,output_path:output,...checked,profile_verified:true,protection:protection.mode,source_unchanged:true,device_written:false};
+    return {ok:true,output_path:output,...checked,profile_verified:true,recovery_verified:true,recovery_count:diskRecovery.length,protection:protection.mode,source_unchanged:true,device_written:false};
   } finally { fs.rmSync(work, {recursive:true,force:true}); }
 }
 async function main() {
   requireValue(Number(process.versions.node.split('.')[0]) >= 22);
   const [operation, ...extra] = process.argv.slice(2); requireValue(extra.length === 0);
   if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare'],input:'JSON stdin for download, inspect and prepare',usb_writing:false};
-  if (operation === 'doctor') return {ok:true,version:VERSION,node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32',usb_writing:false};
+  if (operation === 'doctor') return {ok:true,version:VERSION,imager_version:engineVersion,recovery_types:['bitlocker','luks'],node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32',usb_writing:false};
   if (operation === 'locales') return {ok:true,languages:core.LOCALE_CATALOG.languages,keyboards:core.LOCALE_CATALOG.keyboards};
   if (operation === 'catalog') return {ok:true,signature_verified:true,releases:await catalog()};
   const r = await input();

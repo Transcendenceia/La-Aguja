@@ -153,3 +153,21 @@ La bienvenida SSH orienta incluso conexiones de comandos sin PTY, por el canal
 de diagnóstico del cliente (banner), sin añadir bytes al stdout de SCP/SFTP/rsync.
 Guía rápida: `/usr/share/aguja/QUICKSTART.md`; contexto: `aguja context`; inventario:
 `aguja tools`; documentación pública: https://aguja.transcendenceia.net/docs.
+
+
+## 7. Claves de recuperación y demás secretos (desde 0.9.15)
+
+Antes de buscar credenciales, lee `/usr/share/aguja/SECRETS.md` y la skill
+`/usr/share/aguja/skills/disk-recovery/SKILL.md`. Ejecuta `aguja secrets --json`
+y `sudo aguja recovery status --json`: muestran ubicaciones/estado, no valores.
+Las claves BitLocker/LUKS de otro equipo están en `/config/aguja-recovery.json`;
+tras desbloquear el perfil o `sudo aguja recovery unlock`, se materializan solo
+en RAM privada, `/run/aguja-recovery/keys.json` (root, 0600/0700). `list --json`
+permite seleccionar etiquetas e IDs sin mostrar claves; `open INDICE DISPOSITIVO`
+abre el mapping en solo lectura por defecto, nunca monta ni repara automáticamente.
+No uses un lector de archivos que vuelque secretos al contexto del modelo.
+Pasa el campo mínimo al destino mediante entrada privada dentro de un proceso.
+La guía de secretos distingue perfil protegido, INI legado, APIs, sesiones nativas,
+Wi-Fi, tailnet y la identidad SSH; no supone que todos existen ni sean válidos.
+Las copias de AGENTS.md/CLAUDE.md/GEMINI.md conservan las instrucciones del dueño
+fuera de un bloque gestionado que apunta a estas guías canónicas actualizadas.

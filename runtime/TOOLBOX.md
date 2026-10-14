@@ -115,3 +115,8 @@ análisis que se envíen a un modelo siguen la política de datos de ese proveed
 Las descargas requieren Internet; las herramientas ya incluidas permiten trabajo
 local sin red. Los agentes pueden investigar otras opciones: esta guía ofrece
 puntos de partida, **no prohíbe herramientas nuevas**.
+
+
+## Private recovery and credentials / Recuperación y credenciales
+
+Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. `aguja profile unlock` also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.

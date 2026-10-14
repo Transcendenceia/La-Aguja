@@ -109,6 +109,8 @@ def main(profile_override=None):
         # into a legacy persistent HOME on the unencrypted DATA filesystem.
         c['persistent_home'] = 'no'
     secure_write('/run/aguja-profile-status.json', json.dumps({'present': capsule_path.is_file(), 'locked': locked, 'loaded': bool(capsule)}), 0o644)
+    import recovery_state
+    recovery_state.initialize()
     run("hostnamectl", "set-hostname", c["hostname"])
     secure_write("/etc/hosts", "127.0.0.1 localhost\n127.0.1.1 " + c["hostname"] + "\n", 0o644)
     Path("/data").mkdir(exist_ok=True)
@@ -171,9 +173,8 @@ def main(profile_override=None):
     if capsule:
         subprocess.Popen(['nmcli', '--wait', '25', 'connection', 'up', 'aguja-ethernet'],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    for name in ("AGENTS.md", "CLAUDE.md", "GEMINI.md"):
-        if not (workspace / name).exists():
-            shutil.copyfile("/usr/share/aguja/AGENT-CONTEXT.md", workspace / name)
+    import agent_context
+    agent_context.ensure(workspace)
     quickstart = workspace / "QUICKSTART.md"
     if not quickstart.exists() and not quickstart.is_symlink():
         shutil.copyfile("/usr/share/aguja/QUICKSTART.md", quickstart)

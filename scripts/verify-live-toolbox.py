@@ -7,7 +7,7 @@ import json,os,shutil,socket,subprocess,tempfile,time
 binaries=('qemu-system-x86_64','qemu-img','qemu-nbd')
 versions={b:subprocess.check_output([b,'--version'],text=True).splitlines()[0] for b in binaries}
 assert all(shutil.which(b) for b in binaries)
-guides=('AGENT-CONTEXT.md','QUICKSTART.md','TOOLBOX.md','SSH-WELCOME.txt')
+guides=('AGENT-CONTEXT.md','QUICKSTART.md','TOOLBOX.md','SSH-WELCOME.txt','SECRETS.md')
 assert all((Path('/usr/share/aguja')/g).is_file() for g in guides)
 assert 'morluto/rea' in Path('/usr/share/aguja/TOOLBOX.md').read_text()
 config=subprocess.check_output(['sudo','-n','/usr/sbin/sshd','-T'],text=True)

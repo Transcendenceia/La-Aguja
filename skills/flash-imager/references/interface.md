@@ -1,4 +1,4 @@
-# File-image interface · 1.0.3
+# File-image interface · 1.0.4
 
 Use Node.js >=22. The downloadable ZIP is self-contained; no npm install, Electron, root, mtools or mounts are required. From the source checkout install the existing Imager dependency with `npm ci --prefix desktop`. Preparation uses its pure-JavaScript GPT/FAT32 engine on regular `.img` files. The output parent must already exist and be private. Existing files, symlinks and device sources are refused; the factory image is preserved. Keep enough space for a full copy.
 
@@ -35,6 +35,7 @@ See `../assets/request.example.json`. Absolute Windows paths work too; escape ba
 - `image_sha256`: trusted expected factory SHA-256 (64 lowercase hex).
 - `capsule`: schema 1; hostname, network, SSH, providers; optional locale and tailscale.
 - `protection`: `{mode:"plain"}` or `{mode:"encrypted",passphrase:"..."}`. Encryption is the existing runtime-compatible scrypt + AES-256-GCM envelope. Passphrase: 12–1024 characters; enter privately, never in a public example. Encrypted profiles require `aguja profile unlock` after boot.
+- `disk_recovery`: optional array of up to 16 entries `{type:"bitlocker"|"luks",label:"equipment/disk",identifier:"optional ID/UUID",key:"private existing key"}`. Read [recovery.md](recovery.md). Secret values enter only through private stdin; use encrypted protection. An empty list clears prior supplemental recovery content in the output copy.
 - `import_providers`: names explicitly authorised for selective local portable-session import. Each listed provider must have `mode:"import"`, and every import-mode provider must be listed. No arbitrary import paths are accepted. File portability does not prove authentication validity.
 - `allow_plain_secrets:true`: optional explicit override for a caller who deliberately accepts unencrypted credentials; otherwise such a request is rejected. Do not infer this consent.
 
@@ -52,6 +53,6 @@ Legacy project relay/account fields are not supported. No BitLocker harvesting, 
 
 ## Result and verification
 
-Preparation returns `output_path`, `sha256`, `bytes`, `profile_verified:true`, `source_unchanged:true`, `device_written:false`, and `protection`. It uses the existing engine's FAT32 readback, additionally opens the encrypted profile in memory, hashes the output, checks the original hash again and atomically creates the final file without replacement. This verifies file preparation, not physical boot or service health.
+Preparation returns `output_path`, `sha256`, `bytes`, `profile_verified:true`, `recovery_verified:true`, `recovery_count`, `source_unchanged:true`, `device_written:false`, and `protection`. It uses the existing engine's FAT32 readback, additionally opens the encrypted profile in memory, hashes the output, checks the original hash again and atomically creates the final file without replacement. This verifies file preparation, not physical boot or service health.
 
 POSIX staging/output are 0700/0600. Node mode bits do **not** enforce Windows ACLs: use a private user directory, and encryption for credentials. macOS/Windows execution support follows the Node engine but must be tested in your own environment; Linux functional QA alone is not a cross-OS certificate.

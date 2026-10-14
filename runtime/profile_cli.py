@@ -26,6 +26,13 @@ def main(args):
             print('No se abrió el perfil; comprueba la frase y la configuración.')
             return 1
         print('Perfil desbloqueado. Red, SSH y proveedores aplicados; la red privada conserva tu elección.')
+        import recovery_state
+        if recovery_state.status().get('present'):
+            try:
+                recovery_state.unlock(password)
+                print('Claves de recuperación disponibles en RAM privada; ningún disco se abrió.')
+            except (ValueError, OSError, KeyError):
+                print('El perfil está abierto; el resguardo de recuperación requiere revisión o aguja recovery unlock.')
         return 0
     if args not in ([], ['status'], ['status', '--json']):
         raise ValueError('profile status [--json] | profile unlock')

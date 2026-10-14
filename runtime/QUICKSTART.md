@@ -227,3 +227,8 @@ RAM/disco y `/usr/share/aguja/TOOLBOX.md`: incluye ejemplos y sugerencias opcion
 (REA, Rizin, Unblob, Volatility, btop, lnav, etc.), sin descargarlas. Los agentes
 pueden investigar e instalar otras herramientas según la misión y los recursos.
 La bienvenida SSH muestra estos caminos también al conectarse sin terminal.
+
+
+## Private recovery and credentials / Recuperación y credenciales
+
+Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. `aguja profile unlock` also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.

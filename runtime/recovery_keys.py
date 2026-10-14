@@ -41,6 +41,8 @@ def open_envelope(raw, passphrase=None):
     if len(raw) > 256 * 1024:
         raise ValueError('Recovery file too large / Archivo demasiado grande')
     envelope = json.loads(raw)
+    if not isinstance(envelope, dict):
+        raise ValueError('Invalid recovery format')
     if envelope.get('format') != FORMAT or envelope.get('schema') != 1:
         raise ValueError('Invalid recovery format / Formato de recuperación no válido')
     if envelope.get('protection') == 'plain':
@@ -74,6 +76,22 @@ def export_keys(keys, root=Path('/run/aguja-recovery')):
         json.dump({'schema': 1, 'keys': validate(keys)}, out)
     return path
 
+
+def open_device(item, selected, index, writable=False):
+    item = validate([item])[0]
+    device = Path(selected).resolve(strict=True)
+    if not str(device).startswith('/dev/') or not stat.S_ISBLK(device.stat().st_mode):
+        raise ValueError('Select a block device')
+    if item['type'] == 'luks' and re.fullmatch(r'[0-9a-fA-F-]{36}', item['identifier']):
+        uuid = subprocess.check_output(['cryptsetup', 'luksUUID', str(device)], text=True).strip()
+        if uuid.lower() != item['identifier'].lower():
+            raise ValueError('LUKS UUID does not match')
+    command = ['cryptsetup', 'open', '--type', 'bitlk' if item['type'] == 'bitlocker' else 'luks', '--key-file', '-']
+    if not writable:
+        command.append('--readonly')
+    command += [str(device), f'aguja-recovery-{index}']
+    subprocess.run(command, input=item['key'].encode(), check=True)
+
 def main():
     parser = argparse.ArgumentParser(description='LA AGUJA manual BitLocker / LUKS recovery keys')
     parser.add_argument('action', choices=['list', 'export', 'open'])
@@ -96,19 +114,7 @@ def main():
     else:
         if args.index is None or not 1 <= args.index <= len(keys) or not args.device:
             raise ValueError('Choose a key number and exact device / Elige número de clave y dispositivo exacto')
-        device = Path(args.device).resolve(strict=True)
-        if not str(device).startswith('/dev/') or not stat.S_ISBLK(device.stat().st_mode):
-            raise ValueError('Select a block device / Selecciona un dispositivo de bloques')
-        item = keys[args.index - 1]
-        if item['type'] == 'luks' and re.fullmatch(r'[0-9a-fA-F-]{36}', item['identifier']):
-            uuid = subprocess.check_output(['cryptsetup', 'luksUUID', str(device)], text=True).strip()
-            if uuid.lower() != item['identifier'].lower():
-                raise ValueError('LUKS UUID does not match / El UUID LUKS no coincide')
-        command = ['cryptsetup', 'open', '--type', 'bitlk' if item['type'] == 'bitlocker' else 'luks', '--key-file', '-']
-        if not args.writable:
-            command.append('--readonly')
-        command += [str(device), f'aguja-recovery-{args.index}']
-        subprocess.run(command, input=item['key'].encode(), check=True)
+        open_device(keys[args.index - 1], args.device, args.index, args.writable)
 
 if __name__ == '__main__':
     try:

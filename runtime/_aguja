@@ -7,6 +7,8 @@ commands=(
   'run:Tarea visible: --label nombre -- comando'
   'login:Acceso oficial con navegador local para Claude, Antigravity o Codex'
   'profile:Estado y desbloqueo del perfil preparado'
+  'recovery:Claves BitLocker/LUKS; status, list, unlock y apertura explícita'
+  'secrets:Ubicaciones y estado de credenciales sin mostrar valores'
   'tailscale:Estado de red privada Tailscale / Headscale'
   'browser:Ayuda del acceso pendiente (sin QR)'
   'network:Estado de red JSON; --wait espera conexión'
@@ -27,6 +29,8 @@ if (( CURRENT == 2 )); then
 fi
 case "$words[2]" in
   profile) _values 'Perfil' status unlock ;;
+  recovery) _values 'Recuperación' status list unlock export open --json --writable ;;
+  secrets) _values 'Formato' --json ;;
   login) _values 'Agente' codex antigravity claude ;;
   agent) _values 'Agente' codex antigravity claude opencode shell ;;
   status) _values 'Formato' --json --disks ;;

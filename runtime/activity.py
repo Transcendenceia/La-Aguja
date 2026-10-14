@@ -193,7 +193,8 @@ SECRET_FILES = ('/etc/aguja/aguja.conf', '/config/aguja.conf',
                 '/home/aguja/.config/aguja/provider-env.json', '/run/aguja-platform/remote.json',
                 '/config/aguja-profile.json', '/config/aguja-remote.json', '/config/aguja-agent-access.json',
                 '/home/aguja/.codex/auth.json', '/home/aguja/.gemini/antigravity-cli/antigravity-oauth-token',
-                '/home/aguja/.claude/.credentials.json', '/home/aguja/.local/share/opencode/auth.json')
+                '/home/aguja/.claude/.credentials.json', '/home/aguja/.local/share/opencode/auth.json',
+                '/config/aguja-recovery.json', '/run/aguja-recovery/keys.json', '/config/bitlocker.json')
 
 
 def secret_stamp():
@@ -227,7 +228,8 @@ def secret_values():
             def collect(item):
                 if isinstance(item, dict):
                     for key, item_value in item.items():
-                        if SENSITIVE.search(key) and isinstance(item_value, str) and len(item_value) >= 4 and item_value != 'aguja':
+                        recovery_key = filename in ('/config/aguja-recovery.json', '/run/aguja-recovery/keys.json') and key == 'key'
+                        if (SENSITIVE.search(key) or recovery_key) and isinstance(item_value, str) and len(item_value) >= 4 and item_value != 'aguja':
                             found.add(item_value)
                             # A delegated token packs two secrets; redact either
                             # component too, should a command use it separately.

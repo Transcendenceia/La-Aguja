@@ -41,7 +41,8 @@ test('real file preparation, encrypted runtime interoperability, no overwrite an
     const secret=request(source,path.join(dir,'encrypted.img'));secret.capsule.ssh.password='SYNTHETIC-SSH-PRIVATE';secret.capsule.providers={codex:{mode:'api',api_key:'SYNTHETIC-API-PRIVATE'}};
     assert.equal(call('prepare',secret).status,1);assert(!fs.existsSync(secret.output_path));
     secret.protection={mode:'encrypted',passphrase:'SYNTHETIC-UNLOCK-PRIVATE'};
-    const encrypted=call('prepare',secret);assert.equal(encrypted.status,0,encrypted.stdout);assert(!encrypted.stdout.includes('SYNTHETIC'));assert.equal(encrypted.stderr,'');
+    secret.disk_recovery=[{type:'luks',label:'Other machine',identifier:'',key:'  SYNTHETIC LUKS ñ exact  '}];
+    const encrypted=call('prepare',secret);assert.equal(encrypted.status,0,encrypted.stdout);assert.equal(encrypted.result.recovery_verified,true);assert.equal(encrypted.result.recovery_count,1);assert(!encrypted.stdout.includes('SYNTHETIC'));assert.equal(encrypted.stderr,'');
     const raw=execFileSync('mtype',['-i',secret.output_path+'@@1048576','::/aguja-profile.json']);assert(!raw.includes('SYNTHETIC-API-PRIVATE'));
     const py='import sys;sys.path.insert(0,sys.argv[1]);from profile import open_capsule;c=open_capsule(sys.stdin.buffer.read(),"SYNTHETIC-UNLOCK-PRIVATE");assert c["providers"]["codex"]["api_key"]=="SYNTHETIC-API-PRIVATE";assert c["hostname"]=="agent-fixture";print("opened")';
     assert.equal(execFileSync('/usr/bin/python3',['-I','-c',py,path.join(ROOT,'runtime')],{input:raw}).toString().trim(),'opened');
@@ -60,6 +61,9 @@ test('standalone distributable prepares an image without checkout or npm install
     const skillVersion=fs.readFileSync(path.join(extracted,'flash-imager/SKILL.md'),'utf8').match(/^  version: "([^"]+)"$/m)[1];
     assert.equal(doctor.result.version,manifest.skill_version);assert.equal(manifest.skill_version,skillVersion);
     const source=synthetic(dir),r=request(source,path.join(dir,'standalone-private.img'));
+    r.disk_recovery=[{type:'bitlocker',label:'Other Windows',identifier:'',key:Array(8).fill('000011').join('-')}];
+    assert.equal(call('prepare',r,script).status,1);
+    r.protection={mode:'encrypted',passphrase:'SYNTHETIC-BUNDLE-UNLOCK'};
     assert.equal(call('prepare',r,script).status,0);assert(fs.existsSync(r.output_path));
     const second=path.join(dir,'second');execFileSync('python3',[path.join(ROOT,'scripts/package-imager-skill.py'),second]);
     for(const name of fs.readdirSync(output))assert.equal(hash(path.join(output,name)),hash(path.join(second,name)));

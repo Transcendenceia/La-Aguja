@@ -84,3 +84,8 @@ y se marca `distribution: personal`. No se publica automáticamente ni sustituye
 La imagen pública 0.9.0 anteriormente publicada contiene solo Codex y OpenCode. Las licencias
 originales de Claude/Antigravity no cambian por instalarlos: mantener estos medios personales
 fuera de releases públicas hasta acreditar la distribución, según `NOTICE.md`.
+
+
+## Credential and recovery context (0.9.15+)
+
+All four live agents use `/usr/share/aguja/AGENT-CONTEXT.md` and `/usr/share/aguja/SECRETS.md`. Their workspace AGENTS.md/CLAUDE.md/GEMINI.md retain owner text and receive an updated managed pointer. The included [disk recovery skill](../skills/disk-recovery/SKILL.md) explains metadata-only inventory, private input and read-only mappings. [Recovery guide](DISK-RECOVERY.md).

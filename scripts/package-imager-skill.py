@@ -28,10 +28,11 @@ def build(output):
         if source.is_symlink() or not source.is_file():
             raise ValueError('Missing or unsafe bundle source: ' + str(source.relative_to(ROOT)))
         files['flash-imager/' + destination] = source.read_bytes()
-    for name in ['SKILL.md','references/interface.md','references/harnesses.md','assets/request.example.json','scripts/imager.cjs']:
+    for name in ['SKILL.md','references/interface.md','references/harnesses.md','assets/request.example.json','scripts/imager.cjs','references/recovery.md']:
         add(ROOT/'skills/flash-imager'/name, name)
-    for name in ['core.cjs','image-storage.cjs','provisioning.cjs','fat32-writer.cjs','public-download.cjs','resources/release-key.json']:
+    for name in ['core.cjs','image-storage.cjs','provisioning.cjs','fat32-writer.cjs','public-download.cjs','resources/release-key.json','disk-recovery.cjs','package.json']:
         add(ROOT/'desktop'/name, 'scripts/lib/desktop/' + name)
+    add(ROOT/'runtime/recovery_keys.py', 'scripts/lib/runtime/recovery_keys.py')
     add(ROOT/'runtime/locale-catalog.json', 'scripts/lib/runtime/locale-catalog.json')
     add(ROOT/'LICENSE', 'LICENSE')
     add(ROOT/'NOTICE.md', 'NOTICE.md')

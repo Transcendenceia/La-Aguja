@@ -54,7 +54,11 @@
       "windows-wifi.ps1",
       "flash-result.cjs",
       "disk-recovery.cjs",
-      "flash-confirm.cjs"
+      "flash-confirm.cjs",
+      "imager-updates.cjs",
+      "reusable-profile.cjs",
+      "capsule-edit.cjs",
+      "usb-config.cjs"
     ],
     "extraResources": [
       {

@@ -3,7 +3,7 @@
 set -euo pipefail
 PROJECT=${AGUJA_PROJECT:-$(cd "$(dirname "$0")/.." && pwd)}
 ROOT=${AGUJA_ROOT:-$PROJECT/build/rootfs}
-[[ $EUID == 0 && $(realpath "$ROOT") == "$PROJECT/build/rootfs" && -f $ROOT/etc/debian_version ]] || exit 1
+[[ $EUID == 0 && $(realpath "$ROOT") == "$PROJECT/build/"* && -f $ROOT/etc/debian_version ]] || exit 1
 mount --make-rprivate /
 mount -t proc proc "$ROOT/proc"
 mount -t tmpfs -o mode=755,nosuid tmpfs "$ROOT/dev"

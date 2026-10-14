@@ -2,10 +2,11 @@
 import argparse,contextlib,fcntl,hashlib,json,os,re,shutil,signal,stat,subprocess,sys,tarfile,time,uuid
 from pathlib import Path
 import update_sources as sources
+from i18n import t
 DATA=Path('/data');CFG=Path('/config');ROOT=DATA/'updates';PIN=Path('/usr/share/aguja/release-key.json');STATE=ROOT/'state.json'
 BINS={'codex':'opt/aguja/agents/codex/x86_64-unknown-linux-musl/bin/codex','claude':'opt/aguja/agents/claude/claude','antigravity':'opt/aguja/agents/antigravity/agy','opencode':'opt/aguja/agents/opencode/opencode'}
 def run(args,**kw):
- timeout=kw.pop('timeout',1800)
+ timeout=kw.pop('timeout',1800);log=kw.pop('log',None)
  with subprocess.Popen(args,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True,**kw) as process:
   try:out,err=process.communicate(timeout=timeout)
   except subprocess.TimeoutExpired:
@@ -13,6 +14,7 @@ def run(args,**kw):
    try:process.communicate(timeout=10)
    except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.communicate()
    raise
+  if log is not None:log.write_bytes((out+err)[-4*1024**2:]);log.chmod(0o600)
   if process.returncode:raise subprocess.CalledProcessError(process.returncode,args)
   return subprocess.CompletedProcess(args,0,out,err)
 
@@ -70,11 +72,14 @@ def source_live():
   if not (root/name).is_file() or (root/name).is_symlink():raise ValueError('Base de arranque no disponible')
  return root
 @contextlib.contextmanager
-def lock():
- capacity(128*1024**2);ROOT.mkdir(mode=0o700,exist_ok=True)
+def lock(check_capacity=True):
+ if check_capacity:capacity(128*1024**2)
+ ROOT.mkdir(mode=0o700,exist_ok=True)
  if ROOT.is_symlink() or ROOT.stat().st_uid!=0:raise ValueError('Área de actualizaciones no válida')
  with (ROOT/'lock').open('a+b') as f:
-  fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB);yield
+  try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  except BlockingIOError:raise ValueError('Ya hay una operación de actualización en curso; espera a que termine.')
+  yield
 
 def installed():
  result={}
@@ -113,13 +118,21 @@ def check():
 def boot_pointer(s):
  # GRUB resolves this DATA partition as a sibling of the boot medium, not by
  # searching labels across every internal disk attached to the rescue target.
- text='set default=aguja-current\n'
+ validate_state(s)
+ text='set default='+('aguja-current' if s.get('active') else 'aguja-factory')+'\n'
  for field,label in [('active','Actualizada'),('previous','Anterior')]:
   if not s.get(field):continue
-  g=s[field];m=metadata(ROOT/g/'manifest.json')
-  if m.get('schema')!=1 or set(m.get('files',{}))!={'vmlinuz','initrd.img','filesystem.squashfs'}:raise ValueError('Manifiesto de generación incompleto')
-  for name,digest in m['files'].items():
-   if not re.fullmatch('[a-f0-9]{64}',digest) or (ROOT/g/'live'/name).is_symlink() or hashfile(ROOT/g/'live'/name)!=digest:raise ValueError('Generación dañada; no se activa')
+  g=s[field]
+  try:
+   m=metadata(ROOT/g/'manifest.json')
+   if m.get('schema')!=1 or set(m.get('files',{}))!={'vmlinuz','initrd.img','filesystem.squashfs'}:raise ValueError('Manifiesto de generación incompleto')
+   for name,digest in m['files'].items():
+    if not re.fullmatch('[a-f0-9]{64}',digest) or (ROOT/g/'live'/name).is_symlink() or hashfile(ROOT/g/'live'/name)!=digest:raise ValueError('Generación dañada; no se activa')
+  except (ValueError,OSError):
+   if field=='active':raise
+   # A damaged retained previous generation must not prevent selecting the
+   # immutable factory or activating a valid new generation. Never erase it.
+   text+='# Retained previous generation failed verification; use factory.\n';continue
   device=subprocess.check_output(['findmnt','-n','-o','SOURCE','--target','/data'],text=True).strip()
   if device.startswith('/dev/loop'):device=subprocess.check_output(['losetup','-n','-O','BACK-FILE',device],text=True).strip()
   # boot.py records the observed sibling DATA block path even for loop views.
@@ -178,15 +191,34 @@ def install_harnesses(root,items,cache):
    if target.is_symlink():raise ValueError('Destino nativo inesperado')
    with tar.extractfile(member) as src,target.open('wb') as out:shutil.copyfileobj(src,out,1024**2)
    target.chmod(0o755)
+  # Only known metadata regular files, never arbitrary archive extraction.
+  with tarfile.open(archive,'r:gz') as tar:
+   for member_name in ('package/package.json','package/LICENSE.md','package/LICENSE','package/README.md'):
+    try:entry=tar.getmember(member_name)
+    except KeyError:continue
+    if not entry.isfile() or entry.size>1048576:raise ValueError('Metadatos nativos no válidos')
+    target=root/BINS[name];dest=target.parent/Path(member_name).name
+    if dest.is_symlink():raise ValueError('Destino nativo inesperado')
+    dest.write_bytes(tar.extractfile(entry).read());dest.chmod(0o644)
   archive.unlink()
+ atomic(root/'usr/share/aguja/installed-harnesses.json',{'schema':1,'providers':items})
+
+def verify_harnesses(root,items):
+ # Native runtimes (notably Bun/Claude) require /dev even for --version.
+ # Validate inside the same minimal-device namespace as package staging.
+ raw=run(['nice','-n','10','unshare','--mount','--pid','--fork','--propagation','private','/usr/lib/aguja/update-root-worker.sh',str(root),'verify']).stdout
+ actual=json.loads(raw)
+ if actual!={name:item['version'] for name,item in items.items()}:raise ValueError('La versión nativa no coincide con la descarga verificada')
 
 def package_generation(packages,harnesses):
  with lock():
   capacity(7*1024**3);base=source_live();g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);root=folder/'root';cache=folder/'downloads';cache.mkdir();live=folder/'live';live.mkdir()
   run(['nice','-n','10','unsquashfs','-processors','1','-d',str(root),str(base/'filesystem.squashfs')])
-  if harnesses:install_harnesses(root,sources.harnesses(),cache)
+  items=sources.harnesses() if harnesses else {}
+  if items:install_harnesses(root,items,cache)
   worker=Path('/usr/lib/aguja/update-root-worker.sh')
-  run(['nice','-n','10','unshare','--mount','--pid','--fork','--propagation','private',str(worker),str(root),'yes' if packages else 'no'])
+  run(['nice','-n','10','unshare','--mount','--pid','--fork','--propagation','private',str(worker),str(root),'yes' if packages else 'no'],log=folder/'build.log')
+  if items:verify_harnesses(root,items)
   kernels=sorted((root/'boot').glob('vmlinuz-*'),key=lambda p:p.stat().st_mtime)
   if not kernels:raise ValueError('Kernel actualizado no disponible')
   kernel=kernels[-1];initrd=root/'boot'/('initrd.img-'+kernel.name.removeprefix('vmlinuz-'));shutil.copy2(kernel,live/'vmlinuz');shutil.copy2(initrd,live/'initrd.img')
@@ -202,13 +234,20 @@ def package_generation(packages,harnesses):
 def rollback():
  with lock():
   s=state();new={'schema':1,'active':s['previous'],'previous':s['active']}
-  pointer=boot_pointer(new) if new['active'] else b'# Factory selected\n'
+  pointer=boot_pointer(new)
   commit_state(new,pointer);return {'ok':True,'reboot_required':True,'state':new}
 
-def status():
+def status_unlocked():
  s=state();checkfile=ROOT/'checks.json';cached=metadata(checkfile) if checkfile.is_file() else None
  if cached is not None and (not isinstance(cached,dict) or set(cached)!={'schema','checked_at','errors','packages','harnesses','release','restart_required'}):raise ValueError('Inventario de actualización no válido')
  return {'persistent_available':os.path.ismount(DATA) and os.path.ismount(CFG),'state':s,'running_generation':running_generation(),'reboot_required':s['active']!=running_generation(),'check':cached}
+
+def status():
+ # Pending-state recovery shares the activation lock: a simultaneous status
+ # reader must not retire an in-flight transaction before its CFG commit.
+ if os.path.ismount(DATA) and os.path.ismount(CFG) and ROOT.exists():
+  with lock(check_capacity=False):return status_unlocked()
+ return status_unlocked()
 
 def cleanup():
  with lock():
@@ -228,26 +267,26 @@ def cleanup():
   return {'ok':True,'removed':removed,'active_and_previous_preserved':True}
 
 def menu():
- print('LA AGUJA · Actualizaciones persistentes del USB')
- print('1 Consultar actualizaciones / 2 Paquetes del sistema / 3 Arneses / 4 Paquetes y arneses / 5 Rescue Disk / 6 Volver a versión anterior / 7 Retirar generaciones inactivas / Enter Salir')
- choice=input('Opción: ').strip();actions={'1':'check','2':'packages','3':'harnesses','4':'all','5':'release','6':'rollback','7':'cleanup'}
+ print(t('LA AGUJA · Actualizaciones persistentes del USB'))
+ print(t('1 Consultar actualizaciones / 2 Paquetes del sistema / 3 Arneses / 4 Paquetes y arneses / 5 Rescue Disk / 6 Volver a versión anterior / 7 Retirar generaciones inactivas / Enter Salir'))
+ choice=input(t('Opción: ')).strip();actions={'1':'check','2':'packages','3':'harnesses','4':'all','5':'release','6':'rollback','7':'cleanup'}
  if choice not in actions:return {'canceled':True}
  if choice!='1':
-  print('Solo se retirarán generaciones inactivas de actualizaciones; no se borran perfiles ni archivos personales.' if choice=='7' else 'Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.')
-  if input('Continuar [s/N]: ').strip().lower() not in ('s','y','yes','si','sí'):return {'canceled':True}
+  print(t('Solo se retirarán generaciones inactivas de actualizaciones; no se borran perfiles ni archivos personales.') if choice=='7' else t('Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.'))
+  if input(t('Continuar [s/N]: ')).strip().lower() not in ('s','y','yes','si','sí'):return {'canceled':True}
  return main([actions[choice]])
 
 def show(result):
  if 'packages' in result:
-  print('Paquetes del sistema disponibles:',len(result['packages']))
+  print(t('Paquetes del sistema disponibles:'),len(result['packages']))
   for package in result['packages'][:30]:print('  '+package['name']+': '+package['current']+' → '+package['latest'])
-  for name,h in result['harnesses'].items():print(name+': '+str(h['current'])+' → '+h['latest']+(' · disponible' if h['available'] else ' · actualizado'))
+  for name,h in result['harnesses'].items():print(name+': '+str(h['current'])+' → '+h['latest']+(t(' · disponible') if h['available'] else t(' · actualizado')))
   release=result.get('release')
-  if release:print('Rescue Disk: '+release['current']+' → '+release['latest']+(' · disponible' if release['available'] else ' · actualizado'))
-  for error in result['errors'].values():print(error)
- elif result.get('reboot_required'):print('Cambio guardado y verificado. Reinicia cuando quieras para aplicarlo. Fábrica y la versión anterior siguen disponibles.')
- elif 'removed' in result:print('Generaciones inactivas retiradas:',len(result['removed']))
- else:print('Generación actual:',result.get('state',{}).get('active') or 'fábrica')
+  if release:print('Rescue Disk: '+release['current']+' → '+release['latest']+(t(' · disponible') if release['available'] else t(' · actualizado')))
+  for error in result['errors'].values():print(t(error))
+ elif result.get('reboot_required'):print(t('Cambio guardado y verificado. Reinicia cuando quieras para aplicarlo. Fábrica y la versión anterior siguen disponibles.'))
+ elif 'removed' in result:print(t('Generaciones inactivas retiradas:'),len(result['removed']))
+ else:print(t('Generación actual:'),result.get('state',{}).get('active') or t('fábrica'))
 
 def main(argv=None):
  argv=sys.argv[1:] if argv is None else argv

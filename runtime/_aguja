@@ -14,6 +14,7 @@ commands=(
   'network:Estado de red JSON; --wait espera conexión'
   'wifi:Selector Wi-Fi y guardado en el USB'
   'password:Cambiar y guardar contraseña SSH'
+  'update:Actualizaciones persistentes de paquetes, arneses y Rescue'
   'help:Guía de inicio y comandos'
   'tools:Inventario de herramientas'
   'doctor:Diagnóstico de configuración y servicios'
@@ -28,6 +29,7 @@ if (( CURRENT == 2 )); then
     return
 fi
 case "$words[2]" in
+  update) _values 'Actualizaciones' status check packages harnesses all release rollback cleanup menu --json ;;
   profile) _values 'Perfil' status unlock ;;
   recovery) _values 'Recuperación' status list unlock export open --json --writable ;;
   secrets) _values 'Formato' --json ;;

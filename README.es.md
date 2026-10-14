@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 0.9.16 · Rescue Disk 0.9.16 · Experimental · x86-64**
+**Flash Imager 1.0.0 · Rescue Disk 1.0.0 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
@@ -50,7 +50,7 @@ Más allá: migración físico→virtual, laboratorio PXE, imágenes Linux propi
 
 ## Primeros pasos
 
-1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.16). El EXE/AppImage es el preparador, no la imagen de rescate.
+1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.0.0). El EXE/AppImage es el preparador, no la imagen de rescate.
 2. **Selecciona la imagen.** Usa el catálogo firmado o descomprime el `.img.zst` descargado manualmente antes de elegir el `.img`. La ISO sirve para pruebas de arranque en VM.
 3. **Configura idioma, teclado, red y SSH.** Sustituye la contraseña SSH pública de fábrica `aguja` por una propia o una clave pública. IA y tailnet son opcionales.
 4. **Protege el perfil.** Cifra la cápsula si contiene secretos. Cambia la frase inicial pública `aguja` y guarda la nueva fuera del USB. Esto no cifra HOME persistente ni todo AGUJA_DATA.
@@ -148,6 +148,8 @@ Cada máquina puede ser el comienzo de algo nuevo. Si LA AGUJA te ayuda a constr
 
 <p align="center"><a href="https://ko-fi.com/transcendenceia"><img src="branding/donation/support-es.svg" width="360" alt="Invítanos a un café · Ko-fi"></a></p>
 
-**Nuevo en 0.9.16:** idiomas completos, claves manuales BitLocker/LUKS de otro equipo, exclusividad del USB Windows y grabador oculto; inventario de secretos sin valores y contexto para agentes dentro del live. [Guía de recuperación](docs/DISK-RECOVERY.es.md).
+**Nuevo en 1.0:** actualización opcional y firmada del Imager, perfiles reutilizables cifrados, edición de configuración del USB sin regrabar, apartado Discos cifrados y generaciones persistentes de sistema/arneses/Rescue con vuelta a fábrica o anterior. [Actualizaciones persistentes](runtime/UPDATES.md).
+
+**Añadido en 0.9.16:** idiomas completos, claves manuales BitLocker/LUKS de otro equipo, exclusividad del USB Windows y grabador oculto; inventario de secretos sin valores y contexto para agentes dentro del live. [Guía de recuperación](docs/DISK-RECOVERY.es.md).
 
 **Incluido desde 0.9.11:** importar Wi-Fi pide UAC en Windows y conserva WPA3. Rescue Disk incluye QEMU/KVM, TCG, qemu-img/qemu-nbd, OVMF y SeaBIOS. Bienvenida SSH y [guía de herramientas opcionales](runtime/TOOLBOX.md) para investigar e instalar alternativas bajo demanda, sin incluir sus descargas. [Notas de versión](docs/RELEASE-0.9.11.md).

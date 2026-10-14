@@ -2,7 +2,7 @@
 """Identity-bound CFG-only USB editing. Inputs/results use a private pipe."""
 import base64,contextlib,fcntl,hashlib,json,os,re,stat,subprocess,sys,tempfile,uuid
 from pathlib import Path
-FILES=('aguja-profile.json','aguja-recovery.json','locale.json','aguja.conf')
+FILES=('aguja-profile.json','aguja-recovery.json','aguja-locale.json','aguja.conf')
 MAX=4*1024**2
 
 def digest(data):return hashlib.sha256(data).hexdigest()

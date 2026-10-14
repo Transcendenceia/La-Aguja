@@ -20,9 +20,14 @@ async function main(){
    parts.push({url:pin.image_base_url?new URL(name,pin.image_base_url).href:`https://github.com/${pin.repository}/releases/download/v${version}/${name}`,bytes,sha256:hash.digest('hex')});
   }
  }finally{await file.close();}
- const payload=Buffer.from(JSON.stringify({schema:1,expires_at:new Date(Date.now()+365*86400000).toISOString(),releases:[{version,bytes:size,sha256:await digest(image),parts,notes:'Versión pública sin cuentas de LA AGUJA. SSH por tu LAN/Tailscale/Headscale.'}]}));
+ const imagerDir=path.join(root,'desktop/dist'),assets=[];
+ for(const [platform,name]of [['win32',`aguja-flash-imager-${version}-win-x64.exe`],['linux',`aguja-flash-imager-${version}-x86_64.AppImage`],['linux',`aguja-flash-imager-${version}-amd64.deb`],['linux',`aguja-flash-imager-${version}-x64.tar.gz`]]){
+  const assetPath=path.join(imagerDir,name);if(!fs.statSync(assetPath).isFile())throw Error('Falta Imager');const publicName=name.endsWith('-x64.tar.gz')?name.replace('-x64.tar.gz','-linux-x64.tar.gz'):name;assets.push({platform,name:publicName,url:`https://github.com/${pin.repository}/releases/download/v${version}/${publicName}`,bytes:fs.statSync(assetPath).size,sha256:await digest(assetPath)});
+ }
+ const imagers=[{version,assets}];
+ const payload=Buffer.from(JSON.stringify({schema:1,imagers,expires_at:new Date(Date.now()+365*86400000).toISOString(),releases:[{version,bytes:size,sha256:await digest(image),parts,notes:'Versión pública sin cuentas de LA AGUJA. SSH por tu LAN/Tailscale/Headscale.'}]}));
  const envelope={key_id:pin.key_id,payload:payload.toString('base64'),signature:crypto.sign(null,payload,privateKey).toString('base64')};
- const result=require('../desktop/core.cjs').verifyManifest(envelope,pin);if(result[0].bytes!==size)throw Error('Catálogo no verificable');
+ const result=require('../desktop/core.cjs').verifyManifest(envelope,pin);for(const platform of ['win32','linux'])require('../desktop/imager-updates.cjs').releases(envelope,pin,platform);if(result[0].bytes!==size)throw Error('Catálogo no verificable');
  fs.writeFileSync(path.join(folder,'catalog.json'),JSON.stringify(envelope,null,2)+'\n',{flag:'wx'});
  console.log(JSON.stringify({ok:true,version,parts:parts.length,bytes:size,key_id:pin.key_id}));
 }

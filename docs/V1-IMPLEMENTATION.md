@@ -15,3 +15,7 @@ Signed update metadata under the existing Ed25519 release key, exact repository/
 ## Validation gates
 
 Meaningful tests for tampered metadata, corrupt downloads, interrupted transactions, changed USB identity/config, encrypted read/edit/roundtrip, preservation of unrelated bytes, generation rollback, cold boot on different virtual firmware/device topology, package/harness persistence and no secret spill. Final Linux/Windows packages and BIOS/UEFI images must match the frozen source, then publish versioned artifacts and independently verify public downloads. Physical writing/boot and provider inference are separate evidence.
+
+## Build isolation
+
+Native CLI verification and setup run inside private mount/PID namespaces with minimal character-device binds. Never recursively bind host /dev into the main/service namespaces. Do not stop unrelated services or purge old root trees retained in their namespaces; use a separate clean factory path (AGUJA_ROOT under project/build) and preserve the old tree.

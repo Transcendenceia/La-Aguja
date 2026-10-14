@@ -1,8 +1,10 @@
 #!/bin/bash
 # Executed only in an isolated mount+PID namespace by updates.py.
 set -euo pipefail
+ulimit -c 0
 root=$1
 packages=$2
+[[ $packages == yes || $packages == no || $packages == verify ]] || exit 1
 [[ $EUID == 0 && $root == /data/updates/gen-*/root && -f $root/etc/debian_version ]] || exit 1
 mount --make-rprivate /
 mount -t proc proc "$root/proc"
@@ -37,10 +39,28 @@ if [[ $packages == yes ]]; then
  [[ $free_bytes -ge $((download_bytes * 4 + 3 * 1024 * 1024 * 1024)) ]] || { echo 'Espacio insuficiente para instalar y empaquetar'; exit 1; }
  chroot "$root" /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root DEBIAN_FRONTEND=noninteractive apt-get -y --with-new-pkgs -o Dpkg::Options::=--force-confold upgrade
 fi
-chroot "$root" /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root update-initramfs -u -k all
-for name in codex agy claude opencode; do
- chroot "$root" /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root AGY_CLI_DISABLE_AUTO_UPDATE=true "$name" --version
+if [[ $packages != verify ]]; then
+ chroot "$root" /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root update-initramfs -u -k all
+fi
+if [[ $packages == verify ]]; then
+ python3 - "$root" <<'PYVERSIONS'
+import json,re,subprocess,sys
+from pathlib import Path
+root=Path(sys.argv[1]);expected=json.loads((root/'usr/share/aguja/installed-harnesses.json').read_text())['providers']
+paths={'codex':'/opt/aguja/agents/codex/x86_64-unknown-linux-musl/bin/codex','claude':'/opt/aguja/agents/claude/claude','antigravity':'/opt/aguja/agents/antigravity/agy','opencode':'/opt/aguja/agents/opencode/opencode'}
+actual={}
+for name,item in expected.items():
+ raw=subprocess.check_output(['chroot',str(root),'/usr/bin/env','-i','PATH=/usr/local/bin:/usr/bin:/bin','HOME=/nonexistent','AGY_CLI_DISABLE_AUTO_UPDATE=true','DISABLE_AUTOUPDATER=1',paths[name],'--version'],timeout=30).decode(errors='replace')
+ match=re.search(r'\d+\.\d+\.\d+',raw)
+ if not match or match.group()!=item['version']:raise ValueError('Native version mismatch')
+ actual[name]=match.group()
+print(json.dumps(actual))
+PYVERSIONS
+else
+ for name in codex agy claude opencode; do
+  chroot "$root" /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root AGY_CLI_DISABLE_AUTO_UPDATE=true "$name" --version
  done
+fi
 # Fresh staging /root may have only package caches; exclude it entirely from
 # persisted generations. User HOME and profile values never came into this root.
 rm -f "$root/usr/sbin/policy-rc.d"

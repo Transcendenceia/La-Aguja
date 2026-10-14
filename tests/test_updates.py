@@ -42,4 +42,25 @@ class Generations(unittest.TestCase):
  def test_unknown_state_fields_never_reach_status_output(self):
   u.atomic(u.STATE,{'schema':1,'active':None,'previous':None,'token':'SYNTHETIC-SECRET'})
   with self.assertRaises(ValueError):u.status()
+ def test_downloaded_harness_must_report_the_verified_vendor_version(self):
+  import subprocess
+  with patch.object(u,'run',return_value=subprocess.CompletedProcess([],0,b'codex-cli 0.999.0',b'')):
+   with self.assertRaises(ValueError):u.verify_harnesses(self.p,{'codex':{'version':'0.162.1'}})
+  self.assertFalse((self.cfg/'aguja-update.cfg').exists())
+ def test_factory_selection_keeps_a_verified_previous_boot_entry(self):
+  g='gen-'+'d'*32;folder=self.root/g;(folder/'live').mkdir(parents=True)
+  files={}
+  for name in ('vmlinuz','initrd.img','filesystem.squashfs'):
+   (folder/'live'/name).write_bytes(b'SYNTHETIC-BOOT');files[name]=u.hashfile(folder/'live'/name)
+  u.atomic(folder/'manifest.json',{'schema':1,'files':files})
+  reader=Path.read_text
+  def read(path,*args,**kw):
+   return '/dev/fixture5' if str(path)=='/run/aguja-data-device' else reader(path,*args,**kw)
+  with patch.object(Path,'read_text',read),patch('subprocess.check_output',return_value='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'):
+   pointer=u.boot_pointer({'schema':1,'active':None,'previous':g}).decode()
+  self.assertIn('set default=aguja-factory',pointer);self.assertIn('--id aguja-previous',pointer);self.assertIn(g,pointer)
+  (folder/'live/filesystem.squashfs').write_bytes(b'DAMAGED')
+  pointer=u.boot_pointer({'schema':1,'active':None,'previous':g}).decode()
+  self.assertIn('set default=aguja-factory',pointer);self.assertNotIn('--id aguja-previous',pointer)
+  self.assertTrue((folder/'live/filesystem.squashfs').exists())
 if __name__=='__main__':unittest.main()

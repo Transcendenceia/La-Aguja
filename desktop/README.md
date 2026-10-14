@@ -1,10 +1,18 @@
-# LA AGUJA Flash Imager · Windows and Linux 0.9.13
+# LA AGUJA Flash Imager · Windows and Linux 1.0.0
 
 [Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
 
 Prepare a Rescue Disk from a working computer: network, language/keyboard, SSH, AI tools and optional Windows BitLocker recovery keys. Optional remote access uses your own Tailscale/Headscale, not a project tunnel. No LA AGUJA account is required.
 
-## Imager 0.9.13 · languages, exclusive USB access and recovery keys
+## 1.0 profiles, existing USBs and updates
+
+- **Encrypted disks** is a separate step before Create disk; manual BitLocker/LUKS keys and detected BitLocker use the same protected recovery capsule.
+- **Profiles and USB** saves/loads encrypted `.aguja` templates. Templates are portable configuration, not a copy of every local login: imported provider sessions are checked and explicitly selected again during preparation.
+- Select an exact LA AGUJA USB, read/decrypt its CFG, change settings in the normal sections, then return and save. Reading never writes edits. Saving confirms identity, rejects stale snapshots, preserves original stored bytes in a backup, verifies all replacements and leaves workspace/boot generations/unrelated files alone. An interrupted edit is recovered before boot consumes the capsule.
+- **Imager updates** checks a signed catalog and downloads the platform-specific SHA-256-verified app only when requested. Cancel leaves no success message; nothing runs or replaces the current application automatically.
+- In the live, `aguja update menu` offers OS packages, native harnesses and signed Rescue releases. Updates are stored as verified generations on DATA and become active on the next boot; factory and previous are retained. [Offline procedure](../runtime/UPDATES.md).
+
+## Imager 1.0.0 · languages, exclusive USB access and recovery keys
 
 All sections, live status messages and native confirmations follow the selected application language. Language/keyboard option labels also refresh; user-entered values, keys, disk identities and selected layouts stay unchanged.
 
@@ -26,7 +34,7 @@ Exported encrypted reusable profiles retain manual recovery keys; importing rest
 
 ## Imager 0.9.12 · completion dialogs
 
-This desktop-only update continues to use Rescue Disk 0.9.11. No Rescue image rebuild is required.
+Rescue Disk 1.0 adds persistent updates. Existing older USB configurations can be edited, but configuration editing does not upgrade their boot infrastructure. Use a newly prepared 1.0 image for generation updates.
 
 After flashing, a native window confirms that the USB is ready **only after successful read-back verification**. Eject it in your operating system before unplugging it. Failed preparation, denied permissions, writing or verification show a native error window with the public failure reason; the USB is not marked ready. Canceling the confirmation shows neither success nor error. The existing inline status remains available after closing the dialog. All supported application languages are included.
 
@@ -54,11 +62,11 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-0.9.13-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-1.0.0-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 
-Windows keeps AGUJA_DATA size and original partition geometry: it does not expand DATA or relocate the backup GPT to the larger physical USB's end. Unused space remains unallocated; the live does not automatically expand it. Linux has its own verified expansion phase.
+Windows writes the original DATA geometry. Fresh 1.0 media initializes and expands DATA once on its own removable boot USB at first boot, preserving the partition GUID. The CFG editor never creates that initialization marker on existing USBs. Linux has its own verified expansion phase.
 
 **No integrated USB backup:** the option is hidden and backend rejects `backup:true` before preparing/writing. Back up externally. BitLocker key inspection/export requires available keys and permissions; it does not bypass encryption or create missing recovery keys.
 

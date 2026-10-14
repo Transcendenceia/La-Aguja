@@ -29,7 +29,7 @@ function encode(input,oldFiles,oldPassphrase){
  }}
  const diskRecovery=recovery.normalizeRecovery(input.diskRecovery||[]);const files={'aguja-profile.json':provisioning.seal(capsule,input.protection),'aguja-recovery.json':recovery.sealRecovery(diskRecovery,input.protection)};
  // Encrypted profile's public pre-unlock locale must follow a configuration edit.
- files['locale.json']=Buffer.from(JSON.stringify({schema:1,...(capsule.locale||core.LOCALE_CATALOG.default)}));
+ files['aguja-locale.json']=Buffer.from(JSON.stringify(capsule.locale||core.LOCALE_CATALOG.default));
  // Legacy literals may contain old credentials; erase them only when replacing
  // the profile, keeping just the harmless template consumed by old live readers.
  const legacy=literalConfig(oldFiles),home=input.protection.mode==='plain'&&legacy.persistent_home==='yes'?'yes':'no',harness=['menu','shell','codex','antigravity','claude','opencode'].includes(legacy.default_harness)?legacy.default_harness:'menu',agentMode=legacy.agent_mode==='full'?'full':'ask';files['aguja.conf']=Buffer.from('[aguja]\nhostname=aguja\npersistent_home='+home+'\nssh_password=\nssh_public_key=\ndefault_harness='+harness+'\nagent_mode='+agentMode+'\n');

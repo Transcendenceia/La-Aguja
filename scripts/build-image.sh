@@ -1,7 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 PROJECT=$(cd "$(dirname "$0")/.." && pwd)
-ROOT=$(realpath "$PROJECT/build/rootfs")
+ROOT=$(realpath "${AGUJA_ROOT:-$PROJECT/build/rootfs}")
+[[ $ROOT == "$PROJECT/build/"* && -f $ROOT/etc/debian_version ]] || exit 1
 ISO_TREE="$PROJECT/build/iso"
 DIST="$PROJECT/dist"
 VERSION=$(cat "$PROJECT/VERSION")
@@ -55,6 +56,13 @@ done
 for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$PROJECT/runtime/console-history.conf"; do
     cmp -s "$runtime" "$ROOT/usr/lib/aguja/$(basename "$runtime")" || { echo 'Instala el runtime actual antes de empaquetar'; exit 1; }
 done
+# Persistent update code, protocol, boot guard and timer are release capabilities.
+for item in 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer'; do
+    source=${item%%:*}; target=${item#*:}
+    cmp -s "$PROJECT/runtime/$source" "$ROOT/$target" || { echo 'Instala la infraestructura persistente actual'; exit 1; }
+done
+cmp -s "$PROJECT/desktop/resources/release-key.json" "$ROOT/usr/share/aguja/release-key.json" || { echo 'Instala la clave y catálogo actuales'; exit 1; }
+cmp -s "$PROJECT/skills/live-updates/SKILL.md" "$ROOT/usr/share/aguja/skills/live-updates/SKILL.md" || { echo 'Instala la skill de actualizaciones actual'; exit 1; }
 cmp -s "$PROJECT/runtime/locale.sh" "$ROOT/etc/profile.d/aguja-locale.sh" || { echo 'Instala el soporte de idioma antes de empaquetar'; exit 1; }
 AVAILABLE_LOCALES=$(chroot "$ROOT" locale -a)
 while IFS= read -r language; do
@@ -96,6 +104,12 @@ for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.m
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
 done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/disk-recovery/SKILL.md | cmp -s "$PROJECT/skills/disk-recovery/SKILL.md" - || { echo 'Skill de recuperación empaquetada no coincide'; exit 1; }
+for item in 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer'; do
+    source=${item%%:*}; target=${item#*:}
+    unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "$target" | cmp -s "$PROJECT/runtime/$source" - || { echo 'Infraestructura persistente empaquetada no coincide'; exit 1; }
+done
+unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/release-key.json | cmp -s "$PROJECT/desktop/resources/release-key.json" - || { echo 'Catálogo empaquetado no coincide'; exit 1; }
+unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/live-updates/SKILL.md | cmp -s "$PROJECT/skills/live-updates/SKILL.md" - || { echo 'Skill de actualizaciones empaquetada no coincide'; exit 1; }
 # Non-Python helpers, service units and pinned network binaries must survive
 # the squashfs stage too; a matching marker alone does not prove support.
 for unit in aguja-tailscale.service aguja-tailscaled.service aguja-network-check.service aguja-network-check.timer; do

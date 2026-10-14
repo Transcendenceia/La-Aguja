@@ -1,4 +1,4 @@
-# File-image interface · 1.0.5
+# File-image interface · 1.1.0
 
 Use Node.js >=22. The downloadable ZIP is self-contained; no npm install, Electron, root, mtools or mounts are required. From the source checkout install the existing Imager dependency with `npm ci --prefix desktop`. Preparation uses its pure-JavaScript GPT/FAT32 engine on regular `.img` files. The output parent must already exist and be private. Existing files, symlinks and device sources are refused; the factory image is preserved. Keep enough space for a full copy.
 
@@ -56,3 +56,7 @@ Legacy project relay/account fields are not supported. No BitLocker harvesting, 
 Preparation returns `output_path`, `sha256`, `bytes`, `profile_verified:true`, `recovery_verified:true`, `recovery_count`, `source_unchanged:true`, `device_written:false`, and `protection`. It uses the existing engine's FAT32 readback, additionally opens the encrypted profile in memory, hashes the output, checks the original hash again and atomically creates the final file without replacement. This verifies file preparation, not physical boot or service health.
 
 POSIX staging/output are 0700/0600. Node mode bits do **not** enforce Windows ACLs: use a private user directory, and encryption for credentials. macOS/Windows execution support follows the Node engine but must be tested in your own environment; Linux functional QA alone is not a cross-OS certificate.
+
+## Reusable encrypted profiles
+
+`save-profile`: private stdin `{capsule,disk_recovery,passphrase,output_path}`; creates a new `.aguja` file, never overwrites or emits its contents. `profile-info`: `{profile_path}`; metadata only, no password required. For `prepare`, use `profile_path` and `profile_passphrase` instead of `capsule`/`disk_recovery`; preserve the existing image/output/hash/protection fields. The saved profile's password opens the file; the output image protection is a separate explicit choice. Existing import-mode settings still require explicitly approved `import_providers`. Never put either password in argv or chat.

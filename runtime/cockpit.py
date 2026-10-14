@@ -25,14 +25,14 @@ MASCOT = (
 )
 
 MENU_ACTIONS = ('shell', 'wifi', 'guide', 'doctor', 'codex', 'antigravity', 'claude',
-                'opencode', 'password', 'remote', 'locale', 'unlock', 'donate')
+                'opencode', 'password', 'remote', 'locale', 'unlock', 'donate', 'update')
 
 
 def menu_choices():
     return [t('1  Consola Zsh'), t('2  Conectar Wi-Fi'), t('3  Guía y herramientas'), t('8  Diagnóstico'),
             '4  Codex', '5  Antigravity', '6  Claude Code', '7  OpenCode', t('9  Contraseña SSH'),
             t('R  Tailscale / Headscale · SSH privado'), t('I  Idioma y teclado'),
-            t('U  Desbloquear perfil'), t('D  Apoyar LA AGUJA')]
+            t('U  Desbloquear perfil'), t('D  Apoyar LA AGUJA'), t('T  Actualizaciones')]
 
 
 def version():
@@ -53,6 +53,13 @@ def auth_label(mode):
             "key": t("Usuario: aguja  |  Acceso por tu clave pública SSH")}.get(mode, t("Usuario: aguja  |  Consulta aguja doctor"))
 
 
+def update_notice():
+    try:
+        import json
+        state=json.loads(Path('/run/aguja-update-status.json').read_text())
+        return t('Actualizaciones disponibles: {count} · aguja update menu').format(count=state['available_count']) if state['available_count'] else t('Consulta de actualizaciones incompleta · aguja update menu') if state.get('partial') else ''
+    except (OSError,ValueError,KeyError):return ''
+
 def banner(current=None, compact=False):
     current = current or network.state()
     print("\n"+t("LA AGUJA RESCUE DISK")+" · " + version() + t("   /   Agujita lista para el rescate"))
@@ -60,6 +67,7 @@ def banner(current=None, compact=False):
         for line in MASCOT:
             print(line)
     print(t("Una entrada pequeña. Control completo.")+"\n")
+    if update_notice():print(update_notice())
     addresses = current["addresses"]
     if addresses:
         print("IP: " + "  ".join(a["ip"] for a in addresses))
@@ -108,7 +116,7 @@ def draw(screen, current, countdown=0, selected=0, activity=None,
                                max(0,min(width-x-1, limit if limit is not None else width)),color)
             except curses.error:
                 pass
-    line(0, t("LA AGUJA RESCUE DISK")+"  /  " + version() + t("  /  Consola de rescate"), cyan)
+    line(0, t("LA AGUJA RESCUE DISK")+"  /  " + version() + t("  /  Consola de rescate") + (" · "+update_notice() if update_notice() else ""), cyan)
     addresses = current.get("addresses", [])
     ts = current.get("tailscale")
     if ts and ts.get("connected") and ts.get("ipv4"):
@@ -324,6 +332,8 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                 return 'locale'
             elif key in (ord('u'),ord('U')):
                 return 'unlock'
+            elif key in (ord('t'),ord('T')):
+                return 'update'
             elif key in (ord('d'),ord('D')):
                 return 'donate'
             elif key == ord("9"):
@@ -408,6 +418,8 @@ def menu(auto_setup=False):
             subprocess.call(['/usr/local/bin/aguja', 'locale'])
         elif action == 'unlock':
             subprocess.call(['/usr/local/bin/aguja', 'profile', 'unlock'])
+        elif action == 'update':
+            subprocess.call(['/usr/local/bin/aguja','update','menu'])
         elif action == 'donate':
             donate()
             continue

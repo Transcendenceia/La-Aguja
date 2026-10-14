@@ -7,6 +7,24 @@ ROOT=${AGUJA_ROOT:-$PROJECT/build/rootfs}
 AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-tailscale.sh"
 install -d "$ROOT/usr/lib/aguja" "$ROOT/usr/share/aguja" "$ROOT/etc/aguja" \
   "$ROOT/etc/skel" "$ROOT/etc/profile.d" "$ROOT/etc/systemd/system" "$ROOT/usr/local/share/zsh/site-functions"
+# Persistent update infrastructure, copied only into the isolated factory.
+install -m 755 "$PROJECT/runtime/update-root-worker.sh" "$ROOT/usr/lib/aguja/update-root-worker.sh"
+install -m 644 "$PROJECT/desktop/resources/release-key.json" "$ROOT/usr/share/aguja/release-key.json"
+install -m 644 "$PROJECT/config/harnesses.json" "$ROOT/usr/share/aguja/harnesses.json"
+install -m 644 "$PROJECT/runtime/update-protocol.json" "$ROOT/usr/share/aguja/update-protocol.json"
+install -m 644 "$PROJECT/runtime/UPDATES.md" "$ROOT/usr/share/aguja/UPDATES.md"
+install -d "$ROOT/usr/share/aguja/skills/live-updates"
+install -m 644 "$PROJECT/skills/live-updates/SKILL.md" "$ROOT/usr/share/aguja/skills/live-updates/"
+install -m 755 "$PROJECT/runtime/update-initramfs-hook" "$ROOT/etc/initramfs-tools/hooks/aguja-update"
+install -m 644 "$PROJECT/runtime/live-update-guard.sh" "$ROOT/lib/live/boot/9999-aguja-update.sh"
+python3 - "$ROOT/lib/live/boot/9990-main.sh" <<'PYGUARD'
+import sys
+from pathlib import Path
+p=Path(sys.argv[1]);s=p.read_text();call='\taguja_verify_generation "${livefs_root}"\n'
+if call not in s:s=s.replace('\tVerify_checksums "${livefs_root}"',call+'\tVerify_checksums "${livefs_root}"',1)
+assert call in s;p.write_text(s)
+PYGUARD
+install -m 644 "$PROJECT/runtime/aguja-update-check.service" "$PROJECT/runtime/aguja-update-check.timer" "$ROOT/etc/systemd/system/"
 # runtime/*.py is the canonical module inventory, also verified by build-image.
 install -m 755 "$PROJECT/runtime/"*.py "$ROOT/usr/lib/aguja/"
 install -m 644 "$PROJECT/runtime/console-history.conf" "$ROOT/usr/lib/aguja/"
@@ -55,4 +73,4 @@ if [ "$(id -un)" = aguja ] && [ -t 0 ] && [ -z "${AGUJA_COCKPIT:-}" ]; then
     if [ -n "${SSH_CONNECTION:-}" ]; then aguja welcome --remote; else aguja welcome; fi
 fi
 EOF
-chroot "$ROOT" systemctl enable aguja-boot.service avahi-daemon.service aguja-activity.service aguja-tailscale.service aguja-network-check.timer
+chroot "$ROOT" systemctl enable aguja-boot.service avahi-daemon.service aguja-activity.service aguja-tailscale.service aguja-network-check.timer aguja-update-check.timer

@@ -3,8 +3,8 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spa
 const {powershellArgs}=require('./ai-tools.cjs');
 const executable=()=>path.win32.join(process.env.SystemRoot||'C:\\Windows','System32','WindowsPowerShell','v1.0','powershell.exe');
 const quote=s=>"'"+s.replace(/'/g,"''")+"'";
-function labels(operation){return operation==='wifi'?{name:'Wi-Fi',failure:'No se pudo completar la importación Wi-Fi.',cancel:'No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Windows o vuelve a intentarlo.'}:{name:'BitLocker',failure:'No se pudo completar la operación de BitLocker.',cancel:'No se autorizó la consulta de BitLocker. Acepta el diálogo de permisos de Windows o vuelve a intentarlo.'};}
-function plainPowerShell(script,{timeout=30000,operation='bitlocker'}={}){
+function labels(operation){if(operation==='usb-config')return {name:'USB',failure:'No se pudo leer o guardar la configuración del USB. Comprueba permisos y vuelve a leer el dispositivo.',cancel:'No se autorizó la configuración del USB.'};return operation==='wifi'?{name:'Wi-Fi',failure:'No se pudo completar la importación Wi-Fi.',cancel:'No se autorizó la importación Wi-Fi. Acepta el diálogo de permisos de Windows o vuelve a intentarlo.'}:{name:'BitLocker',failure:'No se pudo completar la operación de BitLocker.',cancel:'No se autorizó la consulta de BitLocker. Acepta el diálogo de permisos de Windows o vuelve a intentarlo.'};}
+function plainPowerShell(script,{timeout=30000,operation='bitlocker',limit=1024*1024}={}){
  const text=labels(operation);
  return new Promise((resolve,reject)=>{
   const child=spawn(executable(),powershellArgs('$ProgressPreference="SilentlyContinue";[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false);'+script),{stdio:['pipe','pipe','pipe'],windowsHide:true});
@@ -12,15 +12,15 @@ function plainPowerShell(script,{timeout=30000,operation='bitlocker'}={}){
   const finish=(err,value)=>{if(settled)return;settled=true;clearTimeout(timer);err?reject(err):resolve(value);};
   const timer=setTimeout(()=>{child.kill();finish(Error(`La consulta de ${text.name} tardó demasiado tiempo.`));},timeout);
   child.stdin.on('error',()=>{});child.stdin.end();child.stderr.resume();
-  child.stdout.on('data',data=>{output+=decoder.write(data);if(output.length>1024*1024){child.kill();finish(Error(`La respuesta de ${text.name} no es válida.`));}});
+  child.stdout.on('data',data=>{output+=decoder.write(data);if(output.length>limit){child.kill();finish(Error(`La respuesta de ${text.name} no es válida.`));}});
   child.on('error',()=>finish(Error(`No se pudo iniciar PowerShell para consultar ${text.name}.`)));
   child.on('close',code=>{output+=decoder.end();finish(code===0?null:Error(text.failure),output.trim());});
  });
 }
-async function runPowerShell(script,{timeout=30000,elevated=false,operation='bitlocker'}={}){
+async function runPowerShell(script,{timeout=30000,elevated=false,operation='bitlocker',limit=operation==='usb-config'?8*1024*1024:1024*1024}={}){
  const text=labels(operation);
  if(process.platform!=='win32')throw Error(`${text.name} solo está disponible en Windows.`);
- if(!elevated)return plainPowerShell(script,{timeout,operation});
+ if(!elevated)return plainPowerShell(script,{timeout,operation,limit});
  const stage=await fs.promises.mkdtemp(path.join(os.tmpdir(),operation==='wifi'?'aguja-wifi-uac-':'aguja-bitlocker-uac-'));
  try{
   // ACL precedes all code/results. Preserve owner access; no Everyone/Users grant.
@@ -33,7 +33,7 @@ async function runPowerShell(script,{timeout=30000,elevated=false,operation='bit
   // PS5.1 can discard Win32Exception.InnerException. Use the OS-localized
   // ERROR_CANCELLED message instead of hard-coding Spanish/English text.
   const broker=`$ErrorActionPreference='Stop';try{$arguments='-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "'+${quote(worker)}+'"';$p=Start-Process -FilePath ${quote(executable())} -ArgumentList $arguments -Verb RunAs -WindowStyle Hidden -PassThru;$p.WaitForExit();if($p.ExitCode -ne 0){throw 'Operation failed'};[Console]::Out.Write([IO.File]::ReadAllText(${quote(result)},[Text.Encoding]::UTF8))}catch{$e=$_.Exception;while($e.InnerException){$e=$e.InnerException};$cancelText=[ComponentModel.Win32Exception]::new(1223).Message;$canceled=($e.NativeErrorCode -eq 1223 -or $_.Exception.Message.IndexOf($cancelText,[StringComparison]::OrdinalIgnoreCase) -ge 0);$message=if($canceled){${quote(text.cancel)}}else{${quote(text.failure)}};[Console]::Out.Write((@{ok=$false;canceled=$canceled;error=$message}|ConvertTo-Json -Compress))}`;
-  return await plainPowerShell(broker,{timeout:Math.max(timeout,120000),operation});
+  return await plainPowerShell(broker,{timeout:Math.max(timeout,120000),operation,limit});
  }finally{await fs.promises.rm(stage,{recursive:true,force:true});}
 }
 module.exports={runPowerShell};

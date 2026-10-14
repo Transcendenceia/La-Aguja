@@ -169,7 +169,7 @@ def tools():
 
 def main():
     p = argparse.ArgumentParser(description="LA AGUJA Rescue Disk · AI-first rescue Linux")
-    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "recovery", "secrets", "tailscale", "locale", "donate"])
+    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "recovery", "secrets", "tailscale", "locale", "donate"])
     p.add_argument("args", nargs=argparse.REMAINDER, help="tailscale: status [--json]")
     arguments=sys.argv[1:]
     if arguments[:1]==['qr']:arguments[0]='browser'  # hidden legacy alias; no QR UI
@@ -195,6 +195,9 @@ def main():
             code=auth_pty.run(argv,name,login=True)
             return code if code>=0 else 128-code
         os.execvp(argv[0],argv)
+    elif a.command == 'update':
+        import updates
+        return updates.main(a.args)
     elif a.command == 'profile':
         import profile_cli
         return profile_cli.main(a.args)

@@ -232,3 +232,7 @@ La bienvenida SSH muestra estos caminos también al conectarse sin terminal.
 ## Private recovery and credentials / Recuperación y credenciales
 
 Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. `aguja profile unlock` also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
+
+## USB-persistent updates / Actualizaciones persistentes
+
+`aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.

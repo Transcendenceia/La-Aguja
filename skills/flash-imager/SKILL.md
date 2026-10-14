@@ -3,7 +3,7 @@ name: flash-imager
 description: Prepare a personalised La Aguja bootable disk image on request, using the Flash Imager engine without its GUI. Use for Linux live USB image configuration, network, language, SSH and optional AI or tailnet profiles; not for generating pictures or operating an already booted machine.
 license: GPL-3.0-or-later
 metadata:
-  version: "1.0.5"
+  version: "1.1.0"
 ---
 
 # Flash Imager for AI agents
@@ -20,3 +20,11 @@ The skill version, bundled Imager engine version and selected live image version
 4. Create the private request through a secure file tool or pipe, never by putting secrets into command arguments, shell history, chat, logs or a committed template. Use [assets/request.example.json](assets/request.example.json) as a credential-free skeleton; replace its paths, hash and SSH public key. Keep request files private (0600 on POSIX; restricted user ACLs on Windows). Use encrypted protection for passwords, API keys, imported sessions, tailnet keys or disk recovery keys; obtain the unlock phrase through the harness's secure input/secret mechanism, outside chat. A public-key-only profile can be plain. If secure secret handling is unavailable, use public-key-only preparation or let the user enter secrets in the desktop Imager. Import only explicitly requested compatible native provider sessions via `import_providers`; never copy an entire home directory, browser/keychain, hooks or history.
 5. Feed the JSON request to `node <skill-dir>/scripts/imager.cjs prepare` through stdin, using the harness's process API or the shell-specific pipe in the interface reference. Require exit code zero and final JSON with `ok`, `profile_verified`, `recovery_verified`, `source_unchanged` and `device_written:false`. Return the output path, SHA-256, bytes, profile protection and any remaining boot verification. Do not expose the capsule. Keep the private image and unlock phrase out of public releases. Remove only task-owned secret request files using the environment's approved secure handling.
 6. **Stop at the file unless USB writing was explicitly requested.** Before any later physical write, identify the exact model, capacity, path and serial, establish a recoverable backup and obtain confirmation covering that device's erasure. Use the desktop Imager or the repository's existing guarded writer, not an improvised `dd`. A successful image build is not proof of USB readback, BIOS/UEFI boot, login or network connectivity: report these separately and test them only within the authorised scope.
+
+## 1.0 desktop / persistent live coordination
+
+Reusable profiles can be saved with `save-profile` using a private JSON stdin request. `prepare` may load `profile_path`/`profile_passphrase` internally instead of a plaintext capsule; it never prints decrypted credentials. `profile-info` reports format only. Saving a profile does not copy imported OAuth sessions; request their approved import again.
+
+The desktop 1.0 has a dedicated Encrypted disks section, signed Imager update checks/downloads and an identity-bound CFG editor. Editing an existing physical USB is a separate explicit owner task: use its guarded UI/helper and exact identity; never reflash it to change settings or rewrite DATA. Old stored configuration is retained for rollback with its original protection. Read the USB again after a concurrent change.
+
+After boot, use `/usr/share/aguja/skills/live-updates/SKILL.md` for persistent OS/harness/live updates. File preparation does not run those updates, reboot a computer or initialize a physical USB. Skills, Imager, generation and factory versions are independent.

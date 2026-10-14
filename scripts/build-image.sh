@@ -12,7 +12,7 @@ VERSION=$(cat "$PROJECT/VERSION")
 AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 cmp -s "$PROJECT/VERSION" "$ROOT/usr/share/aguja/VERSION" || { echo 'Instala la versión actual en rootfs antes de empaquetar'; exit 1; }
 cmp -s "$PROJECT/runtime/aguja" "$ROOT/usr/local/bin/aguja" || { echo 'Instala el diagnóstico actual antes de empaquetar'; exit 1; }
-for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md; do
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md; do
     cmp -s "$PROJECT/runtime/$guide" "$ROOT/usr/share/aguja/$guide" || { echo 'Instala las guías actuales'; exit 1; }
 done
 for binary in qemu-system-x86_64 qemu-img qemu-nbd; do
@@ -75,7 +75,7 @@ cp "$(find "$ROOT/boot" -maxdepth 1 -name 'initrd.img-*' | sort -V | tail -1)" "
 for p in dev proc sys; do
     if mountpoint -q "$ROOT/$p"; then echo "Desmonta rootfs/$p antes de empaquetar"; exit 1; fi
 done
-mksquashfs "$ROOT" "$ISO_TREE/live/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 10 -processors 2 -mem 256M -root-uid 0 -root-gid 0 -no-progress -wildcards -e 'tmp/*' 'var/tmp/*' var/cache/apt var/lib/apt/lists root/.npm root/.cache root/.local
+mksquashfs "$ROOT" "$ISO_TREE/live/filesystem.squashfs" -noappend -comp zstd -Xcompression-level 10 -processors 1 -mem 256M -root-uid 0 -root-gid 0 -no-progress -wildcards -e 'tmp/*' 'var/tmp/*' var/cache/apt var/lib/apt/lists root/.npm root/.cache root/.local
 # Compare the actual required executable bytes, not only their presence in rootfs.
 for binary in codex agy claude opencode; do
     executable=$(realpath "$ROOT/usr/local/bin/$binary" 2>/dev/null || true)
@@ -92,7 +92,7 @@ unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja | cmp -
 for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$PROJECT/runtime/console-history.conf"; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/lib/aguja/$(basename "$runtime")" | cmp -s "$runtime" - || { echo 'Runtime empaquetado no coincide'; exit 1; }
 done
-for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md; do
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
 done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/disk-recovery/SKILL.md | cmp -s "$PROJECT/skills/disk-recovery/SKILL.md" - || { echo 'Skill de recuperación empaquetada no coincide'; exit 1; }
@@ -126,7 +126,15 @@ if loadfont /boot/grub/themes/aguja/menu.pf2; then
     set theme=/boot/grub/themes/aguja/theme.txt
     export theme
 fi
-menuentry 'LA AGUJA Rescue Disk' {
+insmod part_gpt
+insmod fat
+insmod ext2
+insmod regexp
+regexp --set=1:aguja_drive '^([^,]+)' "$root"
+if [ -e ($aguja_drive,gpt4)/aguja-update.cfg ]; then
+    source ($aguja_drive,gpt4)/aguja-update.cfg
+fi
+menuentry 'LA AGUJA Rescue Disk · Fábrica' --id aguja-factory {
     linux /live/vmlinuz boot=live components quiet splash plymouth.ignore-serial-consoles console=tty0 console=ttyS0,115200n8
     initrd /live/initrd.img
 }
@@ -164,9 +172,11 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$PROJECT/build/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','usb-config-transaction-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$PROJECT/build/release.json" ::release.json
+printf '{"schema":1,"state":"pending"}\n' > "$PROJECT/build/data-initialize.json"
+mcopy -i "$CFG" "$PROJECT/build/data-initialize.json" ::data-initialize.json
 printf 'LA AGUJA Rescue Disk\r\nSSH de fabrica: usuario aguja, password aguja.\r\nPersonaliza Wi-Fi/SSH en aguja.conf (sin comillas).\r\nAl arrancar: Centro de rescate. Wi-Fi/idioma/teclado disponibles en el menu.\r\nEn consola: aguja help / aguja wifi / aguja password.\r\nPara el agente SSH: aguja context / aguja tools.\r\n' > "$PROJECT/build/LEEME.txt"
 mcopy -i "$CFG" "$PROJECT/build/LEEME.txt" ::LEEME.txt
 dd if="$CFG" of="$IMG" bs=512 seek="$CFG_START" conv=notrunc status=none

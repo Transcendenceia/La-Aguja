@@ -12,7 +12,8 @@ const fat = require(path.join(root, 'desktop/fat32-writer.cjs'));
 const recovery = require(path.join(root, 'desktop/disk-recovery.cjs'));
 const engineVersion = JSON.parse(fs.readFileSync(path.join(root,'desktop/package.json'))).version;
 const pin = JSON.parse(fs.readFileSync(path.join(root, 'desktop/resources/release-key.json')));
-const VERSION = '1.0.5';
+const reusableProfile=require(path.join(root,'desktop/reusable-profile.cjs'));
+const VERSION = '1.1.0';
 function emit(value) { process.stdout.write(JSON.stringify(value) + '\n'); }
 function requireValue(ok) { if (!ok) throw Error('invalid'); }
 function keys(value, allowed) {
@@ -55,7 +56,8 @@ function privateConfig(c, imports) {
     Object.values(c.providers).some(p => p.api_key) || c.tailscale?.enabled);
 }
 async function prepare(r) {
-  keys(r, ['image_path','output_path','image_sha256','capsule','protection','import_providers','allow_plain_secrets','disk_recovery']);
+  keys(r, ['image_path','output_path','image_sha256','capsule','protection','import_providers','allow_plain_secrets','disk_recovery','profile_path','profile_passphrase']);
+  if(r.profile_path!==undefined){requireValue(r.capsule===undefined && r.disk_recovery===undefined);const saved=reusableProfile.open(readSavedProfile(r.profile_path),r.profile_passphrase);r.disk_recovery=saved.disk_recovery||[];delete saved.disk_recovery;r.capsule=saved;}
   const source = sourceFile(r.image_path), output = destination(r.output_path);
   const expected = core.sha(r.image_sha256);
   const capsule = core.validateCapsule(r.capsule);
@@ -109,14 +111,22 @@ async function prepare(r) {
     return {ok:true,output_path:output,...checked,profile_verified:true,recovery_verified:true,recovery_count:diskRecovery.length,protection:protection.mode,source_unchanged:true,device_written:false};
   } finally { fs.rmSync(work, {recursive:true,force:true}); }
 }
+function readSavedProfile(value){
+ requireValue(typeof value==='string'&&path.isAbsolute(value));const fd=fs.openSync(value,fs.constants.O_RDONLY|(fs.constants.O_NOFOLLOW||0));try{const stat=fs.fstatSync(fd);requireValue(stat.isFile()&&stat.size<=1048576);return JSON.parse(fs.readFileSync(fd,'utf8'));}finally{fs.closeSync(fd);}
+}
+async function saveProfile(r){
+ keys(r,['capsule','disk_recovery','passphrase','output_path']);requireValue(typeof r.output_path==='string'&&path.isAbsolute(r.output_path)&&path.extname(r.output_path)==='.aguja');const parent=fs.realpathSync(path.dirname(r.output_path));requireValue(fs.statSync(parent).isDirectory());const out=path.join(parent,path.basename(r.output_path));const data=reusableProfile.seal(r.capsule,r.passphrase,r.disk_recovery||[]);await fs.promises.writeFile(out,JSON.stringify(data),{flag:'wx',mode:0o600});return {ok:true,output_path:out,protection:'encrypted',secret_values_returned:false};
+}
 async function main() {
   requireValue(Number(process.versions.node.split('.')[0]) >= 22);
   const [operation, ...extra] = process.argv.slice(2); requireValue(extra.length === 0);
-  if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare'],input:'JSON stdin for download, inspect and prepare',usb_writing:false};
+  if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare','save-profile','profile-info'],input:'JSON stdin for download, inspect and prepare',usb_writing:false};
   if (operation === 'doctor') return {ok:true,version:VERSION,imager_version:engineVersion,recovery_types:['bitlocker','luks'],node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32',usb_writing:false};
   if (operation === 'locales') return {ok:true,languages:core.LOCALE_CATALOG.languages,keyboards:core.LOCALE_CATALOG.keyboards};
   if (operation === 'catalog') return {ok:true,signature_verified:true,releases:await catalog()};
   const r = await input();
+  if(operation==='save-profile')return saveProfile(r);
+  if(operation==='profile-info'){keys(r,['profile_path']);const e=readSavedProfile(r.profile_path);requireValue(e.format==='aguja-profile-aes256gcm'&&e.schema===1);return {ok:true,schema:e.schema,protection:'encrypted',secret_values_returned:false};}
   if (operation === 'download') {
     keys(r,['version','output_path']);
     const dest = destination(r.output_path), releases = await catalog();

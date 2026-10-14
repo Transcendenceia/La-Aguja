@@ -93,6 +93,8 @@ def main(profile_override=None):
     if not conf.is_file():
         conf = Path("/etc/aguja/aguja.conf")
     c = load(conf)
+    import config_transaction
+    if cfg: config_transaction.recover(Path('/config'))
     import profile as platform_profile
     capsule_path = Path('/config/aguja-profile.json')
     capsule = profile_override
@@ -114,8 +116,18 @@ def main(profile_override=None):
     run("hostnamectl", "set-hostname", c["hostname"])
     secure_write("/etc/hosts", "127.0.0.1 localhost\n127.0.1.1 " + c["hostname"] + "\n", 0o644)
     Path("/data").mkdir(exist_ok=True)
+    initialized_data=None
+    if data and cfg and source != data:
+        import data_capacity
+        initialized_data=data_capacity.initialize('/config',disk,data)
+    if data:
+        secure_write('/run/aguja-data-device',data,0o644)
     if data and not os.path.ismount("/data"):
-        run("mount", "-o", "nosuid,nodev", partition_view(data, source), "/data")
+        if source == data:
+            run('mount','-o','remount,rw,nosuid,nodev',str(medium))
+            run('mount','--bind',str(medium),'/data')
+        else:
+            run("mount", "-o", "nosuid,nodev", initialized_data or partition_view(data, source), "/data")
     workspace = Path("/data/workspace" if data else "/home/aguja/workspace")
     workspace.mkdir(parents=True, exist_ok=True)
     if c["persistent_home"] == "yes" and data and not os.path.ismount("/home/aguja"):

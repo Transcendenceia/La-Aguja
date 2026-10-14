@@ -35,7 +35,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install -y --no-install-recommends ca-certificates
 apt-get update -qq
-apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-sysv dbus udev \
+apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-sysv dbus udev squashfs-tools xorriso \
   openssh-server sudo network-manager wpasupplicant iw rfkill wireless-regdb \
   firmware-realtek firmware-iwlwifi firmware-atheros firmware-brcm80211 firmware-mediatek firmware-misc-nonfree \
   curl wget git jq ripgrep tmux nano less bash-completion zsh zsh-autosuggestions zsh-syntax-highlighting \

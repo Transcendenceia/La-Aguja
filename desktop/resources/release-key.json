@@ -2,7 +2,8 @@
   "schema": 1,
   "key_id": "aguja-public-2026-10-09",
   "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEABIHWueO3JaErKoo1za2BWt3hDXsVrzwYbQdOkVbaosE=\n-----END PUBLIC KEY-----\n",
-  "catalog_url": "https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.16/catalog.json",
+  "catalog_url": "https://github.com/Transcendenceia/La-Aguja/releases/download/v1.0.0/catalog.json",
   "repository": "Transcendenceia/La-Aguja",
-  "image_base_url": "https://aguja.transcendenceia.net/releases/"
+  "image_base_url": "https://aguja.transcendenceia.net/releases/",
+  "update_catalog_url": "https://github.com/Transcendenceia/La-Aguja/releases/latest/download/catalog.json"
 }

@@ -1,7 +1,7 @@
 {
   "name": "aguja-companion",
   "productName": "LA AGUJA Flash Imager",
-  "version": "0.9.16",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "Transcendence IA",
@@ -62,7 +62,8 @@
         "to": "aguja/scripts",
         "filter": [
           "platform-profile.py",
-          "flash-usb.py"
+          "flash-usb.py",
+          "usb-config.py"
         ]
       },
       {
@@ -91,6 +92,10 @@
       {
         "from": "../NOTICE.md",
         "to": "NOTICE.md"
+      },
+      {
+        "from": "usb-config.ps1",
+        "to": "aguja/usb-config.ps1"
       }
     ],
     "win": {

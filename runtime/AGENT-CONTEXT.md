@@ -171,3 +171,7 @@ La guía de secretos distingue perfil protegido, INI legado, APIs, sesiones nati
 Wi-Fi, tailnet y la identidad SSH; no supone que todos existen ni sean válidos.
 Las copias de AGENTS.md/CLAUDE.md/GEMINI.md conservan las instrucciones del dueño
 fuera de un bloque gestionado que apunta a estas guías canónicas actualizadas.
+
+## USB-persistent updates / Actualizaciones persistentes
+
+`aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.

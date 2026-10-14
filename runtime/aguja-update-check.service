@@ -1,0 +1,13 @@
+[Unit]
+Description=LA AGUJA optional public update inventory (never installs)
+After=aguja-boot.service network-online.target
+ConditionPathIsMountPoint=/data
+ConditionPathIsMountPoint=/config
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/lib/aguja/updates.py check --json
+Nice=10
+CPUQuota=50%
+MemoryMax=512M
+TimeoutStartSec=300

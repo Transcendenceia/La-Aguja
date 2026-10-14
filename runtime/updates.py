@@ -59,6 +59,27 @@ def running_generation():
    return value
  return None
 
+def verify_persistent_target():
+ # Mounted directories alone do not establish ownership. Re-observe the boot
+ # disk, CFG/DATA siblings and any byte-range loop views before mutations.
+ observed=Path('/run/aguja-data-device').read_text().strip()
+ def source(where):return subprocess.check_output(['findmnt','-n','-o','SOURCE','--target',where],text=True).strip().split('[')[0]
+ medium=source('/run/live/medium')
+ if not re.fullmatch('/dev/[A-Za-z0-9_-]+',medium):raise ValueError('Medio de arranque no válido')
+ parent=subprocess.check_output(['lsblk','-ndo','PKNAME',medium],text=True).strip();disk='/dev/'+parent if parent else medium
+ tree=json.loads(subprocess.check_output(['lsblk','--tree','-J','-o','PATH,TYPE,TRAN,RM,LABEL',disk],text=True))['blockdevices'][0]
+ if tree['type']!='disk' or tree.get('tran')!='usb' or not tree.get('rm'):raise ValueError('Las actualizaciones persistentes solo escriben en el USB de arranque extraíble')
+ children=tree.get('children',[]);cfg=[x['path'] for x in children if x.get('label')=='AGUJA_CFG'];data=[x['path'] for x in children if x.get('label')=='AGUJA_DATA']
+ if len(cfg)!=1 or data!=[observed]:raise ValueError('CFG y DATA no pertenecen al mismo USB de arranque')
+ for where,partition in [('/config',cfg[0]),('/data',data[0])]:
+  mounted=source(where)
+  if mounted==partition:continue
+  if not re.fullmatch('/dev/loop[0-9]+',mounted):raise ValueError('Montaje persistente ajeno al USB de arranque')
+  loop=json.loads(subprocess.check_output(['losetup','--json','--output','BACK-FILE,OFFSET',mounted],text=True))['loopdevices'][0]
+  offset=int(Path('/sys/class/block/'+Path(partition).name+'/start').read_text())*512
+  if loop['back-file']!=disk or int(loop['offset'])!=offset:raise ValueError('Vista de partición persistente no válida')
+ if 'persistent-updates-v1' not in json.loads((CFG/'release.json').read_text()).get('features',[]):raise ValueError('Este USB necesita la infraestructura de arranque 1.0')
+
 def capacity(required):
  if not os.path.ismount(DATA) or not os.path.ismount(CFG):raise ValueError('Actualización persistente requiere CFG y DATA del USB montadas')
  if shutil.disk_usage(DATA).free<required+512*1024**2:raise ValueError('No hay espacio suficiente en DATA; se conserva la versión actual')
@@ -73,7 +94,7 @@ def source_live():
  return root
 @contextlib.contextmanager
 def lock(check_capacity=True):
- if check_capacity:capacity(128*1024**2)
+ if check_capacity:capacity(128*1024**2);verify_persistent_target()
  ROOT.mkdir(mode=0o700,exist_ok=True)
  if ROOT.is_symlink() or ROOT.stat().st_uid!=0:raise ValueError('Área de actualizaciones no válida')
  with (ROOT/'lock').open('a+b') as f:

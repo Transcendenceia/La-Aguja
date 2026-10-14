@@ -63,4 +63,21 @@ class Generations(unittest.TestCase):
   pointer=u.boot_pointer({'schema':1,'active':None,'previous':g}).decode()
   self.assertIn('set default=aguja-factory',pointer);self.assertNotIn('--id aguja-previous',pointer)
   self.assertTrue((folder/'live/filesystem.squashfs').exists())
+ def test_mutation_refuses_internal_boot_even_when_directories_are_mounted(self):
+  def command(args,**kw):
+   if args[0]=='findmnt':return '/dev/fixture3'
+   if args[0]=='lsblk' and '--tree' not in args:return 'fixture'
+   return json.dumps({'blockdevices':[{'type':'disk','path':'/dev/fixture','tran':'sata','rm':False}]})
+  with patch.object(Path,'read_text',return_value='/dev/fixture5'),patch('subprocess.check_output',side_effect=command):
+   with self.assertRaises(ValueError):u.verify_persistent_target()
+  self.assertFalse((self.cfg/'aguja-update.cfg').exists())
+ def test_mutation_refuses_data_mounted_from_another_disk(self):
+  tree={'blockdevices':[{'type':'disk','path':'/dev/fixture','tran':'usb','rm':True,'children':[{'path':'/dev/fixture4','label':'AGUJA_CFG'},{'path':'/dev/fixture5','label':'AGUJA_DATA'}]}]}
+  def command(args,**kw):
+   if args[0]=='findmnt':return {'/run/live/medium':'/dev/fixture3','/config':'/dev/fixture4','/data':'/dev/other5'}[args[-1]]
+   if args[0]=='lsblk' and '--tree' not in args:return 'fixture'
+   return json.dumps(tree)
+  with patch.object(Path,'read_text',return_value='/dev/fixture5'),patch('subprocess.check_output',side_effect=command):
+   with self.assertRaises(ValueError):u.verify_persistent_target()
+  self.assertFalse((self.cfg/'aguja-update.cfg').exists())
 if __name__=='__main__':unittest.main()

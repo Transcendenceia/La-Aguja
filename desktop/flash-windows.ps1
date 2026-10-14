@@ -198,11 +198,18 @@ namespace Aguja {
     try { $diskStream = [System.IO.File]::Open($devicePath,[System.IO.FileMode]::Open,[System.IO.FileAccess]::ReadWrite,[System.IO.FileShare]::None) }
     catch { throw 'Windows no pudo reservar el USB en exclusiva. Otra herramienta mantiene un acceso directo al disco. No se borró nada.' }
     Emit-Json @{type='progress';stage='write';message='Limpiando particiones del USB…'}
-    if (-not [Aguja.WindowsDiskLock]::Control($diskStream.SafeFileHandle,0x0007C100)) {
-        throw 'Windows no pudo limpiar las particiones del USB con acceso exclusivo. No se grabó la imagen.'
-    }
     $chunkSize = 4 * 1024 * 1024
     $buffer = New-Object byte[] $chunkSize
+    # DELETE_DRIVE_LAYOUT can recreate a removable-media device object and
+    # invalidate the raw handle (ERROR_NO_SUCH_DEVICE on real JetFlash USBs).
+    # Invalidate primary and backup partition headers through the already
+    # exclusive stream instead, without publishing a new layout mid-write.
+    $wipeSize = [int][Math]::Min([long]$chunkSize,[long]$ExpectedSize)
+    $diskStream.Position = 0
+    $diskStream.Write($buffer,0,$wipeSize)
+    $diskStream.Position = $ExpectedSize - $wipeSize
+    $diskStream.Write($buffer,0,$wipeSize)
+    $diskStream.Flush($true)
     Emit-Json @{type='progress';stage='write';message='Grabando USB…'}
     # Keep the partition table/boot headers unpublished until all payload bytes
     # are on the clean disk. New volumes otherwise evade the old raw lock.

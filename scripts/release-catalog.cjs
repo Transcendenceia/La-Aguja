@@ -3,7 +3,7 @@
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 async function digest(file){const hash=crypto.createHash('sha256');for await(const chunk of fs.createReadStream(file))hash.update(chunk);return hash.digest('hex');}
 async function main(){
- const [image,assetDir,keyfile]=process.argv.slice(2);
+ const [image,assetDir,keyfile,previousCatalog]=process.argv.slice(2);
  if(!image||!assetDir||!keyfile)throw Error('Uso: node scripts/release-catalog.cjs IMAGEN DIRECTORIO_ASSETS CLAVE_PRIVADA');
  const root=path.resolve(__dirname,'..'),version=fs.readFileSync(path.join(root,'VERSION'),'utf8').trim(),pin=JSON.parse(fs.readFileSync(path.join(root,'desktop/resources/release-key.json')));
  const folder=path.resolve(assetDir),keypath=path.resolve(keyfile);
@@ -20,12 +20,21 @@ async function main(){
    parts.push({url:pin.image_base_url?new URL(name,pin.image_base_url).href:`https://github.com/${pin.repository}/releases/download/v${version}/${name}`,bytes,sha256:hash.digest('hex')});
   }
  }finally{await file.close();}
+ const prior=previousCatalog?JSON.parse(fs.readFileSync(path.resolve(previousCatalog))):null;
+ let imagers,older=[];
+ if(prior){
+  require('../desktop/core.cjs').verifyManifest(prior,pin);
+  for(const platform of ['win32','linux'])require('../desktop/imager-updates.cjs').releases(prior,pin,platform);
+  const data=JSON.parse(Buffer.from(prior.payload,'base64').toString());imagers=data.imagers;older=data.releases.filter(r=>r.version!==version);
+ }else{
+ const imagerVersion=JSON.parse(fs.readFileSync(path.join(root,'desktop/package.json'))).version;
  const imagerDir=path.join(root,'desktop/dist'),assets=[];
- for(const [platform,name]of [['win32',`aguja-flash-imager-${version}-win-x64.exe`],['linux',`aguja-flash-imager-${version}-x86_64.AppImage`],['linux',`aguja-flash-imager-${version}-amd64.deb`],['linux',`aguja-flash-imager-${version}-x64.tar.gz`]]){
-  const assetPath=path.join(imagerDir,name);if(!fs.statSync(assetPath).isFile())throw Error('Falta Imager');const publicName=name.endsWith('-x64.tar.gz')?name.replace('-x64.tar.gz','-linux-x64.tar.gz'):name;assets.push({platform,name:publicName,url:`https://github.com/${pin.repository}/releases/download/v${version}/${publicName}`,bytes:fs.statSync(assetPath).size,sha256:await digest(assetPath)});
+ for(const [platform,name]of [['win32',`aguja-flash-imager-${imagerVersion}-win-x64.exe`],['linux',`aguja-flash-imager-${imagerVersion}-x86_64.AppImage`],['linux',`aguja-flash-imager-${imagerVersion}-amd64.deb`],['linux',`aguja-flash-imager-${imagerVersion}-x64.tar.gz`]]){
+  const assetPath=path.join(imagerDir,name);if(!fs.statSync(assetPath).isFile())throw Error('Falta Imager');const publicName=name.endsWith('-x64.tar.gz')?name.replace('-x64.tar.gz','-linux-x64.tar.gz'):name;assets.push({platform,name:publicName,url:`https://github.com/${pin.repository}/releases/download/v${imagerVersion}/${publicName}`,bytes:fs.statSync(assetPath).size,sha256:await digest(assetPath)});
  }
- const imagers=[{version,assets}];
- const payload=Buffer.from(JSON.stringify({schema:1,imagers,expires_at:new Date(Date.now()+365*86400000).toISOString(),releases:[{version,bytes:size,sha256:await digest(image),parts,notes:'Versión pública sin cuentas de LA AGUJA. SSH por tu LAN/Tailscale/Headscale.'}]}));
+ imagers=[{version:imagerVersion,assets}];
+ }
+ const payload=Buffer.from(JSON.stringify({schema:1,imagers,expires_at:new Date(Date.now()+365*86400000).toISOString(),releases:[{version,bytes:size,sha256:await digest(image),parts,notes:'Versión pública sin cuentas de LA AGUJA. SSH por tu LAN/Tailscale/Headscale.'},...older]}));
  const envelope={key_id:pin.key_id,payload:payload.toString('base64'),signature:crypto.sign(null,payload,privateKey).toString('base64')};
  const result=require('../desktop/core.cjs').verifyManifest(envelope,pin);for(const platform of ['win32','linux'])require('../desktop/imager-updates.cjs').releases(envelope,pin,platform);if(result[0].bytes!==size)throw Error('Catálogo no verificable');
  fs.writeFileSync(path.join(folder,'catalog.json'),JSON.stringify(envelope,null,2)+'\n',{flag:'wx'});

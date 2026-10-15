@@ -420,6 +420,7 @@ def menu(auto_setup=False):
             subprocess.call(['/usr/local/bin/aguja', 'profile', 'unlock'])
         elif action == 'update':
             subprocess.call(['/usr/local/bin/aguja','update','menu'])
+            continue
         elif action == 'donate':
             donate()
             continue

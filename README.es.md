@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 1.0.0 · Rescue Disk 1.0.0 · Experimental · x86-64**
+**Flash Imager 1.0.0 · Rescue Disk 1.0.1 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
@@ -70,7 +70,7 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 **Flash Imager Agent Skill 1.0.5** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.5/aguja-flash-imager-skill-1.0.5.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.5/aguja-flash-imager-skill-1.0.5.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.0.5/SHA256SUMS-flash-imager-skill-1.0.5) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/aguja-flash-imager-skill-1.1.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/aguja-flash-imager-skill-1.1.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/SHA256SUMS-flash-imager-skill-1.1.0) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
 
 Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual. Un formato portátil no certifica todos los arneses o sistemas operativos.
 
@@ -153,3 +153,6 @@ Cada máquina puede ser el comienzo de algo nuevo. Si LA AGUJA te ayuda a constr
 **Añadido en 0.9.16:** idiomas completos, claves manuales BitLocker/LUKS de otro equipo, exclusividad del USB Windows y grabador oculto; inventario de secretos sin valores y contexto para agentes dentro del live. [Guía de recuperación](docs/DISK-RECOVERY.es.md).
 
 **Incluido desde 0.9.11:** importar Wi-Fi pide UAC en Windows y conserva WPA3. Rescue Disk incluye QEMU/KVM, TCG, qemu-img/qemu-nbd, OVMF y SeaBIOS. Bienvenida SSH y [guía de herramientas opcionales](runtime/TOOLBOX.md) para investigar e instalar alternativas bajo demanda, sin incluir sus descargas. [Notas de versión](docs/RELEASE-0.9.11.md).
+
+
+**Rescue 1.0.1:** Comprobar → No / Sí · RAM / Sí persistente por fila → revisar → progreso → Volver al menú. Flash Imager sigue en 1.0.0. [Guía ilustrada](docs/es/USER-GUIDE.md).

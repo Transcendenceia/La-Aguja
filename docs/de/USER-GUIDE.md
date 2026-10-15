@@ -119,7 +119,7 @@ Unter Windows kann der Imager verfügbare Schlüssel prüfen und ausdrücklich a
 
 [↗](https://aguja.transcendenceia.net/de/docs#bitlocker)
 
-## Schritt 6 · Vorbereiten, schreiben, prüfen
+## Schritt 7 · Vorbereiten, schreiben und prüfen
 
 Prüfe Abbild, Schutzmodus und Zusammenfassung. Privates Abbild erstellen erzeugt eine Datei; USB vorbereiten und schreiben beschreibt zusätzlich das gewählte Gerät. Vergleiche Modell, Seriennummer und echte Größe in der nativen Bestätigung. Bei Unsicherheit abbrechen. UAC/Polkit nur für die beabsichtigte Aktion zulassen.
 
@@ -140,13 +140,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/de/docs#arranque)
 
-## Neustart: vorübergehende Netzidentität
+## Interaktive Live-Updates
 
-Die Tailnet-Identität lebt im RAM. Nach Neustart sind Netzwerk, Profilentsperrung und neue Registrierung nötig. Ein Einmalschlüssel kann bereits nach dem ersten Boot verbraucht sein. Für wiederholte Starts verwende einen gültigen, begrenzten wiederverwendbaren Schlüssel in deiner Verwaltung.
+Updates öffnen oder aguja update menu ausführen. Zuerst nach Updates suchen: installierte und verfügbare Versionen werden aufgelistet. Keine automatische Installation.
 
-Das ist unabhängig vom SSH-Hostschlüssel des USB und von HOME-Persistenz. Entferne veraltete Knoten und widerrufe unbenötigte Schlüssel. Eine frühere Verbindung beweist keine aktuelle Registrierung oder Richtlinie.
+Je Zeile: Nein, Ja · RAM oder Ja, dauerhaft. Nein ändert nichts. RAM gilt nur für diese Sitzung. Dauerhaft speichert ein sauberes, geprüftes System in DATA auf diesem USB für den nächsten Start.
 
-[↗](https://aguja.transcendenceia.net/de/docs#reinicios)
+Mit Maus, Pfeilen und Leertaste wählen. A zeigt Prüfung mit Anzahl und genauem Ziel; Enter wendet an. Ein vollständiges Rescue-Release benötigt dauerhafte Speicherung und einen getrennten Vorgang.
+
+Download-Bytes oder APT-Fortschritt und danach Vorbereitung, Installation, USB-Speicherung, Prüfung und Startauswahl verfolgen. Ohne messbare Gesamtmenge erscheint Aktivität statt erfundener Prozentwerte. Bis zum Ende warten.
+
+Das Ergebnis bleibt bis Zurück zum Menü sichtbar. Kein automatischer Neustart oder Erfolg bei Fehlern. Werkssystem und vorige Generation bleiben; aguja update rollback ändert den nächsten Start.
+
+Beschreibbarer 1.0-kompatibler USB, freier DATA-Speicher und genug RAM erforderlich. Die ausstehende Generation bleibt Grundlage; Geheimnisse und Workspace werden nicht kopiert. CFG-Bearbeitung aktualisiert keinen alten USB.
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![Liste · Nein / RAM / dauerhaft](../../server/public/docs-images/101/updates-list.png)
+
+![Speicherziel prüfen](../../server/public/docs-images/101/updates-review.png)
+
+![Download-Fortschritt](../../server/public/docs-images/101/updates-download.png)
+
+![Auf USB speichern](../../server/public/docs-images/101/updates-save.png)
+
+![Abschluss geprüft](../../server/public/docs-images/101/updates-done.png)
+
+![RAM-Ergebnis · nur diese Sitzung](../../server/public/docs-images/101/updates-ram.png)
+
+Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.
 
 ## KI-Anmeldung im lokalen Browser
 

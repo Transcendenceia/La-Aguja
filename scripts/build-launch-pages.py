@@ -10,6 +10,7 @@ LANGS=['en','es','fr','de','pt','it','nl','zh']
 IDS=['que-es','primer-usb','glosario','preparacion','descargas','imagen','red','ssh','ia-preparacion','tailnet','politicas','secretos','bitlocker','grabar','arranque','reinicios','ia-login','primer-diagnostico','trabajo-ia','herramientas','casos','profesional','problemas','terminar','validacion','referencias']
 GH='https://github.com/Transcendenceia/La-Aguja'
 VERSION=(ROOT/'VERSION').read_text().strip()
+IMAGER_VERSION=json.loads((ROOT/'desktop/package.json').read_text())['version']
 SKILL_VERSION=re.search(r'^  version: "([^"]+)"$',(ROOT/'skills/flash-imager/SKILL.md').read_text(),re.M).group(1)
 SKILL_TAG='flash-imager-skill-v'+SKILL_VERSION
 ORIGIN='https://aguja.transcendenceia.net'
@@ -38,7 +39,7 @@ FIGURES={4:['imager'],14:['rescue-dashboard'],16:['rescue-console'],18:['rescue-
 def paras(items):return ''.join('<p>'+E(x)+'</p>' for x in items)
 def current(s):
  s=re.sub(r'(?<!\d)0\.9\.(?:0|1|2|9|10)(?!\d)',VERSION,s)
- return s.replace('Flash Imager Linux 0.8.2','Flash Imager Linux '+VERSION).replace('Flash Imager Windows 0.8.2','Flash Imager Windows '+VERSION)
+ return re.sub(r'(Flash Imager(?: Linux| Windows)? )'+re.escape(VERSION),r'\g<1>'+IMAGER_VERSION,s).replace('Flash Imager Linux 0.8.2','Flash Imager Linux '+IMAGER_VERSION).replace('Flash Imager Windows 0.8.2','Flash Imager Windows '+IMAGER_VERSION)
 def head(l,c,b,suffix):
  image=SOCIAL[l];image_url=ORIGIN+'/assets/'+image['file']
  title=('LA AGUJA · '+c['hero'][0]) if not suffix else current(b['docTitle'])+f' · {VERSION}'
@@ -55,9 +56,10 @@ def cases(c):return '<div class="case-grid">'+''.join('<article><span class="eye
 def checklist(c):return '<fieldset class="checklist"><legend>'+E(c['checkTitle'])+'</legend><p>'+E(c['checkNote'])+'</p>'+''.join(f'<label><input type="checkbox" name="check-{i}"><span>{E(s)}</span></label>' for i,s in enumerate(c['checks']))+'<p class="check-status" role="status" aria-live="polite"></p></fieldset>'
 def figure(c,name):return f'<figure><a class="zoom-image" href="/assets/docs/099/{name}.png" aria-label="{E(c["zoom"]+": "+c["figures"][name])}"><img src="/assets/docs/099/{name}.png" loading="lazy" decoding="async" alt="{E(c["figures"][name])}"></a><figcaption><strong>{E(c["figures"][name])}</strong> · {E(c["captureNote"])} <span>{E(c["zoom"])}</span></figcaption></figure>'
 def home(l,c,b):
- body=f'<section class="hero"><div><span class="eyebrow">{E(c["eyebrow"])}</span><h1>{E(c["hero"][0])}<br><span>{E(c["hero"][1])}</span></h1><p class="lead">{E(c["lead"])}</p><div class="actions"><a class="button" href="#application">{E(b["actions"][0])} ↘</a><a class="button secondary" href="/{l}/docs">{E(c["ui"]["readGuide"])} →</a></div><p class="micro">{E(c["ui"]["heroNote"])}</p></div><figure class="hero-art"><img src="/assets/hero-recovery-20261009-v1.webp" width="1200" height="800" alt="{E(b["recoveryAlt"])}" fetchpriority="high"><figcaption>{E(b["caption"][1])}</figcaption></figure></section><div class="trust-strip"><span>Rescue Disk <strong>{VERSION}</strong></span><span>Flash Imager <strong>{VERSION}</strong></span><span>Agent Skill <strong>{SKILL_VERSION}</strong></span></div><section class="intro"><h2>{E(c["introTitle"])}</h2>'+paras(c['intro'])+'</section><div class="feature-grid">'+''.join(f'<article><span class="number">0{i+1}</span><h3>{E(title)}</h3><p>{E(text)}</p></article>' for i,(title,text) in enumerate(b['steps']))+'</div>'+planner(c)+f'<section id="possibilities"><span class="eyebrow">{E(c["ui"]["possibilities"])}</span><h2>{E(c["casesTitle"])}</h2><p>{E(c["casesNote"])}</p>'+cases(c)+f'</section><section class="boundary"><h2>{E(c["boundaryTitle"])}</h2>'+paras(c['boundaries'])+f'</section><section id="application"><span class="eyebrow">01 / FLASH IMAGER · {VERSION}</span><h2>{E(b["imagerTitle"])}</h2><p>{E(c["downloadText"])}</p><div class="installer-links">'
+ c["imageText"]=RELEASE[l]["image"]
+ body=f'<section class="hero"><div><span class="eyebrow">{E(c["eyebrow"])}</span><h1>{E(c["hero"][0])}<br><span>{E(c["hero"][1])}</span></h1><p class="lead">{E(c["lead"])}</p><div class="actions"><a class="button" href="#application">{E(b["actions"][0])} ↘</a><a class="button secondary" href="/{l}/docs">{E(c["ui"]["readGuide"])} →</a></div><p class="micro">{E(c["ui"]["heroNote"])}</p></div><figure class="hero-art"><img src="/assets/hero-recovery-20261009-v1.webp" width="1200" height="800" alt="{E(b["recoveryAlt"])}" fetchpriority="high"><figcaption>{E(b["caption"][1])}</figcaption></figure></section><div class="trust-strip"><span>Rescue Disk <strong>{VERSION}</strong></span><span>Flash Imager <strong>{IMAGER_VERSION}</strong></span><span>Agent Skill <strong>{SKILL_VERSION}</strong></span></div><section class="intro"><h2>{E(c["introTitle"])}</h2>'+paras(c['intro'])+'</section><div class="feature-grid">'+''.join(f'<article><span class="number">0{i+1}</span><h3>{E(title)}</h3><p>{E(text)}</p></article>' for i,(title,text) in enumerate(b['steps']))+'</div>'+planner(c)+f'<section id="possibilities"><span class="eyebrow">{E(c["ui"]["possibilities"])}</span><h2>{E(c["casesTitle"])}</h2><p>{E(c["casesNote"])}</p>'+cases(c)+f'</section><section class="boundary"><h2>{E(c["boundaryTitle"])}</h2>'+paras(c['boundaries'])+f'</section><section id="application"><span class="eyebrow">01 / FLASH IMAGER · {IMAGER_VERSION}</span><h2>{E(b["imagerTitle"])}</h2><p>{E(c["downloadText"])}</p><div class="installer-links">'
  files=[('win-x64.exe','Windows 10 / 11 · EXE'),('x86_64.AppImage','Linux · AppImage'),('amd64.deb','Debian / Ubuntu · DEB'),('linux-x64.tar.gz',b['portable'])]
- body+=''.join(f'<a href="{GH}/releases/download/v{VERSION}/aguja-flash-imager-{VERSION}-{file}">{E(label)} ↗</a>' for file,label in files)+f'</div><p><a href="{GH}/releases/download/v{VERSION}/SHA256SUMS-imager-{VERSION}-windows">SHA-256 · Windows</a> · <a href="{GH}/releases/download/v{VERSION}/SHA256SUMS-imager-{VERSION}-linux">SHA-256 · Linux</a></p><a href="/{l}/docs#primer-usb">{E(c["ui"]["firstUsb"])} →</a></section>'
+ body+=''.join(f'<a href="{GH}/releases/download/v{IMAGER_VERSION}/aguja-flash-imager-{IMAGER_VERSION}-{file}">{E(label)} ↗</a>' for file,label in files)+f'</div><p><a href="{GH}/releases/download/v{IMAGER_VERSION}/SHA256SUMS-imager-{IMAGER_VERSION}-windows">SHA-256 · Windows</a> · <a href="{GH}/releases/download/v{IMAGER_VERSION}/SHA256SUMS-imager-{IMAGER_VERSION}-linux">SHA-256 · Linux</a></p><a href="/{l}/docs#primer-usb">{E(c["ui"]["firstUsb"])} →</a></section>'
  s=b['imagerSkill'];d=b['donation']
  urls=[GH+f'/releases/download/{SKILL_TAG}/aguja-flash-imager-skill-{SKILL_VERSION}.zip',GH+f'/releases/download/{SKILL_TAG}/aguja-flash-imager-skill-{SKILL_VERSION}.tar.gz',GH+f'/blob/main/skills/flash-imager/references/harnesses.md',GH+f'/releases/download/{SKILL_TAG}/SHA256SUMS-flash-imager-skill-{SKILL_VERSION}']
  body+=f'<section id="agent-skill"><span class="eyebrow">02 / AGENT SKILL · {SKILL_VERSION}</span><h2>{E(s["title"])}</h2><p>{E(s["text"])}</p><div class="installer-links">'+''.join(f'<a href="{u}">{E(label)} ↗</a>' for u,label in zip(urls,s['links']))+f'</div><p>{E(s["note"])}</p></section><section id="images"><span class="eyebrow">03 / RESCUE DISK · {VERSION}</span><h2>{E(b["imagesTitle"])}</h2><p>{E(c["imageText"])}</p><div class="installer-links">'
@@ -74,7 +76,7 @@ def docs(l,c,b):
  release=RELEASE[l]
  for n,section in release['sections'].items(): b['sections'][int(n)]=section
  b['sections'][13][0]=release['create']
- body=f'<section class="guide-intro"><span class="eyebrow">RESCUE DISK + FLASH IMAGER · {VERSION}</span><h1>{E(b["docUI"][2])}</h1><p class="lead">{E(current(b["docDescription"]))}</p><p>{E(c["docNote"])}</p><div class="actions"><a class="button" href="#primer-usb">{E(c["ui"]["firstUsb"])} ↓</a><button class="secondary print-guide" type="button" hidden>{E(c["ui"]["print"])}</button></div></section><div class="guide-layout"><aside class="contents"><details open><summary>{E(c["ui"]["contents"])}</summary><div class="search-controls" hidden><label for="doc-search">{E(c["ui"]["search"])}</label><input type="search" id="doc-search" placeholder="SSH, BitLocker, ENOSPC…"><p id="search-status" role="status" aria-live="polite"></p></div><nav aria-label="{E(c["ui"]["contents"])}">'+''.join(f'<a data-doc-link href="#{i}">{n+1:02} · {E(s[0])}</a>' for n,(i,s) in enumerate(zip(IDS,b['sections'])))+'</nav></details></aside><div class="chapters">'
+ body=f'<section class="guide-intro"><span class="eyebrow">RESCUE DISK · {VERSION} / FLASH IMAGER · {IMAGER_VERSION}</span><h1>{E(b["docUI"][2])}</h1><p class="lead">{E(current(b["docDescription"]))}</p><p>{E(c["docNote"])}</p><div class="actions"><a class="button" href="#primer-usb">{E(c["ui"]["firstUsb"])} ↓</a><button class="secondary print-guide" type="button" hidden>{E(c["ui"]["print"])}</button></div></section><div class="guide-layout"><aside class="contents"><details open><summary>{E(c["ui"]["contents"])}</summary><div class="search-controls" hidden><label for="doc-search">{E(c["ui"]["search"])}</label><input type="search" id="doc-search" placeholder="SSH, BitLocker, ENOSPC…"><p id="search-status" role="status" aria-live="polite"></p></div><nav aria-label="{E(c["ui"]["contents"])}">'+''.join(f'<a data-doc-link href="#{i}">{n+1:02} · {E(s[0])}</a>' for n,(i,s) in enumerate(zip(IDS,b['sections'])))+'</nav></details></aside><div class="chapters">'
  assert len(b['sections'])==26
  for n,(i,s) in enumerate(zip(IDS,b['sections'])):
   ps=[reviewed(p,c) for p in s[1:] if not re.search(r'0\.8\.[01]',p)]
@@ -82,6 +84,10 @@ def docs(l,c,b):
   if n==0:content=paras(c['intro'])
   body+=f'<section class="doc-section" id="{i}"><span class="eyebrow">{n+1:02} / 26</span><h2>{E(s[0])}</h2>'+content+paras(c['additions'].get(str(n),[]))
   if n==1:body+=paras(release['wizard'])
+  if n==15:
+   for name,title in release['updateCaptions'].items():
+    url='/assets/docs/101/'+name+'.png'
+    body+=f'<figure><a class="zoom-image" href="{url}" aria-label="{E(title)}"><img src="{url}" loading="lazy" decoding="async" width="1280" height="800" alt="{E(title)}"></a><figcaption>{E(title)} · {E(release["captureProvenance"])}</figcaption></figure>'
   if n==15:body+='<pre><code>aguja update menu\naguja update status --json\naguja update check --json\naguja update rollback</code></pre>'
   if n==12:body+='<pre><code>aguja secrets --json\nsudo aguja recovery status --json\nsudo aguja recovery list --json</code></pre>'
   if n==24:body+=f'<p><a href="{GH}/releases/download/v{VERSION}/VALIDATION-{VERSION}.md">GitHub · {VERSION} · Validation ↗</a> · <a href="{GH}/releases/download/v{VERSION}/UPDATES.md">aguja update · README ↗</a></p>'
@@ -98,4 +104,9 @@ if __name__=='__main__':
  for l in (sys.argv[1:] or LANGS):
   c=json.loads((ROOT/f'server/locales/launch-{l}.json').read_text());b=BASE[l]
   (PUBLIC/l/'index.html').write_text(home(l,c,b));(PUBLIC/l/'docs.html').write_text(docs(l,c,b))
+  guide=ROOT/f'docs/{l}/USER-GUIDE.md'
+  text=guide.read_text();chapters=list(re.finditer(r'^## .*$',text,re.M));assert len(chapters)==26
+  section=RELEASE[l]['sections']['15'];block='## '+section[0]+'\n\n'+'\n\n'.join(section[1:])+'\n\n```sh\naguja update menu\naguja update status --json\naguja update check --json\naguja update rollback\n```\n\n'
+  block+='\n\n'.join('!['+title+'](../../server/public/docs-images/101/'+name+'.png)' for name,title in RELEASE[l]['updateCaptions'].items())+'\n\n'+RELEASE[l]['captureProvenance']+'\n\n'
+  guide.write_text(text[:chapters[15].start()]+block+text[chapters[16].start():])
  print('Built launch home + guide pages; routing and other files untouched.')

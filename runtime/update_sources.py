@@ -39,26 +39,34 @@ def catalog(pin):
   if sum(p['bytes'] for p in parts)!=r['bytes']:raise ValueError('Tamaño de imagen no válido')
   result.append({**r,'parts':parts})
  return sorted(result,key=lambda r:semver(r['version']),reverse=True)
-def fetch(value,target,algorithm,expected,size=None,limit=512*1024**2):
+def fetch(value,target,algorithm,expected,size=None,limit=512*1024**2,progress=None):
  h=hashlib.new(algorithm);count=0
  with stream(value) as source,open(target,'xb') as dest:
+  total=size or int(source.headers.get('Content-Length','0')) or None
+  if total is not None and not 0<total<=limit:raise ValueError('Tamaño de descarga no válido')
   while b:=source.read(1024**2):
    count+=len(b)
    if count>limit or size is not None and count>size:raise ValueError('Descarga demasiado grande')
    h.update(b);dest.write(b)
+   if progress:progress(count,total)
   dest.flush();import os;os.fsync(dest.fileno())
  if h.hexdigest()!=expected or size is not None and count!=size:raise ValueError('Hash de descarga incorrecto')
  return count
-def harnesses():
- result={};r=get('https://api.github.com/repos/openai/codex/releases/latest');v=r['tag_name'].removeprefix('rust-v');semver(v)
- a=next(x for x in r['assets'] if x['name']=='codex-x86_64-unknown-linux-musl.tar.gz');digest=a.get('digest','')
- if not re.fullmatch('sha256:[a-f0-9]{64}',digest):raise ValueError('Codex no publica un hash verificable')
- result['codex']={'version':v,'url':url(a['browser_download_url']),'algorithm':'sha256','digest':digest[7:],'bytes':a['size'],'member':'codex-x86_64-unknown-linux-musl'}
+def harnesses(names=None):
+ names=set(names or ['codex','claude','opencode','antigravity']);result={}
+ if not names<=set(['codex','claude','opencode','antigravity']):raise ValueError('Proveedor no válido')
+ if 'codex' in names:
+  r=get('https://api.github.com/repos/openai/codex/releases/latest');v=r['tag_name'].removeprefix('rust-v');semver(v)
+  a=next(x for x in r['assets'] if x['name']=='codex-x86_64-unknown-linux-musl.tar.gz');digest=a.get('digest','')
+  if not re.fullmatch('sha256:[a-f0-9]{64}',digest):raise ValueError('Codex no publica un hash verificable')
+  result['codex']={'version':v,'url':url(a['browser_download_url']),'algorithm':'sha256','digest':digest[7:],'bytes':a['size'],'member':'codex-x86_64-unknown-linux-musl'}
  for name,pkg,member in [('claude','@anthropic-ai/claude-code-linux-x64','package/claude'),('opencode','opencode-linux-x64-baseline','package/bin/opencode')]:
+  if name not in names:continue
   r=get('https://registry.npmjs.org/'+pkg+'/latest');semver(r['version']);dist=r['dist'];integrity=dist['integrity']
   if not integrity.startswith('sha512-'):raise ValueError('Integridad nativa no válida')
   result[name]={'version':r['version'],'url':url(dist['tarball']),'algorithm':'sha512','digest':base64.b64decode(integrity[7:],validate=True).hex(),'member':member}
- r=get('https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json');semver(r['version'])
- if not re.fullmatch('[a-f0-9]{128}',r['sha512']):raise ValueError('Integridad Antigravity no válida')
- result['antigravity']={'version':r['version'],'url':url(r['url']),'algorithm':'sha512','digest':r['sha512'],'member':'antigravity'}
+ if 'antigravity' in names:
+  r=get('https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json');semver(r['version'])
+  if not re.fullmatch('[a-f0-9]{128}',r['sha512']):raise ValueError('Integridad Antigravity no válida')
+  result['antigravity']={'version':r['version'],'url':url(r['url']),'algorithm':'sha512','digest':r['sha512'],'member':'antigravity'}
  return result

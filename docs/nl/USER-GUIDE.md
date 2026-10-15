@@ -95,7 +95,7 @@ Linux starten verwijdert BitLocker niet. Vraag de juiste volumesleutel aan de ei
 
 [↗](https://aguja.transcendenceia.net/nl/docs#bitlocker)
 
-## Stap 6 · Voorbereiden, schrijven, controleren
+## Stap 7 · Voorbereiden, schrijven en controleren
 
 Controleer image, bescherming en overzicht. Private image maken produceert bestand; USB voorbereiden/schrijven beschrijft ook apparaat. Vergelijk model, serie en echte capaciteit in native bevestiging; annuleer bij twijfel. Geef UAC/Polkit alleen voor gewenste actie. Wacht zonder loskoppelen op schrijven en volledige terugleescontrole, controleer resultaat. Correcte bytes garanderen geen firmware: test hardwareboot. Externe Windows-USB-back-up moet vooraf gedaan zijn.
 
@@ -112,11 +112,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/nl/docs#arranque)
 
-## Herstart: tijdelijke identiteit
+## Interactieve live-updates
 
-Tailnet-status staat in RAM. Na herstart zijn netwerk, ontgrendeling en nieuwe registratie nodig. Een eenmalige sleutel kan verbruikt zijn. Gebruik voor meerdere starts een geldige beperkte herbruikbare sleutel. Identiteit staat los van USB-SSH-hostsleutel en HOME-persistentie. Verwijder oude nodes en trek onnodige sleutels in. Oude verbinding bewijst geen huidige status.
+Open Updates of voer aguja update menu uit. Controleer eerst op updates: geïnstalleerde en beschikbare versies verschijnen. Niets wordt automatisch geïnstalleerd.
 
-[↗](https://aguja.transcendenceia.net/nl/docs#reinicios)
+Per rij: Nee, Ja · RAM of Ja, blijvend. Nee verandert niets. RAM geldt alleen voor deze sessie. Blijvend bewaart een schoon, gecontroleerd systeem in DATA op deze USB voor de volgende start.
+
+Kies met muis, pijlen en Spatie. A toont aantallen en de exacte bestemming; Enter past toe. Een volledig Rescue-release vereist blijvende opslag en een aparte handeling.
+
+Volg downloadbytes of APT, voorbereiding, installatie, opslaan op USB, controle en startselectie. Zonder meetbaar totaal verschijnt activiteit, geen verzonnen percentage. Wacht tot het klaar is.
+
+Het resultaat blijft tot Terug naar menu. Geen automatische herstart of onterecht succes na fouten. Fabriek en vorige generatie blijven; aguja update rollback wijzigt de volgende start.
+
+Schrijfbare 1.0-compatibele USB, vrije DATA-ruimte en voldoende RAM vereist. De wachtende generatie blijft basis; geheimen en workspace worden niet gekopieerd. Alleen CFG bewerken werkt een oude USB niet bij.
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![Lijst · Nee / RAM / blijvend](../../server/public/docs-images/101/updates-list.png)
+
+![Bestemming controleren](../../server/public/docs-images/101/updates-review.png)
+
+![Downloadvoortgang](../../server/public/docs-images/101/updates-download.png)
+
+![Opslaan op USB](../../server/public/docs-images/101/updates-save.png)
+
+![Voltooiing gecontroleerd](../../server/public/docs-images/101/updates-done.png)
+
+![RAM-resultaat · alleen deze sessie](../../server/public/docs-images/101/updates-ram.png)
+
+Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.
 
 ## AI-login in lokale browser
 

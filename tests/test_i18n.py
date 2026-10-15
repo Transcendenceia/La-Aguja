@@ -44,10 +44,10 @@ class I18nTests(unittest.TestCase):
         i18n._system_language.cache_clear()
 
     def test_every_runtime_translated_literal_has_dictionary_coverage(self):
-        for filename in ('display.py','cockpit.py','updates.py'):
+        for filename in ('display.py','cockpit.py','updates.py','update_ui.py'):
             tree=ast.parse((Path(i18n.__file__).parent / filename).read_text())
             for node in ast.walk(tree):
-                if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=='t' and node.args and isinstance(node.args[0],ast.Constant):
+                if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id in ('t','tr') and node.args and isinstance(node.args[0],ast.Constant):
                     for language,entries in i18n.CATALOG['translations'].items():
                         self.assertIn(node.args[0].value,entries,(filename,language,node.args[0].value))
 

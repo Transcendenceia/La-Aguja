@@ -21,7 +21,7 @@ class ReleaseUpdates(unittest.TestCase):
  def tearDown(self):
   for p in self.patches:p.stop()
   self.temp.cleanup()
- def fetch(self,url,target,*args):target.write_bytes(self.pieces[int(url[-1])])
+ def fetch(self,url,target,*args,**kwargs):target.write_bytes(self.pieces[int(url[-1])])
  def test_verified_release_extracts_and_activates_only_completed_live_files(self):
   with patch.object(u.sources,'catalog',return_value=[self.release]),patch.object(u.sources,'fetch',self.fetch),patch.object(u.subprocess,'check_output',return_value='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'):
    result=u.release_update()

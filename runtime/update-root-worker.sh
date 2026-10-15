@@ -4,7 +4,7 @@ set -euo pipefail
 ulimit -c 0
 root=$1
 packages=$2
-[[ $packages == yes || $packages == no || $packages == verify ]] || exit 1
+[[ $packages == yes || $packages == no || $packages == verify || $packages == selected ]] || exit 1
 [[ $EUID == 0 && $root == /data/updates/gen-*/root && -f $root/etc/debian_version ]] || exit 1
 mount --make-rprivate /
 mount -t proc proc "$root/proc"
@@ -30,6 +30,25 @@ printf '#!/bin/sh\nexit 101\n' > "$root/usr/sbin/policy-rc.d"
 chmod 755 "$root/usr/sbin/policy-rc.d"
 if [[ -L $root/etc/resolv.conf ]]; then unlink "$root/etc/resolv.conf"; fi
 cp /etc/resolv.conf "$root/etc/resolv.conf"
+if [[ $packages == selected ]]; then
+ python3 - "$root" <<'PYSELECT'
+import json,re,subprocess,sys
+from pathlib import Path
+root=Path(sys.argv[1]);items=json.loads((root/'var/lib/aguja-update-packages.json').read_text())
+assert isinstance(items,list) and 0<len(items)<=4096
+args=[]
+for item in items:
+ assert set(item)=={'name','version'} and re.fullmatch(r'[a-z0-9][a-z0-9+.-]*(?::[a-z0-9][a-z0-9-]*)?',item['name']) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9.+:~_-]{0,199}',item['version'])
+ args.append(item['name']+'='+item['version'])
+env=['/usr/bin/env','-i','PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin','HOME=/root','DEBIAN_FRONTEND=noninteractive','NEEDRESTART_MODE=l']
+subprocess.run(['chroot',str(root),*env,'apt-get','-o','Acquire::Retries=1','update'],check=True)
+preview=subprocess.check_output(['chroot',str(root),*env,'apt-get','--print-uris','-y','install',*args],text=True)
+size=sum(int(m[1]) for line in preview.splitlines() if (m:=re.match(r"^'https?://[^']+' \S+ (\d+) ",line)))
+import shutil
+if shutil.disk_usage(root).free<size*4+3*1024**3:raise ValueError('Not enough space for package staging')
+subprocess.run(['chroot',str(root),*env,'apt-get','-y','-o','APT::Status-Fd=1','-o','Dpkg::Options::=--force-confold','install',*args],check=True)
+PYSELECT
+fi
 if [[ $packages == yes ]]; then
  chroot "$root" /usr/bin/env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin HOME=/root DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Retries=1 update
  # Bound staging growth before installing anything; keep room for another root.

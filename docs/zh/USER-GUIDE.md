@@ -95,7 +95,7 @@ ssh aguja@IP
 
 [↗](https://aguja.transcendenceia.net/zh/docs#bitlocker)
 
-## 步骤 6 · 准备、写入与验证
+## 步骤 7 · 准备、写入与验证
 
 检查镜像、保护模式及摘要。创建私人镜像只生成文件；准备并写入 USB 还会写目标设备。在原生确认中比较型号、序列号、实际容量；不确定就取消。仅对预期操作授权 UAC/Polkit。等待完整写入和回读，不要拔出 USB，并检查结果。字节验证不代表所有固件兼容，应测试目标硬件。Windows USB 备份必须事先外部完成。
 
@@ -112,11 +112,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/zh/docs#arranque)
 
-## 重启：临时网络身份
+## 交互式 live 更新
 
-Tailnet 状态位于 RAM。重启后需要网络、配置解锁和重新注册。一次性密钥可能首次启动后就失效；多次启动应使用有效、受限、可复用密钥。这个身份与 USB 的 SSH 主机密钥和 HOME 持久化不同。结束后清理旧节点并撤销不再需要的密钥。旧连接成功不证明当前注册或策略状态。
+打开更新面板，或运行 aguja update menu。先检查更新：列表显示已安装版本和可用版本。不会自动安装。
 
-[↗](https://aguja.transcendenceia.net/zh/docs#reinicios)
+每行选择“不”“是 · RAM”或“是，持久保存”。“不”不更改任何内容。RAM 仅影响本次会话，重启后丢失。持久更新将干净且经过验证的系统保存到此 USB 的 DATA，供下次启动使用。
+
+使用鼠标、方向键和空格选择。A 显示数量及准确保存目标，Enter 应用。完整 Rescue Disk 版本必须持久保存，并与组件更新分开操作。
+
+可测量时显示下载字节或 APT 进度，随后显示准备、安装、写入 USB、验证及启动选择。没有可测量总量时显示活动状态，不虚构百分比。完成前不要拔出 USB。
+
+结果将保留到点击返回菜单。不会自动重启，也不会将失败或部分完成报告为成功。出厂系统和上一代仍可选择；aguja update rollback 更改下次启动选择。
+
+需要兼容 1.0 的可写 USB、足够 DATA 空间及 RAM。保留待启动代作为基础，不复制个人密钥和 workspace。仅编辑 CFG 不会更新旧 USB 系统。
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![列表 · 不 / RAM / 持久](../../server/public/docs-images/101/updates-list.png)
+
+![核对保存目标](../../server/public/docs-images/101/updates-review.png)
+
+![可测量的下载进度](../../server/public/docs-images/101/updates-download.png)
+
+![写入 USB](../../server/public/docs-images/101/updates-save.png)
+
+![验证完成](../../server/public/docs-images/101/updates-done.png)
+
+![RAM 结果 · 仅本次会话](../../server/public/docs-images/101/updates-ram.png)
+
+真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。
 
 ## 本地浏览器中的 AI 登录
 

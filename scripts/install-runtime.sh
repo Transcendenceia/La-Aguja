@@ -9,6 +9,7 @@ install -d "$ROOT/usr/lib/aguja" "$ROOT/usr/share/aguja" "$ROOT/etc/aguja" \
   "$ROOT/etc/skel" "$ROOT/etc/profile.d" "$ROOT/etc/systemd/system" "$ROOT/usr/local/share/zsh/site-functions"
 # Persistent update infrastructure, copied only into the isolated factory.
 install -m 755 "$PROJECT/runtime/update-root-worker.sh" "$ROOT/usr/lib/aguja/update-root-worker.sh"
+install -m 755 "$PROJECT/runtime/update-session-worker.sh" "$ROOT/usr/lib/aguja/update-session-worker.sh"
 install -m 644 "$PROJECT/desktop/resources/release-key.json" "$ROOT/usr/share/aguja/release-key.json"
 install -m 644 "$PROJECT/config/harnesses.json" "$ROOT/usr/share/aguja/harnesses.json"
 install -m 644 "$PROJECT/runtime/update-protocol.json" "$ROOT/usr/share/aguja/update-protocol.json"
@@ -74,3 +75,5 @@ if [ "$(id -un)" = aguja ] && [ -t 0 ] && [ -z "${AGUJA_COCKPIT:-}" ]; then
 fi
 EOF
 chroot "$ROOT" systemctl enable aguja-boot.service avahi-daemon.service aguja-activity.service aguja-tailscale.service aguja-network-check.timer aguja-update-check.timer
+
+python3 "$PROJECT/scripts/update-runtime-manifest.py" "$ROOT"

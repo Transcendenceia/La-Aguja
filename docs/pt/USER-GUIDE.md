@@ -119,7 +119,7 @@ No Windows, o Imager pode consultar chaves disponíveis e incluir as explicitame
 
 [↗](https://aguja.transcendenceia.net/pt/docs#bitlocker)
 
-## Passo 6 · Preparar, gravar, verificar
+## Passo 7 · Preparar, gravar e verificar
 
 Revê imagem, proteção e resumo. Criar imagem privada gera ficheiro; preparar e gravar também escreve no dispositivo. Confirma modelo, série e capacidade real no diálogo nativo. Cancela se houver dúvida. Autoriza apenas a operação pretendida em UAC/Polkit.
 
@@ -140,13 +140,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/pt/docs#arranque)
 
-## Reinícios: identidade temporária
+## Atualizações interativas do live
 
-O estado da rede privada vive em RAM. Após reinício, precisa de rede, perfil desbloqueado e nova inscrição. Uma chave de uso único pode já ter sido consumida. Para vários arranques, usa uma chave reutilizável válida e limitada.
+Abre Atualizações ou executa aguja update menu. Primeiro procura atualizações: aparecem as versões instaladas e disponíveis. Nada é instalado automaticamente.
 
-Identidade tailnet é distinta da chave SSH do USB e da persistência HOME. Remove nós antigos e revoga chaves desnecessárias no fim. Uma ligação antiga não prova inscrição ou política atual.
+Em cada linha: Não, Sim · RAM ou Sim persistente. Não não altera nada. RAM dura só nesta sessão. Persistente guarda um sistema limpo e verificado em DATA deste USB para o próximo arranque.
 
-[↗](https://aguja.transcendenceia.net/pt/docs#reinicios)
+Usa rato, setas e Espaço. A revê contagens e destino exato; Enter aplica. Uma release Rescue completa exige persistência e uma operação separada dos componentes.
+
+Acompanha bytes ou progresso APT, preparação, instalação, gravação USB, verificação e seleção de arranque. Sem total mensurável mostra atividade, não percentagens inventadas. Espera pelo fim.
+
+O resultado fica até Voltar ao menu. Não há reinício automático nem sucesso falso após falha. Fábrica e geração anterior continuam disponíveis; aguja update rollback muda o próximo arranque.
+
+USB gravável compatível com 1.0, espaço DATA e RAM suficientes. A geração pendente é preservada como base; segredos e workspace não são copiados. Editar CFG não atualiza um USB antigo.
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![Lista · Não / RAM / persistente](../../server/public/docs-images/101/updates-list.png)
+
+![Rever destino persistente](../../server/public/docs-images/101/updates-review.png)
+
+![Progresso da transferência](../../server/public/docs-images/101/updates-download.png)
+
+![A gravar no USB](../../server/public/docs-images/101/updates-save.png)
+
+![Conclusão verificada](../../server/public/docs-images/101/updates-done.png)
+
+![Resultado RAM · só nesta sessão](../../server/public/docs-images/101/updates-ram.png)
+
+Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.
 
 ## Autenticar IA no navegador local
 

@@ -37,7 +37,7 @@ try{
   }
   await context.close();
  }
- const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:960}});const page=await nojs.newPage();for(const lang of languages){await page.goto(base+'/'+lang+'/docs');assert.equal(await page.locator('.doc-section').count(),26);assert.equal(await page.locator('[data-plan]:visible').count(),4);assert.equal(await page.locator('.zoom-image').count(),5);}await nojs.close();
+ const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:960}});const page=await nojs.newPage();for(const lang of languages){await page.goto(base+'/'+lang+'/docs');assert.equal(await page.locator('.doc-section').count(),26);assert.equal(await page.locator('[data-plan]:visible').count(),4);assert.equal(await page.locator('.zoom-image').count(),11);}await nojs.close();
  assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
  // The existing edge proxy injects this beacon, also present on unchanged privacy pages.
  // Local checks remain strict; live checks require an explicit, narrow expectation.

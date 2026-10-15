@@ -1,15 +1,32 @@
 """USB-persistent, immutable update generations; factory/previous boot retained."""
-import argparse,contextlib,fcntl,hashlib,json,os,re,shutil,signal,stat,subprocess,sys,tarfile,time,uuid
+import argparse,selectors,contextlib,fcntl,hashlib,json,os,re,shutil,signal,stat,subprocess,sys,tarfile,time,uuid
 from pathlib import Path
 import update_sources as sources
 from i18n import t
-DATA=Path('/data');CFG=Path('/config');ROOT=DATA/'updates';PIN=Path('/usr/share/aguja/release-key.json');STATE=ROOT/'state.json'
+import update_progress as progress
+DATA=Path('/data');CFG=Path('/config');ROOT=DATA/'updates';PIN=Path('/usr/share/aguja/release-key.json');STATE=ROOT/'state.json';RUN=Path('/run/aguja-updates');NOTICE=Path('/run/aguja-update-status.json')
 BINS={'codex':'opt/aguja/agents/codex/x86_64-unknown-linux-musl/bin/codex','claude':'opt/aguja/agents/claude/claude','antigravity':'opt/aguja/agents/antigravity/agy','opencode':'opt/aguja/agents/opencode/opencode'}
 def run(args,**kw):
  timeout=kw.pop('timeout',1800);log=kw.pop('log',None)
  with subprocess.Popen(args,stdin=subprocess.DEVNULL,stdout=subprocess.PIPE,stderr=subprocess.PIPE,start_new_session=True,**kw) as process:
-  try:out,err=process.communicate(timeout=timeout)
-  except subprocess.TimeoutExpired:
+  try:
+   if not progress.active():out,err=process.communicate(timeout=timeout)
+   else:
+    parts={process.stdout:bytearray(),process.stderr:bytearray()};lines={f:b'' for f in parts};deadline=time.monotonic()+timeout
+    with selectors.DefaultSelector() as selector:
+     for stream in parts:selector.register(stream,selectors.EVENT_READ)
+     while selector.get_map():
+      if time.monotonic()>deadline:raise subprocess.TimeoutExpired(args,timeout)
+      for key,_ in selector.select(.2):
+       raw=os.read(key.fileobj.fileno(),65536)
+       if not raw:selector.unregister(key.fileobj);continue
+       parts[key.fileobj].extend(raw)
+       if len(parts[key.fileobj])>4*1024**2:del parts[key.fileobj][:-4*1024**2]
+       pending=lines[key.fileobj]+raw
+       for line in pending.split(b'\n')[:-1]:progress.apt_line(line.decode(errors='replace'))
+       lines[key.fileobj]=pending.split(b'\n')[-1][-4096:]
+    process.wait(timeout=max(.1,deadline-time.monotonic()));out,err=map(bytes,(parts[process.stdout],parts[process.stderr]))
+  except (subprocess.TimeoutExpired,KeyboardInterrupt):
    os.killpg(process.pid,signal.SIGTERM)
    try:process.communicate(timeout=10)
    except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.communicate()
@@ -79,6 +96,7 @@ def verify_persistent_target():
   offset=int(Path('/sys/class/block/'+Path(partition).name+'/start').read_text())*512
   if loop['back-file']!=disk or int(loop['offset'])!=offset:raise ValueError('Vista de partición persistente no válida')
  if 'persistent-updates-v1' not in json.loads((CFG/'release.json').read_text()).get('features',[]):raise ValueError('Este USB necesita la infraestructura de arranque 1.0')
+ return {'disk':disk,'config':cfg[0],'data':data[0]}
 
 def capacity(required):
  if not os.path.ismount(DATA) or not os.path.ismount(CFG):raise ValueError('Actualización persistente requiere CFG y DATA del USB montadas')
@@ -86,6 +104,12 @@ def capacity(required):
  available=next(int(x.split()[1])*1024 for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:'))
  if available<768*1024**2:raise ValueError('RAM insuficiente; cierra otras tareas antes de actualizar')
 def source_live():
+ active=state()['active']
+ if active:
+  folder=ROOT/active;m=metadata(folder/'manifest.json')
+  for name in ('filesystem.squashfs','vmlinuz','initrd.img'):
+   if (folder/'live'/name).is_symlink() or hashfile(folder/'live'/name)!=m['files'][name]:raise ValueError('La generación seleccionada no supera la verificación.')
+  return folder/'live'
  params=dict(x.split('=',1) for x in Path('/proc/cmdline').read_text().split() if '=' in x);folder=params.get('live-media-path','/live')
  if folder!='/live' and not re.fullmatch('/updates/gen-[a-f0-9]{32}/live',folder):raise ValueError('Generación de arranque no válida')
  root=Path('/run/live/medium')/folder.lstrip('/')
@@ -94,10 +118,12 @@ def source_live():
  return root
 @contextlib.contextmanager
 def lock(check_capacity=True):
- if check_capacity:capacity(128*1024**2);verify_persistent_target()
- ROOT.mkdir(mode=0o700,exist_ok=True)
- if ROOT.is_symlink() or ROOT.stat().st_uid!=0:raise ValueError('Área de actualizaciones no válida')
- with (ROOT/'lock').open('a+b') as f:
+ if check_capacity:
+  capacity(128*1024**2);verify_persistent_target();ROOT.mkdir(mode=0o700,exist_ok=True)
+  if ROOT.is_symlink() or ROOT.stat().st_uid!=0:raise ValueError('Área de actualizaciones no válida')
+ RUN.mkdir(mode=0o700,exist_ok=True)
+ if RUN.is_symlink() or RUN.stat().st_uid!=os.geteuid():raise ValueError('Área temporal de actualizaciones no válida')
+ with (RUN/'lock').open('a+b') as f:
   try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
   except BlockingIOError:raise ValueError('Ya hay una operación de actualización en curso; espera a que termine.')
   yield
@@ -111,7 +137,7 @@ def installed():
  return result
 
 def package_check(refresh=True):
- lists=ROOT/'checks/lists';(lists/'partial').mkdir(parents=True,exist_ok=True)
+ lists=RUN/'checks/lists';(lists/'partial').mkdir(parents=True,exist_ok=True)
  opts=['-o','Dir::State::lists='+str(lists),'-o','Acquire::Retries=1','-o','Acquire::http::Timeout=20','-o','Acquire::https::Timeout=20']
  if refresh:run(['apt-get',*opts,'update'],timeout=180)
  text=run(['apt-get',*opts,'-s','upgrade'],timeout=60).stdout.decode(errors='replace');packages=[]
@@ -121,19 +147,25 @@ def package_check(refresh=True):
  return packages
 
 def check():
- with lock():
+ with lock(check_capacity=False):
   result={'schema':1,'checked_at':int(time.time()),'errors':{},'packages':[],'harnesses':{},'release':None,'restart_required':state()['active']!=running_generation()}
+  progress.emit('check','Paquetes del sistema')
   try:result['packages']=package_check()
   except Exception:result['errors']['packages']='No se pudieron consultar los repositorios del sistema.'
-  try:
-   current=installed();result['harnesses']={n:{'current':current[n],'latest':v['version'],'available':current[n] is not None and sources.semver(v['version'])>sources.semver(current[n])} for n,v in sources.harnesses().items()}
-  except Exception:result['errors']['harnesses']='No se pudieron consultar todos los proveedores.'
+  current=installed()
+  for name in BINS:
+   progress.emit('check',name)
+   try:
+    v=sources.harnesses([name])[name]
+    result['harnesses'][name]={'current':current[name],'latest':v['version'],'available':current[name] is not None and sources.semver(v['version'])>sources.semver(current[name]),'candidate':v}
+   except Exception:result['errors'][name]='No se pudo consultar este proveedor.'
+  progress.emit('check','Rescue Disk')
   try:
    releases=sources.catalog(json.loads(PIN.read_text()));current=Path('/usr/share/aguja/VERSION').read_text().strip();latest=releases[0]['version'];result['release']={'current':current,'latest':latest,'available':sources.semver(latest)>sources.semver(current)}
   except Exception:result['errors']['release']='No se pudo verificar el catálogo firmado.'
-  atomic(ROOT/'checks.json',result)
+  atomic(RUN/'checks.json',result)
   count=len(result['packages'])+sum(x['available'] for x in result['harnesses'].values())+int(bool(result['release'] and result['release']['available']))
-  atomic(Path('/run/aguja-update-status.json'),{'available_count':count,'checked_at':result['checked_at'],'partial':bool(result['errors'])});Path('/run/aguja-update-status.json').chmod(0o644)
+  atomic(NOTICE,{'available_count':count,'checked_at':result['checked_at'],'partial':bool(result['errors'])});NOTICE.chmod(0o644)
   return result
 
 def data_partuuid(device):
@@ -193,13 +225,14 @@ def manifest(folder,version,kind):
 
 def release_update():
  with lock():
+  progress.emit('download','Descargando Rescue Disk')
   r=sources.catalog(json.loads(PIN.read_text()))[0];current=Path('/usr/share/aguja/VERSION').read_text().strip()
   if sources.semver(r['version'])<=sources.semver(current):raise ValueError('El Rescue Disk está actualizado')
-  capacity(r['bytes']+3*1024**3);g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);image=folder/'download.img';h=hashlib.sha256()
+  capacity(r['bytes']+3*1024**3);g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);image=folder/'download.img';h=hashlib.sha256();received=0
   try:
    with image.open('xb') as out:
     for i,p in enumerate(r['parts']):
-     piece=folder/('part-'+str(i));sources.fetch(p['url'],piece,'sha256',p['sha256'],p['bytes'],2*1024**3)
+     piece=folder/('part-'+str(i));sources.fetch(p['url'],piece,'sha256',p['sha256'],p['bytes'],2*1024**3,progress=lambda done,total,offset=received:progress.emit('download','Rescue Disk',completed=offset+done,total=r['bytes'],unit='bytes'));received+=p['bytes']
      with piece.open('rb') as f:
       while b:=f.read(4194304):h.update(b);out.write(b)
      piece.unlink()
@@ -209,23 +242,28 @@ def release_update():
    packed_version=run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/share/aguja/VERSION']).stdout.decode().strip()
    protocol=json.loads(run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/share/aguja/update-protocol.json']).stdout)
    if packed_version!=r['version'] or protocol!={'schema':1,'profile_schema':1,'config_partition':4,'data_partition':5}:raise ValueError('La imagen nueva no admite este protocolo de configuración')
-   manifest(folder,r['version'],'release');image.unlink();active=activate(g)
+   progress.emit('verify','Verificando Rescue Disk');manifest(folder,r['version'],'release');image.unlink();progress.emit('activate','Preparando el próximo arranque');active=activate(g)
    return {'ok':True,'generation':g,'version':r['version'],'reboot_required':True,'state':active}
   except Exception:
    # Failed staging is retained for explicit inspection/cleanup; active stays.
    raise
 
-def install_harnesses(root,items,cache):
+def install_harnesses(root,items,cache,reserve=3*1024**3):
  for name,r in items.items():
-  if shutil.disk_usage(cache).free<3*1024**3:raise ValueError('Espacio insuficiente para descargar arneses; se conserva la versión actual')
-  archive=cache/(name+'.tgz');sources.fetch(r['url'],archive,r['algorithm'],r['digest'],r.get('bytes'))
+  if shutil.disk_usage(cache).free<reserve:raise ValueError('Espacio insuficiente para descargar arneses; se conserva la versión actual')
+  progress.emit('download',name)
+  archive=cache/(name+'.tgz');sources.fetch(r['url'],archive,r['algorithm'],r['digest'],r.get('bytes'),progress=lambda done,total:progress.emit('download',name,completed=done,total=total,unit='bytes'))
   with tarfile.open(archive,'r:gz') as tar:
    member=tar.getmember(r['member'])
    if not member.isfile() or member.size>1024**3 or shutil.disk_usage(root).free<member.size+2*1024**3:raise ValueError('Binario nativo no válido')
    target=root/BINS[name];target.parent.mkdir(parents=True,exist_ok=True)
    if target.is_symlink():raise ValueError('Destino nativo inesperado')
-   with tar.extractfile(member) as src,target.open('wb') as out:shutil.copyfileobj(src,out,1024**2)
-   target.chmod(0o755)
+   temporary=target.with_name(target.name+'.aguja-update-'+uuid.uuid4().hex)
+   try:
+    with tar.extractfile(member) as src,temporary.open('xb') as out:shutil.copyfileobj(src,out,1024**2);out.flush();os.fsync(out.fileno())
+    temporary.chmod(0o755);os.replace(temporary,target)
+   finally:
+    if temporary.exists():temporary.unlink()
   # Only known metadata regular files, never arbitrary archive extraction.
   with tarfile.open(archive,'r:gz') as tar:
    for member_name in ('package/package.json','package/LICENSE.md','package/LICENSE','package/README.md'):
@@ -236,24 +274,59 @@ def install_harnesses(root,items,cache):
     if dest.is_symlink():raise ValueError('Destino nativo inesperado')
     dest.write_bytes(tar.extractfile(entry).read());dest.chmod(0o644)
   archive.unlink()
- atomic(root/'usr/share/aguja/installed-harnesses.json',{'schema':1,'providers':items})
+ record=root/'usr/share/aguja/installed-harnesses.json'
+ if record.is_symlink() or record.exists() and record.stat().st_size>1048576:raise ValueError('Metadatos nativos no válidos')
+ prior=json.loads(record.read_text()).get('providers',{}) if record.exists() else {}
+ atomic(record,{'schema':1,'providers':{**prior,**items}})
 
 def verify_harnesses(root,items):
  # Native runtimes (notably Bun/Claude) require /dev even for --version.
  # Validate inside the same minimal-device namespace as package staging.
  raw=run(['nice','-n','10','unshare','--mount','--pid','--fork','--propagation','private','/usr/lib/aguja/update-root-worker.sh',str(root),'verify']).stdout
  actual=json.loads(raw)
- if actual!={name:item['version'] for name,item in items.items()}:raise ValueError('La versión nativa no coincide con la descarga verificada')
+ if any(actual.get(name)!=item['version'] for name,item in items.items()):raise ValueError('La versión nativa no coincide con la descarga verificada')
 
-def package_generation(packages,harnesses):
+def verify_packages(root,items):
+ for item in items:
+  version=run(['chroot',str(root),'/usr/bin/dpkg-query','-W','-f=${Version}',item['name']]).stdout.decode().strip()
+  if version!=item['version']:raise ValueError('La versión del paquete no coincide con la selección: '+item['name'])
+
+PUBLIC_MANAGER_FILES={'usr/lib/aguja/'+n for n in ['updates.py','update_sources.py','update_tasks.py','update_progress.py','update_ui.py','display.py','cockpit.py','update-root-worker.sh','update-session-worker.sh','locale-catalog.json']}|{'usr/share/aguja/UPDATES.md','usr/share/aguja/skills/live-updates/SKILL.md'}
+def refresh_manager(root,source=Path('/')):
+ record=source/'usr/share/aguja/update-runtime.json'
+ if not record.exists():return
+ if record.is_symlink() or record.stat().st_size>16384 or record.stat().st_uid!=os.geteuid() or record.stat().st_mode&0o022:raise ValueError('Manifiesto del actualizador no válido')
+ manifest=json.loads(record.read_text())
+ if manifest.get('schema')!=1 or set(manifest.get('files',{}))!=PUBLIC_MANAGER_FILES:raise ValueError('Inventario del actualizador no válido')
+ # Only this fixed list of public code/docs, never the RAM overlay, HOME,
+ # profiles, installed credentials or owner workspace, may accompany a new root.
+ payload={}
+ for name,digest in manifest['files'].items():
+  path=source/name
+  if any(p.is_symlink() for p in [path,*list(path.parents)[:-1]]) or not path.is_file() or path.stat().st_uid!=os.geteuid() or path.stat().st_mode&0o022 or path.stat().st_size>2*1024**2 or hashfile(path)!=digest:raise ValueError('El actualizador instalado no coincide con su manifiesto')
+  payload[name]=path.read_bytes()
+ for name,raw in payload.items():
+  target=root/name
+  if target.is_symlink():raise ValueError('Destino del actualizador inesperado')
+  target.parent.mkdir(parents=True,exist_ok=True);atomic(target,raw);target.chmod(0o755 if name.endswith(('.py','.sh')) else 0o644)
+ atomic(root/'usr/share/aguja/update-runtime.json',record.read_bytes());(root/'usr/share/aguja/update-runtime.json').chmod(0o644)
+
+def package_generation(packages,harnesses,package_items=None,harness_items=None):
  with lock():
   capacity(7*1024**3);base=source_live();g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);root=folder/'root';cache=folder/'downloads';cache.mkdir();live=folder/'live';live.mkdir()
+  progress.emit('prepare','Preparando un sistema limpio')
   run(['nice','-n','10','unsquashfs','-processors','1','-d',str(root),str(base/'filesystem.squashfs')])
-  items=sources.harnesses() if harnesses else {}
+  refresh_manager(root)
+  items=(harness_items if harness_items is not None else sources.harnesses()) if harnesses else {}
   if items:install_harnesses(root,items,cache)
   worker=Path('/usr/lib/aguja/update-root-worker.sh')
-  run(['nice','-n','10','unshare','--mount','--pid','--fork','--propagation','private',str(worker),str(root),'yes' if packages else 'no'],log=folder/'build.log')
+  if package_items is not None:
+   atomic(root/'var/lib/aguja-update-packages.json',package_items)
+  progress.emit('install','Instalando las actualizaciones seleccionadas')
+  mode=('selected' if package_items is not None else 'yes') if packages else 'no'
+  run(['nice','-n','10','unshare','--mount','--pid','--fork','--propagation','private',str(worker),str(root),mode],log=folder/'build.log')
   if items:verify_harnesses(root,items)
+  if package_items:verify_packages(root,package_items)
   kernels=sorted((root/'boot').glob('vmlinuz-*'),key=lambda p:p.stat().st_mtime)
   if not kernels:raise ValueError('Kernel actualizado no disponible')
   kernel=kernels[-1];initrd=root/'boot'/('initrd.img-'+kernel.name.removeprefix('vmlinuz-'));shutil.copy2(kernel,live/'vmlinuz');shutil.copy2(initrd,live/'initrd.img')
@@ -262,8 +335,9 @@ def package_generation(packages,harnesses):
    if (root/private).exists() and (root/private).stat().st_size:raise ValueError('No se empaqueta una raíz con secretos')
   root_bytes=sum(p.stat().st_size for p in root.rglob('*') if p.is_file() and not p.is_symlink())
   if shutil.disk_usage(DATA).free<root_bytes+512*1024**2:raise ValueError('No hay margen suficiente para empaquetar; se conserva la versión actual')
+  progress.emit('save','Guardando el sistema en el pendrive')
   run(['nice','-n','10','mksquashfs',str(root),str(live/'filesystem.squashfs'),'-noappend','-processors','1','-mem','256M','-comp','zstd','-Xcompression-level','3','-no-progress','-wildcards','-e','tmp/*','var/tmp/*','var/cache/apt','var/lib/apt/lists','run/*','root/*'])
-  version=(root/'usr/share/aguja/VERSION').read_text().strip();manifest(folder,version,'packages+harnesses');shutil.rmtree(root);shutil.rmtree(cache);active=activate(g)
+  version=(root/'usr/share/aguja/VERSION').read_text().strip();progress.emit('verify','Verificando los archivos guardados');manifest(folder,version,'packages+harnesses');shutil.rmtree(root);shutil.rmtree(cache);progress.emit('activate','Preparando el próximo arranque');active=activate(g)
   return {'ok':True,'generation':g,'reboot_required':True,'state':active}
 
 def rollback():
@@ -273,7 +347,7 @@ def rollback():
   commit_state(new,pointer);return {'ok':True,'reboot_required':True,'state':new}
 
 def status_unlocked():
- s=state();checkfile=ROOT/'checks.json';cached=metadata(checkfile) if checkfile.is_file() else None
+ s=state();checkfile=RUN/'checks.json' if (RUN/'checks.json').is_file() else ROOT/'checks.json';cached=metadata(checkfile) if checkfile.is_file() else None
  if cached is not None and (not isinstance(cached,dict) or set(cached)!={'schema','checked_at','errors','packages','harnesses','release','restart_required'}):raise ValueError('Inventario de actualización no válido')
  return {'persistent_available':os.path.ismount(DATA) and os.path.ismount(CFG),'state':s,'running_generation':running_generation(),'reboot_required':s['active']!=running_generation(),'check':cached}
 
@@ -301,15 +375,9 @@ def cleanup():
     shutil.rmtree(folder);removed.append(folder.name)
   return {'ok':True,'removed':removed,'active_and_previous_preserved':True}
 
-def menu():
- print(t('LA AGUJA · Actualizaciones persistentes del USB'))
- print(t('1 Consultar actualizaciones / 2 Paquetes del sistema / 3 Arneses / 4 Paquetes y arneses / 5 Rescue Disk / 6 Volver a versión anterior / 7 Retirar generaciones inactivas / Enter Salir'))
- choice=input(t('Opción: ')).strip();actions={'1':'check','2':'packages','3':'harnesses','4':'all','5':'release','6':'rollback','7':'cleanup'}
- if choice not in actions:return {'canceled':True}
- if choice!='1':
-  print(t('Solo se retirarán generaciones inactivas de actualizaciones; no se borran perfiles ni archivos personales.') if choice=='7' else t('Se guardará una generación en DATA. El cambio se aplicará al próximo arranque; no se reinicia ahora. Se conserva fábrica y la versión anterior.'))
-  if input(t('Continuar [s/N]: ')).strip().lower() not in ('s','y','yes','si','sí'):return {'canceled':True}
- return main([actions[choice]])
+def menu(language=None):
+ import update_ui
+ return update_ui.menu(language=language)
 
 def show(result):
  if 'packages' in result:
@@ -323,12 +391,24 @@ def show(result):
  elif 'removed' in result:print(t('Generaciones inactivas retiradas:'),len(result['removed']))
  else:print(t('Generación actual:'),result.get('state',{}).get('active') or t('fábrica'))
 
+def elevated_command(argv):
+ command=['sudo','--']
+ actual=os.environ.get('AGUJA_CONSOLE_TTY','') if os.environ.get('AGUJA_LOCAL_CONSOLE')=='1' else ''
+ if not os.environ.get('SSH_CONNECTION'):
+  try:
+   tty=os.ttyname(0)
+   if re.fullmatch('/dev/tty[1-9][0-9]*',tty):actual=tty
+  except OSError:pass
+ if re.fullmatch('/dev/tty[1-9][0-9]*',actual) and not os.environ.get('SSH_CONNECTION'):
+  command+=['/usr/bin/env','AGUJA_LOCAL_CONSOLE=1','AGUJA_CONSOLE_TTY='+actual]
+ return command+[sys.executable,str(Path(__file__).resolve()),*argv]
+
 def main(argv=None):
  argv=sys.argv[1:] if argv is None else argv
- p=argparse.ArgumentParser(prog='aguja update');p.add_argument('operation',choices=['menu','status','check','packages','harnesses','all','release','rollback','cleanup'],nargs='?',default='status');p.add_argument('--json',action='store_true');a=p.parse_args(argv)
- if os.geteuid()!=0:return subprocess.call(['sudo','--',sys.executable,str(Path(__file__).resolve()),*argv])
+ p=argparse.ArgumentParser(prog='aguja update');p.add_argument('operation',choices=['menu','status','check','packages','harnesses','all','release','rollback','cleanup'],nargs='?',default='status');p.add_argument('--json',action='store_true');p.add_argument('--language',choices=['es','en','fr','de','pt','it','zh']);a=p.parse_args(argv)
+ if os.geteuid()!=0:return subprocess.call(elevated_command(argv))
  try:
-  if a.operation=='menu':return menu()
+  if a.operation=='menu':return menu(a.language)
   if a.operation=='status':result=status()
   elif a.operation=='check':result=check()
   elif a.operation=='release':result=release_update()

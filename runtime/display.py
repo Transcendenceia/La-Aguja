@@ -67,8 +67,8 @@ def _font(size, bold=False, mono=False, language='es'):
     return ImageFont.load_default()
 
 
-def font(size, bold=False, mono=False):
-    return _font(size, bold, mono, ui_language())
+def font(size, bold=False, mono=False, language=None):
+    return _font(size, bold, mono, ui_language(language))
 
 
 def asset_root():

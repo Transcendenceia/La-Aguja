@@ -119,7 +119,7 @@ Sous Windows, l’Imager peut examiner les clés disponibles et inclure explicit
 
 [↗](https://aguja.transcendenceia.net/fr/docs#bitlocker)
 
-## Étape 6 · Préparer, écrire, vérifier
+## Étape 7 · Préparer, écrire et vérifier
 
 Relisez image, protection et résumé. Créer une image privée produit un fichier ; préparer et écrire la clé écrit aussi le périphérique choisi. Comparez modèle, série et capacité dans la confirmation native. En cas de doute, annulez. Accordez UAC/Polkit uniquement pour l’opération voulue.
 
@@ -140,13 +140,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/fr/docs#arranque)
 
-## Redémarrage : une identité temporaire
+## Mises à jour interactives du live
 
-L’état du réseau privé est en RAM : après redémarrage, il faut se réinscrire avec réseau et profil déverrouillé. Une clé à usage unique peut être consommée au premier démarrage. Pour plusieurs démarrages, utilisez une clé réutilisable valide et limitée selon votre administration.
+Ouvrez Mises à jour ou lancez aguja update menu. Recherchez d’abord les mises à jour : versions installées et disponibles sont affichées. Aucune installation automatique.
 
-Cette identité est distincte de la clé d’hôte SSH du USB et de la persistance HOME. Supprimez les nœuds obsolètes et révoquez les clés devenues inutiles. Une connexion précédente ne prouve pas l’état ou la politique actuelle.
+Par ligne : Non, Oui · RAM ou Oui, persistant. Non ne change rien. RAM ne concerne que cette session. Persistant enregistre un système propre et vérifié dans DATA sur la clé pour le prochain démarrage.
 
-[↗](https://aguja.transcendenceia.net/fr/docs#reinicios)
+Souris, flèches et Espace sélectionnent. A ouvre la révision avec les nombres et la destination exacte ; Entrée applique. Une release Rescue complète exige la persistance et une opération séparée.
+
+Suivez les octets téléchargés ou APT, puis préparation, installation, enregistrement USB, vérification et activation. Sans total mesurable, une activité est affichée, pas un pourcentage inventé. Attendez la fin.
+
+Le résultat reste affiché jusqu’à Retour au menu. Aucun redémarrage automatique ni faux succès après un échec. Usine et génération précédente restent disponibles ; aguja update rollback choisit le prochain démarrage.
+
+Clé compatible 1.0 inscriptible, espace DATA et RAM suffisants requis. La génération en attente sert de base ; secrets et workspace ne sont pas copiés. Modifier CFG ne modernise pas une ancienne clé.
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![Liste · Non / RAM / persistant](../../server/public/docs-images/101/updates-list.png)
+
+![Vérification de la destination](../../server/public/docs-images/101/updates-review.png)
+
+![Progression du téléchargement](../../server/public/docs-images/101/updates-download.png)
+
+![Enregistrement sur USB](../../server/public/docs-images/101/updates-save.png)
+
+![Fin vérifiée](../../server/public/docs-images/101/updates-done.png)
+
+![Résultat RAM · cette session seulement](../../server/public/docs-images/101/updates-ram.png)
+
+Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.
 
 ## Connexion IA dans le navigateur local
 

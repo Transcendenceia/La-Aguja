@@ -95,7 +95,7 @@ Avviare Linux non rimuove BitLocker. Ottieni dal proprietario la chiave corretta
 
 [↗](https://aguja.transcendenceia.net/it/docs#bitlocker)
 
-## Passo 6 · Preparare, scrivere, verificare
+## Passo 7 · Preparare, scrivere e verificare
 
 Rivedi immagine, protezione e riepilogo. Creare immagine privata genera file; preparare e scrivere USB scrive anche il dispositivo. Conferma modello, seriale e capacità reale nel dialogo nativo; annulla nel dubbio. Autorizza UAC/Polkit per l’azione voluta. Attendi scrittura e rilettura completa senza scollegare. Verifica risultato. Byte corretti non garantiscono firmware: prova avvio reale. Backup USB Windows già eseguito esternamente.
 
@@ -112,11 +112,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/it/docs#arranque)
 
-## Riavvii: identità temporanea
+## Aggiornamenti interattivi del live
 
-Stato tailnet in RAM: dopo riavvio servono rete, profilo sbloccato e nuova iscrizione. Chiave monouso può essere già consumata. Per più avvii usa chiave riutilizzabile valida e limitata. Identità distinta dalla chiave host SSH USB e dalla persistenza HOME. Rimuovi nodi obsoleti e revoca chiavi inutili. Una vecchia connessione non prova lo stato attuale.
+Apri Aggiornamenti o esegui aguja update menu. Prima cerca gli aggiornamenti: vengono elencate versioni installate e disponibili. Nessuna installazione automatica.
 
-[↗](https://aguja.transcendenceia.net/it/docs#reinicios)
+Per ogni riga: No, Sì · RAM o Sì persistente. No non cambia nulla. RAM vale solo per questa sessione. Persistente salva un sistema pulito e verificato in DATA su questa USB per il prossimo avvio.
+
+Scegli con mouse, frecce e Spazio. A mostra il riepilogo con conteggi e destinazione esatta; Invio applica. Una release Rescue completa richiede persistenza e un’operazione separata.
+
+Segui byte scaricati o APT, preparazione, installazione, salvataggio USB, verifica e selezione di avvio. Senza totale misurabile viene mostrata attività, non percentuali inventate. Attendi il termine.
+
+Il risultato resta fino a Torna al menu. Nessun riavvio automatico o falso successo dopo errori. Fabbrica e generazione precedente restano; aguja update rollback cambia il prossimo avvio.
+
+Servono USB scrivibile compatibile con 1.0, spazio DATA e RAM. La generazione in attesa resta la base; segreti e workspace non vengono copiati. Modificare CFG non aggiorna una vecchia USB.
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![Elenco · No / RAM / persistente](../../server/public/docs-images/101/updates-list.png)
+
+![Controllo destinazione](../../server/public/docs-images/101/updates-review.png)
+
+![Progresso download](../../server/public/docs-images/101/updates-download.png)
+
+![Salvataggio sulla USB](../../server/public/docs-images/101/updates-save.png)
+
+![Completamento verificato](../../server/public/docs-images/101/updates-done.png)
+
+![Risultato RAM · solo questa sessione](../../server/public/docs-images/101/updates-ram.png)
+
+Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.
 
 ## Login IA nel browser locale
 

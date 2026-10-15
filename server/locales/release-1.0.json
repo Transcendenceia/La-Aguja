@@ -15,7 +15,7 @@
       ],
       [
         "Keep updates on your USB",
-        "Choose OS, Codex, Claude Code, Antigravity or OpenCode updates. Verified generations on DATA take effect on the next boot; factory and a previous generation remain available."
+        "For each row choose No, Yes · RAM, or Yes, persistent. No changes nothing. RAM updates only this session and is lost after reboot. Persistent saves a verified clean system in DATA on this USB for the next boot."
       ],
       [
         "Your recovery keys, protected",
@@ -44,11 +44,13 @@
         "In the live, profile unlock also opens a matching recovery capsule in private RAM. If its password differs, use sudo aguja recovery unlock. The inventory lists metadata, never key values. Opening a volume requires the correct key and exact target; it is read-only by default, not an automatic repair."
       ],
       "15": [
-        "Reboots and persistent live updates",
-        "Open aguja update menu and choose OS packages, native AI clients, both, or a signed Rescue release. Notifications only check: no automatic installation or restart.",
-        "The manager builds a verified system generation on USB DATA, separately from configuration, sessions and workspace. It takes effect at the next boot, even on another computer. Factory and a previous generation remain selectable; rollback changes the next boot selection.",
-        "You need a writable USB, free DATA space and enough RAM. Ordinary apt or client self-updates in the RAM session remain temporary. Older USBs must be prepared again with image 1.0 to gain this infrastructure; back up personal DATA first. Editing CFG alone does not add it.",
-        "Tailnet node identity remains temporary across reboots. Persistent OS updates do not promise persistent provider login or permanent network identity."
+        "Interactive live updates",
+        "Open Updates in the panel or run aguja update menu. Choose Check for updates first: the list shows installed and available versions. Nothing installs automatically.",
+        "For each row choose No, Yes · RAM, or Yes, persistent. No changes nothing. RAM updates only this session and is lost after reboot. Persistent saves a verified clean system in DATA on this USB for the next boot.",
+        "Use the mouse, arrows and Space to choose. A opens the review with counts and the exact persistent destination; Enter applies. A full Rescue Disk release needs persistence and a separate operation from individual components.",
+        "Watch download bytes or APT progress when measurable, then preparation, installation, USB saving, verification and next-boot selection. Stages without a measurable total show activity, not an invented percentage. Wait for completion before removing USB.",
+        "The final result remains on screen until Back to menu. There is no automatic reboot. A failed or partial operation is not reported as success. Factory and the previous generation remain available; aguja update rollback changes the next boot.",
+        "A writable 1.0-compatible USB, free DATA space and sufficient RAM are required. Pending generations are preserved as build bases; profile secrets and workspace are not copied into the system. Editing CFG alone does not upgrade an older USB."
       ],
       "24": [
         "Validation of 1.0 and its limits",
@@ -57,8 +59,17 @@
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
-    "image": "Rescue Disk 1.0.0 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
-    "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service."
+    "image": "Rescue Disk 1.0.1 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
+    "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service.",
+    "captureProvenance": "Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.",
+    "updateCaptions": {
+      "updates-list": "Update list · No / RAM / persistent",
+      "updates-review": "Review the persistent destination",
+      "updates-download": "Measured download progress",
+      "updates-save": "Saving on USB",
+      "updates-done": "Verified completion",
+      "updates-ram": "RAM result · this session only"
+    }
   },
   "es": {
     "title": "Tu USB evoluciona con tus proyectos.",
@@ -76,7 +87,7 @@
       ],
       [
         "Las actualizaciones viajan en el USB",
-        "Elige actualizar el sistema, Codex, Claude Code, Antigravity u OpenCode. Las generaciones verificadas en DATA se aplican al siguiente arranque; fábrica y una anterior siguen disponibles."
+        "En cada fila elige No, Sí · RAM o Sí persistente. No no cambia nada. RAM actualiza solo esta sesión y se pierde al reiniciar. Persistente guarda un sistema limpio y verificado en DATA de este pendrive para el próximo arranque."
       ],
       [
         "Tus claves de recuperación, protegidas",
@@ -105,11 +116,13 @@
         "En el live, desbloquear el perfil abre también la cápsula compatible en RAM privada. Si usa otra contraseña, ejecuta sudo aguja recovery unlock. El inventario muestra metadatos, nunca valores de claves. Abrir un volumen requiere la clave correcta y el destino exacto: es de solo lectura por defecto, no una reparación automática."
       ],
       "15": [
-        "Reinicios y actualizaciones persistentes del live",
-        "Abre aguja update menu y elige paquetes del sistema, clientes IA nativos, ambos o una release Rescue firmada. Las notificaciones solo consultan: no hay instalación ni reinicio automático.",
-        "El gestor construye una generación verificada del sistema en DATA del USB, separada de configuración, sesiones y workspace. Se aplica al siguiente arranque, también en otro equipo. Fábrica y una generación anterior siguen seleccionables; rollback cambia la selección del próximo arranque.",
-        "Necesitas un USB escribible, espacio libre en DATA y RAM suficiente. El apt ordinario y las autoactualizaciones de clientes en la sesión RAM siguen siendo temporales. Los USB anteriores deben prepararse de nuevo con la imagen 1.0; respalda antes los datos personales de DATA. Editar solo CFG no añade esta infraestructura.",
-        "La identidad del nodo de tailnet sigue siendo temporal entre reinicios. La persistencia del sistema no promete conservar la sesión de un proveedor ni una identidad de red permanente."
+        "Actualizaciones interactivas del live",
+        "Abre Actualizaciones en el panel o ejecuta aguja update menu. Primero pulsa Comprobar actualizaciones: la lista muestra la versión instalada y la disponible. No se instala nada automáticamente.",
+        "En cada fila elige No, Sí · RAM o Sí persistente. No no cambia nada. RAM actualiza solo esta sesión y se pierde al reiniciar. Persistente guarda un sistema limpio y verificado en DATA de este pendrive para el próximo arranque.",
+        "Selecciona con ratón, flechas y Espacio. A abre la revisión con los recuentos y el destino persistente exacto; Enter aplica. La release completa de Rescue Disk requiere persistencia y se actualiza por separado de los componentes.",
+        "Verás bytes de descarga o progreso APT cuando se pueden medir, y las fases de preparación, instalación, guardado en USB, verificación y selección de arranque. Las fases sin total medible muestran actividad, no porcentajes inventados. Espera a que termine antes de retirar el USB.",
+        "El resultado final permanece hasta pulsar Volver al menú. No hay reinicio automático. Un fallo o resultado parcial no se anuncia como éxito. Fábrica y la generación anterior siguen disponibles; aguja update rollback cambia el próximo arranque.",
+        "Necesitas un USB escribible compatible con 1.0, espacio libre en DATA y RAM suficiente. La generación pendiente se conserva como base; los secretos del perfil y el workspace no se copian al sistema. Editar solo CFG no actualiza un USB antiguo."
       ],
       "24": [
         "Validación de la 1.0 y sus límites",
@@ -118,8 +131,17 @@
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
-    "image": "Rescue Disk 1.0.0 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
-    "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio."
+    "image": "Rescue Disk 1.0.1 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
+    "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
+    "captureProvenance": "Capturas reales de la VM; QA con una versión oficial anterior de Codex controlada. La demostración de paquetes es sintética. Las versiones mostradas no prometen actualizaciones disponibles hoy.",
+    "updateCaptions": {
+      "updates-list": "Lista · No / RAM / persistente",
+      "updates-review": "Revisión del destino persistente",
+      "updates-download": "Progreso medido de descarga",
+      "updates-save": "Guardando en el pendrive",
+      "updates-done": "Finalización verificada",
+      "updates-ram": "Resultado RAM · solo esta sesión"
+    }
   },
   "fr": {
     "title": "Votre clé USB évolue avec vos projets.",
@@ -137,7 +159,7 @@
       ],
       [
         "Des mises à jour sur la clé",
-        "Choisissez le système, Codex, Claude Code, Antigravity ou OpenCode. Les générations vérifiées sur DATA prennent effet au prochain démarrage ; l’usine et une précédente restent disponibles."
+        "Par ligne : Non, Oui · RAM ou Oui, persistant. Non ne change rien. RAM ne concerne que cette session. Persistant enregistre un système propre et vérifié dans DATA sur la clé pour le prochain démarrage."
       ],
       [
         "Vos clés de récupération protégées",
@@ -166,11 +188,13 @@
         "Déverrouiller le profil ouvre aussi la capsule compatible en RAM privée. Si le mot de passe diffère, utilisez sudo aguja recovery unlock. L’inventaire affiche les métadonnées, jamais les clés. L’ouverture exige la bonne clé et la cible exacte ; lecture seule par défaut, sans réparation automatique."
       ],
       "15": [
-        "Redémarrages et mises à jour persistantes",
-        "Ouvrez aguja update menu : système, clients IA natifs, les deux ou release Rescue signée. Les notifications vérifient seulement ; aucune installation ni aucun redémarrage automatique.",
-        "Une génération vérifiée est construite sur DATA, séparée de la configuration, des sessions et du workspace. Elle s’applique au prochain démarrage, même sur un autre PC. L’usine et une génération précédente restent sélectionnables ; rollback choisit le prochain démarrage.",
-        "Il faut une clé inscriptible, de l’espace DATA et de la RAM. apt ordinaire et auto-mises à jour dans la session RAM restent temporaires. Les anciennes clés doivent être recréées avec l’image 1.0 ; sauvegardez DATA auparavant. Modifier CFG seul ne suffit pas.",
-        "L’identité du nœud tailnet reste temporaire après redémarrage. La persistance du système ne garantit ni session fournisseur ni identité réseau permanente."
+        "Mises à jour interactives du live",
+        "Ouvrez Mises à jour ou lancez aguja update menu. Recherchez d’abord les mises à jour : versions installées et disponibles sont affichées. Aucune installation automatique.",
+        "Par ligne : Non, Oui · RAM ou Oui, persistant. Non ne change rien. RAM ne concerne que cette session. Persistant enregistre un système propre et vérifié dans DATA sur la clé pour le prochain démarrage.",
+        "Souris, flèches et Espace sélectionnent. A ouvre la révision avec les nombres et la destination exacte ; Entrée applique. Une release Rescue complète exige la persistance et une opération séparée.",
+        "Suivez les octets téléchargés ou APT, puis préparation, installation, enregistrement USB, vérification et activation. Sans total mesurable, une activité est affichée, pas un pourcentage inventé. Attendez la fin.",
+        "Le résultat reste affiché jusqu’à Retour au menu. Aucun redémarrage automatique ni faux succès après un échec. Usine et génération précédente restent disponibles ; aguja update rollback choisit le prochain démarrage.",
+        "Clé compatible 1.0 inscriptible, espace DATA et RAM suffisants requis. La génération en attente sert de base ; secrets et workspace ne sont pas copiés. Modifier CFG ne modernise pas une ancienne clé."
       ],
       "24": [
         "Validation de la 1.0 et limites",
@@ -179,8 +203,17 @@
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
-    "image": "Rescue Disk 1.0.0 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
-    "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service."
+    "image": "Rescue Disk 1.0.1 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
+    "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
+    "captureProvenance": "Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.",
+    "updateCaptions": {
+      "updates-list": "Liste · Non / RAM / persistant",
+      "updates-review": "Vérification de la destination",
+      "updates-download": "Progression du téléchargement",
+      "updates-save": "Enregistrement sur USB",
+      "updates-done": "Fin vérifiée",
+      "updates-ram": "Résultat RAM · cette session seulement"
+    }
   },
   "de": {
     "title": "Dein USB-Stick wächst mit deinen Projekten.",
@@ -198,7 +231,7 @@
       ],
       [
         "Updates reisen auf dem USB-Stick mit",
-        "System, Codex, Claude Code, Antigravity oder OpenCode auswählen. Geprüfte Generationen auf DATA gelten beim nächsten Start; Werksstand und eine vorherige bleiben verfügbar."
+        "Je Zeile: Nein, Ja · RAM oder Ja, dauerhaft. Nein ändert nichts. RAM gilt nur für diese Sitzung. Dauerhaft speichert ein sauberes, geprüftes System in DATA auf diesem USB für den nächsten Start."
       ],
       [
         "Geschützte Wiederherstellungsschlüssel",
@@ -227,11 +260,13 @@
         "Profilentsperrung öffnet auch eine passende Kapsel im privaten RAM. Bei anderem Passwort sudo aguja recovery unlock nutzen. Das Inventar zeigt Metadaten, nie Schlüsselwerte. Öffnen verlangt richtigen Schlüssel und exaktes Ziel: standardmäßig nur lesend, keine automatische Reparatur."
       ],
       "15": [
-        "Neustarts und dauerhafte Live-Updates",
-        "aguja update menu bietet Systempakete, native KI-Clients, beides oder signierte Rescue-Releases. Hinweise prüfen nur; keine automatische Installation oder Neustarts.",
-        "Eine geprüfte Systemgeneration wird auf DATA getrennt von Konfiguration, Sitzungen und Workspace erstellt. Sie gilt beim nächsten Start, auch auf einem anderen PC. Werksstand und vorherige Generation bleiben wählbar; rollback wählt den nächsten Start.",
-        "Beschreibbarer Stick, freier DATA-Speicher und genügend RAM erforderlich. Normales apt und Client-Selbstupdates im RAM bleiben temporär. Alte Sticks mit Image 1.0 neu vorbereiten; persönliche DATA vorher sichern. CFG-Bearbeitung allein ergänzt die Infrastruktur nicht.",
-        "Die Tailnet-Knotenidentität bleibt nach Neustarts temporär. Systempersistenz garantiert keine Anbietersitzung oder dauerhafte Netzwerkidentität."
+        "Interaktive Live-Updates",
+        "Updates öffnen oder aguja update menu ausführen. Zuerst nach Updates suchen: installierte und verfügbare Versionen werden aufgelistet. Keine automatische Installation.",
+        "Je Zeile: Nein, Ja · RAM oder Ja, dauerhaft. Nein ändert nichts. RAM gilt nur für diese Sitzung. Dauerhaft speichert ein sauberes, geprüftes System in DATA auf diesem USB für den nächsten Start.",
+        "Mit Maus, Pfeilen und Leertaste wählen. A zeigt Prüfung mit Anzahl und genauem Ziel; Enter wendet an. Ein vollständiges Rescue-Release benötigt dauerhafte Speicherung und einen getrennten Vorgang.",
+        "Download-Bytes oder APT-Fortschritt und danach Vorbereitung, Installation, USB-Speicherung, Prüfung und Startauswahl verfolgen. Ohne messbare Gesamtmenge erscheint Aktivität statt erfundener Prozentwerte. Bis zum Ende warten.",
+        "Das Ergebnis bleibt bis Zurück zum Menü sichtbar. Kein automatischer Neustart oder Erfolg bei Fehlern. Werkssystem und vorige Generation bleiben; aguja update rollback ändert den nächsten Start.",
+        "Beschreibbarer 1.0-kompatibler USB, freier DATA-Speicher und genug RAM erforderlich. Die ausstehende Generation bleibt Grundlage; Geheimnisse und Workspace werden nicht kopiert. CFG-Bearbeitung aktualisiert keinen alten USB."
       ],
       "24": [
         "Validierung von 1.0 und Grenzen",
@@ -240,8 +275,17 @@
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
-    "image": "Rescue Disk 1.0.0 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
-    "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren."
+    "image": "Rescue Disk 1.0.1 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
+    "captureProvenance": "Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.",
+    "updateCaptions": {
+      "updates-list": "Liste · Nein / RAM / dauerhaft",
+      "updates-review": "Speicherziel prüfen",
+      "updates-download": "Download-Fortschritt",
+      "updates-save": "Auf USB speichern",
+      "updates-done": "Abschluss geprüft",
+      "updates-ram": "RAM-Ergebnis · nur diese Sitzung"
+    }
   },
   "pt": {
     "title": "O teu USB evolui com os teus projetos.",
@@ -259,7 +303,7 @@
       ],
       [
         "Atualizações que viajam no USB",
-        "Escolhe sistema, Codex, Claude Code, Antigravity ou OpenCode. Gerações verificadas em DATA entram no próximo arranque; fábrica e uma anterior continuam disponíveis."
+        "Em cada linha: Não, Sim · RAM ou Sim persistente. Não não altera nada. RAM dura só nesta sessão. Persistente guarda um sistema limpo e verificado em DATA deste USB para o próximo arranque."
       ],
       [
         "Chaves de recuperação protegidas",
@@ -288,11 +332,13 @@
         "Desbloquear o perfil abre a cápsula compatível em RAM privada. Se a palavra-passe diferir, usa sudo aguja recovery unlock. O inventário mostra metadados, nunca chaves. Abrir exige a chave correta e o destino exato: só leitura por predefinição, sem reparação automática."
       ],
       "15": [
-        "Reinícios e atualizações persistentes",
-        "Abre aguja update menu: sistema, clientes IA nativos, ambos ou release Rescue assinada. Notificações só consultam; não instalam nem reiniciam automaticamente.",
-        "Uma geração verificada é construída em DATA, separada de configuração, sessões e workspace. Aplica-se no próximo arranque, mesmo noutro PC. Fábrica e uma anterior ficam selecionáveis; rollback escolhe o próximo arranque.",
-        "É necessário USB gravável, espaço DATA e RAM. apt normal e autoatualizações na sessão RAM continuam temporários. USB antigos precisam de nova preparação com imagem 1.0; faz primeiro backup de DATA. Editar apenas CFG não adiciona esta infraestrutura.",
-        "A identidade do nó tailnet continua temporária entre reinícios. Persistência do sistema não garante login do fornecedor nem identidade permanente."
+        "Atualizações interativas do live",
+        "Abre Atualizações ou executa aguja update menu. Primeiro procura atualizações: aparecem as versões instaladas e disponíveis. Nada é instalado automaticamente.",
+        "Em cada linha: Não, Sim · RAM ou Sim persistente. Não não altera nada. RAM dura só nesta sessão. Persistente guarda um sistema limpo e verificado em DATA deste USB para o próximo arranque.",
+        "Usa rato, setas e Espaço. A revê contagens e destino exato; Enter aplica. Uma release Rescue completa exige persistência e uma operação separada dos componentes.",
+        "Acompanha bytes ou progresso APT, preparação, instalação, gravação USB, verificação e seleção de arranque. Sem total mensurável mostra atividade, não percentagens inventadas. Espera pelo fim.",
+        "O resultado fica até Voltar ao menu. Não há reinício automático nem sucesso falso após falha. Fábrica e geração anterior continuam disponíveis; aguja update rollback muda o próximo arranque.",
+        "USB gravável compatível com 1.0, espaço DATA e RAM suficientes. A geração pendente é preservada como base; segredos e workspace não são copiados. Editar CFG não atualiza um USB antigo."
       ],
       "24": [
         "Validação da 1.0 e limites",
@@ -301,8 +347,17 @@
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
-    "image": "Rescue Disk 1.0.0 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
-    "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço."
+    "image": "Rescue Disk 1.0.1 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
+    "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
+    "captureProvenance": "Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.",
+    "updateCaptions": {
+      "updates-list": "Lista · Não / RAM / persistente",
+      "updates-review": "Rever destino persistente",
+      "updates-download": "Progresso da transferência",
+      "updates-save": "A gravar no USB",
+      "updates-done": "Conclusão verificada",
+      "updates-ram": "Resultado RAM · só nesta sessão"
+    }
   },
   "it": {
     "title": "La tua USB cresce con i tuoi progetti.",
@@ -320,7 +375,7 @@
       ],
       [
         "Aggiornamenti sulla USB",
-        "Scegli sistema, Codex, Claude Code, Antigravity o OpenCode. Generazioni verificate su DATA entrano al prossimo avvio; fabbrica e una precedente restano disponibili."
+        "Per ogni riga: No, Sì · RAM o Sì persistente. No non cambia nulla. RAM vale solo per questa sessione. Persistente salva un sistema pulito e verificato in DATA su questa USB per il prossimo avvio."
       ],
       [
         "Chiavi di recupero protette",
@@ -349,11 +404,13 @@
         "Sbloccare il profilo apre la capsula compatibile in RAM privata. Con password diversa usa sudo aguja recovery unlock. L’inventario mostra metadati, mai chiavi. Aprire richiede chiave corretta e destinazione esatta: sola lettura predefinita, non riparazione automatica."
       ],
       "15": [
-        "Riavvii e aggiornamenti live persistenti",
-        "Apri aguja update menu: pacchetti sistema, client IA nativi, entrambi o release Rescue firmata. Notifiche di sola verifica; nessuna installazione o riavvio automatico.",
-        "Una generazione verificata viene costruita su DATA, separata da configurazione, sessioni e workspace. Vale al prossimo avvio, anche su un altro PC. Fabbrica e una precedente restano selezionabili; rollback sceglie il prossimo avvio.",
-        "Servono USB scrivibile, spazio DATA e RAM. apt normale e autoaggiornamenti nella sessione RAM restano temporanei. Vecchie USB vanno ripreparate con immagine 1.0; prima salva DATA. Modificare solo CFG non aggiunge l’infrastruttura.",
-        "L’identità del nodo tailnet resta temporanea ai riavvii. Persistenza del sistema non garantisce sessioni del fornitore o identità di rete permanente."
+        "Aggiornamenti interattivi del live",
+        "Apri Aggiornamenti o esegui aguja update menu. Prima cerca gli aggiornamenti: vengono elencate versioni installate e disponibili. Nessuna installazione automatica.",
+        "Per ogni riga: No, Sì · RAM o Sì persistente. No non cambia nulla. RAM vale solo per questa sessione. Persistente salva un sistema pulito e verificato in DATA su questa USB per il prossimo avvio.",
+        "Scegli con mouse, frecce e Spazio. A mostra il riepilogo con conteggi e destinazione esatta; Invio applica. Una release Rescue completa richiede persistenza e un’operazione separata.",
+        "Segui byte scaricati o APT, preparazione, installazione, salvataggio USB, verifica e selezione di avvio. Senza totale misurabile viene mostrata attività, non percentuali inventate. Attendi il termine.",
+        "Il risultato resta fino a Torna al menu. Nessun riavvio automatico o falso successo dopo errori. Fabbrica e generazione precedente restano; aguja update rollback cambia il prossimo avvio.",
+        "Servono USB scrivibile compatibile con 1.0, spazio DATA e RAM. La generazione in attesa resta la base; segreti e workspace non vengono copiati. Modificare CFG non aggiorna una vecchia USB."
       ],
       "24": [
         "Validazione della 1.0 e limiti",
@@ -362,8 +419,17 @@
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
-    "image": "Rescue Disk 1.0.0 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
-    "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio."
+    "image": "Rescue Disk 1.0.1 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
+    "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
+    "captureProvenance": "Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.",
+    "updateCaptions": {
+      "updates-list": "Elenco · No / RAM / persistente",
+      "updates-review": "Controllo destinazione",
+      "updates-download": "Progresso download",
+      "updates-save": "Salvataggio sulla USB",
+      "updates-done": "Completamento verificato",
+      "updates-ram": "Risultato RAM · solo questa sessione"
+    }
   },
   "nl": {
     "title": "Je USB groeit mee met je projecten.",
@@ -381,7 +447,7 @@
       ],
       [
         "Updates reizen mee op USB",
-        "Kies systeem, Codex, Claude Code, Antigravity of OpenCode. Gecontroleerde generaties op DATA gelden na herstart; fabriek en een vorige blijven beschikbaar."
+        "Per rij: Nee, Ja · RAM of Ja, blijvend. Nee verandert niets. RAM geldt alleen voor deze sessie. Blijvend bewaart een schoon, gecontroleerd systeem in DATA op deze USB voor de volgende start."
       ],
       [
         "Beschermde herstelsleutels",
@@ -410,11 +476,13 @@
         "Profielontgrendeling opent een passende capsule in privé-RAM. Bij ander wachtwoord gebruik sudo aguja recovery unlock. Inventaris toont metadata, nooit sleutels. Openen vraagt juiste sleutel en exact doel: standaard alleen lezen, geen automatische reparatie."
       ],
       "15": [
-        "Herstarts en blijvende live-updates",
-        "Open aguja update menu: systeempakketten, native AI-clients, beide of ondertekende Rescue-release. Meldingen controleren alleen; geen automatische installatie of herstart.",
-        "Een geverifieerde generatie wordt op DATA gebouwd, los van configuratie, sessies en workspace. Ze geldt na de volgende start, ook op een andere pc. Fabriek en een vorige blijven selecteerbaar; rollback kiest de volgende start.",
-        "Schrijfbare USB, vrije DATA en voldoende RAM nodig. Gewone apt en clientzelfupdates in RAM blijven tijdelijk. Oude USB opnieuw voorbereiden met image 1.0; maak eerst DATA-back-up. Alleen CFG bewerken voegt dit niet toe.",
-        "De tailnet-node-identiteit blijft tijdelijk na herstart. Systeempersistentie garandeert geen providersessie of permanente netwerkidentiteit."
+        "Interactieve live-updates",
+        "Open Updates of voer aguja update menu uit. Controleer eerst op updates: geïnstalleerde en beschikbare versies verschijnen. Niets wordt automatisch geïnstalleerd.",
+        "Per rij: Nee, Ja · RAM of Ja, blijvend. Nee verandert niets. RAM geldt alleen voor deze sessie. Blijvend bewaart een schoon, gecontroleerd systeem in DATA op deze USB voor de volgende start.",
+        "Kies met muis, pijlen en Spatie. A toont aantallen en de exacte bestemming; Enter past toe. Een volledig Rescue-release vereist blijvende opslag en een aparte handeling.",
+        "Volg downloadbytes of APT, voorbereiding, installatie, opslaan op USB, controle en startselectie. Zonder meetbaar totaal verschijnt activiteit, geen verzonnen percentage. Wacht tot het klaar is.",
+        "Het resultaat blijft tot Terug naar menu. Geen automatische herstart of onterecht succes na fouten. Fabriek en vorige generatie blijven; aguja update rollback wijzigt de volgende start.",
+        "Schrijfbare 1.0-compatibele USB, vrije DATA-ruimte en voldoende RAM vereist. De wachtende generatie blijft basis; geheimen en workspace worden niet gekopieerd. Alleen CFG bewerken werkt een oude USB niet bij."
       ],
       "24": [
         "Validatie van 1.0 en grenzen",
@@ -423,8 +491,17 @@
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
-    "image": "Rescue Disk 1.0.0 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
-    "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen."
+    "image": "Rescue Disk 1.0.1 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
+    "captureProvenance": "Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.",
+    "updateCaptions": {
+      "updates-list": "Lijst · Nee / RAM / blijvend",
+      "updates-review": "Bestemming controleren",
+      "updates-download": "Downloadvoortgang",
+      "updates-save": "Opslaan op USB",
+      "updates-done": "Voltooiing gecontroleerd",
+      "updates-ram": "RAM-resultaat · alleen deze sessie"
+    }
   },
   "zh": {
     "title": "让 USB 随你的项目一起成长。",
@@ -442,7 +519,7 @@
       ],
       [
         "更新随 USB 一起走",
-        "选择更新系统、Codex、Claude Code、Antigravity 或 OpenCode。DATA 上经验证的系统代在下次启动生效；出厂和上一代仍可选择。"
+        "每行选择“不”“是 · RAM”或“是，持久保存”。“不”不更改任何内容。RAM 仅影响本次会话，重启后丢失。持久更新将干净且经过验证的系统保存到此 USB 的 DATA，供下次启动使用。"
       ],
       [
         "保护恢复密钥",
@@ -471,11 +548,13 @@
         "解锁配置也会在私有 RAM 中打开匹配的恢复胶囊。密码不同时用 sudo aguja recovery unlock。清单只显示元数据，不显示密钥。打开卷需要正确密钥和准确目标，默认只读，不会自动修复。"
       ],
       "15": [
-        "重启与持久化 live 更新",
-        "打开 aguja update menu，选择系统软件包、原生 AI 客户端、两者或签名 Rescue 发行版。通知只检查，不自动安装或重启。",
-        "管理器在 USB DATA 上构建经验证的系统代，与配置、会话和工作区分离。下次启动生效，换电脑也适用。出厂和上一代仍可选择；rollback 只更改下次启动选择。",
-        "需要可写 USB、足够 DATA 空间和 RAM。RAM 会话中的普通 apt 或客户端自更新仍是临时的。旧 USB 必须用 1.0 镜像重新准备；先备份个人 DATA。仅编辑 CFG 不会加入此启动基础设施。",
-        "每次重启后 tailnet 节点身份仍是临时的。系统持久化不保证保留供应商登录或永久网络身份。"
+        "交互式 live 更新",
+        "打开更新面板，或运行 aguja update menu。先检查更新：列表显示已安装版本和可用版本。不会自动安装。",
+        "每行选择“不”“是 · RAM”或“是，持久保存”。“不”不更改任何内容。RAM 仅影响本次会话，重启后丢失。持久更新将干净且经过验证的系统保存到此 USB 的 DATA，供下次启动使用。",
+        "使用鼠标、方向键和空格选择。A 显示数量及准确保存目标，Enter 应用。完整 Rescue Disk 版本必须持久保存，并与组件更新分开操作。",
+        "可测量时显示下载字节或 APT 进度，随后显示准备、安装、写入 USB、验证及启动选择。没有可测量总量时显示活动状态，不虚构百分比。完成前不要拔出 USB。",
+        "结果将保留到点击返回菜单。不会自动重启，也不会将失败或部分完成报告为成功。出厂系统和上一代仍可选择；aguja update rollback 更改下次启动选择。",
+        "需要兼容 1.0 的可写 USB、足够 DATA 空间及 RAM。保留待启动代作为基础，不复制个人密钥和 workspace。仅编辑 CFG 不会更新旧 USB 系统。"
       ],
       "24": [
         "1.0 的验证范围与限制",
@@ -484,7 +563,16 @@
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",
-    "image": "Rescue Disk 1.0.0 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
-    "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。"
+    "image": "Rescue Disk 1.0.1 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
+    "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
+    "captureProvenance": "真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。",
+    "updateCaptions": {
+      "updates-list": "列表 · 不 / RAM / 持久",
+      "updates-review": "核对保存目标",
+      "updates-download": "可测量的下载进度",
+      "updates-save": "写入 USB",
+      "updates-done": "验证完成",
+      "updates-ram": "RAM 结果 · 仅本次会话"
+    }
   }
 }

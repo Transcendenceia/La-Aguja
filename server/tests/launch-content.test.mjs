@@ -14,7 +14,7 @@ test('all launch locales have equivalent plans, cases, safety additions and inte
 test('interactive layer has no persistence or network APIs',()=>{const js=read('../public/launch-20261009-v1.js');assert(!/fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|WebSocket/.test(js));assert(js.includes('navigator.clipboard.writeText'));assert(js.includes('range.selectNodeContents'));assert(js.includes('dialog.showModal'));});
 test('skill downloads are versioned independently of the live image and portable Linux names match publication',()=>{
  const version=read('../../skills/flash-imager/SKILL.md').match(/^  version: "([^"]+)"$/m)[1];
- const image=read('../../VERSION').trim();
+ const image=JSON.parse(read('../../desktop/package.json')).version;
  for(const lang of languages){
   const h=read('../public/'+lang+'/index.html');
   for(const name of ['aguja-flash-imager-skill-'+version+'.zip','aguja-flash-imager-skill-'+version+'.tar.gz','SHA256SUMS-flash-imager-skill-'+version])assert(h.includes('/releases/download/flash-imager-skill-v'+version+'/'+name),lang+' '+name);
@@ -29,7 +29,7 @@ test('1.0 chapters preserve translated structure, executable update commands and
   assert.deepEqual(shape(release[lang]),reference,lang+' release structure');
   const docs=read('../public/'+lang+'/docs.html');
   for(const command of ['aguja update menu','aguja update status --json','aguja update check --json','aguja update rollback','aguja secrets --json','sudo aguja recovery list --json'])assert(docs.includes(command),lang+' '+command);
-  assert(docs.includes(release[lang].create));assert(docs.includes('VALIDATION-1.0.0.md'));assert(docs.includes('UPDATES.md'));
+  assert(docs.includes(release[lang].create));assert(docs.includes('VALIDATION-'+read('../../VERSION').trim()+'.md'));assert(docs.includes('UPDATES.md'));
   assert(docs.includes('0.9.9'),lang+' historical capture provenance');
  }
 });

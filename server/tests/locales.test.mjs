@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createSite} from '../app.mjs';
+const imagerVersion=JSON.parse(fs.readFileSync(new URL('../../desktop/package.json',import.meta.url),'utf8')).version;
 const currentVersion=fs.readFileSync(new URL('../../VERSION',import.meta.url),'utf8').trim();
 const languages=['en','es','fr','de','pt','it','nl','zh'];
 test('locale routes preserve anonymous access, content structure and localised navigation',async()=>{
@@ -18,9 +19,9 @@ test('locale routes preserve anonymous access, content structure and localised n
      assert.equal((html.match(/class="doc-section"/g)||[]).length,26);
      assert(html.includes('aguja profile unlock'));assert(html.replace(/<[^>]+>/g,'').replace(/\s+/g,'').includes('Ctrl+Shift+V'));
      assert(html.includes('0.9.11'));assert(html.includes('ENOSPC'));assert(html.includes('YOLO'));assert(html.includes('10,000')||html.includes('10.000')||html.includes('10 000')||html.includes('10000')||html.includes('10 000'));
-     assert.equal((html.match(/class="zoom-image"/g)||[]).length,5);assert(html.includes('class="checklist"'));assert(html.includes('id="situation"'));assert(html.includes('property="og:image"'));
+     assert.equal((html.match(/class="zoom-image"/g)||[]).length,11);assert(html.includes('class="checklist"'));assert(html.includes('id="situation"'));assert(html.includes('property="og:image"'));
     }else if(route===''){
-     assert(html.includes(`v${currentVersion}/aguja-flash-imager-${currentVersion}-win-x64.exe`));
+     assert(html.includes(`v${imagerVersion}/aguja-flash-imager-${imagerVersion}-win-x64.exe`));
      assert(html.includes(`/releases/download/v${currentVersion}/aguja-${currentVersion}-amd64.img.zst`));assert(!html.includes('Tu LA AGUJA'));
     }
    }

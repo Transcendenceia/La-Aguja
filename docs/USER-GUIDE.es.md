@@ -462,23 +462,26 @@ La tecla del menú de arranque depende del fabricante; consulta su manual. Selec
 
 **Arrancó:** ves el live. **Perfil cargado:** tus ajustes están disponibles. **Red disponible:** hay una ruta útil, no solo una IP. **Asistencia disponible:** el cliente autorizado puede entrar por SSH. Pasar una no prueba las otras.
 
-## Reinicios: la identidad de tailnet es temporal
+## Actualizaciones interactivas del live
 
-El diseño del live mantiene el estado de tailnet en RAM. Al apagar se pierde esa identidad; un nuevo arranque vuelve a registrarse. **Una clave de un solo uso puede funcionar la primera vez y fallar la segunda.** Cifrar la cápsula no cambia esa regla.
+Abre Actualizaciones en el panel o ejecuta aguja update menu. Primero pulsa Comprobar actualizaciones: la lista muestra la versión instalada y la disponible. No se instala nada automáticamente.
 
-- Para repetir rescates o reinicios sin regrabar, usa una auth/pre-auth key reutilizable, vigente y limitada a la finalidad acordada.
+En cada fila elige No, Sí · RAM o Sí persistente. No no cambia nada. RAM actualiza solo esta sesión y se pierde al reiniciar. Persistente guarda un sistema limpio y verificado en DATA de este pendrive para el próximo arranque.
 
-- La administración puede exigir aprobación de cada nodo nuevo o imponer caducidad. Revisa el nodo actual, no un nombre/IP antiguo que casualmente siga en la consola.
+Selecciona con ratón, flechas y Espacio. A abre la revisión con los recuentos y el destino persistente exacto; Enter aplica. La release completa de Rescue Disk requiere persistencia y se actualiza por separado de los componentes.
 
-- Si tu política admite nodos efímeros, configura su ciclo de vida con el administrador. No se promete IP estable ni limpieza universal de nodos anteriores.
+Verás bytes de descarga o progreso APT cuando se pueden medir, y las fases de preparación, instalación, guardado en USB, verificación y selección de arranque. Las fases sin total medible muestran actividad, no porcentajes inventados. Espera a que termine antes de retirar el USB.
 
-- Al cerrar la tarea, retira el nodo correspondiente del control plane y revoca la clave cuando ya no deba registrar equipos.
+El resultado final permanece hasta pulsar Volver al menú. No hay reinicio automático. Un fallo o resultado parcial no se anuncia como éxito. Fábrica y la generación anterior siguen disponibles; aguja update rollback cambia el próximo arranque.
 
-### Revocar la clave de alta no equivale a expulsar todos los nodos
+Necesitas un USB escribible compatible con 1.0, espacio libre en DATA y RAM suficiente. La generación pendiente se conserva como base; los secretos del perfil y el workspace no se copian al sistema. Editar solo CFG no actualiza un USB antiguo.
 
-Una clave enrolla dispositivos. Los ya inscritos pueden conservar su autorización hasta que retires el nodo o cambies la política. Para detener un acceso actual, cierra su sesión y administra ese nodo; para detener futuras altas, revoca también la clave. Si está dentro de un USB en claro, reemplaza o retira ese perfil de forma controlada.
-
-Para apagar tras guardar lo necesario, coordina las sesiones, verifica montajes y sincroniza. No borres credenciales de otra persona sin permiso ni supongas que «en RAM» elimina copias hechas por un administrador durante la sesión.
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
 
 ## Autenticar IA con el mini navegador local
 

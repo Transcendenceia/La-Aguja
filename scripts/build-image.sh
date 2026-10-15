@@ -57,7 +57,7 @@ for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$
     cmp -s "$runtime" "$ROOT/usr/lib/aguja/$(basename "$runtime")" || { echo 'Instala el runtime actual antes de empaquetar'; exit 1; }
 done
 # Persistent update code, protocol, boot guard and timer are release capabilities.
-for item in 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer'; do
+for item in 'update-session-worker.sh:usr/lib/aguja/update-session-worker.sh' 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer'; do
     source=${item%%:*}; target=${item#*:}
     cmp -s "$PROJECT/runtime/$source" "$ROOT/$target" || { echo 'Instala la infraestructura persistente actual'; exit 1; }
 done
@@ -104,7 +104,7 @@ for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.m
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
 done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/disk-recovery/SKILL.md | cmp -s "$PROJECT/skills/disk-recovery/SKILL.md" - || { echo 'Skill de recuperación empaquetada no coincide'; exit 1; }
-for item in 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer'; do
+for item in 'update-session-worker.sh:usr/lib/aguja/update-session-worker.sh' 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer'; do
     source=${item%%:*}; target=${item#*:}
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "$target" | cmp -s "$PROJECT/runtime/$source" - || { echo 'Infraestructura persistente empaquetada no coincide'; exit 1; }
 done
@@ -186,7 +186,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$PROJECT/build/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','usb-config-transaction-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$PROJECT/build/release.json" ::release.json
 printf '{"schema":1,"state":"pending"}\n' > "$PROJECT/build/data-initialize.json"

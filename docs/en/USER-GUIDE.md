@@ -119,7 +119,7 @@ On Windows, Flash Imager can inspect available recovery keys and optionally incl
 
 [↗](https://aguja.transcendenceia.net/en/docs#bitlocker)
 
-## Step 6 · Prepare, flash and verify
+## Step 7 · Prepare, flash and verify
 
 Review the image, protection mode and configuration summary. Creating a private image prepares a file; preparing and flashing a USB additionally writes the selected device. Compare model, serial number and real capacity in the native confirmation. Cancel if the identity is uncertain. Grant local UAC/Polkit permission only for the operation you intend.
 
@@ -140,13 +140,40 @@ aguja status
 
 [↗](https://aguja.transcendenceia.net/en/docs#arranque)
 
-## Reboots: tailnet identity is temporary
+## Interactive live updates
 
-The live tailnet state is stored in RAM. Rebooting loses the enrolled identity and requires a fresh registration after network availability and profile unlock. A one-use key may be consumed by the first boot and cannot guarantee subsequent boots. For repeated boots, use a valid, appropriately scoped reusable key under your own administration.
+Open Updates in the panel or run aguja update menu. Choose Check for updates first: the list shows installed and available versions. Nothing installs automatically.
 
-This temporary tailnet identity is separate from the USB’s SSH host key and from optional HOME persistence. Remove obsolete nodes and revoke registration keys when the rescue job ends. Do not interpret a previous successful connection as proof that today’s node is registered or allowed by the current policy.
+For each row choose No, Yes · RAM, or Yes, persistent. No changes nothing. RAM updates only this session and is lost after reboot. Persistent saves a verified clean system in DATA on this USB for the next boot.
 
-[↗](https://aguja.transcendenceia.net/en/docs#reinicios)
+Use the mouse, arrows and Space to choose. A opens the review with counts and the exact persistent destination; Enter applies. A full Rescue Disk release needs persistence and a separate operation from individual components.
+
+Watch download bytes or APT progress when measurable, then preparation, installation, USB saving, verification and next-boot selection. Stages without a measurable total show activity, not an invented percentage. Wait for completion before removing USB.
+
+The final result remains on screen until Back to menu. There is no automatic reboot. A failed or partial operation is not reported as success. Factory and the previous generation remain available; aguja update rollback changes the next boot.
+
+A writable 1.0-compatible USB, free DATA space and sufficient RAM are required. Pending generations are preserved as build bases; profile secrets and workspace are not copied into the system. Editing CFG alone does not upgrade an older USB.
+
+```sh
+aguja update menu
+aguja update status --json
+aguja update check --json
+aguja update rollback
+```
+
+![Update list · No / RAM / persistent](../../server/public/docs-images/101/updates-list.png)
+
+![Review the persistent destination](../../server/public/docs-images/101/updates-review.png)
+
+![Measured download progress](../../server/public/docs-images/101/updates-download.png)
+
+![Saving on USB](../../server/public/docs-images/101/updates-save.png)
+
+![Verified completion](../../server/public/docs-images/101/updates-done.png)
+
+![RAM result · this session only](../../server/public/docs-images/101/updates-ram.png)
+
+Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.
 
 ## AI sign-in with the local browser
 

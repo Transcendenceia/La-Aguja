@@ -73,7 +73,7 @@ Codex CLI, OpenCode, Claude Code e Antigravity: chiave API, importazione seletti
 
 ## Passo 5 · Tailscale/Headscale proprio
 
-Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Identità in RAM, nuova iscrizione dopo riavvio.
+Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide.
 
 [↗](https://aguja.transcendenceia.net/it/docs#tailnet)
 
@@ -123,6 +123,8 @@ Scegli con mouse, frecce e Spazio. A mostra il riepilogo con conteggi e destinaz
 Segui byte scaricati o APT, preparazione, installazione, salvataggio USB, verifica e selezione di avvio. Senza totale misurabile viene mostrata attività, non percentuali inventate. Attendi il termine.
 
 Il risultato resta fino a Torna al menu. Nessun riavvio automatico o falso successo dopo errori. Fabbrica e generazione precedente restano; aguja update rollback cambia il prossimo avvio.
+
+In 1.0.2, l’avvio normale evita di ricalcolare l’hash dell’intero sistema. Il controllo in background avvisa senza installare nulla. Le attività confermate continuano dopo Esc o la chiusura SSH; riapri Aggiornamenti per ritrovare avanzamento e risultato. Non rimuovere la USB durante una scrittura.
 
 Servono USB scrivibile compatibile con 1.0, spazio DATA e RAM. La generazione in attesa resta la base; segreti e workspace non vengono copiati. Modificare CFG non aggiorna una vecchia USB.
 

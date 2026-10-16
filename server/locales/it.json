@@ -121,7 +121,7 @@
     ],
     [
       "Passo 5 · Tailscale/Headscale proprio",
-      "Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Identità in RAM, nuova iscrizione dopo riavvio."
+      "Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide."
     ],
     [
       "OpenSSH e Tailscale SSH",
@@ -145,7 +145,7 @@
     ],
     [
       "Riavvii: identità temporanea",
-      "Stato tailnet in RAM: dopo riavvio servono rete, profilo sbloccato e nuova iscrizione. Chiave monouso può essere già consumata. Per più avvii usa chiave riutilizzabile valida e limitata. Identità distinta dalla chiave host SSH USB e dalla persistenza HOME. Rimuovi nodi obsoleti e revoca chiavi inutili. Una vecchia connessione non prova lo stato attuale."
+      "Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide."
     ],
     [
       "Login IA nel browser locale",

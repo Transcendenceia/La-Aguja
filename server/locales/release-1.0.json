@@ -2,7 +2,8 @@
   "en": {
     "title": "Your USB grows with your projects.",
     "intro": [
-      "LA AGUJA 1.0 brings reusable profiles, configuration editing without reflashing, and persistent live updates. Keep your working environment ready for the next computer."
+      "LA AGUJA 1.0 brings reusable profiles, configuration editing without reflashing, and persistent live updates. Keep your working environment ready for the next computer.",
+      "In 1.0.2, normal boot avoids hashing the whole system again. Update checks start in the background and show a notice without installing anything. Confirmed jobs continue when you leave with Escape or close SSH; reopen Updates to recover progress and the result. Do not remove the USB during an active write."
     ],
     "features": [
       [
@@ -50,16 +51,22 @@
         "Use the mouse, arrows and Space to choose. A opens the review with counts and the exact persistent destination; Enter applies. A full Rescue Disk release needs persistence and a separate operation from individual components.",
         "Watch download bytes or APT progress when measurable, then preparation, installation, USB saving, verification and next-boot selection. Stages without a measurable total show activity, not an invented percentage. Wait for completion before removing USB.",
         "The final result remains on screen until Back to menu. There is no automatic reboot. A failed or partial operation is not reported as success. Factory and the previous generation remain available; aguja update rollback changes the next boot.",
+        "In 1.0.2, normal boot avoids hashing the whole system again. Update checks start in the background and show a notice without installing anything. Confirmed jobs continue when you leave with Escape or close SSH; reopen Updates to recover progress and the result. Do not remove the USB during an active write.",
         "A writable 1.0-compatible USB, free DATA space and sufficient RAM are required. Pending generations are preserved as build bases; profile secrets and workspace are not copied into the system. Editing CFG alone does not upgrade an older USB."
       ],
       "24": [
         "Validation of 1.0 and its limits",
         "The release documents Linux/Windows Imager checks, encrypted profiles and CFG editing, BIOS/UEFI virtual USB boots, persistent generations and rollback. The linked release validation records the tested scope.",
         "Screenshots retain their labelled historical versions and synthetic QA data. Neither these checks nor a client version prove provider authentication/inference, successful customer recovery, universal hardware support or Secure Boot compatibility."
+      ],
+      "9": [
+        "Step 5 · Your Tailscale or Headscale",
+        "Remote access is optional. Enable private networking, provide an authorised auth/pre-auth key and optionally a node name. An empty Headscale URL selects official Tailscale; otherwise provide your own HTTPS Headscale endpoint. The live system registers at boot after networking and profile unlock. This does not enrol the preparation PC or create a proprietary LA AGUJA tunnel. Your connecting client must belong to the same authorised tailnet and satisfy its policies. A registration key is not an SSH password or AI API key. Registration alone does not prove that ACLs allow SSH; verify a real connection from the authorised client.",
+        "Since Rescue Disk 1.0.2, the USB restores its saved Tailscale/Headscale identity before connecting. The enrollment key is used for first registration, not a new node on each reboot. Unchanged state is not rewritten; changed state is saved atomically and verified. Automatic profiles add no unlock; encrypted profiles retain their existing unlock. Server expiry and revocation still apply."
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
-    "image": "Rescue Disk 1.0.1 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
+    "image": "Rescue Disk 1.0.2 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
     "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service.",
     "captureProvenance": "Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.",
     "updateCaptions": {
@@ -74,7 +81,8 @@
   "es": {
     "title": "Tu USB evoluciona con tus proyectos.",
     "intro": [
-      "LA AGUJA 1.0 incorpora perfiles reutilizables, edición de configuración sin regrabar y actualizaciones persistentes del live. Tu entorno, listo para el próximo equipo."
+      "LA AGUJA 1.0 incorpora perfiles reutilizables, edición de configuración sin regrabar y actualizaciones persistentes del live. Tu entorno, listo para el próximo equipo.",
+      "En la 1.0.2, el arranque normal evita recalcular el hash del sistema completo. Las comprobaciones se ejecutan en segundo plano y avisan sin instalar nada. Los trabajos confirmados continúan al salir con Escape o cerrar SSH; vuelve a Actualizaciones para recuperar progreso y resultado. No retires el USB durante una escritura activa."
     ],
     "features": [
       [
@@ -122,16 +130,22 @@
         "Selecciona con ratón, flechas y Espacio. A abre la revisión con los recuentos y el destino persistente exacto; Enter aplica. La release completa de Rescue Disk requiere persistencia y se actualiza por separado de los componentes.",
         "Verás bytes de descarga o progreso APT cuando se pueden medir, y las fases de preparación, instalación, guardado en USB, verificación y selección de arranque. Las fases sin total medible muestran actividad, no porcentajes inventados. Espera a que termine antes de retirar el USB.",
         "El resultado final permanece hasta pulsar Volver al menú. No hay reinicio automático. Un fallo o resultado parcial no se anuncia como éxito. Fábrica y la generación anterior siguen disponibles; aguja update rollback cambia el próximo arranque.",
+        "En la 1.0.2, el arranque normal evita recalcular el hash del sistema completo. Las comprobaciones se ejecutan en segundo plano y avisan sin instalar nada. Los trabajos confirmados continúan al salir con Escape o cerrar SSH; vuelve a Actualizaciones para recuperar progreso y resultado. No retires el USB durante una escritura activa.",
         "Necesitas un USB escribible compatible con 1.0, espacio libre en DATA y RAM suficiente. La generación pendiente se conserva como base; los secretos del perfil y el workspace no se copian al sistema. Editar solo CFG no actualiza un USB antiguo."
       ],
       "24": [
         "Validación de la 1.0 y sus límites",
         "La release documenta pruebas del Imager Linux/Windows, perfiles cifrados y edición CFG, arranques de USB virtual BIOS/UEFI, generaciones persistentes y rollback. El documento de validación enlazado detalla el alcance ensayado.",
         "Las capturas mantienen sus versiones históricas indicadas y datos sintéticos de QA. Estas pruebas y la versión de un cliente no demuestran autenticación o inferencia del proveedor, rescates exitosos de clientes, compatibilidad universal ni Secure Boot."
+      ],
+      "9": [
+        "Paso 5 · Tu Tailscale o Headscale",
+        "El acceso remoto es opcional. Activa la red privada y facilita una clave de alta autorizada. Una URL Headscale vacía selecciona Tailscale oficial; de lo contrario usa tu servidor HTTPS. El cliente de acceso debe pertenecer a la misma red y cumplir sus políticas; comprueba una conexión SSH real.",
+        "Desde Rescue Disk 1.0.2, el USB recupera su identidad Tailscale/Headscale guardada antes de conectar. La clave de alta sirve para el primer registro, no para crear un nodo en cada reinicio. El estado idéntico no se reescribe; los cambios se guardan atómicamente y se verifican. El perfil automático no añade desbloqueo; el cifrado conserva el suyo. Siguen aplicándose la caducidad y revocación del servidor."
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
-    "image": "Rescue Disk 1.0.1 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
+    "image": "Rescue Disk 1.0.2 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
     "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
     "captureProvenance": "Capturas reales de la VM; QA con una versión oficial anterior de Codex controlada. La demostración de paquetes es sintética. Las versiones mostradas no prometen actualizaciones disponibles hoy.",
     "updateCaptions": {
@@ -146,7 +160,8 @@
   "fr": {
     "title": "Votre clé USB évolue avec vos projets.",
     "intro": [
-      "LA AGUJA 1.0 ajoute des profils réutilisables, la modification de configuration sans réécriture et des mises à jour persistantes du live. Votre environnement reste prêt pour le prochain ordinateur."
+      "LA AGUJA 1.0 ajoute des profils réutilisables, la modification de configuration sans réécriture et des mises à jour persistantes du live. Votre environnement reste prêt pour le prochain ordinateur.",
+      "En 1.0.2, le démarrage normal évite de recalculer l’empreinte du système complet. La recherche en arrière-plan affiche un avis sans rien installer. Les tâches confirmées continuent après Échap ou la fermeture SSH ; rouvrez Mises à jour pour retrouver progression et résultat. Ne retirez pas le support pendant une écriture."
     ],
     "features": [
       [
@@ -194,16 +209,22 @@
         "Souris, flèches et Espace sélectionnent. A ouvre la révision avec les nombres et la destination exacte ; Entrée applique. Une release Rescue complète exige la persistance et une opération séparée.",
         "Suivez les octets téléchargés ou APT, puis préparation, installation, enregistrement USB, vérification et activation. Sans total mesurable, une activité est affichée, pas un pourcentage inventé. Attendez la fin.",
         "Le résultat reste affiché jusqu’à Retour au menu. Aucun redémarrage automatique ni faux succès après un échec. Usine et génération précédente restent disponibles ; aguja update rollback choisit le prochain démarrage.",
+        "En 1.0.2, le démarrage normal évite de recalculer l’empreinte du système complet. La recherche en arrière-plan affiche un avis sans rien installer. Les tâches confirmées continuent après Échap ou la fermeture SSH ; rouvrez Mises à jour pour retrouver progression et résultat. Ne retirez pas le support pendant une écriture.",
         "Clé compatible 1.0 inscriptible, espace DATA et RAM suffisants requis. La génération en attente sert de base ; secrets et workspace ne sont pas copiés. Modifier CFG ne modernise pas une ancienne clé."
       ],
       "24": [
         "Validation de la 1.0 et limites",
         "La release documente Imager Linux/Windows, profils chiffrés, édition CFG, démarrages USB virtuels BIOS/UEFI, générations persistantes et rollback. Le document lié précise le périmètre testé.",
         "Les captures gardent leurs versions historiques et données synthétiques. Ces tests et une version de client ne prouvent pas une authentification/inférence fournisseur, une récupération client réussie, une compatibilité matérielle universelle ou Secure Boot."
+      ],
+      "9": [
+        "Étape 5 · Votre Tailscale ou Headscale",
+        "L’accès distant est facultatif. Activez le réseau privé, fournissez une clé auth/pre-auth autorisée et éventuellement un nom de nœud. Une URL Headscale vide utilise Tailscale officiel ; sinon indiquez votre serveur HTTPS. Le live s’inscrit au démarrage après réseau et déverrouillage, pas le PC préparateur. Le client doit appartenir au réseau privé autorisé et respecter ses politiques. La clé d’inscription ne remplace pas le mot de passe SSH. Une inscription ne prouve pas les ACL : testez SSH depuis le client autorisé.",
+        "Depuis Rescue Disk 1.0.2, le support restaure son identité Tailscale/Headscale avant la connexion. La clé sert à la première inscription, pas à créer un nœud à chaque redémarrage. Un état identique n’est pas réécrit ; les changements sont enregistrés atomiquement et vérifiés. Le profil automatique n’ajoute aucun déverrouillage ; le profil chiffré conserve le sien. Expiration et révocation du serveur restent applicables."
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
-    "image": "Rescue Disk 1.0.1 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
+    "image": "Rescue Disk 1.0.2 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
     "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
     "captureProvenance": "Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.",
     "updateCaptions": {
@@ -218,7 +239,8 @@
   "de": {
     "title": "Dein USB-Stick wächst mit deinen Projekten.",
     "intro": [
-      "LA AGUJA 1.0 bietet wiederverwendbare Profile, Konfigurationsänderungen ohne erneutes Schreiben und dauerhafte Live-Updates. Deine Umgebung bleibt für den nächsten Rechner bereit."
+      "LA AGUJA 1.0 bietet wiederverwendbare Profile, Konfigurationsänderungen ohne erneutes Schreiben und dauerhafte Live-Updates. Deine Umgebung bleibt für den nächsten Rechner bereit.",
+      "In 1.0.2 entfällt beim normalen Start das erneute Hashen des gesamten Systems. Hintergrundprüfungen melden Updates, installieren aber nichts. Bestätigte Aufgaben laufen nach Escape oder dem Schließen von SSH weiter; Updates zeigt Fortschritt und Ergebnis beim erneuten Öffnen. USB während eines Schreibvorgangs nicht entfernen."
     ],
     "features": [
       [
@@ -266,16 +288,22 @@
         "Mit Maus, Pfeilen und Leertaste wählen. A zeigt Prüfung mit Anzahl und genauem Ziel; Enter wendet an. Ein vollständiges Rescue-Release benötigt dauerhafte Speicherung und einen getrennten Vorgang.",
         "Download-Bytes oder APT-Fortschritt und danach Vorbereitung, Installation, USB-Speicherung, Prüfung und Startauswahl verfolgen. Ohne messbare Gesamtmenge erscheint Aktivität statt erfundener Prozentwerte. Bis zum Ende warten.",
         "Das Ergebnis bleibt bis Zurück zum Menü sichtbar. Kein automatischer Neustart oder Erfolg bei Fehlern. Werkssystem und vorige Generation bleiben; aguja update rollback ändert den nächsten Start.",
+        "In 1.0.2 entfällt beim normalen Start das erneute Hashen des gesamten Systems. Hintergrundprüfungen melden Updates, installieren aber nichts. Bestätigte Aufgaben laufen nach Escape oder dem Schließen von SSH weiter; Updates zeigt Fortschritt und Ergebnis beim erneuten Öffnen. USB während eines Schreibvorgangs nicht entfernen.",
         "Beschreibbarer 1.0-kompatibler USB, freier DATA-Speicher und genug RAM erforderlich. Die ausstehende Generation bleibt Grundlage; Geheimnisse und Workspace werden nicht kopiert. CFG-Bearbeitung aktualisiert keinen alten USB."
       ],
       "24": [
         "Validierung von 1.0 und Grenzen",
         "Die Release dokumentiert Linux-/Windows-Imager, verschlüsselte Profile, CFG-Bearbeitung, virtuelle BIOS-/UEFI-USB-Starts, persistente Generationen und Rollback. Das verlinkte Prüfprotokoll nennt den Umfang.",
         "Aufnahmen behalten ihre historischen Versionen und synthetischen Daten. Tests und Client-Version belegen keine Anbieteranmeldung/Inferenz, erfolgreiche Kundenrettung, universelle Hardware oder Secure Boot."
+      ],
+      "9": [
+        "Schritt 5 · Eigenes Tailscale/Headscale",
+        "Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC. Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client.",
+        "Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin."
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
-    "image": "Rescue Disk 1.0.1 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "image": "Rescue Disk 1.0.2 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
     "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
     "captureProvenance": "Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.",
     "updateCaptions": {
@@ -290,7 +318,8 @@
   "pt": {
     "title": "O teu USB evolui com os teus projetos.",
     "intro": [
-      "LA AGUJA 1.0 traz perfis reutilizáveis, edição da configuração sem regravar e atualizações persistentes do live. O teu ambiente fica pronto para o próximo computador."
+      "LA AGUJA 1.0 traz perfis reutilizáveis, edição da configuração sem regravar e atualizações persistentes do live. O teu ambiente fica pronto para o próximo computador.",
+      "Na 1.0.2, o arranque normal evita recalcular o hash do sistema completo. A verificação em segundo plano avisa sem instalar nada. Tarefas confirmadas continuam após Escape ou fechar SSH; reabre Atualizações para recuperar progresso e resultado. Não retires o USB durante uma escrita ativa."
     ],
     "features": [
       [
@@ -338,16 +367,22 @@
         "Usa rato, setas e Espaço. A revê contagens e destino exato; Enter aplica. Uma release Rescue completa exige persistência e uma operação separada dos componentes.",
         "Acompanha bytes ou progresso APT, preparação, instalação, gravação USB, verificação e seleção de arranque. Sem total mensurável mostra atividade, não percentagens inventadas. Espera pelo fim.",
         "O resultado fica até Voltar ao menu. Não há reinício automático nem sucesso falso após falha. Fábrica e geração anterior continuam disponíveis; aguja update rollback muda o próximo arranque.",
+        "Na 1.0.2, o arranque normal evita recalcular o hash do sistema completo. A verificação em segundo plano avisa sem instalar nada. Tarefas confirmadas continuam após Escape ou fechar SSH; reabre Atualizações para recuperar progresso e resultado. Não retires o USB durante uma escrita ativa.",
         "USB gravável compatível com 1.0, espaço DATA e RAM suficientes. A geração pendente é preservada como base; segredos e workspace não são copiados. Editar CFG não atualiza um USB antigo."
       ],
       "24": [
         "Validação da 1.0 e limites",
         "A release documenta Imager Linux/Windows, perfis encriptados, edição CFG, USB virtual BIOS/UEFI, gerações persistentes e rollback. A validação ligada descreve o âmbito ensaiado.",
         "Capturas mantêm versões históricas e dados sintéticos. Testes e versão do cliente não provam autenticação/inferência, recuperação de clientes, hardware universal ou Secure Boot."
+      ],
+      "9": [
+        "Passo 5 · Tailscale/Headscale próprio",
+        "Acesso opcional: ativa rede privada, fornece chave auth/pre-auth autorizada e nome opcional. URL Headscale vazia usa Tailscale oficial; caso contrário, servidor HTTPS próprio. O live inscreve-se depois de rede e desbloqueio, não o PC preparador. O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real.",
+        "Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se."
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
-    "image": "Rescue Disk 1.0.1 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
+    "image": "Rescue Disk 1.0.2 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
     "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
     "captureProvenance": "Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.",
     "updateCaptions": {
@@ -362,7 +397,8 @@
   "it": {
     "title": "La tua USB cresce con i tuoi progetti.",
     "intro": [
-      "LA AGUJA 1.0 aggiunge profili riutilizzabili, modifica della configurazione senza riscrittura e aggiornamenti live persistenti. Il tuo ambiente resta pronto per il prossimo computer."
+      "LA AGUJA 1.0 aggiunge profili riutilizzabili, modifica della configurazione senza riscrittura e aggiornamenti live persistenti. Il tuo ambiente resta pronto per il prossimo computer.",
+      "In 1.0.2, l’avvio normale evita di ricalcolare l’hash dell’intero sistema. Il controllo in background avvisa senza installare nulla. Le attività confermate continuano dopo Esc o la chiusura SSH; riapri Aggiornamenti per ritrovare avanzamento e risultato. Non rimuovere la USB durante una scrittura."
     ],
     "features": [
       [
@@ -410,16 +446,22 @@
         "Scegli con mouse, frecce e Spazio. A mostra il riepilogo con conteggi e destinazione esatta; Invio applica. Una release Rescue completa richiede persistenza e un’operazione separata.",
         "Segui byte scaricati o APT, preparazione, installazione, salvataggio USB, verifica e selezione di avvio. Senza totale misurabile viene mostrata attività, non percentuali inventate. Attendi il termine.",
         "Il risultato resta fino a Torna al menu. Nessun riavvio automatico o falso successo dopo errori. Fabbrica e generazione precedente restano; aguja update rollback cambia il prossimo avvio.",
+        "In 1.0.2, l’avvio normale evita di ricalcolare l’hash dell’intero sistema. Il controllo in background avvisa senza installare nulla. Le attività confermate continuano dopo Esc o la chiusura SSH; riapri Aggiornamenti per ritrovare avanzamento e risultato. Non rimuovere la USB durante una scrittura.",
         "Servono USB scrivibile compatibile con 1.0, spazio DATA e RAM. La generazione in attesa resta la base; segreti e workspace non vengono copiati. Modificare CFG non aggiorna una vecchia USB."
       ],
       "24": [
         "Validazione della 1.0 e limiti",
         "La release documenta Imager Linux/Windows, profili cifrati, modifica CFG, avvii USB virtuali BIOS/UEFI, generazioni persistenti e rollback. Il documento collegato specifica l’ambito testato.",
         "Le schermate mantengono versioni storiche e dati sintetici. Test e versione del client non provano autenticazione/inferenza, recuperi clienti riusciti, hardware universale o Secure Boot."
+      ],
+      "9": [
+        "Passo 5 · Tailscale/Headscale proprio",
+        "Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale.",
+        "Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide."
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
-    "image": "Rescue Disk 1.0.1 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
+    "image": "Rescue Disk 1.0.2 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
     "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
     "captureProvenance": "Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.",
     "updateCaptions": {
@@ -434,7 +476,8 @@
   "nl": {
     "title": "Je USB groeit mee met je projecten.",
     "intro": [
-      "LA AGUJA 1.0 biedt herbruikbare profielen, configuratiebewerking zonder opnieuw schrijven en blijvende live-updates. Je omgeving staat klaar voor de volgende computer."
+      "LA AGUJA 1.0 biedt herbruikbare profielen, configuratiebewerking zonder opnieuw schrijven en blijvende live-updates. Je omgeving staat klaar voor de volgende computer.",
+      "In 1.0.2 wordt bij normaal opstarten niet opnieuw het hele systeem gehasht. Achtergrondcontroles melden updates zonder iets te installeren. Bevestigde taken gaan door na Escape of het sluiten van SSH; open Updates opnieuw voor voortgang en resultaat. Verwijder de USB niet tijdens schrijven."
     ],
     "features": [
       [
@@ -482,16 +525,22 @@
         "Kies met muis, pijlen en Spatie. A toont aantallen en de exacte bestemming; Enter past toe. Een volledig Rescue-release vereist blijvende opslag en een aparte handeling.",
         "Volg downloadbytes of APT, voorbereiding, installatie, opslaan op USB, controle en startselectie. Zonder meetbaar totaal verschijnt activiteit, geen verzonnen percentage. Wacht tot het klaar is.",
         "Het resultaat blijft tot Terug naar menu. Geen automatische herstart of onterecht succes na fouten. Fabriek en vorige generatie blijven; aguja update rollback wijzigt de volgende start.",
+        "In 1.0.2 wordt bij normaal opstarten niet opnieuw het hele systeem gehasht. Achtergrondcontroles melden updates zonder iets te installeren. Bevestigde taken gaan door na Escape of het sluiten van SSH; open Updates opnieuw voor voortgang en resultaat. Verwijder de USB niet tijdens schrijven.",
         "Schrijfbare 1.0-compatibele USB, vrije DATA-ruimte en voldoende RAM vereist. De wachtende generatie blijft basis; geheimen en workspace worden niet gekopieerd. Alleen CFG bewerken werkt een oude USB niet bij."
       ],
       "24": [
         "Validatie van 1.0 en grenzen",
         "De release beschrijft Linux-/Windows-Imager, versleutelde profielen, CFG-bewerking, virtuele BIOS-/UEFI-USB-starts, blijvende generaties en rollback. Het gekoppelde document vermeldt de testomvang.",
         "Afbeeldingen behouden historische versies en synthetische gegevens. Tests en clientversie bewijzen geen providerlogin/inferentie, geslaagd klantherstel, universele hardware of Secure Boot."
+      ],
+      "9": [
+        "Stap 5 · Eigen Tailscale/Headscale",
+        "Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH.",
+        "Vanaf Rescue Disk 1.0.2 herstelt de USB de opgeslagen Tailscale-/Headscale-identiteit vóór het verbinden. De sleutel dient voor de eerste registratie, niet voor een nieuwe node bij iedere herstart. Ongewijzigde status wordt niet herschreven; wijzigingen worden atomair opgeslagen en gecontroleerd. Automatische profielen vragen geen extra ontgrendeling; versleutelde behouden de bestaande. Verlopen en intrekken op de server blijven gelden."
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
-    "image": "Rescue Disk 1.0.1 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "image": "Rescue Disk 1.0.2 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
     "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
     "captureProvenance": "Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.",
     "updateCaptions": {
@@ -506,7 +555,8 @@
   "zh": {
     "title": "让 USB 随你的项目一起成长。",
     "intro": [
-      "LA AGUJA 1.0 带来可复用配置、无需重写镜像的 USB 配置编辑，以及持久化 live 更新。工作环境随时准备好迎接下一台电脑。"
+      "LA AGUJA 1.0 带来可复用配置、无需重写镜像的 USB 配置编辑，以及持久化 live 更新。工作环境随时准备好迎接下一台电脑。",
+      "1.0.2 正常启动不再重复计算整个系统的哈希。后台检查只提示更新，不自动安装。确认后的任务在按 Escape 返回或关闭 SSH 后继续运行；重新打开更新可恢复进度与结果。正在写入时不要拔出 USB。"
     ],
     "features": [
       [
@@ -554,16 +604,22 @@
         "使用鼠标、方向键和空格选择。A 显示数量及准确保存目标，Enter 应用。完整 Rescue Disk 版本必须持久保存，并与组件更新分开操作。",
         "可测量时显示下载字节或 APT 进度，随后显示准备、安装、写入 USB、验证及启动选择。没有可测量总量时显示活动状态，不虚构百分比。完成前不要拔出 USB。",
         "结果将保留到点击返回菜单。不会自动重启，也不会将失败或部分完成报告为成功。出厂系统和上一代仍可选择；aguja update rollback 更改下次启动选择。",
+        "1.0.2 正常启动不再重复计算整个系统的哈希。后台检查只提示更新，不自动安装。确认后的任务在按 Escape 返回或关闭 SSH 后继续运行；重新打开更新可恢复进度与结果。正在写入时不要拔出 USB。",
         "需要兼容 1.0 的可写 USB、足够 DATA 空间及 RAM。保留待启动代作为基础，不复制个人密钥和 workspace。仅编辑 CFG 不会更新旧 USB 系统。"
       ],
       "24": [
         "1.0 的验证范围与限制",
         "发行版记录了 Linux/Windows Imager、加密配置、CFG 编辑、虚拟 USB BIOS/UEFI 启动、持久系统代及回滚测试。链接的验证文档列明实际测试范围。",
         "截图保留标明的历史版本和合成测试数据。测试或客户端版本不证明供应商登录/推理、客户数据恢复成功、通用硬件兼容或 Secure Boot 支持。"
+      ],
+      "9": [
+        "步骤 5 · 自己的 Tailscale/Headscale",
+        "远程访问可选。启用私有网络并提供授权 auth/pre-auth 密钥，可选节点名。Headscale URL 留空使用官方 Tailscale，否则填写自己的 HTTPS 服务。Live 在网络可用、配置解锁后注册，不注册准备电脑。客户端必须属于授权网络并满足策略。注册密钥不是 SSH 密码。注册成功不证明 ACL 允许连接，应从授权客户端测试真实 SSH。",
+        "从 Rescue Disk 1.0.2 起，USB 在连接前恢复已保存的 Tailscale/Headscale 身份。注册密钥用于首次注册，不会在每次重启时创建新节点。状态未变则不重复写入，变更会原子保存并校验。自动配置不增加解锁步骤，加密配置保留原有解锁。服务器端到期与撤销仍然有效。"
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",
-    "image": "Rescue Disk 1.0.1 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
+    "image": "Rescue Disk 1.0.2 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
     "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
     "captureProvenance": "真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。",
     "updateCaptions": {

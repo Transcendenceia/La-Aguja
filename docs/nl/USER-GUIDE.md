@@ -73,7 +73,7 @@ Codex CLI, OpenCode, Claude Code en Antigravity: API-sleutel, selectieve import 
 
 ## Stap 5 · Eigen Tailscale/Headscale
 
-Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH. Identiteit in RAM, nieuwe aanmelding na herstart.
+Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH. Vanaf Rescue Disk 1.0.2 herstelt de USB de opgeslagen Tailscale-/Headscale-identiteit vóór het verbinden. De sleutel dient voor de eerste registratie, niet voor een nieuwe node bij iedere herstart. Ongewijzigde status wordt niet herschreven; wijzigingen worden atomair opgeslagen en gecontroleerd. Automatische profielen vragen geen extra ontgrendeling; versleutelde behouden de bestaande. Verlopen en intrekken op de server blijven gelden.
 
 [↗](https://aguja.transcendenceia.net/nl/docs#tailnet)
 
@@ -123,6 +123,8 @@ Kies met muis, pijlen en Spatie. A toont aantallen en de exacte bestemming; Ente
 Volg downloadbytes of APT, voorbereiding, installatie, opslaan op USB, controle en startselectie. Zonder meetbaar totaal verschijnt activiteit, geen verzonnen percentage. Wacht tot het klaar is.
 
 Het resultaat blijft tot Terug naar menu. Geen automatische herstart of onterecht succes na fouten. Fabriek en vorige generatie blijven; aguja update rollback wijzigt de volgende start.
+
+In 1.0.2 wordt bij normaal opstarten niet opnieuw het hele systeem gehasht. Achtergrondcontroles melden updates zonder iets te installeren. Bevestigde taken gaan door na Escape of het sluiten van SSH; open Updates opnieuw voor voortgang en resultaat. Verwijder de USB niet tijdens schrijven.
 
 Schrijfbare 1.0-compatibele USB, vrije DATA-ruimte en voldoende RAM vereist. De wachtende generatie blijft basis; geheimen en workspace worden niet gekopieerd. Alleen CFG bewerken werkt een oude USB niet bij.
 

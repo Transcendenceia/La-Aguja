@@ -89,7 +89,7 @@ The Imager does not copy your entire keychain, history, hooks or MCP configurati
 
 Remote access is optional. Enable private networking, provide an authorised auth/pre-auth key and optionally a node name. An empty Headscale URL selects official Tailscale; otherwise provide your own HTTPS Headscale endpoint. The live system registers at boot after networking and profile unlock. This does not enrol the preparation PC or create a proprietary LA AGUJA tunnel.
 
-Your connecting client must belong to the same authorised tailnet and satisfy its policies. A registration key is not an SSH password or AI API key. Registration alone does not prove that ACLs allow SSH; verify a real connection from the authorised client. The live identity is kept in RAM and must register again after reboot.
+Your connecting client must belong to the same authorised tailnet and satisfy its policies. A registration key is not an SSH password or AI API key. Registration alone does not prove that ACLs allow SSH; verify a real connection from the authorised client. Since Rescue Disk 1.0.2, the USB restores its saved Tailscale/Headscale identity before connecting. The enrollment key is used for first registration, not a new node on each reboot. Unchanged state is not rewritten; changed state is saved atomically and verified. Automatic profiles add no unlock; encrypted profiles retain their existing unlock. Server expiry and revocation still apply.
 
 [↗](https://aguja.transcendenceia.net/en/docs#tailnet)
 
@@ -140,7 +140,7 @@ aguja status
 
 ## Reboots: tailnet identity is temporary
 
-The live tailnet state is stored in RAM. Rebooting loses the enrolled identity and requires a fresh registration after network availability and profile unlock. A one-use key may be consumed by the first boot and cannot guarantee subsequent boots. For repeated boots, use a valid, appropriately scoped reusable key under your own administration.
+Since Rescue Disk 1.0.2, the USB restores its saved Tailscale/Headscale identity before connecting. The enrollment key is used for first registration, not a new node on each reboot. Unchanged state is not rewritten; changed state is saved atomically and verified. Automatic profiles add no unlock; encrypted profiles retain their existing unlock. Server expiry and revocation still apply.
 
 This temporary tailnet identity is separate from the USB’s SSH host key and from optional HOME persistence. Remove obsolete nodes and revoke registration keys when the rescue job ends. Do not interpret a previous successful connection as proof that today’s node is registered or allowed by the current policy.
 

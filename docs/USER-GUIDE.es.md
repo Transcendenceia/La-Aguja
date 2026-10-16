@@ -345,7 +345,7 @@ La aceptación de rutas de subred es opcional y no anuncia nuevas rutas: el Resc
 | --- | --- | --- |
 | Wi-Fi, acceso SSH, API keys, auth key de tailnet | Cápsula privada del USB y memoria del live al cargarla. | Cifrar la cápsula; restringir uso, vigencia y custodia del USB. |
 | Sesión OAuth nativa importada | Solo archivos portables permitidos, dentro de la cápsula. | Importar si es necesario; comprobar vigencia y retirar permisos al terminar. |
-| Identidad de tailnet | RAM del live. | Se reinscribe al reiniciar; administrar claves y nodos en el control plane. |
+| Identidad de tailnet | Estado propio del USB desde 1.0.2. | Recupera el nodo guardado; caducidad y revocación siguen bajo el control del servidor. |
 | Workspace, informes, clave SSH del USB | AGUJA_DATA si está disponible. | El cifrado de la cápsula no cifra todo este volumen. |
 
 En **Crear disco**, el modo cifrado usa AES-256-GCM y scrypt. Introduce una frase de al menos 12 caracteres; no la guardes junto al USB. Un perfil reutilizable `.aguja` también se guarda cifrado, pero es distinto de la cápsula dentro de la imagen.
@@ -765,7 +765,7 @@ Inventaría hardware, exporta datos autorizados y claves de recuperación, elige
 
 ### 9. Repetir tu configuración sin volver a escribir todo
 
-Guarda una plantilla `.aguja` cifrada y ábrela en el Imager cuando prepares otro medio. Actualiza claves, red y sesiones, escoge la imagen y verifica el nuevo USB. No traslada automáticamente una sesión caducada ni la identidad RAM de una tailnet.
+Guarda una plantilla `.aguja` cifrada y ábrela en el Imager cuando prepares otro medio. Actualiza claves, red y sesiones, escoge la imagen y verifica el nuevo USB. No traslada automáticamente una sesión caducada ni autoriza clonar una identidad tailnet en varios USB concurrentes.
 
 **Resultado comprobable:** configuración coherente y revisada, con menos errores de escritura. No es gestión de flota ya implementada.
 
@@ -817,7 +817,7 @@ Esta versión no incluye relay, túneles propios ni el conector MCP propietario.
 
 El modo de agente `full` habilita mecanismos de acceso amplio del arnés. La configuración avanzada `agent_mode=ask` conserva las aprobaciones propias del arnés; no quita el sudo del propietario ni convierte el sistema en sandbox. Comprueba el modo efectivo antes de trabajar.
 
-`persistent_home=no` mantiene HOME temporal; `persistent_home=yes` puede conservar HOME y tokens en el USB **sin cifrar**. La cápsula cifrada no cifra ese HOME ni los informes de AGUJA_DATA. La identidad de tailnet permanece RAM incluso si conservas otros datos. Define estas decisiones por intervención, no por comodidad accidental.
+`persistent_home=no` mantiene HOME temporal; `persistent_home=yes` puede conservar HOME y tokens en el USB **sin cifrar**. La cápsula cifrada no cifra ese HOME ni los informes de AGUJA_DATA. Desde Rescue Disk 1.0.2, el USB recupera su identidad Tailscale/Headscale guardada antes de conectar. La clave de alta sirve para el primer registro, no para crear un nodo en cada reinicio. El estado idéntico no se reescribe; los cambios se guardan atómicamente y se verifican. El perfil automático no añade desbloqueo; el cifrado conserva el suyo. Siguen aplicándose la caducidad y revocación del servidor. Define estas decisiones por intervención, no por comodidad accidental.
 
 ### Mini plantilla de entrega
 

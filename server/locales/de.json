@@ -130,7 +130,7 @@
     [
       "Schritt 5 · Eigenes Tailscale/Headscale",
       "Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC.",
-      "Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Die Live-Identität liegt im RAM und registriert sich nach Neustart erneut."
+      "Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin."
     ],
     [
       "OpenSSH ist nicht Tailscale SSH",
@@ -159,7 +159,7 @@
     ],
     [
       "Neustart: vorübergehende Netzidentität",
-      "Die Tailnet-Identität lebt im RAM. Nach Neustart sind Netzwerk, Profilentsperrung und neue Registrierung nötig. Ein Einmalschlüssel kann bereits nach dem ersten Boot verbraucht sein. Für wiederholte Starts verwende einen gültigen, begrenzten wiederverwendbaren Schlüssel in deiner Verwaltung.",
+      "Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin.",
       "Das ist unabhängig vom SSH-Hostschlüssel des USB und von HOME-Persistenz. Entferne veraltete Knoten und widerrufe unbenötigte Schlüssel. Eine frühere Verbindung beweist keine aktuelle Registrierung oder Richtlinie."
     ],
     [

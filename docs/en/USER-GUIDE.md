@@ -91,7 +91,7 @@ The Imager does not copy your entire keychain, history, hooks or MCP configurati
 
 Remote access is optional. Enable private networking, provide an authorised auth/pre-auth key and optionally a node name. An empty Headscale URL selects official Tailscale; otherwise provide your own HTTPS Headscale endpoint. The live system registers at boot after networking and profile unlock. This does not enrol the preparation PC or create a proprietary LA AGUJA tunnel.
 
-Your connecting client must belong to the same authorised tailnet and satisfy its policies. A registration key is not an SSH password or AI API key. Registration alone does not prove that ACLs allow SSH; verify a real connection from the authorised client. The live identity is kept in RAM and must register again after reboot.
+Your connecting client must belong to the same authorised tailnet and satisfy its policies. A registration key is not an SSH password or AI API key. Registration alone does not prove that ACLs allow SSH; verify a real connection from the authorised client. Since Rescue Disk 1.0.2, the USB restores its saved Tailscale/Headscale identity before connecting. The enrollment key is used for first registration, not a new node on each reboot. Unchanged state is not rewritten; changed state is saved atomically and verified. Automatic profiles add no unlock; encrypted profiles retain their existing unlock. Server expiry and revocation still apply.
 
 [↗](https://aguja.transcendenceia.net/en/docs#tailnet)
 
@@ -151,6 +151,8 @@ Use the mouse, arrows and Space to choose. A opens the review with counts and th
 Watch download bytes or APT progress when measurable, then preparation, installation, USB saving, verification and next-boot selection. Stages without a measurable total show activity, not an invented percentage. Wait for completion before removing USB.
 
 The final result remains on screen until Back to menu. There is no automatic reboot. A failed or partial operation is not reported as success. Factory and the previous generation remain available; aguja update rollback changes the next boot.
+
+In 1.0.2, normal boot avoids hashing the whole system again. Update checks start in the background and show a notice without installing anything. Confirmed jobs continue when you leave with Escape or close SSH; reopen Updates to recover progress and the result. Do not remove the USB during an active write.
 
 A writable 1.0-compatible USB, free DATA space and sufficient RAM are required. Pending generations are preserved as build bases; profile secrets and workspace are not copied into the system. Editing CFG alone does not upgrade an older USB.
 

@@ -91,7 +91,7 @@ Não copia chaveiro inteiro, histórico, hooks ou MCP. Sessões portáteis podem
 
 Acesso opcional: ativa rede privada, fornece chave auth/pre-auth autorizada e nome opcional. URL Headscale vazia usa Tailscale oficial; caso contrário, servidor HTTPS próprio. O live inscreve-se depois de rede e desbloqueio, não o PC preparador.
 
-O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real. A identidade fica em RAM e exige nova inscrição após reinício.
+O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real. Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se.
 
 [↗](https://aguja.transcendenceia.net/pt/docs#tailnet)
 
@@ -151,6 +151,8 @@ Usa rato, setas e Espaço. A revê contagens e destino exato; Enter aplica. Uma 
 Acompanha bytes ou progresso APT, preparação, instalação, gravação USB, verificação e seleção de arranque. Sem total mensurável mostra atividade, não percentagens inventadas. Espera pelo fim.
 
 O resultado fica até Voltar ao menu. Não há reinício automático nem sucesso falso após falha. Fábrica e geração anterior continuam disponíveis; aguja update rollback muda o próximo arranque.
+
+Na 1.0.2, o arranque normal evita recalcular o hash do sistema completo. A verificação em segundo plano avisa sem instalar nada. Tarefas confirmadas continuam após Escape ou fechar SSH; reabre Atualizações para recuperar progresso e resultado. Não retires o USB durante uma escrita ativa.
 
 USB gravável compatível com 1.0, espaço DATA e RAM suficientes. A geração pendente é preservada como base; segredos e workspace não são copiados. Editar CFG não atualiza um USB antigo.
 

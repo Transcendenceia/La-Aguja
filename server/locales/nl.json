@@ -121,7 +121,7 @@
     ],
     [
       "Stap 5 · Eigen Tailscale/Headscale",
-      "Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH. Identiteit in RAM, nieuwe aanmelding na herstart."
+      "Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH. Vanaf Rescue Disk 1.0.2 herstelt de USB de opgeslagen Tailscale-/Headscale-identiteit vóór het verbinden. De sleutel dient voor de eerste registratie, niet voor een nieuwe node bij iedere herstart. Ongewijzigde status wordt niet herschreven; wijzigingen worden atomair opgeslagen en gecontroleerd. Automatische profielen vragen geen extra ontgrendeling; versleutelde behouden de bestaande. Verlopen en intrekken op de server blijven gelden."
     ],
     [
       "OpenSSH versus Tailscale SSH",
@@ -145,7 +145,7 @@
     ],
     [
       "Herstart: tijdelijke identiteit",
-      "Tailnet-status staat in RAM. Na herstart zijn netwerk, ontgrendeling en nieuwe registratie nodig. Een eenmalige sleutel kan verbruikt zijn. Gebruik voor meerdere starts een geldige beperkte herbruikbare sleutel. Identiteit staat los van USB-SSH-hostsleutel en HOME-persistentie. Verwijder oude nodes en trek onnodige sleutels in. Oude verbinding bewijst geen huidige status."
+      "Vanaf Rescue Disk 1.0.2 herstelt de USB de opgeslagen Tailscale-/Headscale-identiteit vóór het verbinden. De sleutel dient voor de eerste registratie, niet voor een nieuwe node bij iedere herstart. Ongewijzigde status wordt niet herschreven; wijzigingen worden atomair opgeslagen en gecontroleerd. Automatische profielen vragen geen extra ontgrendeling; versleutelde behouden de bestaande. Verlopen en intrekken op de server blijven gelden."
     ],
     [
       "AI-login in lokale browser",

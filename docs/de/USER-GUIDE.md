@@ -91,7 +91,7 @@ Der gesamte Schlüsselbund, Verlauf, Hooks und MCP-Konfiguration werden nicht ko
 
 Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC.
 
-Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Die Live-Identität liegt im RAM und registriert sich nach Neustart erneut.
+Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin.
 
 [↗](https://aguja.transcendenceia.net/de/docs#tailnet)
 
@@ -151,6 +151,8 @@ Mit Maus, Pfeilen und Leertaste wählen. A zeigt Prüfung mit Anzahl und genauem
 Download-Bytes oder APT-Fortschritt und danach Vorbereitung, Installation, USB-Speicherung, Prüfung und Startauswahl verfolgen. Ohne messbare Gesamtmenge erscheint Aktivität statt erfundener Prozentwerte. Bis zum Ende warten.
 
 Das Ergebnis bleibt bis Zurück zum Menü sichtbar. Kein automatischer Neustart oder Erfolg bei Fehlern. Werkssystem und vorige Generation bleiben; aguja update rollback ändert den nächsten Start.
+
+In 1.0.2 entfällt beim normalen Start das erneute Hashen des gesamten Systems. Hintergrundprüfungen melden Updates, installieren aber nichts. Bestätigte Aufgaben laufen nach Escape oder dem Schließen von SSH weiter; Updates zeigt Fortschritt und Ergebnis beim erneuten Öffnen. USB während eines Schreibvorgangs nicht entfernen.
 
 Beschreibbarer 1.0-kompatibler USB, freier DATA-Speicher und genug RAM erforderlich. Die ausstehende Generation bleibt Grundlage; Geheimnisse und Workspace werden nicht kopiert. CFG-Bearbeitung aktualisiert keinen alten USB.
 

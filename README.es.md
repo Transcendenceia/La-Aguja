@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 1.0.0 · Rescue Disk 1.0.1 · Experimental · x86-64**
+**Flash Imager 1.0.0 · Rescue Disk 1.0.2 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
@@ -155,4 +155,4 @@ Cada máquina puede ser el comienzo de algo nuevo. Si LA AGUJA te ayuda a constr
 **Incluido desde 0.9.11:** importar Wi-Fi pide UAC en Windows y conserva WPA3. Rescue Disk incluye QEMU/KVM, TCG, qemu-img/qemu-nbd, OVMF y SeaBIOS. Bienvenida SSH y [guía de herramientas opcionales](runtime/TOOLBOX.md) para investigar e instalar alternativas bajo demanda, sin incluir sus descargas. [Notas de versión](docs/RELEASE-0.9.11.md).
 
 
-**Rescue 1.0.1:** Comprobar → No / Sí · RAM / Sí persistente por fila → revisar → progreso → Volver al menú. Flash Imager sigue en 1.0.0. [Guía ilustrada](docs/es/USER-GUIDE.md).
+**Rescue 1.0.2:** arranque normal más rápido, identidad tailnet persistida en el USB y actualizaciones confirmadas en segundo plano con progreso recuperable. Se conserva No / Sí · RAM / Sí persistente por fila. Flash Imager sigue en 1.0.0. [Notas de versión](docs/RELEASE-1.0.2.md) · [Guía ilustrada](docs/es/USER-GUIDE.md).

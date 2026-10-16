@@ -130,7 +130,7 @@
     [
       "Passo 5 · Tailscale/Headscale próprio",
       "Acesso opcional: ativa rede privada, fornece chave auth/pre-auth autorizada e nome opcional. URL Headscale vazia usa Tailscale oficial; caso contrário, servidor HTTPS próprio. O live inscreve-se depois de rede e desbloqueio, não o PC preparador.",
-      "O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real. A identidade fica em RAM e exige nova inscrição após reinício."
+      "O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real. Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se."
     ],
     [
       "OpenSSH não é Tailscale SSH",
@@ -159,7 +159,7 @@
     ],
     [
       "Reinícios: identidade temporária",
-      "O estado da rede privada vive em RAM. Após reinício, precisa de rede, perfil desbloqueado e nova inscrição. Uma chave de uso único pode já ter sido consumida. Para vários arranques, usa uma chave reutilizável válida e limitada.",
+      "Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se.",
       "Identidade tailnet é distinta da chave SSH do USB e da persistência HOME. Remove nós antigos e revoga chaves desnecessárias no fim. Uma ligação antiga não prova inscrição ou política atual."
     ],
     [

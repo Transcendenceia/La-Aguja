@@ -1,15 +1,20 @@
-# Validation — 1.0.2 candidate (2026-10-16)
+# Validation — Rescue Disk 1.0.2 (2026-10-16)
 
-Unpublished personal-build candidate. No physical USB flashing or public release
-was performed in this feature task. Synthetic identities only; no production
-Headscale configuration, ACL or node was changed.
+These are the final factory-image tests performed before publication. The
+feature-validation task used synthetic identities only and did not change a
+production Headscale configuration, ACL or node. Personal USB deployment is a
+separate operation; private deployment records are not release assets.
 
 ## Exact final artifacts
 
 | Artifact | SHA-256 |
 | --- | --- |
-| aguja-personal-1.0.2-amd64.img | `3a6d37cf5f2aa649862c53fe4bdcda4da012979df66fd56cb59e9f2d2a878c5a` |
-| aguja-personal-1.0.2-amd64.iso | `668e8318e5b4d0aa488434ae454edfa57a4b99851f16234de49879fbda06957f` |
+| aguja-1.0.2-amd64.img | `3a6d37cf5f2aa649862c53fe4bdcda4da012979df66fd56cb59e9f2d2a878c5a` |
+| aguja-1.0.2-amd64.iso | `668e8318e5b4d0aa488434ae454edfa57a4b99851f16234de49879fbda06957f` |
+
+Build outputs used an `aguja-personal-` filename prefix; publication renames
+these factory artifacts without changing their bytes. They contain no prepared
+owner profile or enrolled node identity. This is not an image of a user's USB.
 
 The build checked current source against installed root and packed SquashFS,
 including the new units, Python runtime, update worker and fast boot guard.

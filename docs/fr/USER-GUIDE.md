@@ -91,7 +91,7 @@ Le trousseau complet, l’historique, les hooks et la configuration MCP ne sont 
 
 L’accès distant est facultatif. Activez le réseau privé, fournissez une clé auth/pre-auth autorisée et éventuellement un nom de nœud. Une URL Headscale vide utilise Tailscale officiel ; sinon indiquez votre serveur HTTPS. Le live s’inscrit au démarrage après réseau et déverrouillage, pas le PC préparateur.
 
-Le client doit appartenir au réseau privé autorisé et respecter ses politiques. La clé d’inscription ne remplace pas le mot de passe SSH. Une inscription ne prouve pas les ACL : testez SSH depuis le client autorisé. L’identité du live est conservée en RAM et doit se réinscrire après redémarrage.
+Le client doit appartenir au réseau privé autorisé et respecter ses politiques. La clé d’inscription ne remplace pas le mot de passe SSH. Une inscription ne prouve pas les ACL : testez SSH depuis le client autorisé. Depuis Rescue Disk 1.0.2, le support restaure son identité Tailscale/Headscale avant la connexion. La clé sert à la première inscription, pas à créer un nœud à chaque redémarrage. Un état identique n’est pas réécrit ; les changements sont enregistrés atomiquement et vérifiés. Le profil automatique n’ajoute aucun déverrouillage ; le profil chiffré conserve le sien. Expiration et révocation du serveur restent applicables.
 
 [↗](https://aguja.transcendenceia.net/fr/docs#tailnet)
 
@@ -151,6 +151,8 @@ Souris, flèches et Espace sélectionnent. A ouvre la révision avec les nombres
 Suivez les octets téléchargés ou APT, puis préparation, installation, enregistrement USB, vérification et activation. Sans total mesurable, une activité est affichée, pas un pourcentage inventé. Attendez la fin.
 
 Le résultat reste affiché jusqu’à Retour au menu. Aucun redémarrage automatique ni faux succès après un échec. Usine et génération précédente restent disponibles ; aguja update rollback choisit le prochain démarrage.
+
+En 1.0.2, le démarrage normal évite de recalculer l’empreinte du système complet. La recherche en arrière-plan affiche un avis sans rien installer. Les tâches confirmées continuent après Échap ou la fermeture SSH ; rouvrez Mises à jour pour retrouver progression et résultat. Ne retirez pas le support pendant une écriture.
 
 Clé compatible 1.0 inscriptible, espace DATA et RAM suffisants requis. La génération en attente sert de base ; secrets et workspace ne sont pas copiés. Modifier CFG ne modernise pas une ancienne clé.
 

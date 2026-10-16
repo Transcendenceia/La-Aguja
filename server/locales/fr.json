@@ -130,7 +130,7 @@
     [
       "Étape 5 · Votre Tailscale ou Headscale",
       "L’accès distant est facultatif. Activez le réseau privé, fournissez une clé auth/pre-auth autorisée et éventuellement un nom de nœud. Une URL Headscale vide utilise Tailscale officiel ; sinon indiquez votre serveur HTTPS. Le live s’inscrit au démarrage après réseau et déverrouillage, pas le PC préparateur.",
-      "Le client doit appartenir au réseau privé autorisé et respecter ses politiques. La clé d’inscription ne remplace pas le mot de passe SSH. Une inscription ne prouve pas les ACL : testez SSH depuis le client autorisé. L’identité du live est conservée en RAM et doit se réinscrire après redémarrage."
+      "Le client doit appartenir au réseau privé autorisé et respecter ses politiques. La clé d’inscription ne remplace pas le mot de passe SSH. Une inscription ne prouve pas les ACL : testez SSH depuis le client autorisé. Depuis Rescue Disk 1.0.2, le support restaure son identité Tailscale/Headscale avant la connexion. La clé sert à la première inscription, pas à créer un nœud à chaque redémarrage. Un état identique n’est pas réécrit ; les changements sont enregistrés atomiquement et vérifiés. Le profil automatique n’ajoute aucun déverrouillage ; le profil chiffré conserve le sien. Expiration et révocation du serveur restent applicables."
     ],
     [
       "OpenSSH et Tailscale SSH sont différents",
@@ -159,7 +159,7 @@
     ],
     [
       "Redémarrage : une identité temporaire",
-      "L’état du réseau privé est en RAM : après redémarrage, il faut se réinscrire avec réseau et profil déverrouillé. Une clé à usage unique peut être consommée au premier démarrage. Pour plusieurs démarrages, utilisez une clé réutilisable valide et limitée selon votre administration.",
+      "Depuis Rescue Disk 1.0.2, le support restaure son identité Tailscale/Headscale avant la connexion. La clé sert à la première inscription, pas à créer un nœud à chaque redémarrage. Un état identique n’est pas réécrit ; les changements sont enregistrés atomiquement et vérifiés. Le profil automatique n’ajoute aucun déverrouillage ; le profil chiffré conserve le sien. Expiration et révocation du serveur restent applicables.",
       "Cette identité est distincte de la clé d’hôte SSH du USB et de la persistance HOME. Supprimez les nœuds obsolètes et révoquez les clés devenues inutiles. Une connexion précédente ne prouve pas l’état ou la politique actuelle."
     ],
     [

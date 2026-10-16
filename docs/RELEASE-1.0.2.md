@@ -1,6 +1,8 @@
-# 1.0.2 candidate — portable identity and background updates
+# LA AGUJA Rescue Disk 1.0.2 — portable identity and background updates
 
-This is an unpublished candidate, not a release announcement.
+Rescue Disk update. Flash Imager remains **1.0.0**; the standalone preparation
+skill remains **1.1.0**. Existing Imagers discover this image through the signed
+catalogue; installing an Imager does not itself update an already written USB.
 
 ## Changes
 
@@ -33,11 +35,13 @@ This is an unpublished candidate, not a release announcement.
 The existing Imager profile schema remains compatible. Its explanatory text now
 distinguishes 1.0.2 persistent node state from older volatile images.
 
-## Verification and deployment boundary
+## Verification
 
 See `VALIDATION-1.0.2.md` for the exact final artifacts and observed tests.
-This candidate does not modify an already provisioned USB merely by being built.
-Neither publication nor physical flashing was performed as part of this work.
+The final image passed 235 Python tests, four Imager translation checks and five
+BIOS/UEFI virtual USB boots, including a real saved background update. Automatic
+and encrypted media retained their native node identity across changed guest
+UUIDs/MACs. A provisioned USB is not upgraded merely by downloading this release.
 
 ## Español
 

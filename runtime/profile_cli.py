@@ -21,7 +21,7 @@ def main(args):
             if capsule is None:
                 raise ValueError('Perfil no abierto')
             import boot
-            boot.main(profile_override=capsule)
+            boot.main(profile_override=capsule, profile_passphrase=password)
         except Exception:
             print('No se abrió el perfil; comprueba la frase y la configuración.')
             return 1

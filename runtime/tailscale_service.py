@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-"""Opt-in tailnet enrollment. No installer, secret argv or persistent node state.
+"""Opt-in enrollment with USB-persistent native identity and async checkpoints.
 
-Identity lives in /run: reboot requires a new valid enrollment (reusable key for
-unattended repeated boots). Local Running/Online status is not an SSH/ACL test.
+Auth keys enroll the first boot; restored native state reconnects without a new
+registration. Persistence has its own saved/pending/error status, not SSH proof.
 """
 import ipaddress
 import json
@@ -147,7 +147,7 @@ def retrieve_status(binary, login_server=''):
     state = {'enabled': True, 'connected': False, 'ipv4': '', 'tailscale_ips': [],
              'backend_state': 'Unknown', 'login_server': login_server or 'https://controlplane.tailscale.com',
              'checked_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-             'identity_storage': 'volatile', 'ssh_verified': False}
+             'identity_storage': 'usb', 'ssh_verified': False}
     try:
         result = subprocess.run(cli(binary) + ['status', '--json'], capture_output=True,
                                 text=True, timeout=5)
@@ -209,6 +209,11 @@ def main():
             write_status({'enabled': True, 'connected': False, 'error': 'No se pudo iniciar el daemon privado de tailnet.'})
             return 1
         current = retrieve_status(binary, config.get('login_server', ''))
+        # A restored node may need a moment to reach the control server.
+        import tailnet_identity
+        if not current['connected'] and (current['backend_state'] in ('Running', 'Starting') or (tailnet_identity.restored() and current['backend_state'] not in ('NeedsLogin', 'NeedsMachineAuth'))):
+            write_status(current)
+            return 1
         if not current['connected']:
             success, error = connect_tailscale(binary, config)
             current = retrieve_status(binary, config.get('login_server', ''))
@@ -217,6 +222,8 @@ def main():
                 write_status(current)
                 return 1
         KEY_FILE.unlink(missing_ok=True)
+        import tailnet_identity
+        tailnet_identity.request_save()
         write_status(current)
         log('Nodo conectado a la tailnet. SSH depende del servicio y las políticas del propietario.')
         return 0

@@ -56,6 +56,12 @@ def auth_label(mode):
 def update_notice():
     try:
         import json
+        job=json.loads(Path('/run/aguja-update-job.json').read_text()) if Path('/run/aguja-update-job.json').exists() else {}
+        if job.get('state') in ('queued','running'):
+            return t('Buscando actualizaciones en segundo plano · T para ver') if job.get('operation')=='check' else t('Actualizando en segundo plano · T para ver progreso')
+        if job.get('operation')=='apply' and job.get('state') in ('done','failed'):
+            if not job.get('ok'):return t('Actualización interrumpida · T para revisar')
+            return t('Actualizaciones guardadas y verificadas · reinicio pendiente') if job.get('reboot_required') else t('Actualización terminada · T para ver')
         state=json.loads(Path('/run/aguja-update-status.json').read_text())
         return t('Actualizaciones disponibles: {count} · aguja update menu').format(count=state['available_count']) if state['available_count'] else t('Consulta de actualizaciones incompleta · aguja update menu') if state.get('partial') else ''
     except (OSError,ValueError,KeyError):return ''
@@ -247,6 +253,7 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             now = time.monotonic()
             if now >= next_network:
                 current = network.state()
+                current['update_notice'] = update_notice()
                 next_network = now+3
             if now >= next_activity:
                 live = activity_snapshot()

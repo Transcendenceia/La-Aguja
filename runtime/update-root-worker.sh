@@ -30,6 +30,9 @@ printf '#!/bin/sh\nexit 101\n' > "$root/usr/sbin/policy-rc.d"
 chmod 755 "$root/usr/sbin/policy-rc.d"
 if [[ -L $root/etc/resolv.conf ]]; then unlink "$root/etc/resolv.conf"; fi
 cp /etc/resolv.conf "$root/etc/resolv.conf"
+# Background units use UMask=0077; APT downloads drop to _apt and still need DNS.
+# This is temporary nonsecret resolver configuration, restored by the EXIT trap.
+chmod 644 "$root/etc/resolv.conf"
 if [[ $packages == selected ]]; then
  python3 - "$root" <<'PYSELECT'
 import json,re,subprocess,sys

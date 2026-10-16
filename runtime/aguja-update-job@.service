@@ -1,0 +1,16 @@
+[Unit]
+Description=LA AGUJA background update job %i
+After=aguja-boot.service
+[Service]
+Type=exec
+ExecStart=/usr/bin/python3 /usr/lib/aguja/update_jobs.py worker %i
+ExecStopPost=/usr/bin/python3 /usr/lib/aguja/update_jobs.py finalize %i
+Nice=10
+CPUWeight=20
+IOWeight=20
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+UMask=0077
+StandardInput=null
+StandardOutput=journal
+StandardError=journal

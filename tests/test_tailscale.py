@@ -50,6 +50,13 @@ class TailscaleServiceTests(unittest.TestCase):
         with patch.object(boot.subprocess, 'run', side_effect=TimeoutExpired(['synthetic'], 1)):
             self.assertFalse(boot.restart_tailnet())
 
+    def test_restored_native_identity_waits_for_control_without_reusing_consumed_key(self):
+        self.prepare()
+        import tailnet_identity
+        with patch.object(ts,'ensure_binaries',return_value=('tailscale','tailscaled')), patch.object(ts,'wait_for_network',return_value=True), patch.object(ts,'ensure_tailscaled',return_value=True), patch.object(ts,'retrieve_status',return_value={'connected':False,'backend_state':'Unknown'}), patch.object(tailnet_identity,'restored',return_value=True), patch.object(ts,'connect_tailscale') as enroll:
+            self.assertEqual(ts.main(),1)
+            enroll.assert_not_called()
+
     def test_bad_server_or_types_rejected_without_secret_output(self):
         for config in (dict(self.config, login_server='https://secret:credential@example.test'),
                        dict(self.config, login_server='http://localhost'),
@@ -111,7 +118,7 @@ class TailscaleServiceTests(unittest.TestCase):
         state = json.loads(ts.STATUS_FILE.read_text())
         self.assertTrue(state['connected'])
         self.assertFalse(state['ssh_verified'])
-        self.assertEqual(state['identity_storage'], 'volatile')
+        self.assertEqual(state['identity_storage'], 'usb')
         self.assertFalse(ts.KEY_FILE.exists())
         self.assertNotIn(self.key, ts.CONFIG_FILE.read_text() + ts.STATUS_FILE.read_text())
         self.assertEqual(ts.STATUS_FILE.stat().st_mode & 0o777, 0o644)

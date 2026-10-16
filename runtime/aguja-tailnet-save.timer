@@ -1,0 +1,8 @@
+[Unit]
+Description=Retry pending tailnet identity checkpoints
+[Timer]
+OnBootSec=15s
+OnUnitInactiveSec=30s
+Unit=aguja-tailnet-save.service
+[Install]
+WantedBy=timers.target

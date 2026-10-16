@@ -291,7 +291,8 @@ def verify_packages(root,items):
   version=run(['chroot',str(root),'/usr/bin/dpkg-query','-W','-f=${Version}',item['name']]).stdout.decode().strip()
   if version!=item['version']:raise ValueError('La versión del paquete no coincide con la selección: '+item['name'])
 
-PUBLIC_MANAGER_FILES={'usr/lib/aguja/'+n for n in ['updates.py','update_sources.py','update_tasks.py','update_progress.py','update_ui.py','display.py','cockpit.py','update-root-worker.sh','update-session-worker.sh','locale-catalog.json']}|{'usr/share/aguja/UPDATES.md','usr/share/aguja/skills/live-updates/SKILL.md'}
+PUBLIC_MANAGER_FILES={"usr/lib/aguja/"+n for n in ['updates.py', 'update_sources.py', 'update_tasks.py', 'update_progress.py', 'update_ui.py', 'update_jobs.py', 'tailnet_identity.py', 'tailscale_service.py', 'profile_cli.py', 'boot.py', 'profile.py', 'network.py', 'display.py', 'cockpit.py', 'update-root-worker.sh', 'update-session-worker.sh', 'locale-catalog.json']}|set(['usr/share/aguja/UPDATES.md', 'usr/share/aguja/skills/live-updates/SKILL.md', 'usr/lib/live/boot/9999-aguja-update.sh', 'etc/initramfs-tools/hooks/aguja-update', 'etc/systemd/system/aguja-tailscale.service', 'etc/systemd/system/aguja-tailscaled.service', 'etc/systemd/system/aguja-tailnet-save.service', 'etc/systemd/system/aguja-tailnet-save.path', 'etc/systemd/system/aguja-tailnet-save.timer', 'etc/systemd/system/aguja-update-check.service', 'etc/systemd/system/aguja-update-check.timer', 'etc/systemd/system/aguja-update-job@.service'])
+
 def refresh_manager(root,source=Path('/')):
  record=source/'usr/share/aguja/update-runtime.json'
  if not record.exists():return
@@ -308,8 +309,11 @@ def refresh_manager(root,source=Path('/')):
  for name,raw in payload.items():
   target=root/name
   if target.is_symlink():raise ValueError('Destino del actualizador inesperado')
-  target.parent.mkdir(parents=True,exist_ok=True);atomic(target,raw);target.chmod(0o755 if name.endswith(('.py','.sh')) else 0o644)
+  target.parent.mkdir(parents=True,exist_ok=True);atomic(target,raw);target.chmod(0o755 if name.endswith(('.py','.sh')) or name=='etc/initramfs-tools/hooks/aguja-update' else 0o644)
  atomic(root/'usr/share/aguja/update-runtime.json',record.read_bytes());(root/'usr/share/aguja/update-runtime.json').chmod(0o644)
+ for target,unit in [('multi-user.target','aguja-tailnet-save.path'),('timers.target','aguja-tailnet-save.timer'),('timers.target','aguja-update-check.timer')]:
+  link=root/'etc/systemd/system'/(target+'.wants')/unit;link.parent.mkdir(parents=True,exist_ok=True)
+  if not link.exists() and not link.is_symlink():link.symlink_to('../'+unit)
 
 def package_generation(packages,harnesses,package_items=None,harness_items=None):
  with lock():

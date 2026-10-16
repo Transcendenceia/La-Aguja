@@ -1,0 +1,14 @@
+[Unit]
+Description=Checkpoint this USB tailnet identity and verify durable storage
+After=aguja-boot.service
+ConditionPathExists=/run/aguja-tailnet-private/persistence.json
+ConditionPathExists=/run/aguja-tailscale/tailscaled.state
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/lib/aguja/tailnet_identity.py save
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+UMask=0077
+StandardOutput=journal
+StandardError=journal

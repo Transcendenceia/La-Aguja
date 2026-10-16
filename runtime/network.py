@@ -96,12 +96,14 @@ def state():
         # Before unlock the protected platform directory is root-private.
         # Missing/unreadable tailnet metadata must not prevent rescue/locale UI.
         pass
+    try:identity_status=json.loads(Path('/run/aguja-tailnet-persistence.json').read_text())
+    except (OSError,ValueError):identity_status={}
     return {"hostname": hostname, "addresses": addresses, "devices": devices,
             "connected": bool(addresses), "mdns": mdns,
             "ssh_active": bool(services and services[0] == "active"),
             "ssh_port": str(settings.get("ssh_port", "22")),
             "ssh_auth_mode": settings.get("ssh_auth_mode", "unknown"),
-            "tailscale": ts_status,
+            "tailscale": ts_status, "tailnet_persistence": identity_status,
             "workspace": "/data/workspace" if os.path.ismount("/data") else str(Path.home() / "workspace")}
 
 

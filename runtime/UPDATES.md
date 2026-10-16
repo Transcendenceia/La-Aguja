@@ -43,3 +43,41 @@ Older media made before 1.0 needs to be prepared again with a compatible image; 
 5. Espera el resultado. **Actualizado en RAM** se pierde al reiniciar. **Guardado en el pendrive y verificado** queda pendiente del próximo arranque, también en otra máquina. No se reinicia automáticamente. **Enter · Volver al menú** cierra el resultado.
 
 Fábrica y la generación anterior siguen disponibles. Una generación pendiente ya guardada no se descarta al preparar otra actualización. Los secretos, las sesiones y el workspace no se copian desde RAM al sistema empaquetado. Si falla una instalación temporal puede haber cambios parciales en RAM; revisa el estado antes de repetir. `rollback` y `cleanup` permanecen como herramientas avanzadas, no como siete opciones mezcladas con la consulta inicial.
+
+## Boot verification
+
+Normal boot checks generation selection and root-image availability without
+rehashing the complete root image. Download, write and activation verification
+remain mandatory. For a full pre-boot root checksum diagnostic, temporarily add
+`aguja.verify=full` to the kernel command line in GRUB. This detects changes since
+activation, at the cost of reading the entire root image before startup.
+
+## Background work and startup notices (1.0.2)
+
+A read-only update check starts shortly after boot, without delaying the panel.
+The panel reports available updates or incomplete/offline checks. Nothing installs
+without your selection and confirmation. Opening Updates reuses the inventory.
+
+Confirmed work runs in a separate system service, with lower CPU/I/O priority.
+Press Escape to return to other tools; reopen Updates to see progress and the
+verified result. Closing a local menu or SSH session does not cancel the job.
+Keep the USB connected and do not power off while a write is active. Persisted
+changes become active only after the existing full verification and commit; a
+restart remains your choice. A failed/interrupted task is reported as such.
+
+## Portable tailnet identity (1.0.2)
+
+The first connected enrollment triggers an immediate background identity
+checkpoint on this boot USB. Further native state changes are observed, with a
+retry timer and a final checkpoint during clean daemon shutdown. Success means
+atomic file write, fsync and readback all completed; until then the panel says
+pending/saving, or reports an error. Unchanged state does not rewrite the USB.
+
+The next boot restores that native identity before starting the daemon, even on
+another computer. It does not enroll a replacement just because a saved state
+cannot be read. Automatic profiles restore without prompts. For an encrypted
+profile the checkpoint is encrypted too and restores only after the existing
+local profile unlock; its key stays in private RAM, never on the USB. Node
+revocation/expiry still applies. Configuration, identity and workspace are not
+included in clean public system generations. Do not run cloned copies of the
+same provisioned identity simultaneously.

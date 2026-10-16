@@ -8,35 +8,59 @@ from i18n import t
 
 class Model:
  def __init__(self):
-  self.target=None;self.mode=None;self.phase='home';self.inventory=None;self.items=[];self.choices={};self.selected=0;self.offset=0;self.event={};self.events=deque(maxlen=8);self.result=None;self.error='';self.focus=0;self.pending=queue.Queue();self.thread=None
+  self.target=None;self.mode=None;self.phase='home';self.inventory=None;self.items=[];self.choices={};self.selected=0;self.offset=0;self.event={};self.events=deque(maxlen=8);self.result=None;self.error='';self.focus=0;self.pending=queue.Queue();self.thread=None;self.job=None;self.next_poll=0
+  self.attach()
  @property
  def busy(self):return self.phase in ('checking','applying')
+ def inventory_result(self,value):
+  self.inventory=value;self.items=tasks.rows(value);self.choices={r['id']:'no' for r in self.items};self.selected=0;self.offset=0;self.focus=0;self.phase='list'
+ def attach(self):
+  import update_jobs as jobs
+  try:
+   record=jobs.status()
+   if record:
+    self.job=record['id'];self.phase='checking' if record['operation']=='check' else 'applying';self.accept(record);return
+   inventory=jobs.cached_inventory()
+   if inventory:self.inventory_result(inventory)
+  except (OSError,ValueError,KeyError):pass
  def start(self,operation):
   if self.busy:return
   if operation=='apply':
    chosen=tasks.plan(self.items,self.choices)
    if not any(chosen.values()):self.error='Selecciona al menos una actualización.';return
-  self.phase='checking' if operation=='check' else 'applying';self.error='';self.event={};self.events.clear();self.result=None
+  self.phase='checking' if operation=='check' else 'applying';self.error='';self.event={};self.events.clear();self.result=None;self.job=None
   items=[dict(r) for r in self.items];choices=dict(self.choices)
   def worker():
    try:
-    with progress.listen(lambda e:self.pending.put(('event',e))):result=updates.check() if operation=='check' else tasks.apply(items,choices)
-    self.pending.put((operation,result))
+    import update_jobs as jobs
+    self.pending.put(('job',jobs.submit(operation,items,choices)))
    except Exception as e:
     self.pending.put(('error',str(e) if isinstance(e,ValueError) else 'No se completó esta operación. Revisa el estado antes de reintentar.'))
-  self.thread=threading.Thread(target=worker,name='aguja-update',daemon=False);self.thread.start()
+  # This thread only submits to systemd. Work survives closing this UI or SSH.
+  self.thread=threading.Thread(target=worker,name='aguja-update-submit',daemon=True);self.thread.start()
+ def accept(self,record):
+  event=record.get('event')
+  if event:
+   self.event=event
+   if event.get('mode'):self.mode=event['mode']
+   if not self.events or event!=self.events[-1]:self.events.append(event)
+  if record['state'] in ('done','failed'):
+   result=record.get('result',{})
+   if record['operation']=='check' and record['state']=='done':self.inventory_result(result)
+   else:self.result=result;self.phase='done';self.focus=0
  def drain(self):
   while True:
    try:kind,value=self.pending.get_nowait()
-   except queue.Empty:return
-   if kind=='event':
-    self.event=value
-    if value.get('mode'):self.mode=value['mode']
-    if not self.events or (value.get('stage'),value.get('detail'))!=(self.events[-1].get('stage'),self.events[-1].get('detail')):self.events.append(value)
-   elif kind=='check':
-    self.inventory=value;self.items=tasks.rows(value);self.choices={r['id']:'no' for r in self.items};self.selected=0;self.offset=0;self.focus=0;self.phase='list'
-   elif kind=='apply':self.result=value;self.phase='done';self.focus=0
+   except queue.Empty:break
+   if kind=='job':self.job=value['id'];self.accept(value)
    else:self.error=value;self.result={'ok':False,'error':value};self.phase='done'
+  if self.job and self.busy and time.monotonic()>=self.next_poll:
+   self.next_poll=time.monotonic()+.5
+   try:
+    import update_jobs as jobs
+    record=jobs.status()
+    if record and record['id']==self.job:self.accept(record)
+   except (OSError,ValueError,KeyError):pass
  def select(self,index,mode):
   if self.phase!='list' or not 0<=index<len(self.items):return
   row=self.items[index]
@@ -47,7 +71,7 @@ class Model:
   row=self.items[self.selected];modes=('no','persistent') if row['kind']=='release' else tasks.MODES
   self.select(self.selected,modes[(modes.index(self.choices[row['id']])+direction)%len(modes)])
  def back(self):
-  if self.busy:return False
+  if self.busy:return self.job is not None
   if self.phase=='home':return True
   self.phase='home';self.error='';return False
 
@@ -157,7 +181,8 @@ def menu(language=None):
       for event in list(model.events)[-6:]:
        if y>=bottom:break
        write(y,tr(STAGES.get(event.get('stage'),'Iniciando'))+' · '+text_for_event(event),display.DIM);y+=line
-      write(fb.height-round(65*scale),tr('Espera a que termine; no retires el pendrive.'),display.GOLD)
+      write(fb.height-round(105*scale),tr('Puedes seguir usando LA AGUJA. No apagues ni retires el USB.'),display.GOLD)
+      button(tr('Esc · Continuar en segundo plano'),'exit',margin,fb.height-round(65*scale),round(450*scale),enabled=model.job is not None)
      elif model.phase=='done':
       result=model.result or {};ok=result.get('ok',False);write(y,tr('Actualización terminada' if ok else 'La actualización no terminó'),display.GREEN if ok else display.RED);y+=line*1.5
       if result.get('error'):write(y,tr(result['error']),display.RED);y+=line*2
@@ -166,6 +191,7 @@ def menu(language=None):
       if result.get('reboot_required'):write(y,tr('Reinicio pendiente: fábrica y versión anterior siguen disponibles.'));y+=line
       if result.get('session_may_be_partial'):write(y,tr('Puede haber cambios parciales en RAM; revisa antes de reintentar.'),display.GOLD);y+=line
       button(tr('Enter · Volver al menú'),'exit',margin,max(y+line,fb.height-round(85*scale)),round(350*scale))
+      button(tr('C · Comprobar'),'check',margin+round(370*scale),max(y+line,fb.height-round(85*scale)),round(230*scale))
      if model.error and model.phase!='done':write(fb.height-round(103*scale),tr(model.error),display.RED)
      if pointer and pointer.position:
       x,y=pointer.position;canvas.ellipse((x-4,y-4,x+4,y+4),fill=display.WHITE)
@@ -194,14 +220,14 @@ def menu(language=None):
     elif model.busy:
      line(3,'|/-\\'[int(time.monotonic()*5)%4]+' '+tr(STAGES.get(model.event.get('stage'),'Iniciando')));line(5,text_for_event(model.event));line(6,measurement(model.event))
      for n,event in enumerate(list(model.events)[-max(1,h-12):],8):line(n,tr(STAGES.get(event.get('stage'),'Iniciando'))+' · '+text_for_event(event))
-     line(h-3,tr('Espera a que termine; no retires el pendrive.'))
+     line(h-3,tr('Esc · Continuar en segundo plano'));line(h-2,tr('Puedes seguir usando LA AGUJA. No apagues ni retires el USB.'))
     else:
      result=model.result or {};line(3,tr('Actualización terminada' if result.get('ok') else 'La actualización no terminó'))
      line(5,tr(result.get('error','Reinicio pendiente: fábrica y versión anterior siguen disponibles.' if result.get('reboot_required') else 'Actualizado en RAM · solo esta sesión')));line(h-3,tr('Enter · Volver al menú'))
     if model.error:line(h-2,tr(model.error))
     screen.refresh()
    def action(value):
-    if model.busy:return False
+    if model.busy:return value=='exit' and model.job is not None
     if isinstance(value,tuple):model.select(value[1],value[2]);return False
     if value=='check':model.start('check')
     elif value=='review':
@@ -224,7 +250,7 @@ def menu(language=None):
     if model.busy or signature!=rendered:draw();rendered=signature
     if pointer:
      for e in pointer.poll():
-      if e['action']=='back' and not model.busy:
+      if e['action']=='back':
        if model.back():return 0
       elif e['action'] in ('wheel-up','wheel-down') and model.phase=='list' and model.items:
        model.selected=max(0,min(len(model.items)-1,model.selected+(-1 if e['action']=='wheel-up' else 1)))
@@ -235,14 +261,16 @@ def menu(language=None):
          break
     try:key=screen.getch()
     except KeyboardInterrupt:
-     if model.busy:continue
+     if model.busy and model.job is None:continue
      return 0
-    if model.busy:continue
+    if model.busy:
+     if key in (27,ord('q'),ord('Q')) and model.job is not None:return 0
+     continue
     if key==27:
      if model.phase=='done':return 0
      if model.phase=='confirm':model.phase='list'
      elif model.back():return 0
-    elif key in (ord('c'),ord('C')) and model.phase in ('home','list'):action('check')
+    elif key in (ord('c'),ord('C')) and model.phase in ('home','list','done'):action('check')
     elif key in (10,13):
      if model.phase=='home':action('check')
      elif model.phase=='list':action('review')

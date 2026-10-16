@@ -70,7 +70,7 @@ def restart_tailnet():
         return False
 
 
-def main(profile_override=None):
+def main(profile_override=None, profile_passphrase=None):
     # live-boot mounts only its boot medium. No probing/mounting internal filesystems.
     medium = Path("/run/live/medium")
     # DATA must belong to the same physical disk as our boot partition.
@@ -173,6 +173,8 @@ def main(profile_override=None):
         secure_write('/etc/NetworkManager/system-connections/aguja-ethernet.nmconnection',
                      platform_profile.ethernet_keyfile(capsule['network']['ethernet']))
         platform_profile.apply(capsule, tailnet_state='/run/aguja-tailnet-private')
+        import tailnet_identity
+        tailnet_identity.configure(capsule, capsule_path.read_bytes(), profile_passphrase)
         # Tailnet credentials live separately, never in this owner-writable tree.
         run('chown', '-R', 'aguja:aguja', '/run/aguja-platform')
     subprocess.run(["rfkill", "unblock", "wifi"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -197,6 +199,8 @@ def main(profile_override=None):
         platform.mkdir(parents=True, exist_ok=True, mode=0o711)
         platform_profile.private_write(platform / 'tailscale.json', json.dumps({'enabled': False}))
         platform_profile.apply_tailnet({'enabled': False})
+        import tailnet_identity
+        tailnet_identity.configure(None, b'{}')
         (platform / 'tailscale.key').unlink(missing_ok=True)
     if profile_override:
         run('systemctl', 'restart', 'ssh')

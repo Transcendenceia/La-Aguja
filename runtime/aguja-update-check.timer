@@ -1,9 +1,9 @@
 [Unit]
 Description=LA AGUJA public update notifications
 [Timer]
-OnBootSec=10min
-OnUnitActiveSec=1d
-RandomizedDelaySec=1min
+OnBootSec=15s
+OnUnitInactiveSec=1h
+RandomizedDelaySec=5s
 Unit=aguja-update-check.service
 [Install]
 WantedBy=timers.target

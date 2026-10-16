@@ -1,0 +1,8 @@
+[Unit]
+Description=Observe native tailnet identity changes without polling the USB
+After=aguja-boot.service
+[Path]
+PathChanged=/run/aguja-tailscale/tailscaled.state
+Unit=aguja-tailnet-save.service
+[Install]
+WantedBy=multi-user.target

@@ -25,7 +25,7 @@ p=Path(sys.argv[1]);s=p.read_text();call='\taguja_verify_generation "${livefs_ro
 if call not in s:s=s.replace('\tVerify_checksums "${livefs_root}"',call+'\tVerify_checksums "${livefs_root}"',1)
 assert call in s;p.write_text(s)
 PYGUARD
-install -m 644 "$PROJECT/runtime/aguja-update-check.service" "$PROJECT/runtime/aguja-update-check.timer" "$ROOT/etc/systemd/system/"
+install -m 644 "$PROJECT/runtime/aguja-update-check.service" "$PROJECT/runtime/aguja-update-check.timer" "$PROJECT/runtime/aguja-update-job@.service" "$PROJECT/runtime/aguja-tailnet-save.service" "$PROJECT/runtime/aguja-tailnet-save.path" "$PROJECT/runtime/aguja-tailnet-save.timer" "$ROOT/etc/systemd/system/"
 # runtime/*.py is the canonical module inventory, also verified by build-image.
 install -m 755 "$PROJECT/runtime/"*.py "$ROOT/usr/lib/aguja/"
 install -m 644 "$PROJECT/runtime/console-history.conf" "$ROOT/usr/lib/aguja/"
@@ -74,6 +74,6 @@ if [ "$(id -un)" = aguja ] && [ -t 0 ] && [ -z "${AGUJA_COCKPIT:-}" ]; then
     if [ -n "${SSH_CONNECTION:-}" ]; then aguja welcome --remote; else aguja welcome; fi
 fi
 EOF
-chroot "$ROOT" systemctl enable aguja-boot.service avahi-daemon.service aguja-activity.service aguja-tailscale.service aguja-network-check.timer aguja-update-check.timer
+chroot "$ROOT" systemctl enable aguja-boot.service avahi-daemon.service aguja-activity.service aguja-tailscale.service aguja-network-check.timer aguja-update-check.timer aguja-tailnet-save.path aguja-tailnet-save.timer
 
 python3 "$PROJECT/scripts/update-runtime-manifest.py" "$ROOT"

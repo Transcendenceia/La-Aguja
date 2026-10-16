@@ -1157,7 +1157,19 @@
       "Usa aguja update check --json para una consulta no interactiva.": "Use aguja update check --json for a non-interactive check.",
       "Verificando las versiones de esta sesión": "Verifying this session’s versions",
       "Verificando los archivos guardados": "Verifying saved files",
-      "Destino persistente: {device}": "Persistent target: {device}"
+      "Destino persistente: {device}": "Persistent target: {device}",
+      "Actualizaciones guardadas y verificadas · reinicio pendiente": "Updates saved and verified · restart pending",
+      "Actualización interrumpida · T para revisar": "Update interrupted · T to review",
+      "Actualización terminada · T para ver": "Update finished · T to view",
+      "Actualizando en segundo plano · T para ver progreso": "Updating in background · T for progress",
+      "Buscando actualizaciones en segundo plano · T para ver": "Checking updates in background · T to view",
+      "Esc · Continuar en segundo plano": "Esc · Continue in background",
+      "Guardando identidad tailnet": "Saving tailnet identity",
+      "Identidad tailnet pendiente": "Tailnet identity not yet saved",
+      "Identidad tailnet preservada": "Tailnet identity preserved",
+      "No se pudo preservar la identidad tailnet": "Could not preserve tailnet identity",
+      "Puedes seguir usando LA AGUJA. No apagues ni retires el USB.": "You can keep using LA AGUJA. Do not power off or unplug the USB.",
+      "Con Rescue Disk 1.0.2, espera a «Identidad tailnet preservada» para reutilizar el mismo nodo desde otro equipo. Las versiones anteriores conservan la identidad solo en RAM y necesitan una clave reutilizable vigente para cada arranque.": "With Rescue Disk 1.0.2, wait for “Tailnet identity preserved” before reusing the same node on another computer. Earlier versions keep identity only in RAM and need a valid reusable key for each boot."
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -2164,7 +2176,19 @@
       "Usa aguja update check --json para una consulta no interactiva.": "非交互检查请使用 aguja update check --json。",
       "Verificando las versiones de esta sesión": "正在验证本次会话版本",
       "Verificando los archivos guardados": "正在验证已保存文件",
-      "Destino persistente: {device}": "持久保存目标：{device}"
+      "Destino persistente: {device}": "持久保存目标：{device}",
+      "Actualizaciones guardadas y verificadas · reinicio pendiente": "更新已保存并验证 · 等待重启",
+      "Actualización interrumpida · T para revisar": "更新中断 · 按 T 查看",
+      "Actualización terminada · T para ver": "更新完成 · 按 T 查看",
+      "Actualizando en segundo plano · T para ver progreso": "正在后台更新 · 按 T 查看进度",
+      "Buscando actualizaciones en segundo plano · T para ver": "正在后台检查更新 · 按 T 查看",
+      "Esc · Continuar en segundo plano": "Esc · 在后台继续",
+      "Guardando identidad tailnet": "正在保存 tailnet 身份",
+      "Identidad tailnet pendiente": "tailnet 身份尚未保存",
+      "Identidad tailnet preservada": "tailnet 身份已保存",
+      "No se pudo preservar la identidad tailnet": "无法保存 tailnet 身份",
+      "Puedes seguir usando LA AGUJA. No apagues ni retires el USB.": "可以继续使用 LA AGUJA。请勿关机或拔出 USB。",
+      "Con Rescue Disk 1.0.2, espera a «Identidad tailnet preservada» para reutilizar el mismo nodo desde otro equipo. Las versiones anteriores conservan la identidad solo en RAM y necesitan una clave reutilizable vigente para cada arranque.": "使用 Rescue Disk 1.0.2 时，请等待“tailnet 身份已保存”，然后才能在另一台计算机上复用同一节点。早期版本仅在内存中保存身份，每次启动都需要有效的可复用密钥。"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -3171,7 +3195,19 @@
       "Usa aguja update check --json para una consulta no interactiva.": "Utilisez aguja update check --json sans interaction.",
       "Verificando las versiones de esta sesión": "Vérification des versions de cette session",
       "Verificando los archivos guardados": "Vérification des fichiers enregistrés",
-      "Destino persistente: {device}": "Destination persistante : {device}"
+      "Destino persistente: {device}": "Destination persistante : {device}",
+      "Actualizaciones guardadas y verificadas · reinicio pendiente": "Mises à jour enregistrées et vérifiées · redémarrage requis",
+      "Actualización interrumpida · T para revisar": "Mise à jour interrompue · T pour consulter",
+      "Actualización terminada · T para ver": "Mise à jour terminée · T pour consulter",
+      "Actualizando en segundo plano · T para ver progreso": "Mise à jour en arrière-plan · T pour la progression",
+      "Buscando actualizaciones en segundo plano · T para ver": "Recherche de mises à jour en arrière-plan · T pour consulter",
+      "Esc · Continuar en segundo plano": "Échap · Continuer en arrière-plan",
+      "Guardando identidad tailnet": "Enregistrement de l’identité tailnet",
+      "Identidad tailnet pendiente": "Identité tailnet pas encore enregistrée",
+      "Identidad tailnet preservada": "Identité tailnet conservée",
+      "No se pudo preservar la identidad tailnet": "Impossible de conserver l’identité tailnet",
+      "Puedes seguir usando LA AGUJA. No apagues ni retires el USB.": "Vous pouvez continuer à utiliser LA AGUJA. Ne pas éteindre ni retirer la clé USB.",
+      "Con Rescue Disk 1.0.2, espera a «Identidad tailnet preservada» para reutilizar el mismo nodo desde otro equipo. Las versiones anteriores conservan la identidad solo en RAM y necesitan una clave reutilizable vigente para cada arranque.": "Avec Rescue Disk 1.0.2, attendez « Identité tailnet conservée » avant de réutiliser le même nœud sur un autre ordinateur. Les versions antérieures gardent l’identité uniquement en RAM et nécessitent une clé réutilisable valide à chaque démarrage."
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -4178,7 +4214,19 @@
       "Usa aguja update check --json para una consulta no interactiva.": "Usa aguja update check --json para consulta não interativa.",
       "Verificando las versiones de esta sesión": "A verificar as versões desta sessão",
       "Verificando los archivos guardados": "A verificar os ficheiros guardados",
-      "Destino persistente: {device}": "Destino persistente: {device}"
+      "Destino persistente: {device}": "Destino persistente: {device}",
+      "Actualizaciones guardadas y verificadas · reinicio pendiente": "Atualizações salvas e verificadas · reinício pendente",
+      "Actualización interrumpida · T para revisar": "Atualização interrompida · T para revisar",
+      "Actualización terminada · T para ver": "Atualização concluída · T para ver",
+      "Actualizando en segundo plano · T para ver progreso": "Atualizando em segundo plano · T para ver progresso",
+      "Buscando actualizaciones en segundo plano · T para ver": "Buscando atualizações em segundo plano · T para ver",
+      "Esc · Continuar en segundo plano": "Esc · Continuar em segundo plano",
+      "Guardando identidad tailnet": "Salvando identidade tailnet",
+      "Identidad tailnet pendiente": "Identidade tailnet ainda não salva",
+      "Identidad tailnet preservada": "Identidade tailnet preservada",
+      "No se pudo preservar la identidad tailnet": "Não foi possível preservar a identidade tailnet",
+      "Puedes seguir usando LA AGUJA. No apagues ni retires el USB.": "Você pode continuar usando LA AGUJA. Não desligue nem retire o USB.",
+      "Con Rescue Disk 1.0.2, espera a «Identidad tailnet preservada» para reutilizar el mismo nodo desde otro equipo. Las versiones anteriores conservan la identidad solo en RAM y necesitan una clave reutilizable vigente para cada arranque.": "Com Rescue Disk 1.0.2, espere «Identidade tailnet preservada» antes de reutilizar o mesmo nó em outro computador. Versões anteriores mantêm a identidade apenas na RAM e precisam de uma chave reutilizável válida a cada inicialização."
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -5185,7 +5233,19 @@
       "Usa aguja update check --json para una consulta no interactiva.": "Für nichtinteraktive Prüfung aguja update check --json verwenden.",
       "Verificando las versiones de esta sesión": "Versionen dieser Sitzung werden geprüft",
       "Verificando los archivos guardados": "Gespeicherte Dateien werden geprüft",
-      "Destino persistente: {device}": "Dauerhaftes Ziel: {device}"
+      "Destino persistente: {device}": "Dauerhaftes Ziel: {device}",
+      "Actualizaciones guardadas y verificadas · reinicio pendiente": "Updates gespeichert und geprüft · Neustart ausstehend",
+      "Actualización interrumpida · T para revisar": "Update unterbrochen · T zum Prüfen",
+      "Actualización terminada · T para ver": "Update abgeschlossen · T zum Anzeigen",
+      "Actualizando en segundo plano · T para ver progreso": "Update im Hintergrund · T für Fortschritt",
+      "Buscando actualizaciones en segundo plano · T para ver": "Updatesuche im Hintergrund · T zum Anzeigen",
+      "Esc · Continuar en segundo plano": "Esc · Im Hintergrund fortsetzen",
+      "Guardando identidad tailnet": "Tailnet-Identität wird gespeichert",
+      "Identidad tailnet pendiente": "Tailnet-Identität noch nicht gespeichert",
+      "Identidad tailnet preservada": "Tailnet-Identität gesichert",
+      "No se pudo preservar la identidad tailnet": "Tailnet-Identität konnte nicht gesichert werden",
+      "Puedes seguir usando LA AGUJA. No apagues ni retires el USB.": "LA AGUJA kann weiter genutzt werden. Nicht ausschalten oder USB entfernen.",
+      "Con Rescue Disk 1.0.2, espera a «Identidad tailnet preservada» para reutilizar el mismo nodo desde otro equipo. Las versiones anteriores conservan la identidad solo en RAM y necesitan una clave reutilizable vigente para cada arranque.": "Warte bei Rescue Disk 1.0.2 auf „Tailnet-Identität gesichert“, bevor derselbe Knoten an einem anderen Computer genutzt wird. Frühere Versionen speichern die Identität nur im RAM und benötigen bei jedem Start einen gültigen wiederverwendbaren Schlüssel."
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -6192,7 +6252,19 @@
       "Usa aguja update check --json para una consulta no interactiva.": "Usa aguja update check --json per una verifica non interattiva.",
       "Verificando las versiones de esta sesión": "Verifica delle versioni di questa sessione",
       "Verificando los archivos guardados": "Verifica dei file salvati",
-      "Destino persistente: {device}": "Destinazione persistente: {device}"
+      "Destino persistente: {device}": "Destinazione persistente: {device}",
+      "Actualizaciones guardadas y verificadas · reinicio pendiente": "Aggiornamenti salvati e verificati · riavvio in attesa",
+      "Actualización interrumpida · T para revisar": "Aggiornamento interrotto · T per verificare",
+      "Actualización terminada · T para ver": "Aggiornamento completato · T per vedere",
+      "Actualizando en segundo plano · T para ver progreso": "Aggiornamento in background · T per avanzamento",
+      "Buscando actualizaciones en segundo plano · T para ver": "Ricerca aggiornamenti in background · T per vedere",
+      "Esc · Continuar en segundo plano": "Esc · Continua in background",
+      "Guardando identidad tailnet": "Salvataggio identità tailnet",
+      "Identidad tailnet pendiente": "Identità tailnet non ancora salvata",
+      "Identidad tailnet preservada": "Identità tailnet preservata",
+      "No se pudo preservar la identidad tailnet": "Impossibile preservare l’identità tailnet",
+      "Puedes seguir usando LA AGUJA. No apagues ni retires el USB.": "Puoi continuare a usare LA AGUJA. Non spegnere o rimuovere la USB.",
+      "Con Rescue Disk 1.0.2, espera a «Identidad tailnet preservada» para reutilizar el mismo nodo desde otro equipo. Las versiones anteriores conservan la identidad solo en RAM y necesitan una clave reutilizable vigente para cada arranque.": "Con Rescue Disk 1.0.2, attendi «Identità tailnet preservata» prima di riutilizzare lo stesso nodo su un altro computer. Le versioni precedenti conservano l’identità solo in RAM e richiedono una chiave riutilizzabile valida a ogni avvio."
     }
   }
 }

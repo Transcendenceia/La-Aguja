@@ -246,7 +246,7 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
         return x0+m*.65,y0+round(73*s),x1-m*.65,y1-m*.65
 
     text(m, m*.6, t('LA AGUJA RESCUE DISK'), CYAN, title_font, width-m*2)
-    text(m, 53*s, t('Una entrada pequeña. Control completo.'), DIM, small)
+    text(m, 53*s, current.get('update_notice') or t('Una entrada pequeña. Control completo.'), GOLD if current.get('update_notice') else DIM, small, max(100,width-m*2-310*s))
     ip = current.get('addresses', [{}])[0].get('ip', '') if current.get('addresses') else ''
     if ip:
         port = current.get('ssh_port',22)
@@ -263,7 +263,9 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
             gx = right+idx*145*s
             d.rounded_rectangle((gx,74*s,gx+120*s,77*s),radius=1,fill=EDGE)
             d.rounded_rectangle((gx,74*s,gx+120*s*max(0,min(100,stats.get(key,0)))/100,77*s),radius=1,fill=CYAN if key=='cpu' else GOLD)
-        text(right, 87*s, current.get('mdns') or t('mDNS esperando'), DIM, small)
+        saved=current.get('tailnet_persistence',{}).get('state')
+        identity_label={'saved':t('Identidad tailnet preservada'),'pending':t('Identidad tailnet pendiente'),'saving':t('Guardando identidad tailnet'),'error':t('No se pudo preservar la identidad tailnet')}
+        text(right, 87*s, identity_label.get(saved) or current.get('mdns') or t('mDNS esperando'), GOLD if saved in ('pending','saving','error') else DIM, small)
 
     if not geo['sidebar']:
         pose = expression_at(tick,bool(processes),False)

@@ -7,7 +7,8 @@ ConditionPathExists=/run/aguja-tailnet-private/config.json
 StartLimitIntervalSec=0
 
 [Service]
-Type=oneshot
+# Connect in the background: offline/control-server waits must not delay getty.
+Type=exec
 RemainAfterExit=yes
 ExecStart=/usr/bin/python3 /usr/lib/aguja/tailscale_service.py
 # Network may arrive later or the control server may approve the node later.

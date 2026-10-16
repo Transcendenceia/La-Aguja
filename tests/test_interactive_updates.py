@@ -36,20 +36,23 @@ class Selection(unittest.TestCase):
   for name,version in [('curl;id','1.1'),('curl','1.1\nBAD=yes'),('--root','1.0')]:
    with self.assertRaises(ValueError):tasks.rows({'packages':[{'name':name,'latest':version,'current':'1'}]})
  def test_ui_requires_check_selection_and_confirmation_without_auto_apply(self):
-  m=ui.Model();m.pending.put(('check',{'packages':[{'name':'curl','latest':'1.1','current':'1.0'}]}));m.drain()
+  import update_jobs
+  with patch.object(update_jobs,'status',return_value=None),patch.object(update_jobs,'cached_inventory',return_value=None):m=ui.Model()
+  m.inventory_result({'packages':[{'name':'curl','latest':'1.1','current':'1.0'}]})
   self.assertEqual(m.phase,'list');self.assertEqual(m.choices,{'package:curl':'no'});m.start('apply');self.assertIsNone(m.thread)
   m.cycle();self.assertEqual(m.choices['package:curl'],'session');m.cycle();self.assertEqual(m.choices['package:curl'],'persistent')
-  m.phase='applying';self.assertFalse(m.back());self.assertEqual(m.phase,'applying')
-  m.pending.put(('apply',{'ok':True,'results':[]}));m.drain();self.assertEqual(m.phase,'done');self.assertEqual(m.phase,'done')
+  m.phase='applying';self.assertFalse(m.back());m.job='a'*32;self.assertTrue(m.back());self.assertEqual(m.phase,'applying')
+  m.accept({'operation':'apply','state':'done','result':{'ok':True,'results':[]}});self.assertEqual(m.phase,'done')
  def test_release_never_cycles_to_an_unsupported_ram_update(self):
   m=ui.Model();m.phase='list';m.items=[self.items[-1]];m.choices={'release:rescue':'no'};m.cycle();self.assertEqual(m.choices['release:rescue'],'persistent');m.cycle();self.assertEqual(m.choices['release:rescue'],'no')
- def test_busy_model_ignores_second_job_and_completion_waits_for_worker(self):
-  import threading
-  entered=threading.Event();release=threading.Event();m=ui.Model()
-  def slow():entered.set();release.wait(2);return {'packages':[]}
-  with patch.object(u,'check',side_effect=slow):
+ def test_busy_model_ignores_second_submission_but_can_leave_progress(self):
+  import threading,update_jobs
+  entered=threading.Event();release=threading.Event()
+  with patch.object(update_jobs,'status',return_value=None),patch.object(update_jobs,'cached_inventory',return_value=None):m=ui.Model()
+  def slow(*args):entered.set();release.wait(2);return {'id':'a'*32,'operation':'check','state':'running'}
+  with patch.object(update_jobs,'submit',side_effect=slow):
    m.start('check');self.assertTrue(entered.wait(1));m.start('check');self.assertEqual(m.phase,'checking');self.assertFalse(m.back());release.set();m.thread.join(2);m.drain()
-  self.assertEqual(m.phase,'list');self.assertEqual(m.items,[])
+  self.assertEqual(m.job,'a'*32);self.assertEqual(m.phase,'checking')
  def test_stream_progress_never_forwards_unknown_raw_process_text(self):
   events=[]
   with progress.listen(events.append):
@@ -81,6 +84,8 @@ class PrivateGeneration(unittest.TestCase):
     path=src/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(('PUBLIC '+name).encode());path.chmod(0o644);files[name]=u.hashfile(path)
    record.write_text(json.dumps({'schema':1,'files':files}));record.chmod(0o644);secret=src/'home/aguja/private';secret.parent.mkdir(parents=True);secret.write_text('SYNTHETIC-SECRET')
    u.refresh_manager(dest,src);self.assertFalse((dest/'home').exists());self.assertEqual((dest/'usr/lib/aguja/updates.py').read_bytes(),(src/'usr/lib/aguja/updates.py').read_bytes())
+   self.assertEqual((dest/'etc/initramfs-tools/hooks/aguja-update').stat().st_mode & 0o777,0o755)
+   self.assertEqual((dest/'etc/systemd/system/aguja-update-job@.service').stat().st_mode & 0o777,0o644)
    (src/'usr/lib/aguja/updates.py').write_text('CHANGED')
    with self.assertRaises(ValueError):u.refresh_manager(p/'rejected',src)
    self.assertFalse((p/'rejected').exists())

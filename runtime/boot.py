@@ -89,30 +89,38 @@ def main(profile_override=None, profile_passphrase=None):
     Path("/config").mkdir(exist_ok=True)
     if cfg and not os.path.ismount("/config"):
         run("mount", "-o", "rw,umask=0077,nosuid,nodev,noexec", partition_view(cfg, source), "/config")
-    conf = Path("/config/aguja.conf") if cfg else medium / "aguja.conf"
-    if not conf.is_file():
-        conf = Path("/etc/aguja/aguja.conf")
-    c = load(conf)
+    import profile_vault
     import config_transaction
-    if cfg: config_transaction.recover(Path('/config'))
+    if cfg:
+        config_transaction.recover(Path('/config'))
     import profile as platform_profile
-    capsule_path = Path('/config/aguja-profile.json')
-    capsule = profile_override
-    locked = False
-    if capsule is None and capsule_path.is_file():
-        capsule = platform_profile.open_capsule(capsule_path.read_bytes())
-        locked = capsule is None
+    # Public keyboard preferences are needed to type the private unlock phrase.
+    platform_profile.apply_locale(None)
+    capsule, capsule_path, unlock_password, protection = profile_vault.gate()
+    if profile_override is not None:
+        capsule = profile_override
+    profile_passphrase = profile_passphrase or unlock_password
+    conf = profile_vault.settings_root() / 'aguja.conf' if cfg else medium / 'aguja.conf'
+    if not conf.is_file():
+        conf = Path('/etc/aguja/aguja.conf')
+    c = load(conf)
+    locked = False  # gate must return successfully before access is configured
     if capsule:
         c = platform_profile.configuration(capsule, c)
     platform_profile.apply_locale(capsule)
     os.environ.update(platform_profile.locale_environment())
-    if capsule_path.is_file() and json.loads(capsule_path.read_bytes()).get('protection') == 'encrypted':
+    if protection in ('luks2', 'legacy-aes'):
         # A protected profile must never silently spill decrypted native secrets
         # into a legacy persistent HOME on the unencrypted DATA filesystem.
         c['persistent_home'] = 'no'
-    secure_write('/run/aguja-profile-status.json', json.dumps({'present': capsule_path.is_file(), 'locked': locked, 'loaded': bool(capsule)}), 0o644)
+    secure_write('/run/aguja-profile-status.json', json.dumps({'present': capsule_path.is_file() or protection == 'luks2', 'locked': locked, 'loaded': bool(capsule) or protection == 'luks2', 'protection': protection, 'early_gate': True}), 0o644)
     import recovery_state
     recovery_state.initialize()
+    if profile_passphrase and recovery_state.status().get('locked'):
+        try:
+            recovery_state.unlock(profile_passphrase)
+        except (ValueError, OSError, KeyError):
+            pass  # independent recovery envelope may deliberately use another key
     run("hostnamectl", "set-hostname", c["hostname"])
     secure_write("/etc/hosts", "127.0.0.1 localhost\n127.0.1.1 " + c["hostname"] + "\n", 0o644)
     Path("/data").mkdir(exist_ok=True)
@@ -187,6 +195,12 @@ def main(profile_override=None, profile_passphrase=None):
     if capsule:
         subprocess.Popen(['nmcli', '--wait', '25', 'connection', 'up', 'aguja-ethernet'],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    import hardware
+    try:
+        observed_hardware = hardware.snapshot()
+    except (OSError, ValueError, KeyError):
+        observed_hardware = {'schema': 1, 'read_only': True, 'error': 'Inventory unavailable; rerun aguja hardware'}
+    secure_write('/run/aguja-hardware.json', json.dumps(observed_hardware), 0o644)
     import agent_context
     agent_context.ensure(workspace)
     quickstart = workspace / "QUICKSTART.md"

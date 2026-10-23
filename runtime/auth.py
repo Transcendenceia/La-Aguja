@@ -172,19 +172,20 @@ def capture_browser(args):
 
 def render(width,height,record,return_hint='A / Esc: volver al panel'):
     from PIL import Image,ImageDraw,ImageFont
-    image=Image.new('RGB',(width,height),'#07131b');draw=ImageDraw.Draw(image)
-    font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',max(12,min(26,width//42)))
-    def text(x,y,s,color='#dfeef3'):draw.text((x,y),s,font=font,fill=color)
-    text(24,18,'LA AGUJA · NAVEGADOR DE AUTENTICACIÓN','#75e3da')
+    import display
+    image=Image.new('RGB',(width,height),display.BG);draw=ImageDraw.Draw(image)
+    font=display.font(max(12,min(26,width//42)))
+    def text(x,y,s,color=display.WHITE):draw.text((x,y),s,font=font,fill=color)
+    text(24,18,'LA AGUJA · NAVEGADOR DE AUTENTICACIÓN',display.CYAN)
     if not record:
         text(24,85,'No hay un acceso pendiente.')
         text(24,130,'Consola: aguja login claude / antigravity / codex')
         text(24,height-50,return_hint);return image
-    text(24,62,record['provider']+' · '+urlsplit(record['url']).hostname,'#ffc767')
+    text(24,62,record['provider']+' · '+urlsplit(record['url']).hostname,display.GOLD)
     text(24,130,'Vuelve al agente y pulsa Ctrl+] para abrir su navegador.')
     text(24,height-100,'Copia el código; Ctrl+Shift+V en la misma consola del agente.')
-    text(24,height-65,'Por SSH se conserva el enlace nativo. No se generan códigos.','#9ab0bc')
-    text(24,height-32,return_hint,'#75e3da');return image
+    text(24,height-65,'Por SSH se conserva el enlace nativo. No se generan códigos.',display.DIM)
+    text(24,height-32,return_hint,display.CYAN);return image
 
 
 def terminal_lines(record,columns,lines):

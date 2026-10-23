@@ -9,7 +9,8 @@ from pathlib import Path
 import stat
 import recovery_keys
 
-SOURCE = Path('/config/aguja-recovery.json')
+from profile_vault import settings_root
+SOURCE = settings_root() / 'aguja-recovery.json'
 ROOT = Path('/run/aguja-recovery')
 
 

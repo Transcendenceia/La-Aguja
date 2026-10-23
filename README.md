@@ -17,6 +17,20 @@ No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requir
 
 > **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. In the 0.9.9 image, Safe asks for task confirmation but is **not a sandbox**. Version 0.9.10 adds a Codex sandbox: [policy and scope](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
 
+## Rescue 1.1 candidate · Rescue only
+
+Task-oriented TranscendenceIA cockpit with the original Agujita; early LUKS profile
+gate; hardware/resource preflight and scenario-aware backup planning; cloud/NAS
+credential preparation (rclone/restic); expanded Debian firmware and microcode.
+`aguja hardware --json`, `aguja plan --json`, `aguja storage status --json`.
+Read [mission guide](runtime/MISSIONS.md), [backup choices](runtime/BACKUP.md) and
+[design/acceptance](docs/design/rescue-next.md). Existing Imagers stay unchanged:
+automatic profiles remain automatic, legacy encrypted capsules unlock at boot.
+LUKS protects a profile vault, not all DATA. Candidate image/hardware validation
+is tracked separately; this section does not announce a published release.
+Official Rescue upgrades are checked first and offered as verified persistent
+generations, preserving profile/DATA and previous boot; no automatic reboot.
+
 ## See the actual product
 
 ![Flash Imager 0.9.9 on Linux with English selected](server/public/docs-images/099/imager-en.png)

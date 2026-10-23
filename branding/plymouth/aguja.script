@@ -1,7 +1,7 @@
 # Agujita: 96 true RGBA frames, 12 fps, an 8-second seamless loop.
 # Script plugin controls refresh cadence explicitly; no unportable time API.
-Window.SetBackgroundTopColor(0.043, 0.071, 0.125);
-Window.SetBackgroundBottomColor(0.043, 0.071, 0.125);
+Window.SetBackgroundTopColor(0.035, 0.043, 0.063);
+Window.SetBackgroundBottomColor(0.035, 0.043, 0.063);
 screen_w = Window.GetWidth();
 screen_h = Window.GetHeight();
 scale = Math.Min(1, Math.Min(screen_w / 680, screen_h / 760));

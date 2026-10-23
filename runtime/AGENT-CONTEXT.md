@@ -120,9 +120,10 @@ No hay tokens ni cuentas de proveedor incluidos de fábrica.
 
 1. Acordar objetivo y destino exacto; capturar diagnóstico y estado actual.
 2. Empezar por lectura. Si el disco falla físicamente, minimizar accesos repetidos.
-3. Antes de modificar datos existentes, preservar una imagen/backup recuperable
-   en un medio distinto y con espacio suficiente; para trabajo nuevo, comprobar
-   destino y capacidad antes de generar artefactos.
+3. Antes de modificar datos existentes, comparar las opciones viables de BACKUP.md
+   con capacidad medida y recomendar la mejor. Preferir medio físico distinto;
+   una partición temporal no protege de fallo físico. Omitir respaldo solo por
+   decisión explícita del propietario para el destino y operación concretos.
 4. Trabajar sobre copia cuando corresponda. No ejecutar fsck en un filesystem montado.
 5. Un montaje `aguja mount-ro DEVICE RUTA` solicita lectura; un journal puede requerir
    `noload` (ext4) o `norecovery` (XFS). Para peritaje, bloqueo de escritura/imagen.
@@ -175,3 +176,17 @@ fuera de un bloque gestionado que apunta a estas guías canónicas actualizadas.
 ## USB-persistent updates / Actualizaciones persistentes
 
 `aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.
+
+## Mission planning and hardware-aware intervention (1.1)
+
+Start with `aguja hardware --json` and `aguja plan --json`. Read **MISSIONS.md**
+and **BACKUP.md** in `/usr/share/aguja/` before proposing an installation, repair,
+P2V, new service, VM or data transfer. They are current canonical extensions of
+this guide: compare separate internal/external disks, NAS, cloud (ask first),
+Rescue DATA (temporary; clean only after verified restoration), same-disk staging
+(healthy source only, not a disaster backup), or explicit owner-selected no backup.
+Do not insist on one destination regardless of the actual resources.
+Protected profiles unlock at the early boot gate, not from the cockpit menu;
+`aguja profile status --json` identifies LUKS vs legacy vs automatic preparation.
+LUKS secrets are in `/config/private`; workspace DATA remains a separate concern.
+Cloud/NAS support is prepared via `aguja storage`, independently of the Imagers.

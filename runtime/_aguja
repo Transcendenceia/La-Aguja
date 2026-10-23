@@ -6,7 +6,7 @@ commands=(
   'activity:Conexiones, comandos y procesos SSH en memoria; --json'
   'run:Tarea visible: --label nombre -- comando'
   'login:Acceso oficial con navegador local para Claude, Antigravity o Codex'
-  'profile:Estado y desbloqueo del perfil preparado'
+  'profile:Estado y conversión LUKS local; desbloqueo al arrancar'
   'recovery:Claves BitLocker/LUKS; status, list, unlock y apertura explícita'
   'secrets:Ubicaciones y estado de credenciales sin mostrar valores'
   'tailscale:Estado de red privada Tailscale / Headscale'
@@ -16,6 +16,9 @@ commands=(
   'password:Cambiar y guardar contraseña SSH'
   'update:Actualizaciones persistentes de paquetes, arneses y Rescue'
   'help:Guía de inicio y comandos'
+  'hardware:Inventario actual de hardware y recursos; --json'
+  'plan:Opciones de respaldo según recursos; --json'
+  'storage:Credenciales cloud/NAS; status o configure'
   'tools:Inventario de herramientas'
   'doctor:Diagnóstico de configuración y servicios'
   'context:Instrucciones para el agente remoto'
@@ -30,8 +33,10 @@ if (( CURRENT == 2 )); then
 fi
 case "$words[2]" in
   update) _values 'Actualizaciones' status check packages harnesses all release rollback cleanup menu --json ;;
-  profile) _values 'Perfil' status unlock ;;
+  profile) _values 'Perfil' status protect --json ;;
   recovery) _values 'Recuperación' status list unlock export open --json --writable ;;
+  hardware|plan) _values 'Formato' --json ;;
+  storage) _values 'Almacenamiento' status configure --json ;;
   secrets) _values 'Formato' --json ;;
   login) _values 'Agente' codex antigravity claude ;;
   agent) _values 'Agente' codex antigravity claude opencode shell ;;

@@ -24,15 +24,36 @@ MASCOT = (
     "        V        ",
 )
 
-MENU_ACTIONS = ('shell', 'wifi', 'guide', 'doctor', 'codex', 'antigravity', 'claude',
-                'opencode', 'password', 'remote', 'locale', 'unlock', 'donate', 'update')
+# One source of truth for labels, keyboard navigation and pointer hit targets.
+MENU = (
+    ('shell', '1', 'Consola Zsh', 'Terminal y sesiones tmux', 'TRABAJAR'),
+    ('guide', '3', 'Misiones y herramientas', 'Guía del agente, métodos y límites', 'TRABAJAR'),
+    ('hardware', 'E', 'Equipo y recursos', 'CPU, RAM, discos, red y virtualización', 'TRABAJAR'),
+    ('backup', 'C', 'Planificar respaldo', 'Opciones según este equipo y tu objetivo', 'TRABAJAR'),
+    ('codex', '4', 'Codex', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
+    ('antigravity', '5', 'Antigravity', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
+    ('claude', '6', 'Claude Code', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
+    ('opencode', '7', 'OpenCode', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
+    ('wifi', '2', 'Red y Wi-Fi', 'Conectar, comprobar y recuperar acceso', 'CONECTAR'),
+    ('remote', 'R', 'Tailscale / Headscale', 'SSH privado desde otro equipo', 'CONECTAR'),
+    ('storage', 'N', 'Cloud y NAS', 'Credenciales y destinos de respaldo', 'CONECTAR'),
+    ('password', '9', 'Contraseña SSH', 'Cambiar sin mostrar la contraseña', 'CONECTAR'),
+    ('doctor', '8', 'Diagnóstico de Rescue', 'Servicios, herramientas y conectividad', 'SISTEMA'),
+    ('locale', 'I', 'Idioma y teclado', 'Preferencias de esta consola', 'SISTEMA'),
+    ('update', 'T', 'Actualizaciones', 'Consultar · RAM · persistentes', 'SISTEMA'),
+    ('donate', 'D', 'Apoyar LA AGUJA', 'Un proyecto de TranscendenceIA', 'SISTEMA'),
+)
+MENU_ACTIONS = tuple(row[0] for row in MENU)
 
 
 def menu_choices():
-    return [t('1  Consola Zsh'), t('2  Conectar Wi-Fi'), t('3  Guía y herramientas'), t('8  Diagnóstico'),
-            '4  Codex', '5  Antigravity', '6  Claude Code', '7  OpenCode', t('9  Contraseña SSH'),
-            t('R  Tailscale / Headscale · SSH privado'), t('I  Idioma y teclado'),
-            t('U  Desbloquear perfil'), t('D  Apoyar LA AGUJA'), t('T  Actualizaciones')]
+    return [key + '  ' + t(label) for _, key, label, _, _ in MENU]
+
+
+def menu_window(selected, capacity):
+    capacity = max(1, capacity)
+    start = max(0, min(selected - capacity // 2, len(MENU) - capacity))
+    return range(start, min(len(MENU), start + capacity))
 
 
 def version():
@@ -48,7 +69,7 @@ def ssh_command(address, port):
 
 
 def auth_label(mode):
-    return {"locked": t("SSH bloqueado · desbloquea tu perfil en la consola local"), "default": t("Usuario: aguja  |  Contraseña de fábrica: aguja"),
+    return {"locked": t("SSH bloqueado · revisa el desbloqueo al arrancar"), "default": t("Usuario: aguja  |  Contraseña de fábrica: aguja"),
             "custom": t("Usuario: aguja  |  Contraseña personalizada (no se muestra)"),
             "key": t("Usuario: aguja  |  Acceso por tu clave pública SSH")}.get(mode, t("Usuario: aguja  |  Consulta aguja doctor"))
 
@@ -72,7 +93,7 @@ def banner(current=None, compact=False):
     if not compact:
         for line in MASCOT:
             print(line)
-    print(t("Una entrada pequeña. Control completo.")+"\n")
+    print(t("Una pequeña entrada. Grandes posibilidades.")+"\n")
     if update_notice():print(update_notice())
     addresses = current["addresses"]
     if addresses:
@@ -178,8 +199,8 @@ def draw(screen, current, countdown=0, selected=0, activity=None,
         line(height-4,t('A / Esc: volver · navegador en el agente: Ctrl+] · pega el código allí'),gold)
     elif view == "help":
         options = menu_choices()
-        for i,text in enumerate(options[:capacity]):
-            line(8+i,("> " if selected==i else "  ")+text,gold if selected==i else 0)
+        for row, i in enumerate(menu_window(selected, capacity)):
+            line(8+row,('> ' if selected==i else '  ')+options[i],gold if selected==i else 0)
     elif view == "processes":
         rows = display.process_rows(activity.get("processes",[]))
         for i,(text,state) in enumerate(rows[scroll:scroll+capacity]):
@@ -222,8 +243,8 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
     if curses.has_colors():
         curses.start_color()
         curses.use_default_colors()
-        curses.init_pair(1, curses.COLOR_CYAN, -1)
-        curses.init_pair(2, curses.COLOR_YELLOW, -1)
+        curses.init_pair(1, curses.COLOR_WHITE, -1)
+        curses.init_pair(2, curses.COLOR_MAGENTA, -1)
     # Eight animation frames/s. getch blocks between frames rather than spinning.
     screen.timeout(125)
     try:curses.mousemask(curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION)
@@ -294,6 +315,11 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                     if buttons & curses.BUTTON4_PRESSED:control.key('up',snapshot)
                     elif buttons & getattr(curses,'BUTTON5_PRESSED',0):control.key('down',snapshot)
                     elif buttons & curses.BUTTON3_PRESSED:control.key('back',snapshot)
+                    elif buttons & (curses.BUTTON1_CLICKED|curses.BUTTON1_PRESSED) and control.view=='help':
+                        height,width=screen.getmaxyx()
+                        indices=list(menu_window(selection,max(0,height-13)))
+                        row=my-8
+                        if 0<=row<len(indices):return MENU_ACTIONS[indices[row]]
                     elif buttons & (curses.BUTTON1_CLICKED|curses.BUTTON1_PRESSED|curses.BUTTON1_DOUBLE_CLICKED) and control.view=='commands':
                         if control.detail:control.key('back',snapshot)
                         else:
@@ -337,8 +363,12 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                 return "remote"
             elif key in (ord('i'),ord('I')):
                 return 'locale'
-            elif key in (ord('u'),ord('U')):
-                return 'unlock'
+            elif key in (ord('e'),ord('E')):
+                return 'hardware'
+            elif key in (ord('c'),ord('C')):
+                return 'backup'
+            elif key in (ord('n'),ord('N')):
+                return 'storage'
             elif key in (ord('t'),ord('T')):
                 return 'update'
             elif key in (ord('d'),ord('D')):
@@ -389,7 +419,7 @@ def page(text):
 
 
 def guide():
-    page(Path("/usr/share/aguja/QUICKSTART.md").read_text())
+    page(Path("/usr/share/aguja/QUICKSTART.md").read_text() + "\n\n" + Path("/usr/share/aguja/MISSIONS.md").read_text())
 
 
 def menu(auto_setup=False):
@@ -423,8 +453,10 @@ def menu(auto_setup=False):
             print(t("Configura URL del servidor, nombre y clave de alta en Flash Imager → Red privada. SSH conserva la autenticación del perfil."))
         elif action == 'locale':
             subprocess.call(['/usr/local/bin/aguja', 'locale'])
-        elif action == 'unlock':
-            subprocess.call(['/usr/local/bin/aguja', 'profile', 'unlock'])
+        elif action in ('hardware', 'backup', 'storage'):
+            command = {'hardware':'hardware', 'backup':'plan', 'storage':'storage'}[action]
+            output = subprocess.run(['/usr/local/bin/aguja', command], capture_output=True, text=True)
+            page(output.stdout)
         elif action == 'update':
             subprocess.call(['/usr/local/bin/aguja','update','menu'])
             continue

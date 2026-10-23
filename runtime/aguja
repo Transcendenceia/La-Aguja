@@ -39,7 +39,8 @@ def status(args=()):
 def doctor(args=()):
     if os.geteuid() != 0:
         return call("sudo", "-n", "/usr/local/bin/aguja", "doctor", *args)
-    conf = Path("/config/aguja.conf")
+    from profile_vault import settings_root
+    conf = settings_root() / "aguja.conf"
     if not conf.exists():
         conf = Path("/etc/aguja/aguja.conf")
     try:
@@ -152,6 +153,7 @@ def tools():
     groups = {
         "Agentes IA (tu cuenta / Internet)": ("codex", "agy", "claude", "opencode"),
         "Consola y sesiones": ("zsh", "tmux", "nano", "less", "rg", "jq", "git", "python3"),
+        "Cloud y NAS": ("rclone", "restic", "mount.cifs", "mount.nfs", "sshfs"),
         "Red y acceso": ("nmcli", "nmtui", "ssh", "scp", "rsync", "curl", "avahi-browse"),
         "Recuperación de datos": ("ddrescue", "ddrescuelog", "testdisk", "photorec"),
         "Hardware": ("smartctl", "nvme", "lshw", "lspci", "lsusb", "hdparm"),
@@ -169,11 +171,17 @@ def tools():
 
 def main():
     p = argparse.ArgumentParser(description="LA AGUJA Rescue Disk · AI-first rescue Linux")
-    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "recovery", "secrets", "tailscale", "locale", "donate"])
+    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "recovery", "secrets", "tailscale", "locale", "donate", "hardware", "plan", "storage"])
     p.add_argument("args", nargs=argparse.REMAINDER, help="tailscale: status [--json]")
     arguments=sys.argv[1:]
     if arguments[:1]==['qr']:arguments[0]='browser'  # hidden legacy alias; no QR UI
     a = p.parse_args(arguments)
+    if a.command in ('hardware', 'plan'):
+        import hardware
+        return hardware.main((['plan'] if a.command == 'plan' else []) + a.args)
+    if a.command == 'storage':
+        import storage
+        return storage.main(a.args)
     if a.command == "status":
         return status(a.args)
     elif a.command == "run":
@@ -284,9 +292,11 @@ def main():
             p.error("mount-ro /dev/partición /mnt/target")
         return mount_target(*a.args)
     elif a.command == "config":
-        if not Path("/config/aguja.conf").exists():
+        from profile_vault import settings_root
+        target = settings_root() / "aguja.conf"
+        if not target.exists():
             p.error("ISO de solo lectura: conecta un USB LA AGUJA Rescue Disk configurable")
-        return call("sudo", "-n", "nano", "/config/aguja.conf")
+        return call("sudo", "-n", "nano", str(target))
     return 0
 
 

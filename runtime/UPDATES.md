@@ -81,3 +81,16 @@ local profile unlock; its key stays in private RAM, never on the USB. Node
 revocation/expiry still applies. Configuration, identity and workspace are not
 included in clean public system generations. Do not run cloned copies of the
 same provisioned identity simultaneously.
+
+
+## Official Rescue releases (1.1)
+
+Every interactive/background check queries the signed latest Rescue catalog first,
+independently of APT or agent provider failures. A newer Rescue release is the first
+row in the list; choose **No** or **Sí persistente** (not RAM). The reviewed version
+is pinned for the operation: a changed catalog requires another review, not a silent
+upgrade to different bytes. Download parts and assembled image hashes are verified,
+then a new boot generation is staged. CFG, LUKS vault and DATA/workspace are not
+reflashed. Factory/previous remain available; no automatic reboot. If a LUKS vault
+is present, a release without the early gate capability is rejected. Catalog errors
+mean “unverified”, not “up to date”. This does not update Flash Imager.

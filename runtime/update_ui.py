@@ -126,7 +126,7 @@ def menu(language=None):
      y=body_top
      if model.phase=='home':
       write(y,tr('1. Comprobar actualizaciones'),display.WHITE);y+=line*2
-      write(y,tr('No: no cambia nada.'));y+=line
+      write(y,tr('Incluye la última versión oficial de Rescue Disk, con catálogo firmado.'));y+=line
       write(y,tr('Sí: actualiza solo esta sesión en RAM.'));y+=line
       write(y,tr('Sí persistente: guarda en el pendrive para el próximo arranque.'));y+=line*2
       button(tr('C · Comprobar actualizaciones'),'check',margin,y,round(360*scale))

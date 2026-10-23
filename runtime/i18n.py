@@ -41,7 +41,7 @@ def ui_language(value=None):
 
 def t(source, *, language=None, **values):
     language = ui_language(language)
-    message = source if language == 'es' else CATALOG['translations'].get(language, {}).get(source, source)
+    message = source if language == 'es' else CATALOG['translations'].get(language, {}).get(source, CATALOG['translations'].get('en', {}).get(source, source))
     return message.format(**values) if values else message
 
 

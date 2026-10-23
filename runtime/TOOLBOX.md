@@ -119,7 +119,7 @@ puntos de partida, **no prohíbe herramientas nuevas**.
 
 ## Private recovery and credentials / Recuperación y credenciales
 
-Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. `aguja profile unlock` also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
+Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. The early boot profile gate also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
 
 ## USB-persistent updates / Actualizaciones persistentes
 

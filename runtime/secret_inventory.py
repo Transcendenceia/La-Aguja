@@ -5,6 +5,9 @@ import recovery_state
 
 SOURCES = {
     'profile_capsule': '/config/aguja-profile.json',
+    'luks_profile_vault': '/config/aguja-profile.luks',
+    'storage_credentials': '/config/private/storage/rclone.conf',
+    'volatile_storage_credentials': '/run/aguja-storage/storage/rclone.conf',
     'literal_configuration': '/config/aguja.conf',
     'legacy_bitlocker_backup': '/config/bitlocker.json',
     'provider_api_environment': '/home/aguja/.config/aguja/provider-env.json',

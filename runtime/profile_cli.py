@@ -8,35 +8,17 @@ from pathlib import Path
 
 
 def main(args):
-    if args == ['unlock']:
+    if args == ['protect']:
         if os.geteuid() != 0:
-            return subprocess.call(['sudo', '-n', '/usr/local/bin/aguja', 'profile', 'unlock'])
-        if not os.isatty(0):
-            print('Desbloquea el perfil desde una consola interactiva local.')
-            return 1
-        import profile
-        try:
-            password = getpass.getpass('Frase del perfil protegido: ')
-            capsule = profile.open_capsule(Path('/config/aguja-profile.json').read_bytes(), password)
-            if capsule is None:
-                raise ValueError('Perfil no abierto')
-            import boot
-            boot.main(profile_override=capsule, profile_passphrase=password)
-        except Exception:
-            print('No se abrió el perfil; comprueba la frase y la configuración.')
-            return 1
-        print('Perfil desbloqueado. Red, SSH y proveedores aplicados; la red privada conserva tu elección.')
-        import recovery_state
-        if recovery_state.status().get('present'):
-            try:
-                recovery_state.unlock(password)
-                print('Claves de recuperación disponibles en RAM privada; ningún disco se abrió.')
-            except (ValueError, OSError, KeyError):
-                print('El perfil está abierto; el resguardo de recuperación requiere revisión o aguja recovery unlock.')
-        return 0
+            return subprocess.call(['sudo', '-n', '/usr/local/bin/aguja', 'profile', 'protect'])
+        import profile_vault
+        return profile_vault.protect()
+    if args == ['unlock']:
+        print('El perfil se desbloquea antes de iniciar Rescue, en la pantalla de arranque; no desde el menú.')
+        return 1
     if args not in ([], ['status'], ['status', '--json']):
-        raise ValueError('profile status [--json] | profile unlock')
+        raise ValueError('profile status [--json] | profile protect')
     path = Path('/run/aguja-profile-status.json')
     value = json.loads(path.read_text()) if path.exists() else {'present': False, 'locked': False, 'loaded': False}
-    print(json.dumps(value) if '--json' in args else 'Perfil: ' + ('protegido, pendiente de desbloquear' if value['locked'] else 'cargado' if value['loaded'] else 'configuración de fábrica'))
+    print(json.dumps(value) if '--json' in args else 'Perfil: ' + ('protegido, pendiente de desbloquear' if value['locked'] else 'cargado' if value['loaded'] else 'configuración de fábrica') + ' · ' + value.get('protection', 'unknown'))
     return 0

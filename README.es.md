@@ -18,6 +18,19 @@ Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí
 
 > **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. En la imagen 0.9.9, Seguro pide confirmación de tareas pero **no es un sandbox**. La versión 0.9.10 añade un sandbox para Codex: [política y alcance](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
 
+## Candidata Rescue 1.1 · solo Rescue
+
+Menú por tareas con estilo TranscendenceIA y Agujita original; perfil LUKS antes
+del menú y SSH; inventario de recursos y respaldo adaptado al escenario; cloud/NAS
+(rclone/restic); firmware y microcódigo ampliados.
+`aguja hardware --json`, `aguja plan --json`, `aguja storage status --json`.
+Consulta [misiones](runtime/MISSIONS.md), [respaldos](runtime/BACKUP.md) y
+[alcance/aceptación](docs/design/rescue-next.md). Imagers sin cambios: perfiles
+automáticos siguen automáticos y cápsulas antiguas se abren al arrancar.
+LUKS cifra la bóveda de perfil, no toda DATA. Candidata, no anuncio de publicación.
+Las nuevas versiones oficiales se consultan primero y se ofrecen como generaciones
+persistentes verificadas, conservando perfil/DATA y arranque anterior, sin reinicio automático.
+
 ## Mira el producto real
 
 ![Flash Imager 0.9.9 en Linux y español](server/public/docs-images/099/imager.png)

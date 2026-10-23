@@ -14,7 +14,7 @@ VERSION=$(cat "$PROJECT/VERSION")
 AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 cmp -s "$PROJECT/VERSION" "$ROOT/usr/share/aguja/VERSION" || { echo 'Instala la versión actual en rootfs antes de empaquetar'; exit 1; }
 cmp -s "$PROJECT/runtime/aguja" "$ROOT/usr/local/bin/aguja" || { echo 'Instala el diagnóstico actual antes de empaquetar'; exit 1; }
-for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md; do
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md MISSIONS.md BACKUP.md; do
     cmp -s "$PROJECT/runtime/$guide" "$ROOT/usr/share/aguja/$guide" || { echo 'Instala las guías actuales'; exit 1; }
 done
 for binary in qemu-system-x86_64 qemu-img qemu-nbd; do
@@ -101,7 +101,7 @@ unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja | cmp -
 for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$PROJECT/runtime/console-history.conf"; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/lib/aguja/$(basename "$runtime")" | cmp -s "$runtime" - || { echo 'Runtime empaquetado no coincide'; exit 1; }
 done
-for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md; do
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md MISSIONS.md BACKUP.md; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
 done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/disk-recovery/SKILL.md | cmp -s "$PROJECT/skills/disk-recovery/SKILL.md" - || { echo 'Skill de recuperación empaquetada no coincide'; exit 1; }
@@ -187,7 +187,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$BUILD/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$BUILD/release.json" ::release.json
 printf '{"schema":1,"state":"pending"}\n' > "$BUILD/data-initialize.json"

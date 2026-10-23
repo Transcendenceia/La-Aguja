@@ -3,7 +3,8 @@
 import base64,contextlib,fcntl,hashlib,hmac,json,os,stat,sys,time
 from pathlib import Path
 CFG=Path('/config');PRIVATE=Path('/run/aguja-tailnet-private');RUN=Path('/run/aguja-tailscale')
-SAVED=CFG/'aguja-tailnet-identity.json';STATE=RUN/'tailscaled.state';SETTINGS=PRIVATE/'persistence.json';KEY=PRIVATE/'persistence.key'
+from profile_vault import settings_root
+SAVED=settings_root()/'aguja-tailnet-identity.json';STATE=RUN/'tailscaled.state';SETTINGS=PRIVATE/'persistence.json';KEY=PRIVATE/'persistence.key'
 RESTORED=PRIVATE/'restored';STATUS=Path('/run/aguja-tailnet-persistence.json');AAD=b'aguja-tailnet-state:1';LIMIT=1024**2
 
 def read(path):

@@ -38,11 +38,15 @@ apt-get update -qq
 apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-sysv dbus udev squashfs-tools xorriso \
   openssh-server sudo network-manager wpasupplicant iw rfkill wireless-regdb \
   firmware-realtek firmware-iwlwifi firmware-atheros firmware-brcm80211 firmware-mediatek firmware-misc-nonfree \
+  firmware-amd-graphics firmware-intel-graphics firmware-nvidia-graphics firmware-sof-signed firmware-intel-sound \
+  firmware-ath9k-htc firmware-carl9170 firmware-libertas firmware-ti-connectivity firmware-zd1211 \
+  firmware-bnx2 firmware-bnx2x firmware-netxen firmware-qlogic intel-microcode amd64-microcode \
   curl wget git jq ripgrep tmux nano less bash-completion zsh zsh-autosuggestions zsh-syntax-highlighting \
   avahi-daemon avahi-utils libnss-mdns python3 python3-pil python3-qrcode python3-cryptography nodejs npm \
   qemu-system-x86 qemu-system-gui qemu-utils ovmf seabios \
   gddrescue testdisk smartmontools nvme-cli hdparm pciutils usbutils lshw \
   parted gdisk dosfstools e2fsprogs btrfs-progs xfsprogs ntfs-3g exfatprogs \
+  rclone restic cifs-utils nfs-common sshfs ethtool bluez \
   cryptsetup lvm2 mdadm dislocker wimtools debootstrap arch-install-scripts \
   grub-pc-bin grub-efi-amd64-bin efibootmgr rsync zstd xz-utils unzip iproute2 iputils-ping dnsutils \
   locales kbd console-setup plymouth plymouth-themes fonts-dejavu-core fonts-noto-cjk \

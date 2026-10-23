@@ -17,7 +17,7 @@ These commands return metadata only. Do not `cat`, copy to chat, commit, screens
 - `/config/bitlocker.json`: legacy backup on older preparations. The current Imager writes an empty compatibility stub and uses the supplemental capsule instead. Inspect legacy structure privately only when the current capsule is absent, and never overwrite/re-publish a legacy key dump.
 - `/config/aguja-recovery.py`: older standalone helper supplied by the preparer; fallback for Rescue 0.9.11. New live images include the native `aguja recovery` interface. Prefer the installed helper, not executable code from an untrusted USB.
 
-For a protected profile, `aguja profile unlock` asks for its password on an interactive console, without echo. In 0.9.16 it also opens the matching recovery capsule into private RAM. If the recovery capsule has a different password, use `sudo aguja recovery unlock`. Plain capsules load into private RAM at boot. Neither action opens, mounts, decrypts permanently, repairs or changes any disk.
+For a protected profile, the early boot gate asks for its password locally without echo, before cockpit, SSH or agents. Matching recovery keys also load into private RAM. A recovery capsule with its own different password uses `sudo aguja recovery unlock`. Plain capsules load at boot. Neither action opens, mounts, repairs or changes a target disk.
 
 ```sh
 sudo aguja recovery list --json               # index, type, label and ID; no keys
@@ -33,7 +33,7 @@ BitLocker entries are 48-digit recovery passwords, not PINs, login passwords or 
 
 | Purpose | Canonical location | Use |
 | --- | --- | --- |
-| Portable boot profile | `/config/aguja-profile.json` | Unlock with `aguja profile unlock`; never dump the capsule |
+| Portable boot profile | `/config/aguja-profile.json` | Unlocked at the early boot gate; never dump the capsule |
 | Legacy literal Wi-Fi/SSH settings | `/config/aguja.conf` | Read only the needed setting privately; may be stale for an encrypted profile |
 | API settings for native agents | `/home/aguja/.config/aguja/provider-env.json` | Native launchers call `profile.provider_environment`; don't print `env` or `/proc/*/environ` |
 | Codex file login | `/home/aguja/.codex/auth.json` | Use the existing native login; absence may mean no portable session |
@@ -50,4 +50,16 @@ The live recovery skill is `/usr/share/aguja/skills/disk-recovery/SKILL.md`. Rea
 
 ## Español
 
-`aguja secrets --json` muestra ubicaciones y estado, nunca valores. Las claves manuales viven cifradas en `/config/aguja-recovery.json`; tras desbloquear se usan en `/run/aguja-recovery/keys.json` (RAM privada, 0600). `aguja profile unlock` abre también el resguardo compatible; `sudo aguja recovery unlock` permite abrirlo por separado. `list` no muestra las claves y `open` abre el mapping en solo lectura, sin montar ni reparar. Conserva espacios exactos de LUKS y no confunde la clave numérica de BitLocker con su identificador. No copies secretos a conversación, logs, DATA ni GitHub.
+`aguja secrets --json` muestra ubicaciones y estado, nunca valores. Las claves manuales viven cifradas en `/config/aguja-recovery.json`; tras desbloquear se usan en `/run/aguja-recovery/keys.json` (RAM privada, 0600). El desbloqueo temprano del perfil abre también el resguardo compatible; `sudo aguja recovery unlock` permite abrirlo por separado. `list` no muestra las claves y `open` abre el mapping en solo lectura, sin montar ni reparar. Conserva espacios exactos de LUKS y no confunde la clave numérica de BitLocker con su identificador. No copies secretos a conversación, logs, DATA ni GitHub.
+
+## LUKS profiles and cloud storage (1.1)
+
+`/config/aguja-profile.luks` contains a real LUKS2/ext4 vault. Once opened it is
+mounted root-only at `/config/private`, before cockpit, SSH and agents. Its copies
+of profile/INI/recovery/tailnet settings are authoritative. DATA/workspaces are
+not encrypted by this feature. Plain automatic Imager profiles remain unencrypted;
+legacy encrypted capsules still unlock at boot and are explicitly reported as AES.
+`aguja storage status --json` locates cloud credentials without reading values.
+Rclone configuration persists only inside an open vault; otherwise RAM-only.
+No cloud credentials/accounts ship in Rescue. LUKS gate protects owner entrypoints,
+not a defense against an attacker replacing the unsigned live medium.

@@ -44,7 +44,7 @@ class Selection(unittest.TestCase):
   m.phase='applying';self.assertFalse(m.back());m.job='a'*32;self.assertTrue(m.back());self.assertEqual(m.phase,'applying')
   m.accept({'operation':'apply','state':'done','result':{'ok':True,'results':[]}});self.assertEqual(m.phase,'done')
  def test_release_never_cycles_to_an_unsupported_ram_update(self):
-  m=ui.Model();m.phase='list';m.items=[self.items[-1]];m.choices={'release:rescue':'no'};m.cycle();self.assertEqual(m.choices['release:rescue'],'persistent');m.cycle();self.assertEqual(m.choices['release:rescue'],'no')
+  m=ui.Model();m.phase='list';m.items=[next(row for row in self.items if row['kind']=='release')];m.choices={'release:rescue':'no'};m.cycle();self.assertEqual(m.choices['release:rescue'],'persistent');m.cycle();self.assertEqual(m.choices['release:rescue'],'no')
  def test_busy_model_ignores_second_submission_but_can_leave_progress(self):
   import threading,update_jobs
   entered=threading.Event();release=threading.Event()

@@ -1,8 +1,10 @@
 LA AGUJA Rescue Disk | AI-assisted live diagnostics, recovery and installation.
 Runs from USB with a RAM overlay; internal disks are not mounted automatically.
+First: aguja hardware --json | aguja plan --json
 Start: aguja status | aguja doctor | aguja tools | aguja context
+Read MISSIONS.md + BACKUP.md before interventions; compare feasible backup options.
 Offline guides: /usr/share/aguja/{QUICKSTART,AGENT-CONTEXT,TOOLBOX}.md
 Native QEMU/KVM + BIOS/UEFI tools. Optional specialist tools: TOOLBOX.md;
 research alternatives and install on demand, within your mission and resources.
-Workspace: /aguja/workspace | owner privileges: sudo -n | help: aguja help
+Workspace: /data/workspace (when DATA is mounted) | owner privileges: sudo -n | help: aguja help
 Docs: https://aguja.transcendenceia.net/docs

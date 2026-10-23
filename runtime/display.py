@@ -15,15 +15,16 @@ import re
 import time
 from i18n import result_text, event_text, t, ui_language
 
-BG = '#08121b'
-CARD = '#101f2b'
-EDGE = '#233d4c'
-CYAN = '#67e8db'
-GOLD = '#ffd282'
-WHITE = '#edf5f6'
-DIM = '#9ab0bc'
-GREEN = '#8cdeae'
+BG = '#090b10'
+CARD = '#11141b'
+EDGE = '#3e354b'
+CYAN = '#d9afff'  # semantic name retained for renderer compatibility
+GOLD = '#ff9dcc'
+WHITE = '#f7f6f1'
+DIM = '#9a9da6'
+GREEN = '#8cdeae'  # real successful state only, not dominant decoration
 RED = '#ff969a'
+SPECTRUM = ('#ff4b0a', '#ff0a8a', '#aa35ff', '#3867ff', '#28d9f7')
 ANSI = re.compile(r'\x1b(?:\[[0-?]*[ -/]*[@-~]|\][^\x07]*(?:\x07|\x1b\\))')
 
 
@@ -55,6 +56,12 @@ def _font(size, bold=False, mono=False, language='es'):
         for candidate in ('/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc' if bold else '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',):
             try:
                 return ImageFont.truetype(candidate, size, index=2)
+            except OSError:
+                pass
+    if not mono and language != 'zh':
+        for candidate in ('Inter-Bold.otf' if bold else 'Inter-Regular.otf', 'Inter.ttf'):
+            try:
+                return ImageFont.truetype(str(asset_root() / 'fonts' / candidate), size)
             except OSError:
                 pass
     family = 'DejaVuSansMono' if mono else 'DejaVuSans'
@@ -184,11 +191,10 @@ def pointer_action(control, snapshot, event, width, height):
         control.key('up' if action=='wheel-up' else 'down',snapshot);return
     if action == 'click' and control.view == 'help':
         from cockpit import MENU_ACTIONS
-        geo=layout(width,height); scale=geo['scale']; margin=geo['margin']
-        x0,y0,x1,y1=geo['stream']; start=y0+round(73*scale)
-        if x0<=event['x']<=x1 and start<=event['y']<y1:
-            index=int((event['y']-start)/round(25*scale))
-            if 0<=index<len(MENU_ACTIONS):return MENU_ACTIONS[index]
+        for index, box in menu_boxes(width, height, getattr(control, 'menu_selected', 0)):
+            x0,y0,x1,y1 = box
+            if x0 <= event['x'] <= x1 and y0 <= event['y'] <= y1:
+                return MENU_ACTIONS[index]
         return
     if action!='click' or control.view!='commands':return
     x,y,right,bottom,cardheight=command_geometry(width,height)
@@ -201,6 +207,25 @@ def pointer_action(control, snapshot, event, width, height):
     commands=panel_state.command_window(control.data(snapshot).get('commands',[]),control.selected,max(1,int((bottom-y)/cardheight)))
     index=int((py-y)/cardheight)
     if 0<=index<len(commands):control.select(commands[index]['id'],expand=True)
+
+
+def menu_boxes(width, height, selected=0):
+    from cockpit import MENU, menu_window
+    geo = layout(width, height)
+    s, m = geo['scale'], geo['margin']
+    x0,y0,x1,y1 = geo['stream']
+    top = y0 + round(73*s)
+    row_height = max(32, round(53*s))
+    columns = 2 if x1-x0 >= 650*s and width >= 900 else 1
+    rows = max(1, int((y1-m*.65-top) / row_height))
+    capacity = rows * columns
+    indices = list(menu_window(selected, capacity))
+    gap = round(12*s)
+    cell_width = (x1-x0-m*1.3-gap*(columns-1))/columns
+    return [(index, (round(x0+m*.65+(offset//rows)*(cell_width+gap)),
+                      top+(offset%rows)*row_height,
+                      round(x0+m*.65+(offset//rows)*(cell_width+gap)+cell_width),
+                      top+(offset%rows)*row_height+row_height-4)) for offset,index in enumerate(indices)]
 
 
 def render(width, height, current, activity=None, tick=0, paused=False, scroll=0,
@@ -220,6 +245,8 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
     s, m = geo['scale'], geo['margin']
     image = Image.new('RGB', (width, height), BG)
     d = ImageDraw.Draw(image)
+    for index, color in enumerate(SPECTRUM):
+        d.rectangle((index*width//5, 0, (index+1)*width//5, 2), fill=color)
     title_font, text_font = font(round(28*s), True), font(round(17*s))
     mono = font(round(15*s), mono=True)
     small = font(round(13*s))
@@ -246,7 +273,7 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
         return x0+m*.65,y0+round(73*s),x1-m*.65,y1-m*.65
 
     text(m, m*.6, t('LA AGUJA RESCUE DISK'), CYAN, title_font, width-m*2)
-    text(m, 53*s, current.get('update_notice') or t('Una entrada pequeña. Control completo.'), GOLD if current.get('update_notice') else DIM, small, max(100,width-m*2-310*s))
+    text(m, 53*s, current.get('update_notice') or t('Una pequeña entrada. Grandes posibilidades.'), GOLD if current.get('update_notice') else DIM, small, max(100,width-m*2-310*s))
     ip = current.get('addresses', [{}])[0].get('ip', '') if current.get('addresses') else ''
     if ip:
         port = current.get('ssh_port',22)
@@ -280,6 +307,8 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
         state += (t(' · Solo fallos') if control.failures else '') + (t(' · Una sesión') if control.session else '')
         if activity.get('technical_count'):
             state += f" · {activity['technical_count']} sondeos técnicos {t('visibles') if control.technical else t('agrupados (B)')}"
+    if view == 'help':
+        state = t('Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter')
     x,y,right,bottom = panel(stream, heading, state)
     row_capacity = max(1, int((bottom-y) / lineheight))
     if view == 'commands':
@@ -313,7 +342,7 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
                 focused=chosen and c.get('id')==chosen.get('id')
                 color=colors.get(c.get('status'),DIM)
                 d.rounded_rectangle((x-7*s,yy-4*s,right,yy+cardheight-12*s),radius=7*s,
-                                    fill='#18333d' if focused else BG,outline=GOLD if focused else EDGE)
+                                    fill='#191d26' if focused else BG,outline=GOLD if focused else EDGE)
                 stamp=time.strftime('%H:%M:%S',time.localtime(c.get('started',now)))
                 indicator='◐◓◑◒'[int(tick*4)%4]+' ' if c.get('status')=='running' and not paused else ''
                 text(x+7*s,yy,indicator+labels.get(c.get('status'),t('FINALIZADO'))+' · '+panel_state.command_duration(c,now)+' · '+stamp,color,small,right-x-14*s)
@@ -325,10 +354,18 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
             text(x,y+2*lineheight,t('aguja run --label "Revisar memoria" -- free -h'),CYAN,mono,right-x)
             text(x,y+3*lineheight,t('S cambia sesión · F filtra fallos · B muestra sondeos'),DIM,small,right-x)
     elif view == 'help':
-        from cockpit import menu_choices
-        choices = menu_choices()
-        for i, label in enumerate(choices[:row_capacity]):
-            text(x, y+i*lineheight, ('› ' if i==selected else '  ')+label, GOLD if i==selected else WHITE, mono, right-x)
+        from cockpit import MENU
+        if control:
+            control.menu_selected = selected
+        for index, box in menu_boxes(width, height, selected):
+            bx,by,br,bb = box
+            action,key,label,detail,group = MENU[index]
+            chosen = index == selected
+            d.rounded_rectangle(box,radius=max(3,round(7*s)),fill='#191d26' if chosen else CARD,
+                                outline=GOLD if chosen else EDGE,width=1)
+            text(bx+8*s,by+5*s,key, GOLD if chosen else CYAN,mono,26*s)
+            text(bx+37*s,by+5*s,t(label), WHITE,font(round(16*s),True),br-bx-46*s)
+            text(bx+37*s,by+28*s,t(group)+' · '+t(detail),DIM,font(round(11*s)),br-bx-46*s)
     elif view == 'processes':
         for i, (label,state) in enumerate(process_rows(processes)[scroll:scroll+row_capacity]):
             text(x,y+i*lineheight,label + '  ['+clean(state)+']',WHITE,mono,right-x)
@@ -346,7 +383,7 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
         for i,(stamp,label,kind) in enumerate(wrapped[max(0,end-row_capacity):end]):
             yy = y+i*lineheight
             if kind in ('connect','disconnect'):
-                d.rounded_rectangle((x-5,yy-2,right,yy+lineheight-2),radius=4,fill='#193f43' if kind=='connect' else '#3d3026')
+                d.rounded_rectangle((x-5,yy-2,right,yy+lineheight-2),radius=4,fill='#242032' if kind=='connect' else '#30232a')
             text(x,yy,stamp,DIM,small,80*s)
             text(x+90*s,yy,label,GOLD if kind=='command' else CYAN if kind=='connect' else WHITE,mono,right-x-90*s)
         if not wrapped:
@@ -388,7 +425,7 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
         tw = min(width-m*2,round(510*s))
         tx = (width-tw)//2
         ty = geo['header']+10*s
-        d.rounded_rectangle((tx,ty,tx+tw,ty+55*s),radius=12,fill='#24545a',outline=CYAN,width=2)
+        d.rounded_rectangle((tx,ty,tx+tw,ty+55*s),radius=12,fill='#242032',outline=CYAN,width=2)
         text(tx+16*s,ty+17*s,event_text(recent),WHITE,small,tw-32*s)
     fy = height-geo['footer']+14*s
     text(m,fy,t('↑↓ Elegir / desplazar · Enter / clic Desplegar · Esc Plegar · PgUp/PgDn · S Sesión · F Fallos · B Sondeos · L Directo · Tab Vistas · Q Consola'),WHITE,small,width-2*m)
@@ -418,7 +455,7 @@ def render_options(width, height, title, options, selected=0, detail=''):
     boxes=[]
     for i in range(start,min(len(options),start+capacity)):
         box=(margin+20,row_y,width-margin-20,row_y+37)
-        d.rounded_rectangle(box,radius=7,fill='#18333d' if i==selected else BG,
+        d.rounded_rectangle(box,radius=7,fill='#191d26' if i==selected else BG,
                             outline=GOLD if i==selected else EDGE)
         d.text((box[0]+12,row_y+7),('› ' if i==selected else '  ')+clean(options[i][0]),
                font=font(17),fill=GOLD if i==selected else WHITE)

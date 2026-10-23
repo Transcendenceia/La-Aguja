@@ -8,7 +8,7 @@ Manual por niveles, pasos y capturas: https://aguja.transcendenceia.net/docs
 ## Primera vuelta sin reparar nada
 
 1. Arranca el USB correcto desde el menú del fabricante; no selecciones instalación del disco interno.
-2. Si el perfil está cifrado, ejecuta `aguja profile unlock` en consola local. Su frase no es la de SSH ni la clave BitLocker.
+2. Si el perfil está protegido, se abre antes del menú en la pantalla de arranque. Su frase no es la de SSH ni la clave BitLocker.
 3. Comprueba `aguja status`, `aguja doctor` y `lsblk -o NAME,SIZE,MODEL,FSTYPE,LABEL,MOUNTPOINTS`.
 4. Distingue USB, disco interno y destino de recuperación. No montes ni repares para completar esta práctica.
 5. Si necesitas IA, autentica un proveedor y confirma su estado; no hace falta autorizar los cuatro.
@@ -21,7 +21,7 @@ Preparar/grabar borra el USB confirmado; arrancar el live no modifica automátic
 ## Listo al arrancar
 
 - La consola local entra automáticamente como `aguja` y muestra **Centro de rescate**.
-- El Imager propone desbloquear el perfil con `aguja`; puedes cambiarla o elegir explícitamente arranque directo.
+- El Imager existente prepara una cápsula protegida o arranque directo. Rescue abre la cápsula protegida durante el arranque, antes del menú. La bóveda LUKS nueva se prepara desde la consola local con `sudo aguja profile protect`.
 - SSH: usuario `aguja`, contraseña de fábrica pública `aguja`.
 - Una contraseña personalizada en aguja.conf reemplaza la de fábrica.
 - Una contraseña vacía con clave pública habilita solo esa clave.
@@ -151,7 +151,7 @@ El Imager Windows/Linux puede incluir alta opcional con tu clave, URL Headscale 
 Tailscale oficial) y nombre del nodo. Solo se inscribe al arrancar con la opción habilitada,
 red y perfil disponible/desbloqueado. No prepara un túnel propietario de nuestra plataforma.
 
-    aguja profile unlock        Si la cápsula está cifrada: primero en consola local
+    aguja profile status --json  Protección efectiva; el desbloqueo se hace al arrancar
     aguja tailscale status
     aguja tailscale status --json
     ssh aguja@IP_TAILNET         Desde otro equipo autorizado en la misma tailnet
@@ -231,8 +231,26 @@ La bienvenida SSH muestra estos caminos también al conectarse sin terminal.
 
 ## Private recovery and credentials / Recuperación y credenciales
 
-Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. `aguja profile unlock` also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
+Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. The early boot profile gate also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
 
 ## USB-persistent updates / Actualizaciones persistentes
 
 `aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.
+
+
+## Rescue 1.1 · equipo, misiones y respaldos
+
+`aguja hardware --json`: inventario y recursos actuales. `aguja plan --json`: opciones
+de respaldo, sin tocar discos. `aguja storage status --json` / `sudo aguja storage
+configure`: cloud y NAS; credenciales en LUKS o solo RAM. Lee MISSIONS.md y BACKUP.md.
+El menú se organiza en Trabajar, Agentes, Conectar y Sistema; ↑↓/Enter o ratón.
+El perfil protegido se abre antes del panel, SSH y agentes, no desde el menú.
+La preparación automática del Imager sigue funcionando. Cápsulas AES antiguas son
+compatibles en el mismo paso temprano, pero no se presentan como LUKS.
+`sudo aguja profile protect` convierte explícitamente la configuración local a una
+bóveda LUKS2; exige consola local, confirmación y frase nueva. No cifra DATA ni
+borra de forma segura rastros previos de flash. No requiere actualizar Imagers.
+
+Al convertir un perfil anterior, se valida su frase antigua y se guardan perfil y
+resguardos normalizados dentro de LUKS: el siguiente arranque requiere solo la frase
+LUKS nueva. La identidad tailnet se conserva si su estado anterior se puede validar.

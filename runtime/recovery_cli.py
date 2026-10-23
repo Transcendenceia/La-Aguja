@@ -23,7 +23,7 @@ def main(args):
     try:
         state = recovery_state.status()
         if a.action == 'status':
-            print(json.dumps(state) if a.json else 'Recovery: ' + ('loaded in private RAM' if state['loaded'] else 'locked; use aguja profile unlock or aguja recovery unlock' if state['locked'] else 'available' if state['present'] else 'not configured'))
+            print(json.dumps(state) if a.json else 'Recovery: ' + ('loaded in private RAM' if state['loaded'] else 'locked; use sudo aguja recovery unlock (profile unlock is at boot)' if state['locked'] else 'available' if state['present'] else 'not configured'))
             return 0
         if not state['present'] or state.get('error'):
             raise ValueError()

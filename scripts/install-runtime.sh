@@ -7,6 +7,9 @@ ROOT=${AGUJA_ROOT:-$PROJECT/build/rootfs}
 AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-tailscale.sh"
 install -d "$ROOT/usr/lib/aguja" "$ROOT/usr/share/aguja" "$ROOT/etc/aguja" \
   "$ROOT/etc/skel" "$ROOT/etc/profile.d" "$ROOT/etc/systemd/system" "$ROOT/usr/local/share/zsh/site-functions"
+printf '{"schema":1,"features":["early-profile-gate-v1","luks-profile-v1","hardware-preflight-v1","storage-credentials-v1"]}\n' > "$ROOT/usr/share/aguja/capabilities.json"
+# The factory account is locked until boot's profile gate configures owner access.
+chroot "$ROOT" passwd -l aguja
 # Persistent update infrastructure, copied only into the isolated factory.
 install -m 755 "$PROJECT/runtime/update-root-worker.sh" "$ROOT/usr/lib/aguja/update-root-worker.sh"
 install -m 755 "$PROJECT/runtime/update-session-worker.sh" "$ROOT/usr/lib/aguja/update-session-worker.sh"
@@ -14,6 +17,9 @@ install -m 644 "$PROJECT/desktop/resources/release-key.json" "$ROOT/usr/share/ag
 install -m 644 "$PROJECT/config/harnesses.json" "$ROOT/usr/share/aguja/harnesses.json"
 install -m 644 "$PROJECT/runtime/update-protocol.json" "$ROOT/usr/share/aguja/update-protocol.json"
 install -m 644 "$PROJECT/runtime/UPDATES.md" "$ROOT/usr/share/aguja/UPDATES.md"
+install -m 644 "$PROJECT/runtime/MISSIONS.md" "$PROJECT/runtime/BACKUP.md" "$ROOT/usr/share/aguja/"
+install -d "$ROOT/usr/share/aguja/branding/fonts"
+install -m 644 "$PROJECT/branding/fonts/"* "$ROOT/usr/share/aguja/branding/fonts/"
 install -d "$ROOT/usr/share/aguja/skills/live-updates"
 install -m 644 "$PROJECT/skills/live-updates/SKILL.md" "$ROOT/usr/share/aguja/skills/live-updates/"
 install -m 755 "$PROJECT/runtime/update-initramfs-hook" "$ROOT/etc/initramfs-tools/hooks/aguja-update"
@@ -26,6 +32,10 @@ if call not in s:s=s.replace('\tVerify_checksums "${livefs_root}"',call+'\tVerif
 assert call in s;p.write_text(s)
 PYGUARD
 install -m 644 "$PROJECT/runtime/aguja-update-check.service" "$PROJECT/runtime/aguja-update-check.timer" "$PROJECT/runtime/aguja-update-job@.service" "$PROJECT/runtime/aguja-tailnet-save.service" "$PROJECT/runtime/aguja-tailnet-save.path" "$PROJECT/runtime/aguja-tailnet-save.timer" "$ROOT/etc/systemd/system/"
+install -d "$ROOT/etc/initramfs-tools/conf.d" "$ROOT/etc/NetworkManager/conf.d"
+printf 'MODULES=most\n' > "$ROOT/etc/initramfs-tools/conf.d/aguja-portable"
+# Avoid unreliable firmware Wi-Fi power-saving during SSH/long transfers.
+printf '[connection]\nwifi.powersave=2\n' > "$ROOT/etc/NetworkManager/conf.d/20-aguja-wifi.conf"
 # runtime/*.py is the canonical module inventory, also verified by build-image.
 install -m 755 "$PROJECT/runtime/"*.py "$ROOT/usr/lib/aguja/"
 install -m 644 "$PROJECT/runtime/console-history.conf" "$ROOT/usr/lib/aguja/"
@@ -56,7 +66,7 @@ install -m 644 "$ROOT/etc/skel/.zshrc" "$ROOT/home/aguja/.zshrc"
 touch "$ROOT/home/aguja/.hushlogin"
 chroot "$ROOT" chown -R aguja:aguja /home/aguja
 chroot "$ROOT" usermod -s /bin/zsh aguja
-chroot "$ROOT" usermod -a -G video aguja
+chroot "$ROOT" usermod -a -G video,render,kvm aguja
 truncate -s 0 "$ROOT/etc/motd"
 for service in ssh avahi-daemon; do
     mkdir -p "$ROOT/etc/systemd/system/$service.service.d"
@@ -65,7 +75,7 @@ done
 for unit in getty@tty1 serial-getty@ttyS0; do
     mkdir -p "$ROOT/etc/systemd/system/$unit.service.d"
     # shellcheck disable=SC2016
-    printf '[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin aguja %%I $TERM\n' > "$ROOT/etc/systemd/system/$unit.service.d/autologin.conf"
+    printf '[Unit]\nRequires=aguja-boot.service\nAfter=aguja-boot.service\n[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin aguja %%I $TERM\n' > "$ROOT/etc/systemd/system/$unit.service.d/autologin.conf"
 done
 cat > "$ROOT/etc/profile.d/aguja.sh" <<'EOF'
 export PATH="$HOME/.local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH"

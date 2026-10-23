@@ -149,6 +149,10 @@ def package_check(refresh=True):
 def check():
  with lock(check_capacity=False):
   result={'schema':1,'checked_at':int(time.time()),'errors':{},'packages':[],'harnesses':{},'release':None,'restart_required':state()['active']!=running_generation()}
+  progress.emit('check','Rescue Disk')
+  try:
+   releases=sources.catalog(json.loads(PIN.read_text()));current=Path('/usr/share/aguja/VERSION').read_text().strip();latest=releases[0]['version'];result['release']={'current':current,'latest':latest,'available':sources.semver(latest)>sources.semver(current)}
+  except Exception:result['errors']['release']='No se pudo verificar el catálogo firmado.'
   progress.emit('check','Paquetes del sistema')
   try:result['packages']=package_check()
   except Exception:result['errors']['packages']='No se pudieron consultar los repositorios del sistema.'
@@ -159,10 +163,6 @@ def check():
     v=sources.harnesses([name])[name]
     result['harnesses'][name]={'current':current[name],'latest':v['version'],'available':current[name] is not None and sources.semver(v['version'])>sources.semver(current[name]),'candidate':v}
    except Exception:result['errors'][name]='No se pudo consultar este proveedor.'
-  progress.emit('check','Rescue Disk')
-  try:
-   releases=sources.catalog(json.loads(PIN.read_text()));current=Path('/usr/share/aguja/VERSION').read_text().strip();latest=releases[0]['version'];result['release']={'current':current,'latest':latest,'available':sources.semver(latest)>sources.semver(current)}
-  except Exception:result['errors']['release']='No se pudo verificar el catálogo firmado.'
   atomic(RUN/'checks.json',result)
   count=len(result['packages'])+sum(x['available'] for x in result['harnesses'].values())+int(bool(result['release'] and result['release']['available']))
   atomic(NOTICE,{'available_count':count,'checked_at':result['checked_at'],'partial':bool(result['errors'])});NOTICE.chmod(0o644)
@@ -223,10 +223,11 @@ def manifest(folder,version,kind):
  files={n:hashfile(folder/'live'/n) for n in ('vmlinuz','initrd.img','filesystem.squashfs')}
  atomic(folder/'manifest.json',{'schema':1,'version':version,'kind':kind,'files':files,'created_at':int(time.time())});return files
 
-def release_update():
+def release_update(expected_version=None):
  with lock():
   progress.emit('download','Descargando Rescue Disk')
   r=sources.catalog(json.loads(PIN.read_text()))[0];current=Path('/usr/share/aguja/VERSION').read_text().strip()
+  if expected_version is not None and r['version']!=expected_version:raise ValueError('El catálogo cambió. Comprueba de nuevo y revisa la versión antes de aplicar.')
   if sources.semver(r['version'])<=sources.semver(current):raise ValueError('El Rescue Disk está actualizado')
   capacity(r['bytes']+3*1024**3);g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);image=folder/'download.img';h=hashlib.sha256();received=0
   try:
@@ -242,6 +243,9 @@ def release_update():
    packed_version=run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/share/aguja/VERSION']).stdout.decode().strip()
    protocol=json.loads(run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/share/aguja/update-protocol.json']).stdout)
    if packed_version!=r['version'] or protocol!={'schema':1,'profile_schema':1,'config_partition':4,'data_partition':5}:raise ValueError('La imagen nueva no admite este protocolo de configuración')
+   if (CFG/'aguja-profile.luks').exists():
+    gate=run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/lib/aguja/profile_vault.py']).stdout
+    if not gate or b'early-profile-gate-v1' not in run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/share/aguja/capabilities.json']).stdout:raise ValueError('La versión nueva no declara soporte para este perfil LUKS')
    progress.emit('verify','Verificando Rescue Disk');manifest(folder,r['version'],'release');image.unlink();progress.emit('activate','Preparando el próximo arranque');active=activate(g)
    return {'ok':True,'generation':g,'version':r['version'],'reboot_required':True,'state':active}
   except Exception:
@@ -291,7 +295,7 @@ def verify_packages(root,items):
   version=run(['chroot',str(root),'/usr/bin/dpkg-query','-W','-f=${Version}',item['name']]).stdout.decode().strip()
   if version!=item['version']:raise ValueError('La versión del paquete no coincide con la selección: '+item['name'])
 
-PUBLIC_MANAGER_FILES={"usr/lib/aguja/"+n for n in ['updates.py', 'update_sources.py', 'update_tasks.py', 'update_progress.py', 'update_ui.py', 'update_jobs.py', 'tailnet_identity.py', 'tailscale_service.py', 'profile_cli.py', 'boot.py', 'profile.py', 'network.py', 'display.py', 'cockpit.py', 'update-root-worker.sh', 'update-session-worker.sh', 'locale-catalog.json']}|set(['usr/share/aguja/UPDATES.md', 'usr/share/aguja/skills/live-updates/SKILL.md', 'usr/lib/live/boot/9999-aguja-update.sh', 'etc/initramfs-tools/hooks/aguja-update', 'etc/systemd/system/aguja-tailscale.service', 'etc/systemd/system/aguja-tailscaled.service', 'etc/systemd/system/aguja-tailnet-save.service', 'etc/systemd/system/aguja-tailnet-save.path', 'etc/systemd/system/aguja-tailnet-save.timer', 'etc/systemd/system/aguja-update-check.service', 'etc/systemd/system/aguja-update-check.timer', 'etc/systemd/system/aguja-update-job@.service'])
+PUBLIC_MANAGER_FILES={"usr/lib/aguja/"+n for n in ['profile_vault.py', 'hardware.py', 'storage.py', 'agent_context.py', 'secret_inventory.py', 'recovery_state.py', 'i18n.py', 'updates.py', 'update_sources.py', 'update_tasks.py', 'update_progress.py', 'update_ui.py', 'update_jobs.py', 'tailnet_identity.py', 'tailscale_service.py', 'profile_cli.py', 'boot.py', 'profile.py', 'network.py', 'display.py', 'cockpit.py', 'update-root-worker.sh', 'update-session-worker.sh', 'locale-catalog.json']}|set(['usr/share/aguja/capabilities.json', 'usr/share/aguja/MISSIONS.md', 'usr/share/aguja/BACKUP.md', 'usr/share/aguja/AGENT-CONTEXT.md', 'usr/share/aguja/SSH-WELCOME.txt', 'etc/systemd/system/aguja-boot.service', 'usr/share/aguja/UPDATES.md', 'usr/share/aguja/skills/live-updates/SKILL.md', 'usr/lib/live/boot/9999-aguja-update.sh', 'etc/initramfs-tools/hooks/aguja-update', 'etc/systemd/system/aguja-tailscale.service', 'etc/systemd/system/aguja-tailscaled.service', 'etc/systemd/system/aguja-tailnet-save.service', 'etc/systemd/system/aguja-tailnet-save.path', 'etc/systemd/system/aguja-tailnet-save.timer', 'etc/systemd/system/aguja-update-check.service', 'etc/systemd/system/aguja-update-check.timer', 'etc/systemd/system/aguja-update-job@.service'])
 
 def refresh_manager(root,source=Path('/')):
  record=source/'usr/share/aguja/update-runtime.json'

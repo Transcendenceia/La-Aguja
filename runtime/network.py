@@ -108,7 +108,8 @@ def state():
 
 
 def save_settings(changes):
-    profile_path = Path('/config/aguja-profile.json')
+    from profile_vault import settings_root, private_root
+    profile_path = settings_root() / 'aguja-profile.json'
     if profile_path.is_file():
         import profile
         # Protected settings stay in volatile runtime. Plain profiles are updated
@@ -116,16 +117,16 @@ def save_settings(changes):
         if json.loads(profile_path.read_bytes()).get('protection') == 'encrypted':
             return False
         before = profile_path.read_bytes()
-        backup_dir = Path('/data/config-backups') if os.path.ismount('/data') else Path('/run/aguja-config-backups')
+        backup_dir = private_root() / 'backups' if private_root() else Path('/data/config-backups') if os.path.ismount('/data') else Path('/run/aguja-config-backups')
         backup_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
         os.chmod(backup_dir, 0o700)
         profile.private_write(backup_dir / (uuid.uuid4().hex + '-profile.json'), before)
         return profile.update_plain_settings(profile_path, changes)
-    target = Path("/config/aguja.conf")
+    target = settings_root() / "aguja.conf"
     if not target.is_file():
         return False
     # Keep a private, recoverable previous configuration on this USB, never in Git.
-    folder = Path("/data/config-backups") if os.path.ismount("/data") else Path("/run/aguja-config-backups")
+    folder = private_root() / "backups" if private_root() else Path("/data/config-backups") if os.path.ismount("/data") else Path("/run/aguja-config-backups")
     folder.mkdir(mode=0o700, parents=True, exist_ok=True)
     os.chmod(folder, 0o700)
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -199,7 +200,7 @@ def set_password():
     if result is not None:
         return result
     if session().get('ssh_auth_mode') == 'locked':
-        print('Primero desbloquea el perfil protegido: aguja profile unlock.')
+        print('El perfil protegido se desbloquea en la pantalla de arranque, antes del menú.')
         return 1
     print("LA AGUJA · Contraseña SSH personalizada\nLa contraseña no se muestra ni se envía como argumento.")
     password = getpass.getpass("Nueva contraseña: ")

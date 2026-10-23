@@ -8,14 +8,14 @@ PACKAGE=re.compile(r'[a-z0-9][a-z0-9+.-]*(?::[a-z0-9][a-z0-9-]*)?')
 VERSION=re.compile(r'[A-Za-z0-9][A-Za-z0-9.+:~_-]{0,199}')
 def rows(inventory):
  result=[]
+ r=inventory.get('release')
+ if r and r['available']:result.append({'id':'release:rescue','kind':'release','name':'Rescue Disk',**r})
  for p in inventory.get('packages',[]):
   if not PACKAGE.fullmatch(p['name']) or not VERSION.fullmatch(p['latest']):raise ValueError('Paquete de actualización no válido')
   result.append({'id':'package:'+p['name'],'kind':'package',**p})
  for name,h in inventory.get('harnesses',{}).items():
   if name not in u.BINS:raise ValueError('Proveedor no válido')
   if h['available']:result.append({'id':'harness:'+name,'kind':'harness','name':name,**h})
- r=inventory.get('release')
- if r and r['available']:result.append({'id':'release:rescue','kind':'release','name':'Rescue Disk',**r})
  if len({r['id'] for r in result})!=len(result):raise ValueError('Inventario de actualización duplicado')
  return result
 
@@ -98,7 +98,7 @@ def apply(items,choices):
   progress.emit('start','Sí persistente' if mode=='persistent' else 'Sí · solo esta sesión',mode=mode,items=[r['id'] for r in group])
   try:
    if mode=='session':result=session_update(group)
-   elif group[0]['kind']=='release':result=u.release_update()
+   elif group[0]['kind']=='release':result=u.release_update(expected_version=group[0]['latest'])
    else:
     packages=package_items(group);harnesses=harness_items(group)
     result=u.package_generation(bool(packages),bool(harnesses),package_items=packages,harness_items=harnesses)

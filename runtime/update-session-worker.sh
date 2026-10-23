@@ -3,7 +3,7 @@
 set -euo pipefail
 ulimit -c 0
 plan=$1
-[[ $EUID == 0 && $plan == /run/aguja-updates/session-*/packages.json && -f $plan && ! -L $plan ]] || exit 1
+[[ $EUID == 0 && $plan == /var/cache/aguja-session-updates/session-*/packages.json && -f $plan && ! -L $plan ]] || exit 1
 python3 - <<'PYRAM'
 import sys
 sys.path.insert(0,'/usr/lib/aguja')

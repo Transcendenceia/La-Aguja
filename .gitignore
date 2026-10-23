@@ -20,3 +20,5 @@ desktop/tests/*.fixture.json
 # Separate local desktop candidate artifacts
 dist-desk/
 dist-desk-fix/
+
+dist-efficient/

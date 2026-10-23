@@ -54,33 +54,21 @@ class Desk(Gtk.Window):
         root=Gtk.Box(orientation=Gtk.Orientation.VERTICAL); self.add(root)
         bar=Gtk.Box();bar.get_style_context().add_class('spectrum');root.pack_start(bar,False,False,0)
         body=Gtk.Box();root.pack_start(body,True,True,0)
-        side=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=12);side.set_size_request(230,-1)
-        side.get_style_context().add_class('sidebar');body.pack_start(side,False,False,0)
-        side.pack_start(self.label('LA AGUJA', 'title'),False,False,10)
-        side.pack_start(self.label('TRANSCENDENCEIA', 'muted'),False,False,0)
-        self.nav=Gtk.ListBox();self.nav.set_selection_mode(Gtk.SelectionMode.SINGLE)
-        for key,title in PAGES:
-            row=Gtk.ListBoxRow();row.page=key;row.add(self.label(tr(title)));self.nav.add(row)
-        self.nav.connect('row-selected',lambda _,row:self.show_page(row.page) if row else None)
-        side.pack_start(self.nav,True,True,0)
-        self.button(side,'Return to cockpit',lambda:self.close())
+        # Only the requested task is constructed. No second menu or eager pages.
+        page=page if page in ('cloud','tailnet','network') else 'network'
         self.stack=Gtk.Stack();body.pack_start(self.stack,True,True,0)
-        self.status=self.label(tr('Ready'));self.status.set_margin_start(20);self.status.set_margin_end(20)
-        self.status.get_style_context().add_class('statusbar');root.pack_end(self.status,False,False,0)
-        for key,title in PAGES:
-            scroll=Gtk.ScrolledWindow();scroll.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
-            box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=16)
-            for name in ('start','end','top','bottom'):getattr(box,'set_margin_'+name)(28)
-            box.pack_start(self.label(tr(title),'title'),False,False,0)
-            scroll.add(box);self.stack.add_named(scroll,key);self.pages[key]=box
-            getattr(self,'page_'+key)(box)
-        index=next((i for i,(key,_) in enumerate(PAGES) if key==page),0)
-        self.nav.select_row(self.nav.get_row_at_index(index));self.show_all();self.maximize()
-        GLib.timeout_add(1500,self.poll_updates)
-        if page=='browser':
-            try: url=json.loads((Path(os.environ['AGUJA_DESK_REQUEST'])/'request.json').read_text()).get('url')
-            except (KeyError,OSError,ValueError):url=None
-            if url:self.address.set_text(url);GLib.idle_add(self.browse)
+        title=dict(PAGES)[page]
+        scroll=Gtk.ScrolledWindow();scroll.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
+        box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=16)
+        for name in ('start','end','top','bottom'):getattr(box,'set_margin_'+name)(24)
+        box.pack_start(self.label(tr(title),'title'),False,False,0)
+        scroll.add(box);self.stack.add_named(scroll,page);self.pages[page]=box
+        self.status=self.label(tr('Ready'));self.status.get_style_context().add_class('statusbar')
+        footer=Gtk.Box(spacing=20);footer.set_margin_start(24);footer.set_margin_end(24)
+        self.button(footer,'Return to cockpit',lambda:self.close())
+        footer.pack_start(self.status,True,True,0);root.pack_end(footer,False,False,12)
+        getattr(self,'page_'+page)(box)
+        self.show_page(page);self.show_all();self.maximize()
 
     def label(self,text,style=None):
         label=Gtk.Label(label=text);label.set_xalign(0);label.set_line_wrap(True);label.set_max_width_chars(85)
@@ -101,7 +89,7 @@ class Desk(Gtk.Window):
     def field(self,box,title,secret=False,file=False,directory=False):
         line=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=5)
         box.pack_start(line,False,False,0);line.pack_start(self.label(tr(title)),False,False,0)
-        row=self.row(line);entry=Gtk.Entry();entry.set_hexpand(True);entry.set_visibility(not secret)
+        row=self.row(line);entry=Gtk.Entry();entry.set_width_chars(1);entry.set_hexpand(True);entry.set_visibility(not secret)
         if secret:entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)
         row.pack_start(entry,True,True,0)
         if file or directory:self.button(row,'Choose',lambda:self.choose(entry,directory))
@@ -120,6 +108,9 @@ class Desk(Gtk.Window):
         action=Gtk.FileChooserAction.SELECT_FOLDER if directory else Gtk.FileChooserAction.OPEN
         dialog=Gtk.FileChooserDialog(title=tr('Select directory' if directory else 'Select file'),transient_for=self,action=action)
         dialog.add_buttons(tr('Cancel'),Gtk.ResponseType.CANCEL,tr('Choose'),Gtk.ResponseType.OK)
+        dialog.set_default_size(900,600)
+        dialog.set_current_folder(str(Path.home()))
+        dialog.show_all()
         if dialog.run()==Gtk.ResponseType.OK:
             path=dialog.get_filename()
             if entry is not None:entry.set_text(path)
@@ -152,6 +143,7 @@ class Desk(Gtk.Window):
         except OSError:self.status.set_text(tr(ERROR))
 
     def show_page(self,key):
+        if key not in self.pages:return
         self.current=key;self.stack.set_visible_child_name(key)
         refresh={'cloud':self.refresh_cloud,'tailnet':self.refresh_tailnet,'files':self.refresh_volumes,'network':self.refresh_network}
         if key in refresh:refresh[key]()
@@ -180,7 +172,7 @@ class Desk(Gtk.Window):
         import web
         try:
             runtime=Path('/run/user')/str(os.getuid());runtime.mkdir(mode=0o700,parents=True,exist_ok=True)
-            choice=self.engine.get_active_id();(runtime/'aguja-browser').write_text(choice)
+            choice=self.engine.get_active_id() if hasattr(self,'engine') else 'helium';(runtime/'aguja-browser').write_text(choice)
             if url is None:url=self.address.get_text().strip() or None
             if url and '://' not in url:
                 from urllib.parse import quote

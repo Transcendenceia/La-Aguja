@@ -10,8 +10,8 @@ replace /usr/lib/aguja/browser-session there (back up/restore it) with:
   #!/bin/sh
   exec python3 /tmp/aguja-browser-fixture.py session "$@"
 On the real guest console as aguja: python3 /tmp/aguja-browser-fixture.py run
-Use the page buttons: callback, Copy; console should focus. Ctrl+Shift+V then
-Enter explicitly pastes the synthetic code into that same CLI PTY. Test events:
+Use the page buttons: callback, Copy; the synthetic code must reach the original native CLI PTY automatically,
+without a keyboard shortcut or a second login process. Test events:
 /run/aguja-auth/<uid>/graphical-fixture-events.json (booleans only).
 Capture QMP screendump while the page and console are visible. Restore the
 production browser-session afterwards. Never apply the override to real media.
@@ -60,8 +60,8 @@ class Page(http.server.BaseHTTPRequestHandler):
 <p>Prueba sintética: NO es una cuenta ni autorización de un proveedor.</p>
 <button onclick="fetch('/callback?state='''+STATE+'''').then(()=>this.textContent='Callback local OK')">1. Probar callback localhost</button>
 <button onclick="navigator.clipboard.writeText('''+html.escape(json.dumps(CODE),quote=True)+''').then(()=>this.textContent='Copiado: vuelve a la misma consola')">2. Copiar código sintético</button>
-<p>La consola debe recibir el foco. Pega allí con Ctrl+Shift+V y Enter.</p>
-<small>Copiar solo cambia el foco; no pega ni ejecuta automáticamente.</small>''').encode()
+<p>Copiar debe enviar el código a la misma PTY y enfocar la consola.</p>
+<small>Solo el código sintético de esta autenticación activa se devuelve al CLI.</small>''').encode()
         self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8')
         self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
 
@@ -69,14 +69,12 @@ class Page(http.server.BaseHTTPRequestHandler):
 def session(directory):
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Page)
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
-    real_read=auth.read_record;real_focus=browser.focus_console
-    def read(path):
-        record=real_read(path)
-        if record:record=dict(record,url=f'http://127.0.0.1:{server.server_port}/fixture')
-        return record
+    import web
+    real_open=web.open_browser;real_focus=browser.focus_console
+    def open_fixture(url,**kwargs):return real_open(f'http://127.0.0.1:{server.server_port}/fixture',**kwargs)
     def focus():
         real_focus();event(clipboard_owner_returned_focus=True)
-    auth.read_record=read;browser.focus_console=focus
+    web.open_browser=open_fixture;browser.focus_console=focus
     event(fixture_only=True,normal_user=os.getuid()!=0,browser_ready=True)
     try:return browser.user_session(directory)
     finally:server.shutdown();server.server_close()
@@ -86,9 +84,9 @@ def native_cli():
     print('LA AGUJA · CLI sintético. Sin cuenta real. El proceso espera el código en ESTA PTY.',flush=True)
     url='https://claude.com/cai/oauth/authorize?client_id=aguja-fixture&response_type=code&state='+STATE+'&code=true'
     print(url,flush=True)
-    value=input('Pega el código sintético con Ctrl+Shift+V y Enter: ')
+    value=input('Esperando el código copiado (automático): ')
     success=hashlib.sha256(value.encode()).digest()==hashlib.sha256(CODE.encode()).digest()
-    event(explicit_paste_same_native_pty=success)
+    event(automatic_paste_same_native_pty=success)
     print('MISMA PTY: '+('OK' if success else 'FALLO'),flush=True)
     input('Enter para cerrar la prueba y volver al VT de texto: ')
     return 0 if success else 1
@@ -99,5 +97,5 @@ if __name__=='__main__':
     elif sys.argv[1]=='cli':raise SystemExit(native_cli())
     elif sys.argv[1]=='run':
         EVENTS.unlink(missing_ok=True)
-        raise SystemExit(auth_pty.run([sys.executable,str(Path(__file__).resolve()),'cli'],'claude',login=True))
+        raise SystemExit(auth_pty.run([sys.executable,str(Path(__file__).resolve()),'cli'],'claude',login=False))
     raise SystemExit('fixture run|session DIR|cli')

@@ -80,7 +80,7 @@ class BrowserProtocolTests(unittest.TestCase):
                 profile_paths.append(page.parent)
             return SimpleNamespace(poll=lambda:0)
         with tempfile.TemporaryDirectory() as d,patch.object(auth,'read_record',return_value=record),\
-             patch.object(browser,'SelectionOwners',Selection),patch.dict(os.environ,{'DISPLAY':':99'}),\
+             patch('gui_session.wait_window_manager'),patch.object(browser,'read_clipboard',return_value=None),patch.dict(os.environ,{'DISPLAY':':99'}),\
              patch('web.binary',return_value='chromium'),patch.object(os,'getuid',return_value=1000),patch.object(subprocess,'Popen',side_effect=spawn):
             # No clipboard process nor DOM interrogation is created. The code
             # remains in the provider page until the user explicitly pastes.
@@ -90,7 +90,7 @@ class BrowserProtocolTests(unittest.TestCase):
         self.assertEqual(calls[1][calls[1].index('-sl')+1], '10000')
         self.assertFalse(any(p.exists() for p in profile_paths))
 
-    def test_clipboard_owner_signal_never_auto_injects_code(self):
+    def test_legacy_clipboard_owner_signal_only_tracks_new_owners(self):
         selection=browser.SelectionOwners.__new__(browser.SelectionOwners)
         selection.owners=(0,)
         with patch.object(selection,'sample',side_effect=[(42,),(42,),(0,),(43,)]):

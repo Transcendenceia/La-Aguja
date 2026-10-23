@@ -217,7 +217,7 @@ def menu_boxes(width, height, selected=0):
     top = y0 + round(73*s)
     row_height = max(32, round(53*s))
     columns = 2 if x1-x0 >= 650*s and width >= 900 else 1
-    rows = max(1, int((y1-m*.65-top) / row_height))
+    rows = min(max(1, int((y1-m*.65-top) / row_height)), max(1,(len(MENU)+columns-1)//columns))
     capacity = rows * columns
     indices = list(menu_window(selected, capacity))
     gap = round(12*s)
@@ -558,18 +558,25 @@ class Framebuffer:
             result=subprocess.run(['sudo','-n','/usr/bin/python3','/usr/lib/aguja/console_mode.py',actual,str(mode)],stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=8)
             if result.returncode:raise error
 
-    def present(self,image):
+    def present(self,image,box=None):
         if image.size!=(self.width,self.height):
             raise ValueError('Frame size does not match mapped device')
-        data=image.convert('RGBA' if self.raw_mode.endswith('A') else 'RGB').tobytes('raw',self.raw_mode)
-        rowlen=self.width*(self.var.bits_per_pixel//8)
-        offset=self.var.yoffset*self.fix.line_length+self.var.xoffset*(self.var.bits_per_pixel//8)
+        # Never repaint a different VT (for example while Xorg owns the screen).
+        if getattr(self,'tty_fd',None) is not None and Path('/sys/class/tty/tty0/active').read_text().strip()!=Path(os.ttyname(self.tty_fd)).name:
+            return
+        left,top,right,bottom=box or (0,0,self.width,self.height)
+        left,top=max(0,left),max(0,top);right,bottom=min(self.width,right),min(self.height,bottom)
+        if right<=left or bottom<=top:return
+        pixels=image if box is None else image.crop((left,top,right,bottom))
+        data=pixels.convert('RGBA' if self.raw_mode.endswith('A') else 'RGB').tobytes('raw',self.raw_mode)
+        rowlen=(right-left)*(self.var.bits_per_pixel//8)
+        offset=(self.var.yoffset+top)*self.fix.line_length+(self.var.xoffset+left)*(self.var.bits_per_pixel//8)
         # write() reports damage to the DRM driver. mmap alone can leave Intel
         # FBC/PSR scanning a cached login frame although readback has new pixels.
         if rowlen == self.fix.line_length:
             self._write_pixels(data,offset)
         else:
-            for row in range(self.height):
+            for row in range(bottom-top):
                 start=offset+row*self.fix.line_length
                 self._write_pixels(data[row*rowlen:(row+1)*rowlen],start)
 
@@ -595,3 +602,24 @@ class Framebuffer:
             self.fd=None
         if getattr(self,'owned_tty',False):
             os.close(self.tty_fd);self.owned_tty=False
+
+
+class PointerPainter:
+    """Reuse the composed panel; mouse motion writes only the tiny dirty rectangle."""
+    def __init__(self):
+        self.base=None;self.previous=None;self.reset=True
+
+    def present(self,fb,position):
+        if self.base is None:return
+        if self.reset:
+            fb.present(self.base);self.previous=None;self.reset=False
+        if position==self.previous:return
+        def bounds(p):return (max(0,p[0]-3),max(0,p[1]-3),min(fb.width,p[0]+18),min(fb.height,p[1]+23))
+        if self.previous:fb.present(self.base,bounds(self.previous))
+        if position:
+            from PIL import ImageDraw
+            box=bounds(position);pixels=self.base.crop(box)
+            x,y=position[0]-box[0],position[1]-box[1]
+            ImageDraw.Draw(pixels).polygon([(x,y),(x+13,y+14),(x+6,y+13),(x+3,y+20)],fill=WHITE,outline=BG)
+            frame=self.base.copy();frame.paste(pixels,(box[0],box[1]));fb.present(frame,box)
+        self.previous=position

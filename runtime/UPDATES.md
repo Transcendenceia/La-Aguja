@@ -95,7 +95,7 @@ reflashed. Factory/previous remain available; no automatic reboot. If a LUKS vau
 is present, a release without the early gate capability is rejected. Catalog errors
 mean “unverified”, not “up to date”. This does not update Flash Imager.
 
-## Bulk selection (Rescue Desk)
+## Bulk selection (single cockpit)
 
 All RAM selects all component updates, not the complete Rescue image, which
 requires persistent storage. All persistent can combine the signed official
@@ -104,3 +104,10 @@ components in a new generation based on it, and activate only the final verified
 generation. Components already at a newer version in the Rescue are not
 downgraded. A failed stage leaves the previous active generation unchanged.
 No automatic reboot. Closing the UI does not stop background update jobs.
+
+RAM preflight checks the complete selection before package installation. Download
+staging uses the verified live RAM overlay under /var/cache/aguja-session-updates,
+not the much smaller /run tmpfs. Owned archives are reclaimed on success/failure;
+private receipts remain. A later failure reports verified completed components
+and does not claim the whole selection succeeded. The fixed Install footer opens
+confirmation; measured APT/download progress remains visible or can be reattached.

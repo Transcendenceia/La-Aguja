@@ -265,7 +265,7 @@ def install_harnesses(root,items,cache,reserve=3*1024**3):
   archive=cache/(name+'.tgz');sources.fetch(r['url'],archive,r['algorithm'],r['digest'],r.get('bytes'),progress=lambda done,total:progress.emit('download',name,completed=done,total=total,unit='bytes'))
   with tarfile.open(archive,'r:gz') as tar:
    member=tar.getmember(r['member'])
-   if not member.isfile() or member.size>1024**3 or shutil.disk_usage(root).free<member.size+2*1024**3:raise ValueError('Binario nativo no válido')
+   if not member.isfile() or member.size>1024**3 or shutil.disk_usage(root).free<member.size+reserve:raise ValueError('Binario nativo no válido')
    target=root/BINS[name];target.parent.mkdir(parents=True,exist_ok=True)
    if target.is_symlink():raise ValueError('Destino nativo inesperado')
    temporary=target.with_name(target.name+'.aguja-update-'+uuid.uuid4().hex)

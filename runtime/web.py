@@ -35,7 +35,7 @@ def open_browser(url=None, directory=None, choice=None):
     if directory is None:
         runtime = Path('/run/user') / str(os.getuid())
         runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
-        directory = Path(tempfile.mkdtemp(prefix='aguja-web-', dir=runtime))
+        directory = runtime / 'aguja-web-session'
     directory = Path(directory)
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
     if url:
@@ -64,9 +64,9 @@ def open_browser(url=None, directory=None, choice=None):
     return subprocess.Popen([
         executable, '--user-data-dir=' + str(profile), '--no-first-run',
         '--no-default-browser-check', '--disable-sync', '--ozone-platform=x11',
-        '--password-store=basic', '--force-dark-mode',
+        '--password-store=basic', '--force-dark-mode', '--disk-cache-size=33554432',
         '--load-extension=' + str(ASSETS/'browser-theme'),
-        '--window-size=1180,740', '--window-position=24,24', page.as_uri(),
+        '--start-maximized', '--window-size=1180,740', '--window-position=0,0', page.as_uri(),
     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 

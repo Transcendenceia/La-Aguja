@@ -124,19 +124,20 @@ entradas interactivas ni contraseñas tecleadas. Credenciales, lectura de config
 stdin y protocolos de transferencia ocultan sus contenidos, sin cambiar la respuesta SSH.
 No interpretes una salida ocultada como un comando fallido: comprueba su resultado remoto.
 
-## Autenticación IA · mini navegador local
+## Autenticación IA · navegador automático
 
     aguja login claude
     aguja login antigravity
     aguja login codex
     opencode auth login          Recorrido nativo; no promete navegador para todos sus proveedores
 
-Desde consola local compatible se abre Chromium normal con sandbox y una consola gráfica
-unida a la misma PTY del CLI. Tú autorizas el dominio oficial; callback localhost y state/PKCE
-siguen siendo del proveedor. Si copias un código, la consola toma foco; pega explícitamente
-con Ctrl+Shift+V y Enter cuando el CLI lo solicite. Copiar no entrega ni ejecuta el código.
+Desde consola local compatible el navegador compartido abre automáticamente el enlace
+nativo de autenticación, también si aparece al iniciar un agente. Tú autorizas el dominio
+oficial; callback localhost y state/PKCE siguen siendo del proveedor. Durante un flujo manual
+activo, copiar el código lo envía una sola vez a la misma PTY del CLI y enfoca su consola.
+No se lee el portapapeles fuera de esa autenticación. Los callbacks localhost se reciben
+por el mecanismo nativo, sin pegar códigos. Ctrl+] queda como recuperación opcional.
 Cerrar navegador/consola gráfica devuelve al terminal original sin matar el CLI.
-Ctrl+] abre una URL pendiente capturada o cierra el asistente activo.
 
 No QR en el recorrido nuevo. En SSH/serie/sin pantalla compatible permanece la URL y el método
 nativo; localhost del disco no se reenvía automáticamente al PC remoto. Usa el método remoto
@@ -255,14 +256,18 @@ Al convertir un perfil anterior, se valida su frase antigua y se guardan perfil 
 resguardos normalizados dentro de LUKS: el siguiente arranque requiere solo la frase
 LUKS nueva. La identidad tailnet se conserva si su estado anterior se puede validar.
 
-## Centro gráfico (1.1.1)
+## Menú único (1.2.0)
 
-`aguja desk` abre formularios locales; `aguja web` el navegador compartido con
-OAuth y `aguja files` el acceso a Yazi, visores y montajes explícitos.
+Agentes, Conexiones, Herramientas y Ajustes agrupan las operaciones. Navegador
+abre directamente el mismo navegador usado por OAuth. Archivos abre Yazi como
+root sin configuración intermedia; no monta discos automáticamente. Actualizaciones
+incluye selección por componente, Todo RAM / Todo persistente, botón Instalar
+selección, confirmación y progreso real en segundo plano.
+
+Conexiones abre solo el formulario elegido: Internet, Tailscale/Headscale o Cloud/NAS.
 Cloud/NAS permite campos manuales o importar rclone.conf desde archivo/directorio;
 las claves referenciadas se copian al almacén privado. Navegación remota en solo
-lectura; no sincroniza automáticamente. Red privada configura Tailscale/Headscale
-sin depender del Imager. Todo RAM/Todo persistente están en Actualizaciones.
+lectura; no sincroniza automáticamente. No hay un segundo centro gráfico.
 Los agentes necesitan Internet y acceso a un proveedor: no hay modelos locales.
 Instrucciones canónicas en inglés; respuesta en tu idioma. Método ODD:
 `/usr/share/aguja/ODD.md`.

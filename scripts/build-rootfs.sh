@@ -92,7 +92,9 @@ chroot "$ROOT" apt-get clean
 find "$ROOT/var/lib/apt/lists" -type f -delete
 find "$ROOT/etc/ssh" -maxdepth 1 -name 'ssh_host_*' -type f -delete
 truncate -s 0 "$ROOT/etc/machine-id"
-[[ ! -f "$ROOT/var/lib/dbus/machine-id" ]] || truncate -s 0 "$ROOT/var/lib/dbus/machine-id"
+# systemd supplies a fresh /etc/machine-id at boot; D-Bus must use that same
+# identity, not a second empty regular file left over from debootstrap.
+ln -sfn /etc/machine-id "$ROOT/var/lib/dbus/machine-id"
 rm -f "$ROOT/usr/sbin/policy-rc.d"
 AGUJA_PROJECT="$PROJECT" bash "$PROJECT/scripts/install-branding.sh"
 chroot "$ROOT" update-initramfs -u -k all

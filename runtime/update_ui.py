@@ -112,7 +112,7 @@ def menu(language=None):
    except (OSError,ValueError,RuntimeError,ImportError):pass
    try:curses.curs_set(0)
    except curses.error:pass
-   screen.timeout(120);screen.keypad(True)
+   screen.timeout(20);screen.keypad(True)
    def text_for_event(e):
     detail=e.get('detail','');return tr(detail) if detail in MESSAGES else display.clean(detail)
    def draw():
@@ -164,7 +164,7 @@ def menu(language=None):
         if allowed:boxes.append(((x,y,x+width,y+line),('select',index,mode)))
        y+=line
       if not model.error:write(bottom+round(5*scale),tr('Flechas: elegir · Espacio: cambiar · A: aplicar · C: consultar'),display.DIM)
-      button(tr('A · Revisar selección'),'review',margin,fb.height-round(65*scale),round(300*scale),enabled=any(v!='no' for v in model.choices.values()))
+      button(tr('A · Instalar selección'),'review',margin,fb.height-round(65*scale),round(300*scale),enabled=any(v!='no' for v in model.choices.values()))
       button(tr('C · Comprobar'),'check',margin+round(320*scale),fb.height-round(65*scale),round(230*scale))
       button(tr('Esc · Volver'),'home',fb.width-margin-round(200*scale),fb.height-round(65*scale),round(200*scale))
      elif model.phase=='confirm':
@@ -179,7 +179,7 @@ def menu(language=None):
       write(y,tr('Se instalarán también las dependencias necesarias.'));y+=line
       write(y,tr('RAM se pierde al reiniciar. Persistente se aplica en el próximo arranque.'));y+=line
       write(y,tr('No se reinicia el equipo automáticamente.'));y+=line*1.5
-      button(tr('Enter · Aplicar selección'),'apply',margin,y,round(340*scale));button(tr('Esc · Revisar lista'),'list',margin+round(360*scale),y,round(290*scale))
+      button(tr('Enter · Instalar ahora'),'apply',margin,fb.height-round(65*scale),round(340*scale));button(tr('Esc · Revisar lista'),'list',margin+round(360*scale),fb.height-round(65*scale),round(290*scale))
      elif model.busy:
       mark='◐◓◑◒'[int(time.monotonic()*5)%4];write(y,mark+'  '+tr(STAGES.get(model.event.get('stage'),'Comprobando actualizaciones' if model.phase=='checking' else 'Iniciando')),display.GOLD);y+=line*1.5
       if model.phase=='applying' and model.mode:write(y,tr(LABELS[model.mode]),display.CYAN);y+=line
@@ -198,15 +198,14 @@ def menu(language=None):
       result=model.result or {};ok=result.get('ok',False);write(y,tr('Actualización terminada' if ok else 'La actualización no terminó'),display.GREEN if ok else display.RED);y+=line*1.5
       if result.get('error'):write(y,tr(result['error']),display.RED);y+=line*2
       for item in result.get('results',[]):
+       if not item.get('ok',True):continue
        write(y,tr('Guardado en el pendrive y verificado' if item['mode']=='persistent' else 'Actualizado en RAM · solo esta sesión'),display.CYAN);y+=line
       if result.get('reboot_required'):write(y,tr('Reinicio pendiente: fábrica y versión anterior siguen disponibles.'));y+=line
       if result.get('session_may_be_partial'):write(y,tr('Puede haber cambios parciales en RAM; revisa antes de reintentar.'),display.GOLD);y+=line
       button(tr('Enter · Volver al menú'),'exit',margin,max(y+line,fb.height-round(85*scale)),round(350*scale))
       button(tr('C · Comprobar'),'check',margin+round(370*scale),max(y+line,fb.height-round(85*scale)),round(230*scale))
      if model.error and model.phase!='done':write(fb.height-round(103*scale),tr(model.error),display.RED)
-     if pointer and pointer.position:
-      x,y=pointer.position;canvas.ellipse((x-4,y-4,x+4,y+4),fill=display.WHITE)
-     fb.present(image);return
+     painter.base=image;painter.reset=True;return
     # Exact same controller and plan on serial/SSH: no fake progress or auto-approval.
     def line(y,text):
      if 0<=y<h-1:
@@ -227,7 +226,7 @@ def menu(language=None):
     elif model.phase=='confirm':
      line(2,tr('Revisa antes de aplicar'));chosen=tasks.plan(model.items,model.choices)
      for n,mode in enumerate(('session','persistent')):line(4+n,tr(LABELS[mode])+': '+', '.join(r['name'] for r in chosen[mode]))
-     line(7,tr('Se instalarán también las dependencias necesarias.'));line(8,tr('RAM se pierde al reiniciar. Persistente se aplica en el próximo arranque.'));line(10,tr('Enter · Aplicar selección'));line(11,tr('Esc · Revisar lista'))
+     line(7,tr('Se instalarán también las dependencias necesarias.'));line(8,tr('RAM se pierde al reiniciar. Persistente se aplica en el próximo arranque.'));line(10,tr('Enter · Instalar ahora'));line(11,tr('Esc · Revisar lista'))
     elif model.busy:
      line(3,'|/-\\'[int(time.monotonic()*5)%4]+' '+tr(STAGES.get(model.event.get('stage'),'Iniciando')));line(5,text_for_event(model.event));line(6,measurement(model.event))
      for n,event in enumerate(list(model.events)[-max(1,h-12):],8):line(n,tr(STAGES.get(event.get('stage'),'Iniciando'))+' · '+text_for_event(event))
@@ -257,11 +256,12 @@ def menu(language=None):
     elif value=='list':model.phase='list';model.error=''
     elif value=='exit':return True
     return False
-   rendered=None
+   rendered=None;painter=display.PointerPainter()
    while True:
     model.drain()
-    signature=(model.phase,model.selected,model.offset,repr(model.choices),repr(model.event),repr(model.result),model.error,pointer.position if pointer else None)
-    if model.busy or signature!=rendered:draw();rendered=signature
+    signature=(model.phase,model.selected,model.offset,repr(model.choices),repr(model.event),repr(model.result),model.error,int(time.monotonic()*2) if model.busy else None)
+    if signature!=rendered:draw();rendered=signature
+    if fb:painter.present(fb,pointer.position if pointer else None)
     if pointer:
      for e in pointer.poll():
       if e['action']=='back':

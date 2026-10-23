@@ -24,6 +24,7 @@ chroot "$ROOT" dpkg-query -W -f='${Status}\n' qemu-system-gui ovmf seabios | awk
 # Reject unprivileged copies that strip ownership/setuid from the factory.
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/bin/sudo") == 0:0:4755 ]] || { echo 'Restaura propietarios y permisos de la rootfs (sudo)'; exit 1; }
 [[ $(stat -c '%u:%a' "$ROOT/usr/lib/dbus-1.0/dbus-daemon-launch-helper") == 0:4754 ]] || { echo 'Restaura propietarios y permisos de la rootfs (D-Bus)'; exit 1; }
+[[ $(readlink "$ROOT/var/lib/dbus/machine-id") == /etc/machine-id ]] || { echo 'D-Bus debe usar la identidad del arranque'; exit 1; }
 # Public images must never ship a live node identity or enrollment key.
 [[ ! -e "$ROOT/run/aguja-platform/tailscale.key" ]] || { echo 'Rootfs contiene una clave tailnet privada; usa una raíz limpia'; exit 1; }
 for private_tree in run/aguja-tailnet-private run/aguja-tailscale var/lib/tailscale; do

@@ -1,12 +1,14 @@
 """Local OAuth browser and a private bridge to the *existing* CLI PTY.
 
-No clipboard content is read. A changed X selection owner only focuses the
-console; the user explicitly pastes there. No passwords/codes are logged or
-exchanged here. The normal-user Chromium sandbox is never disabled.
+During an active native OAuth request, copied authorization codes may be returned
+to that same CLI PTY. No clipboard history, passwords/codes or exchanges are
+logged. The normal-user Chromium sandbox is never disabled.
 """
 import ctypes
 import fcntl
 import json
+import hashlib
+import re
 import os
 from pathlib import Path
 import pwd
@@ -65,6 +67,10 @@ class Relay:
         self.server=socket.socket(socket.AF_UNIX);self.server.bind(str(self.path))
         self.path.chmod(0o600);self.server.listen(1);self.server.setblocking(False)
         self.client=None;self.rx=bytearray();self.tx=bytearray();self.history=bytearray()
+        self.directory=directory;self.pasted=set()
+        self.paste=socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM)
+        self.paste.setsockopt(socket.SOL_SOCKET,socket.SO_PASSCRED,1)
+        self.paste.bind(str(directory/'paste.sock'));(directory/'paste.sock').chmod(0o600);self.paste.setblocking(False)
     def disconnect(self):
         if self.client:self.client.close()
         self.client=None;self.rx.clear();self.tx.clear()
@@ -74,6 +80,17 @@ class Relay:
             self.tx.extend(frame(0,data))
             if len(self.tx)>1024*1024:self.disconnect()
     def poll(self,master):
+        while True:
+            try:data,credentials,flags,_=self.paste.recvmsg(4097,socket.CMSG_SPACE(12))
+            except BlockingIOError:break
+            uid=next((struct.unpack('3i',value)[1] for level,kind,value in credentials if level==socket.SOL_SOCKET and kind==socket.SCM_CREDENTIALS),None)
+            record=auth.read_record(self.directory/'request.json')
+            code=authorization_code(data,record) if uid==os.getuid() and not flags else None
+            if code:
+                digest=hashlib.sha256(code).digest()
+                if digest not in self.pasted:
+                    from auth_pty import write_all
+                    write_all(master,code+b'\r');self.pasted.add(digest)
         try:
             client,_=self.server.accept()
             uid=struct.unpack('3i',client.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,12))[1]
@@ -101,6 +118,7 @@ class Relay:
         except (OSError,ValueError):self.disconnect()
     def close(self):
         self.disconnect();self.server.close();self.path.unlink(missing_ok=True)
+        self.paste.close();(self.directory/'paste.sock').unlink(missing_ok=True)
 
 
 def launch(directory):
@@ -157,6 +175,37 @@ class SelectionOwners:
     def close(self):self.x.XCloseDisplay(self.display)
 
 
+def authorization_code(data,record):
+    """Only code-shaped clipboard data in a live, manual native OAuth flow."""
+    if not record or not 20<=len(data)<=4096:return None
+    from urllib.parse import parse_qs,urlsplit
+    request=urlsplit(record['url']);query=parse_qs(request.query)
+    # Loopback callbacks deliver themselves; never inject their clipboard data.
+    if any(urlsplit(uri).hostname in ('localhost','127.0.0.1','::1') for uri in query.get('redirect_uri',[])):return None
+    if request.path.rstrip('/')=='/codex/device':return None
+    try:code=data.decode('ascii').strip()
+    except UnicodeError:return None
+    if not re.fullmatch(r'[A-Za-z0-9_./~+%-]{20,}(?:#[A-Za-z0-9_.~+%-]{1,512})?',code):return None
+    if '#' in code and query.get('state') and code.rsplit('#',1)[1]!=query['state'][0]:return None
+    return code.encode()
+
+
+def read_clipboard():
+    """Bounded, volatile read; called only by the active authentication session."""
+    process=subprocess.Popen(['xclip','-o','-selection','clipboard'],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
+    data=bytearray();deadline=time.monotonic()+.6
+    try:
+        while len(data)<=4096 and time.monotonic()<deadline:
+            if not select.select([process.stdout],[],[],max(0,deadline-time.monotonic()))[0]:return None
+            chunk=os.read(process.stdout.fileno(),4097-len(data))
+            if not chunk:return bytes(data)
+            data.extend(chunk)
+        return None
+    finally:
+        if process.poll() is None:process.kill()
+        process.wait();process.stdout.close()
+
+
 def focus_console():
     # Match our fixed WM_CLASS, never window text (which may be private).
     found=subprocess.run(['xdotool','search','--onlyvisible','--class','aguja-oauth-console'],
@@ -184,8 +233,10 @@ def user_session(directory):
         page.write_text('<!doctype html><meta charset="utf-8"><title>LA AGUJA · Login</title>'
                         '<script>location.replace('+json.dumps(record['url']).replace('<','\\u003c')+')</script>')
         children.append(subprocess.Popen(['openbox','--config-file','/usr/share/aguja/desktop/openbox.xml'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL))
+        from gui_session import wait_window_manager
+        wait_window_manager(children[-1])
         terminal_process=subprocess.Popen(['xterm','-class','aguja-oauth-console','-T',
-            'LA AGUJA | misma consola | Ctrl+Shift+V pega | cerrar vuelve al texto',
+            'LA AGUJA | mismo CLI | copiar codigo lo envia | cerrar vuelve al texto',
             '-sb','-sl','10000',
             '-bg','#090b10','-fg','#f7f6f1','-cr','#ff9dcc','-fa','DejaVu Sans Mono','-fs','11',
             '-geometry','100x28+16+440','-xrm',
@@ -193,15 +244,24 @@ def user_session(directory):
             '-e','/usr/bin/python3','/usr/lib/aguja/browser.py','terminal',str(directory)],
             stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
         children.append(terminal_process)
-        selection=SelectionOwners()
+        initial=read_clipboard();last_clipboard=hashlib.sha256(initial).digest() if initial else b'';next_clipboard=0
         import web
         chromium=web.open_browser(record['url'],directory=private)
         children.append(chromium)
         while not stopping and terminal_process.poll() is None and chromium.poll() is None:
             if (directory/'browser-stop').exists() or auth.process_stamp(record['pid'])!=record['start_ticks']:break
-            if selection.changed():
-                try:focus_console()
-                except (OSError,subprocess.TimeoutExpired):pass
+            if time.monotonic()>=next_clipboard:
+                next_clipboard=time.monotonic()+.5
+                active=auth.read_record(directory/'request.json')
+                if not active:break
+                data=read_clipboard()
+                digest=hashlib.sha256(data).digest() if data else None
+                # Read only new clipboard contents, not an inherited stale code.
+                if last_clipboard is not None and digest!=last_clipboard and authorization_code(data or b'',active):
+                    with socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM) as paste:paste.sendto(data,str(directory/'paste.sock'))
+                    try:focus_console()
+                    except (OSError,subprocess.TimeoutExpired):pass
+                last_clipboard=digest or b''
             time.sleep(.1)
     finally:
         if selection:selection.close()

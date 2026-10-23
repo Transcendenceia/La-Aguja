@@ -9,6 +9,7 @@ import signal
 import subprocess
 import sys
 import time
+import threading
 
 import network
 from i18n import result_text, t
@@ -27,24 +28,15 @@ MASCOT = (
 # One source of truth for labels, keyboard navigation and pointer hit targets.
 MENU = (
     ('shell', '1', 'Consola Zsh', 'Terminal y sesiones tmux', 'TRABAJAR'),
-    ('guide', '3', 'Misiones y herramientas', 'Guía del agente, métodos y límites', 'TRABAJAR'),
-    ('desk', 'G', 'Centro gráfico', 'Formularios, archivos y configuración', 'TRABAJAR'),
-    ('web', 'V', 'Navegador web', 'Helium · navegación y acceso a agentes', 'TRABAJAR'),
-    ('files', 'E', 'Archivos', 'Yazi · explorar, previsualizar y editar', 'TRABAJAR'),
-    ('backup', 'C', 'Planificar respaldo', 'Opciones según este equipo y tu objetivo', 'TRABAJAR'),
-    ('codex', '4', 'Codex', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
-    ('antigravity', '5', 'Antigravity', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
-    ('claude', '6', 'Claude Code', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
-    ('opencode', '7', 'OpenCode', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
-    ('wifi', '2', 'Red y Wi-Fi', 'Conectar, comprobar y recuperar acceso', 'CONECTAR'),
-    ('remote', 'R', 'Tailscale / Headscale', 'SSH privado desde otro equipo', 'CONECTAR'),
-    ('storage', 'N', 'Cloud y NAS', 'Credenciales y destinos de respaldo', 'CONECTAR'),
-    ('password', '9', 'Contraseña SSH', 'Cambiar sin mostrar la contraseña', 'CONECTAR'),
-    ('doctor', '8', 'Diagnóstico de Rescue', 'Servicios, herramientas y conectividad', 'SISTEMA'),
-    ('locale', 'I', 'Idioma y teclado', 'Preferencias de esta consola', 'SISTEMA'),
-    ('update', 'T', 'Actualizaciones', 'Consultar · RAM · persistentes', 'SISTEMA'),
-    ('donate', 'D', 'Apoyar LA AGUJA', 'Un proyecto de TranscendenceIA', 'SISTEMA'),
+    ('agents', 'A', 'Agentes IA', 'Codex · Claude · Antigravity · OpenCode', 'TRABAJAR'),
+    ('web', 'V', 'Navegador web', 'Abrir directamente · navegación y OAuth', 'TRABAJAR'),
+    ('files', 'E', 'Archivos · root', 'Abrir Yazi directamente con acceso completo', 'TRABAJAR'),
+    ('connections', '2', 'Conexiones', 'Internet · Tailscale / Headscale · Cloud y NAS', 'CONECTAR'),
+    ('tools', '3', 'Herramientas y respaldo', 'Misiones · métodos · diagnóstico', 'TRABAJAR'),
+    ('update', 'T', 'Actualizaciones', 'Instalar selección · progreso · RAM / persistente', 'SISTEMA'),
+    ('settings', 'I', 'Ajustes', 'Idioma y teclado · contraseña SSH · proyecto', 'SISTEMA'),
 )
+
 MENU_ACTIONS = tuple(row[0] for row in MENU)
 
 
@@ -83,7 +75,7 @@ def update_notice():
         if job.get('state') in ('queued','running'):
             return t('Buscando actualizaciones en segundo plano · T para ver') if job.get('operation')=='check' else t('Actualizando en segundo plano · T para ver progreso')
         if job.get('operation')=='apply' and job.get('state') in ('done','failed'):
-            if not job.get('ok'):return t('Actualización interrumpida · T para revisar')
+            if not job.get('ok'):return t('Actualización no completada · T para ver causa y resultado')
             return t('Actualizaciones guardadas y verificadas · reinicio pendiente') if job.get('reboot_required') else t('Actualización terminada · T para ver')
         state=json.loads(Path('/run/aguja-update-status.json').read_text())
         return t('Actualizaciones disponibles: {count} · aguja update menu').format(count=state['available_count']) if state['available_count'] else t('Consulta de actualizaciones incompleta · aguja update menu') if state.get('partial') else ''
@@ -229,7 +221,7 @@ def draw(screen, current, countdown=0, selected=0, activity=None,
             for i,art in enumerate(MASCOT[-5:]):
                 line(height-9+i,art,gold,x+8,24)
     line(height-3,t('↑↓ Elegir / desplazar · Enter / clic Desplegar · Esc Plegar · PgUp/PgDn · S Sesión · F Fallos · B Sondeos · L Directo · Tab Vistas · Q Consola'),curses.A_DIM)
-    line(height-2,t("1 Consola  2 Wi-Fi  3 Guía  4 Codex  5 Antigravity  6 Claude  7 OpenCode  8 Estado  9 Clave  R Tailnet"),curses.A_DIM)
+    line(height-2,t("1 Consola · A Agentes · V Navegador · E Archivos · 2 Conexiones · 3 Herramientas · T Actualizaciones · I Ajustes"),curses.A_DIM)
     screen.refresh()
 
 
@@ -247,8 +239,8 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
         curses.use_default_colors()
         curses.init_pair(1, curses.COLOR_WHITE, -1)
         curses.init_pair(2, curses.COLOR_MAGENTA, -1)
-    # Eight animation frames/s. getch blocks between frames rather than spinning.
-    screen.timeout(125)
+    # Fast input polling; expensive layout/font work is cached independently.
+    screen.timeout(20)
     try:curses.mousemask(curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION)
     except curses.error:pass
     start = time.monotonic()
@@ -256,10 +248,16 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
     paused = False
     current, snapshot = {}, {}
     next_network = next_activity = next_stats = 0
+    network_worker=None;network_result=[]
+    def refresh_network():
+        try:network_result.append(network.state())
+        except Exception:pass
     resources = display.ResourceStats()
     stats = {}
     fb = None
     pointer = None
+    painter = display.PointerPainter()
+    rendered = None
     previous_term = signal.getsignal(signal.SIGTERM)
     def stop(signum, frame):
         raise SystemExit(128+signum)
@@ -275,9 +273,12 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
         while True:
             now = time.monotonic()
             if now >= next_network:
-                current = network.state()
-                current['update_notice'] = update_notice()
+                if network_worker is None or not network_worker.is_alive():
+                    network_worker=threading.Thread(target=refresh_network,daemon=True);network_worker.start()
                 next_network = now+3
+            if network_result:
+                current=network_result.pop();network_result.clear()
+            current['update_notice'] = update_notice()
             if now >= next_activity:
                 live = activity_snapshot()
                 if not paused:
@@ -295,13 +296,17 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                         for event in pointer.poll():
                             action = display.pointer_action(control,snapshot,event,fb.width,fb.height)
                             if action is not None:return action
-                    if control.view=='auth':
-                        import auth
-                        fb.present(auth.render(fb.width,fb.height,auth.current()))
-                    else:
-                        fb.present(display.render(fb.width,fb.height,current,snapshot,tick=now-start,
-                               paused=paused,scroll=control.scroll,view=control.view,selected=selection,
-                               countdown=remaining,stats=stats,release=version(),control=control,pointer=pointer.position if pointer else None))
+                    signature=(int((now-start)/2),selection,paused,repr(control.__dict__),current.get('update_notice'))
+                    if signature != rendered:
+                        if control.view=='auth':
+                            import auth
+                            pixels=auth.render(fb.width,fb.height,auth.current())
+                        else:
+                            pixels=display.render(fb.width,fb.height,current,snapshot,tick=int(now-start),
+                                   paused=paused,scroll=control.scroll,view=control.view,selected=selection,
+                                   countdown=remaining,stats=stats,release=version(),control=control)
+                        painter.base=pixels;rendered=signature;painter.reset=True
+                    painter.present(fb,pointer.position if pointer else None)
                 except (OSError, ValueError):
                     fb.close()
                     fb = None
@@ -343,6 +348,7 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                     return MENU_ACTIONS[selection]
                 control.key('detail',snapshot)
             elif key in (ord('a'),ord('A')):
+                if control.view=='help':return 'agents'
                 control.view='commands' if control.view=='auth' else 'auth'
             elif key == 27 and control.view=='auth':
                 if auth_view:return 'shell'
@@ -352,11 +358,11 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             elif key in (ord("q"),ord("Q"),ord("1"),27):
                 return "shell"
             elif key in (ord("w"),ord("W"),ord("2")):
-                return "wifi"
+                return "connections"
             elif key in (ord("h"),ord("H")):
                 control.view = "help"
             elif key == ord("3"):
-                return "guide"
+                return "tools"
             elif key in (ord("4"),ord("5"),ord("6"),ord("7")):
                 return ("codex","antigravity","claude","opencode")[key-ord("4")]
             elif key == ord("8"):
@@ -364,11 +370,11 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             elif key in (ord("r"),ord("R")):
                 return "remote"
             elif key in (ord('i'),ord('I')):
-                return 'locale'
+                return 'settings'
             elif key in (ord('e'),ord('E')):
                 return 'files'
             elif key in (ord('g'),ord('G')):
-                return 'desk'
+                return 'agents'
             elif key in (ord('v'),ord('V')):
                 return 'web'
             elif key in (ord('c'),ord('C')):
@@ -443,14 +449,23 @@ def menu(auto_setup=False):
             value = input(t("1 Consola / W Wi-Fi / H Ayuda / 4 Codex [1]: ")).strip().lower()
             action = {"w": "wifi", "h": "guide", "4": "codex", "r": "remote"}.get(value, "shell")
         automatic = False
+        groups={
+            'agents':('Agentes IA', [('Codex','codex'),('Claude Code','claude'),('Antigravity','antigravity'),('OpenCode','opencode')]),
+            'connections':('Conexiones', [('Internet y Wi-Fi','wifi'),('Tailscale / Headscale','remote'),('Cloud y NAS','storage')]),
+            'tools':('Herramientas y respaldo', [('Misiones y herramientas','guide'),('Planificar respaldo','backup'),('Diagnóstico de Rescue','doctor')]),
+            'settings':('Ajustes', [('Idioma y teclado','locale'),('Contraseña SSH','password'),('Apoyar LA AGUJA','donate')]),
+        }
+        if action in groups:
+            title,options=groups[action]
+            action=option_dialog(t(title),[(t(label),value) for label,value in options])
+            if action is None:continue
         if action == "shell":
             banner(compact=True)
             return "shell"
         if action in ("codex", "antigravity", "claude", "opencode"):
             return action
         import browser
-        graphical={'desk':'home','web':'browser','files':'files','guide':'guide','backup':'backup',
-                   'storage':'cloud','remote':'tailnet','wifi':'network','password':'settings','update':'updates'}
+        graphical={'web':'browser','files':'files','storage':'cloud','remote':'tailnet','wifi':'network'}
         if action in graphical and browser.local_console():
             import gui_session
             if gui_session.run(graphical[action]) == 0:
@@ -468,7 +483,7 @@ def menu(auto_setup=False):
             subprocess.call(['/usr/local/bin/aguja', 'locale'])
         elif action in ('desk','web','files'):
             if browser.local_console():
-                print(t('No se pudo iniciar el centro gráfico. Ejecuta aguja doctor para revisar el entorno.'))
+                print(t('No se pudo abrir la herramienta. Ejecuta aguja doctor para revisar el entorno.'))
             else:
                 print(t('Centro gráfico disponible en la consola local; por SSH usa aguja tools.'))
         elif action in ('hardware', 'backup', 'storage'):
@@ -511,11 +526,14 @@ def option_dialog(title, options, detail=''):
                 pointer=Pointer(fb.width,fb.height)
             except (ImportError,OSError,ValueError,RuntimeError):
                 pass
-            screen.timeout(150)
+            screen.timeout(20)
+            painter=display.PointerPainter();rendered=None
             while True:
                 if fb:
-                    pixels,boxes=display.render_options(fb.width,fb.height,title,options,selected,detail)
-                    fb.present(pixels)
+                    if selected != rendered:
+                        pixels,boxes=display.render_options(fb.width,fb.height,title,options,selected,detail)
+                        painter.base=pixels;painter.reset=True;rendered=selected
+                    painter.present(fb,pointer.position if pointer else None)
                     if pointer:
                         for event in pointer.poll():
                             if event.get('action')=='back':return None

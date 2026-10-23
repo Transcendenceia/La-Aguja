@@ -66,11 +66,10 @@ def run(argv,name,login=False):
         record=auth.read_record(session.directory/"request.json")
         if not record or record["provider"]!=expected:return
         if gui is not None and gui.poll() is None:
-            (session.directory/"browser-stop").touch(mode=0o600)
             return
         if browser.available():
             gui=browser.launch(session.directory)
-            write_all(1,b"\r\nLA AGUJA: abriendo navegador local. Copia el codigo, luego Ctrl+Shift+V en la misma consola. Cierra la consola grafica para volver.\r\n")
+            write_all(1,b"\r\nLA AGUJA: abriendo navegador local. Copia el codigo para enviarlo automaticamente al mismo CLI. Cierra la consola grafica para volver.\r\n")
         else:
             write_all(1,b"\r\nLA AGUJA: sin navegador local (SSH, serie o display no disponible). Conserva el enlace nativo y el modo remoto oficial; los callbacks localhost requieren un navegador en este host o reenvio local explicito.\r\n")
     try:
@@ -87,7 +86,7 @@ def run(argv,name,login=False):
                     if fd==0:send_signal(signal.SIGHUP)
                     continue
                 if fd==master:
-                    if login:detector.feed(data)
+                    detector.feed(data)
                     write_all(1,data);relay.output(data)
                 else:
                     # Ctrl+] is an explicit request, never a model-output action.
@@ -101,12 +100,9 @@ def run(argv,name,login=False):
             if record and record['provider']==expected:
                 if record['url']!=seen:
                     seen=record['url']
-                    # An opener inherited by an agent is still not proof the
-                    # user requested login. Outside `aguja login`, require the
-                    # explicit Ctrl+] action even for an allowlisted provider.
-                    if login:open_browser()
-                    elif announced!=seen:
-                        write_all(1,b'\r\nLA AGUJA: Ctrl+] abre el navegador de autenticacion.\r\n');announced=seen
+                    # The owner requested automatic native authentication handoff.
+                    # Only the exact provider allowlist above can open a browser.
+                    open_browser()
             else:
                 if seen:detector.clear();seen=None;announced=None
             if gui is not None and gui.poll() is not None:

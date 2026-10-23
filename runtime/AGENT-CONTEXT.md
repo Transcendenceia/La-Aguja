@@ -62,8 +62,9 @@ stdin scripts remain private. Never put secrets in labels, argv or output.
 - SSH host identity persists in `/data/ssh`; config backups are root-private in
   `/data/config-backups`. Preserve owner settings and recovery material.
 
-`aguja desk` opens the on-demand local graphical Desk. `aguja files` opens its
-file page with Yazi, previews, editing and explicit target mounts. Mounted host
+`aguja files` opens root Yazi directly, without configuration or automatic mounts.
+The single cockpit groups agents, connections, tools and settings. Connection
+forms are on demand; there is no second graphical hub. Mounted host
 files are accessible; ext4 read-only mounts use noload, XFS uses norecovery.
 Read-only is not forensic hardware write-blocking. Never run fsck on a mounted
 filesystem or launch an unknown binary merely to preview it. Avoid host/VM
@@ -94,7 +95,7 @@ it. Use `aguja password` or Desk settings without printing custom credentials.
 agent OAuth: Helium by default, Chromium for compatibility. Browser cookies
 stay in RAM, downloads go to the chosen path. Local OAuth retains the original
 CLI PTY and callback; never substitute a model's browser session for the owner's
-account. Headless SSH retains native login handoff; graphical Desk needs local
+account. Headless SSH retains native login handoff; graphical tools need the local
 console. No login or inference is implied by browser/CLI availability.
 
     aguja agent codex
@@ -146,3 +147,7 @@ irreversible scope, keep already-authorized work moving, and verify observable
 files/services/boot rather than exit codes alone. Save sanitized evidence and
 rollback before reboot. Guide: `/usr/share/aguja/QUICKSTART.md`; tools:
 `aguja tools`; docs: https://aguja.transcendenceia.net/docs.
+
+Native manual OAuth opens automatically on the local console. During an active
+authentication only, copying a valid code returns it once to the original native
+CLI PTY. Loopback callbacks remain native; no clipboard injection is needed.

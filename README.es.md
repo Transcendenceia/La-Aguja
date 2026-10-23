@@ -112,7 +112,7 @@ La identidad tailnet vive **solo en RAM** y se registra de nuevo tras reiniciar.
 
 ### Entra en tu proveedor IA
 
-Localmente, `aguja login codex`, `aguja login claude` o `aguja login antigravity` pueden abrir Chromium con sandbox en el login oficial y con la PTY original. Copiar enfoca la consola; pega expresamente con Ctrl+Shift+V. OpenCode usa `opencode auth login`. Sin consentimiento automático y sin QR en este recorrido.
+Localmente, `aguja login codex`, `aguja login claude` o `aguja login antigravity` abren automáticamente el navegador compartido con sandbox en el login oficial y con la PTY original. Durante el flujo manual activo, copiar el código lo devuelve a la misma PTY y enfoca su consola. OpenCode usa `opencode auth login`. Sin consentimiento automático y sin QR en este recorrido.
 
 SSH/serie/sin pantalla conservan métodos nativos; no se reenvía automáticamente un callback localhost remoto. Las claves API y la importación selectiva de sesiones portables son alternativas, no pruebas de autenticación vigente. No se copia todo el llavero, historial, hooks ni configuración MCP. Costes, cuotas y datos enviados dependen de tu cuenta y proveedor.
 

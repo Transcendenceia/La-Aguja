@@ -44,10 +44,8 @@ def run(action='home', url=None):
     if action not in ACTIONS:
         raise ValueError('Unknown Desk page')
     if os.environ.get('DISPLAY'):
-        if action=='browser' and url:
-            import web
-            web.open_browser(url)
-            return 0
+        if action in ('browser','files'):
+            return direct(action,url)
         return subprocess.call(['/usr/bin/python3', '/usr/lib/aguja/desk.py', action])
     import auth
     import browser
@@ -131,6 +129,27 @@ def launch(directory):
         os.close(lock)
 
 
+def wait_window_manager(process):
+    for _ in range(100):
+        if process.poll() is not None:raise ValueError('Window manager did not start')
+        state=subprocess.run(['xprop','-root','_NET_SUPPORTING_WM_CHECK'],capture_output=True,timeout=2)
+        if b'window id #' in state.stdout:return
+        time.sleep(.02)
+    raise ValueError('Window manager did not become ready')
+
+
+def direct(action,url=None):
+    if action=='browser':
+        import web
+        return web.open_browser(url).wait()
+    # The owner explicitly requested a root explorer. No setup page or mounts.
+    return subprocess.call(['xterm','-class','aguja-files','-T','LA AGUJA · Archivos · root',
+        '-bg','#090b10','-fg','#f7f6f1','-cr','#ff9dcc','-fa','DejaVu Sans Mono','-fs','12',
+        '-xrm','*VT100.translations: #override Ctrl Shift <Key>V: insert-selection(CLIPBOARD)',
+        '-e','sudo','-n','env','DISPLAY='+os.environ['DISPLAY'],
+        'XAUTHORITY='+os.environ['XAUTHORITY'],'YAZI_CONFIG_HOME=/usr/share/aguja/desktop/yazi','yazi','/'])
+
+
 def session(directory):
     record = read_request(directory, os.getuid())
     environment = dict(os.environ, BROWSER='/usr/local/bin/aguja-web', GTK_THEME='Adwaita:dark',
@@ -138,6 +157,10 @@ def session(directory):
     window_manager = subprocess.Popen(['openbox', '--config-file', '/usr/share/aguja/desktop/openbox.xml'],
                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
+        wait_window_manager(window_manager)
+        os.environ.update(environment)
+        if record['action'] in ('browser','files'):
+            return direct(record['action'],record.get('url'))
         return subprocess.call(['/usr/bin/python3','/usr/lib/aguja/desk.py',record['action']], env=environment)
     finally:
         window_manager.terminate()

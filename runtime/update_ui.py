@@ -70,6 +70,14 @@ class Model:
   if not self.items:return
   row=self.items[self.selected];modes=('no','persistent') if row['kind']=='release' else tasks.MODES
   self.select(self.selected,modes[(modes.index(self.choices[row['id']])+direction)%len(modes)])
+ def select_all(self,mode):
+  if self.phase!='list' or mode not in tasks.MODES:return
+  skipped=False
+  for row in self.items:
+   selected='no' if row['kind']=='release' and mode=='session' else mode
+   skipped|=selected!=mode
+   self.choices[row['id']]=selected
+  self.error='La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.' if skipped else ''
  def back(self):
   if self.busy:return self.job is not None
   if self.phase=='home':return True
@@ -133,6 +141,9 @@ def menu(language=None):
       button(tr('Esc · Volver al menú'),'exit',margin,fb.height-round(72*scale))
      elif model.phase=='list':
       count=len(model.items);write(y,tr('Actualizaciones disponibles: {count}').format(count=count),display.GOLD);y+=line
+      for index,(label,mode) in enumerate((('Todo · No','no'),('Todo · RAM','session'),('Todo · persistente','persistent'))):
+       button(tr(label),('all',mode),margin+index*round(280*scale),y,round(260*scale))
+      y+=round(60*scale)
       if model.inventory.get('restart_required'):write(y,tr('Hay una generación guardada pendiente de reinicio.'),display.GOLD);y+=line
       if model.inventory.get('errors'):write(y,tr('Consulta incompleta: algunas fuentes no respondieron.'),display.RED);y+=line
       capacity=max(1,int((bottom-y-line)/line));model.offset=max(0,min(model.offset,max(0,count-capacity)))
@@ -212,7 +223,7 @@ def menu(language=None):
       index=n+model.offset;mode='['+tr(LABELS[model.choices[row['id']]])+']';name_width=max(8,min(30,(w-len(mode)-6)//2));version_width=max(4,w-len(mode)-name_width-6);versions=str(row['current'])+' → '+row['latest'];line(4+n,('> ' if index==model.selected else '  ')+row['name'][:name_width].ljust(name_width)+' '+versions[:version_width].ljust(version_width)+' '+mode)
      if model.inventory.get('errors'):line(h-5,tr('Consulta incompleta: algunas fuentes no respondieron.'))
      if not model.items:line(4,tr('No hay actualizaciones disponibles.'))
-     line(h-3,tr('Flechas: elegir · Espacio: cambiar · A: aplicar · C: consultar'))
+     line(h-3,tr('0: todo No · R: todo RAM · P: todo persistente · A: aplicar'))
     elif model.phase=='confirm':
      line(2,tr('Revisa antes de aplicar'));chosen=tasks.plan(model.items,model.choices)
      for n,mode in enumerate(('session','persistent')):line(4+n,tr(LABELS[mode])+': '+', '.join(r['name'] for r in chosen[mode]))
@@ -228,7 +239,10 @@ def menu(language=None):
     screen.refresh()
    def action(value):
     if model.busy:return value=='exit' and model.job is not None
-    if isinstance(value,tuple):model.select(value[1],value[2]);return False
+    if isinstance(value,tuple):
+     if value[0]=='all':model.select_all(value[1])
+     else:model.select(value[1],value[2])
+     return False
     if value=='check':model.start('check')
     elif value=='review':
      try:
@@ -277,7 +291,10 @@ def menu(language=None):
      elif model.phase=='confirm':action('apply')
      elif model.phase=='done':return 0
     elif model.phase=='list':
-     if key==curses.KEY_UP:model.selected=max(0,model.selected-1)
+     if key==ord('0'):model.select_all('no')
+     elif key in (ord('r'),ord('R')):model.select_all('session')
+     elif key in (ord('p'),ord('P')):model.select_all('persistent')
+     elif key==curses.KEY_UP:model.selected=max(0,model.selected-1)
      elif key==curses.KEY_DOWN:model.selected=min(max(0,len(model.items)-1),model.selected+1)
      elif key==curses.KEY_NPAGE:model.selected=min(max(0,len(model.items)-1),model.selected+8)
      elif key==curses.KEY_PPAGE:model.selected=max(0,model.selected-8)

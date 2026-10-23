@@ -14,7 +14,7 @@ VERSION=$(cat "$PROJECT/VERSION")
 AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 cmp -s "$PROJECT/VERSION" "$ROOT/usr/share/aguja/VERSION" || { echo 'Instala la versión actual en rootfs antes de empaquetar'; exit 1; }
 cmp -s "$PROJECT/runtime/aguja" "$ROOT/usr/local/bin/aguja" || { echo 'Instala el diagnóstico actual antes de empaquetar'; exit 1; }
-for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md MISSIONS.md BACKUP.md; do
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md MISSIONS.md BACKUP.md ODD.md; do
     cmp -s "$PROJECT/runtime/$guide" "$ROOT/usr/share/aguja/$guide" || { echo 'Instala las guías actuales'; exit 1; }
 done
 for binary in qemu-system-x86_64 qemu-img qemu-nbd; do
@@ -49,7 +49,7 @@ for helper in browser-session; do
     cmp -s "$PROJECT/runtime/$helper" "$ROOT/usr/lib/aguja/$helper" || { echo 'Instala el navegador OAuth actual'; exit 1; }
 done
 cmp -s "$PROJECT/runtime/browser-launch" "$ROOT/usr/local/bin/aguja-browser-launch" || { echo 'Instala el launcher del navegador'; exit 1; }
-for browser_binary in chromium Xorg openbox xclip xterm xdotool; do
+for browser_binary in helium yazi xxd chromium Xorg openbox xclip xterm xdotool; do
     chroot "$ROOT" /bin/sh -c 'command -v "$1" >/dev/null' sh "$browser_binary" || { echo 'Falta un componente del navegador OAuth'; exit 1; }
 done
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/lib/chromium/chrome-sandbox") == 0:0:4755 ]] || { echo 'Incluye chromium-sandbox con sus permisos oficiales'; exit 1; }
@@ -72,6 +72,9 @@ done < <(python3 -c 'import json,sys; c=json.load(open(sys.argv[1])); print("\n"
 # Refuse retired project relay; required provider clients are installed independently of auth.
 for retired in usr/lib/aguja/remote.py usr/lib/aguja/tunnel.py usr/lib/aguja/access.py etc/systemd/system/aguja-tunnel.service; do
     [[ ! -e "$ROOT/$retired" && ! -L "$ROOT/$retired" ]] || { echo 'Rootfs contiene componentes retirados'; exit 1; }
+done
+for asset in "$PROJECT/runtime/desktop-resources/"*; do
+    [[ ! -f "$asset" ]] || cmp -s "$asset" "$ROOT/usr/share/aguja/desktop/$(basename "$asset")" || { echo 'Instala los recursos del centro gráfico'; exit 1; }
 done
 mkdir -p "$ISO_TREE/live" "$ISO_TREE/boot/grub" "$DIST"
 mkdir -p "$ISO_TREE/boot/grub/themes/aguja"
@@ -101,7 +104,7 @@ unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja | cmp -
 for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$PROJECT/runtime/console-history.conf"; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/lib/aguja/$(basename "$runtime")" | cmp -s "$runtime" - || { echo 'Runtime empaquetado no coincide'; exit 1; }
 done
-for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md MISSIONS.md BACKUP.md; do
+for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.md UPDATES.md MISSIONS.md BACKUP.md ODD.md; do
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
 done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/disk-recovery/SKILL.md | cmp -s "$PROJECT/skills/disk-recovery/SKILL.md" - || { echo 'Skill de recuperación empaquetada no coincide'; exit 1; }
@@ -187,7 +190,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$BUILD/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$BUILD/release.json" ::release.json
 printf '{"schema":1,"state":"pending"}\n' > "$BUILD/data-initialize.json"

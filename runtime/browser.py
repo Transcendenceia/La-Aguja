@@ -183,20 +183,19 @@ def user_session(directory):
         page=private/'start.html'
         page.write_text('<!doctype html><meta charset="utf-8"><title>LA AGUJA · Login</title>'
                         '<script>location.replace('+json.dumps(record['url']).replace('<','\\u003c')+')</script>')
-        children.append(subprocess.Popen(['openbox'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL))
+        children.append(subprocess.Popen(['openbox','--config-file','/usr/share/aguja/desktop/openbox.xml'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL))
         terminal_process=subprocess.Popen(['xterm','-class','aguja-oauth-console','-T',
             'LA AGUJA | misma consola | Ctrl+Shift+V pega | cerrar vuelve al texto',
             '-sb','-sl','10000',
+            '-bg','#090b10','-fg','#f7f6f1','-cr','#ff9dcc','-fa','DejaVu Sans Mono','-fs','11',
             '-geometry','100x28+16+440','-xrm',
             '*VT100.translations: #override Ctrl Shift <Key>V: insert-selection(CLIPBOARD)',
             '-e','/usr/bin/python3','/usr/lib/aguja/browser.py','terminal',str(directory)],
             stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
         children.append(terminal_process)
         selection=SelectionOwners()
-        chromium=subprocess.Popen(['chromium','--user-data-dir='+str(private/'profile'),
-            '--no-first-run','--no-default-browser-check','--disable-sync',
-            '--ozone-platform=x11','--password-store=basic','--window-size=1000,650','--window-position=16,16',
-            '--app='+page.as_uri()],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        import web
+        chromium=web.open_browser(record['url'],directory=private)
         children.append(chromium)
         while not stopping and terminal_process.poll() is None and chromium.poll() is None:
             if (directory/'browser-stop').exists() or auth.process_stamp(record['pid'])!=record['start_ticks']:break

@@ -103,13 +103,17 @@ def capacity(required):
  if shutil.disk_usage(DATA).free<required+512*1024**2:raise ValueError('No hay espacio suficiente en DATA; se conserva la versión actual')
  available=next(int(x.split()[1])*1024 for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:'))
  if available<768*1024**2:raise ValueError('RAM insuficiente; cierra otras tareas antes de actualizar')
+def generation_live(generation):
+ if not re.fullmatch('gen-[a-f0-9]{32}',generation):raise ValueError('Generación no válida')
+ folder=ROOT/generation;m=metadata(folder/'manifest.json')
+ if folder.is_symlink():raise ValueError('Generación no válida')
+ for name in ('filesystem.squashfs','vmlinuz','initrd.img'):
+  if (folder/'live'/name).is_symlink() or hashfile(folder/'live'/name)!=m['files'][name]:raise ValueError('La generación seleccionada no supera la verificación.')
+ return folder/'live'
+
 def source_live():
  active=state()['active']
- if active:
-  folder=ROOT/active;m=metadata(folder/'manifest.json')
-  for name in ('filesystem.squashfs','vmlinuz','initrd.img'):
-   if (folder/'live'/name).is_symlink() or hashfile(folder/'live'/name)!=m['files'][name]:raise ValueError('La generación seleccionada no supera la verificación.')
-  return folder/'live'
+ if active:return generation_live(active)
  params=dict(x.split('=',1) for x in Path('/proc/cmdline').read_text().split() if '=' in x);folder=params.get('live-media-path','/live')
  if folder!='/live' and not re.fullmatch('/updates/gen-[a-f0-9]{32}/live',folder):raise ValueError('Generación de arranque no válida')
  root=Path('/run/live/medium')/folder.lstrip('/')
@@ -223,7 +227,7 @@ def manifest(folder,version,kind):
  files={n:hashfile(folder/'live'/n) for n in ('vmlinuz','initrd.img','filesystem.squashfs')}
  atomic(folder/'manifest.json',{'schema':1,'version':version,'kind':kind,'files':files,'created_at':int(time.time())});return files
 
-def release_update(expected_version=None):
+def release_update(expected_version=None,stage_only=False):
  with lock():
   progress.emit('download','Descargando Rescue Disk')
   r=sources.catalog(json.loads(PIN.read_text()))[0];current=Path('/usr/share/aguja/VERSION').read_text().strip()
@@ -246,7 +250,9 @@ def release_update(expected_version=None):
    if (CFG/'aguja-profile.luks').exists():
     gate=run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/lib/aguja/profile_vault.py']).stdout
     if not gate or b'early-profile-gate-v1' not in run(['unsquashfs','-cat',str(folder/'live/filesystem.squashfs'),'usr/share/aguja/capabilities.json']).stdout:raise ValueError('La versión nueva no declara soporte para este perfil LUKS')
-   progress.emit('verify','Verificando Rescue Disk');manifest(folder,r['version'],'release');image.unlink();progress.emit('activate','Preparando el próximo arranque');active=activate(g)
+   progress.emit('verify','Verificando Rescue Disk');manifest(folder,r['version'],'release');image.unlink()
+   if stage_only:return {'ok':True,'generation':g,'version':r['version'],'staged':True,'reboot_required':False}
+   progress.emit('activate','Preparando el próximo arranque');active=activate(g)
    return {'ok':True,'generation':g,'version':r['version'],'reboot_required':True,'state':active}
   except Exception:
    # Failed staging is retained for explicit inspection/cleanup; active stays.
@@ -295,7 +301,7 @@ def verify_packages(root,items):
   version=run(['chroot',str(root),'/usr/bin/dpkg-query','-W','-f=${Version}',item['name']]).stdout.decode().strip()
   if version!=item['version']:raise ValueError('La versión del paquete no coincide con la selección: '+item['name'])
 
-PUBLIC_MANAGER_FILES={"usr/lib/aguja/"+n for n in ['profile_vault.py', 'hardware.py', 'storage.py', 'agent_context.py', 'secret_inventory.py', 'recovery_state.py', 'i18n.py', 'updates.py', 'update_sources.py', 'update_tasks.py', 'update_progress.py', 'update_ui.py', 'update_jobs.py', 'tailnet_identity.py', 'tailscale_service.py', 'profile_cli.py', 'boot.py', 'profile.py', 'network.py', 'display.py', 'cockpit.py', 'update-root-worker.sh', 'update-session-worker.sh', 'locale-catalog.json']}|set(['usr/share/aguja/capabilities.json', 'usr/share/aguja/MISSIONS.md', 'usr/share/aguja/BACKUP.md', 'usr/share/aguja/AGENT-CONTEXT.md', 'usr/share/aguja/SSH-WELCOME.txt', 'etc/systemd/system/aguja-boot.service', 'usr/share/aguja/UPDATES.md', 'usr/share/aguja/skills/live-updates/SKILL.md', 'usr/lib/live/boot/9999-aguja-update.sh', 'etc/initramfs-tools/hooks/aguja-update', 'etc/systemd/system/aguja-tailscale.service', 'etc/systemd/system/aguja-tailscaled.service', 'etc/systemd/system/aguja-tailnet-save.service', 'etc/systemd/system/aguja-tailnet-save.path', 'etc/systemd/system/aguja-tailnet-save.timer', 'etc/systemd/system/aguja-update-check.service', 'etc/systemd/system/aguja-update-check.timer', 'etc/systemd/system/aguja-update-job@.service'])
+PUBLIC_MANAGER_FILES={"usr/lib/aguja/"+n for n in ['tailnet_config.py', 'gui_session.py', 'desk.py', 'desk_backend.py', 'desk_i18n.py', 'web.py', 'file_open.py', 'profile_vault.py', 'hardware.py', 'storage.py', 'agent_context.py', 'secret_inventory.py', 'recovery_state.py', 'i18n.py', 'updates.py', 'update_sources.py', 'update_tasks.py', 'update_progress.py', 'update_ui.py', 'update_jobs.py', 'tailnet_identity.py', 'tailscale_service.py', 'profile_cli.py', 'boot.py', 'profile.py', 'network.py', 'display.py', 'cockpit.py', 'update-root-worker.sh', 'update-session-worker.sh', 'locale-catalog.json']}|set(['usr/share/aguja/capabilities.json', 'usr/share/aguja/ODD.md', 'usr/share/aguja/MISSIONS.md', 'usr/share/aguja/BACKUP.md', 'usr/share/aguja/AGENT-CONTEXT.md', 'usr/share/aguja/SSH-WELCOME.txt', 'etc/systemd/system/aguja-boot.service', 'usr/share/aguja/UPDATES.md', 'usr/share/aguja/skills/live-updates/SKILL.md', 'usr/lib/live/boot/9999-aguja-update.sh', 'etc/initramfs-tools/hooks/aguja-update', 'etc/systemd/system/aguja-tailscale.service', 'etc/systemd/system/aguja-tailscaled.service', 'etc/systemd/system/aguja-tailnet-save.service', 'etc/systemd/system/aguja-tailnet-save.path', 'etc/systemd/system/aguja-tailnet-save.timer', 'etc/systemd/system/aguja-update-check.service', 'etc/systemd/system/aguja-update-check.timer', 'etc/systemd/system/aguja-update-job@.service'])
 
 def refresh_manager(root,source=Path('/')):
  record=source/'usr/share/aguja/update-runtime.json'
@@ -319,13 +325,31 @@ def refresh_manager(root,source=Path('/')):
   link=root/'etc/systemd/system'/(target+'.wants')/unit;link.parent.mkdir(parents=True,exist_ok=True)
   if not link.exists() and not link.is_symlink():link.symlink_to('../'+unit)
 
-def package_generation(packages,harnesses,package_items=None,harness_items=None):
+def package_generation(packages,harnesses,package_items=None,harness_items=None,base_generation=None):
  with lock():
-  capacity(7*1024**3);base=source_live();g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);root=folder/'root';cache=folder/'downloads';cache.mkdir();live=folder/'live';live.mkdir()
+  capacity(7*1024**3);base=generation_live(base_generation) if base_generation else source_live();g='gen-'+uuid.uuid4().hex;folder=ROOT/g;folder.mkdir(mode=0o700);root=folder/'root';cache=folder/'downloads';cache.mkdir();live=folder/'live';live.mkdir()
   progress.emit('prepare','Preparando un sistema limpio')
   run(['nice','-n','10','unsquashfs','-processors','1','-d',str(root),str(base/'filesystem.squashfs')])
   refresh_manager(root)
   items=(harness_items if harness_items is not None else sources.harnesses()) if harnesses else {}
+  superseded=[]
+  if base_generation:
+   # The new Rescue can already contain the reviewed component versions or newer.
+   # Never downgrade its packages/providers merely to match an older inventory.
+   selected=[]
+   for item in package_items or []:
+    installed_package=subprocess.run(['chroot',str(root),'/usr/bin/dpkg-query','-W','-f=${Version}',item['name']],capture_output=True)
+    covered=installed_package.returncode==0 and subprocess.run(['dpkg','--compare-versions',installed_package.stdout.decode().strip(),'ge',item['version']],capture_output=True).returncode==0
+    if covered:superseded.append('package:'+item['name'])
+    else:selected.append(item)
+   package_items=selected
+   native=root/'usr/share/aguja/installed-harnesses.json'
+   prior=json.loads(native.read_text()).get('providers',{}) if native.exists() else {}
+   for name in list(items):
+    try:covered=sources.semver(prior[name]['version'])>=sources.semver(items[name]['version'])
+    except (KeyError,ValueError,TypeError):covered=False
+    if covered:superseded.append('harness:'+name);items.pop(name)
+   packages=bool(package_items)
   if items:install_harnesses(root,items,cache)
   worker=Path('/usr/lib/aguja/update-root-worker.sh')
   if package_items is not None:
@@ -346,7 +370,7 @@ def package_generation(packages,harnesses,package_items=None,harness_items=None)
   progress.emit('save','Guardando el sistema en el pendrive')
   run(['nice','-n','10','mksquashfs',str(root),str(live/'filesystem.squashfs'),'-noappend','-processors','1','-mem','256M','-comp','zstd','-Xcompression-level','3','-no-progress','-wildcards','-e','tmp/*','var/tmp/*','var/cache/apt','var/lib/apt/lists','run/*','root/*'])
   version=(root/'usr/share/aguja/VERSION').read_text().strip();progress.emit('verify','Verificando los archivos guardados');manifest(folder,version,'packages+harnesses');shutil.rmtree(root);shutil.rmtree(cache);progress.emit('activate','Preparando el próximo arranque');active=activate(g)
-  return {'ok':True,'generation':g,'reboot_required':True,'state':active}
+  return {'ok':True,'generation':g,'reboot_required':True,'state':active,'already_covered_by_rescue':superseded}
 
 def rollback():
  with lock():

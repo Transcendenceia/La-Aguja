@@ -1,0 +1,14 @@
+{
+  "helium": {
+    "version": "0.20.1.1",
+    "url": "https://github.com/imputnet/helium-linux/releases/download/0.20.1.1/helium-bin_0.20.1.1-1_amd64.deb",
+    "sha256": "1cba59a53031b866216d85780c9068d71e318a25e19602752d9e3a45e193fa5e",
+    "bytes": 126164740
+  },
+  "yazi": {
+    "version": "v26.9.1",
+    "url": "https://github.com/sxyazi/yazi/releases/download/v26.9.1/yazi-x86_64-unknown-linux-gnu.deb",
+    "sha256": "331d6247c0a0fd549f14cd599a928a529b8b22eded1bb1f61a518376c7621b45",
+    "bytes": 10476564
+  }
+}

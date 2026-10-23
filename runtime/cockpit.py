@@ -28,7 +28,9 @@ MASCOT = (
 MENU = (
     ('shell', '1', 'Consola Zsh', 'Terminal y sesiones tmux', 'TRABAJAR'),
     ('guide', '3', 'Misiones y herramientas', 'Guía del agente, métodos y límites', 'TRABAJAR'),
-    ('hardware', 'E', 'Equipo y recursos', 'CPU, RAM, discos, red y virtualización', 'TRABAJAR'),
+    ('desk', 'G', 'Centro gráfico', 'Formularios, archivos y configuración', 'TRABAJAR'),
+    ('web', 'V', 'Navegador web', 'Helium · navegación y acceso a agentes', 'TRABAJAR'),
+    ('files', 'E', 'Archivos', 'Yazi · explorar, previsualizar y editar', 'TRABAJAR'),
     ('backup', 'C', 'Planificar respaldo', 'Opciones según este equipo y tu objetivo', 'TRABAJAR'),
     ('codex', '4', 'Codex', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
     ('antigravity', '5', 'Antigravity', 'Tu cuenta · modo Seguro o Inseguro', 'AGENTES'),
@@ -364,7 +366,11 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             elif key in (ord('i'),ord('I')):
                 return 'locale'
             elif key in (ord('e'),ord('E')):
-                return 'hardware'
+                return 'files'
+            elif key in (ord('g'),ord('G')):
+                return 'desk'
+            elif key in (ord('v'),ord('V')):
+                return 'web'
             elif key in (ord('c'),ord('C')):
                 return 'backup'
             elif key in (ord('n'),ord('N')):
@@ -442,6 +448,13 @@ def menu(auto_setup=False):
             return "shell"
         if action in ("codex", "antigravity", "claude", "opencode"):
             return action
+        import browser
+        graphical={'desk':'home','web':'browser','files':'files','guide':'guide','backup':'backup',
+                   'storage':'cloud','remote':'tailnet','wifi':'network','password':'settings','update':'updates'}
+        if action in graphical and browser.local_console():
+            import gui_session
+            if gui_session.run(graphical[action]) == 0:
+                continue
         if action == "guide":
             guide()
         elif action == "wifi":
@@ -453,6 +466,8 @@ def menu(auto_setup=False):
             print(t("Configura URL del servidor, nombre y clave de alta en Flash Imager → Red privada. SSH conserva la autenticación del perfil."))
         elif action == 'locale':
             subprocess.call(['/usr/local/bin/aguja', 'locale'])
+        elif action in ('desk','web','files'):
+            print(t('Centro gráfico disponible en la consola local; por SSH usa aguja tools.'))
         elif action in ('hardware', 'backup', 'storage'):
             command = {'hardware':'hardware', 'backup':'plan', 'storage':'storage'}[action]
             output = subprocess.run(['/usr/local/bin/aguja', command], capture_output=True, text=True)

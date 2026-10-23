@@ -94,3 +94,13 @@ then a new boot generation is staged. CFG, LUKS vault and DATA/workspace are not
 reflashed. Factory/previous remain available; no automatic reboot. If a LUKS vault
 is present, a release without the early gate capability is rejected. Catalog errors
 mean “unverified”, not “up to date”. This does not update Flash Imager.
+
+## Bulk selection (Rescue Desk)
+
+All RAM selects all component updates, not the complete Rescue image, which
+requires persistent storage. All persistent can combine the signed official
+Rescue and components: stage the verified release without activation, update
+components in a new generation based on it, and activate only the final verified
+generation. Components already at a newer version in the Rescue are not
+downgraded. A failed stage leaves the previous active generation unchanged.
+No automatic reboot. Closing the UI does not stop background update jobs.

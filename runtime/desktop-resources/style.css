@@ -1,0 +1,35 @@
+* { font-family: Inter, Noto Sans, sans-serif; font-size: 14px; }
+label { color: #f7f6f1; }
+window, dialog { background: #090b10; color: #f7f6f1; }
+headerbar { background: #11141b; color: #f7f6f1; border: 0; box-shadow: none; }
+.spectrum { min-height: 3px; background-image: linear-gradient(to right,#ff4b0a,#ff0a8a,#aa35ff,#3867ff,#28d9f7); }
+.sidebar { background: #11141b; padding: 16px 10px; }
+.sidebar row { border-radius: 9px; margin: 3px 0; padding: 10px; }
+.sidebar row:selected { background: #242032; color: #d9afff; }
+.sidebar row:selected label { color: #d9afff; }
+.sidebar row:hover { background: #191d26; }
+.title { font-size: 29px; font-weight: 700; }
+.subtitle, .muted { color: #9a9da6; }
+.brand { color: #d9afff; font-size: 17px; font-weight: 700; }
+.section { color: #d9afff; font-size: 18px; font-weight: 600; margin-top: 18px; }
+.card { background: #11141b; border: 1px solid #3e354b; border-radius: 12px; padding: 18px; }
+button { background: #191d26; color: #f7f6f1; border: 1px solid #534660; border-radius: 8px; padding: 10px 16px; box-shadow: none; text-shadow: none; }
+button:hover { background: #242032; border-color: #d9afff; }
+button:focus, entry:focus, combobox:focus { outline: 2px solid #d9afff; outline-offset: 2px; }
+button.suggested-action { background: #f7f6f1; color: #090b10; border-color: #f7f6f1; font-weight: 600; }
+button.destructive-action { background: #30232a; color: #ff9dcc; }
+entry, textview, textview text, treeview, viewport { background: #11141b; color: #f7f6f1; border-color: #3e354b; caret-color: #ff9dcc; }
+entry { border: 1px solid #534660; border-radius: 7px; padding: 9px; }
+entry:disabled, button:disabled { color: #777982; }
+checkbutton { padding: 5px 0; }
+checkbutton check { border-color: #887299; background: #191d26; }
+checkbutton check:checked { background: #aa35ff; color: #f7f6f1; }
+combobox button { padding: 8px 12px; }
+selection, treeview:selected { background: #3e354b; color: #f7f6f1; }
+scrolledwindow { border: 0; }
+separator { background: #3e354b; min-height: 1px; min-width: 1px; }
+.statusbar { background: #11141b; padding: 10px 16px; color: #d9afff; }
+.error { color: #ff969a; }
+.success { color: #8cdeae; }
+.link { color: #d9afff; }
+filechooser { background: #090b10; color: #f7f6f1; }

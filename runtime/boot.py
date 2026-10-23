@@ -185,6 +185,11 @@ def main(profile_override=None, profile_passphrase=None):
         tailnet_identity.configure(capsule, capsule_path.read_bytes(), profile_passphrase)
         # Tailnet credentials live separately, never in this owner-writable tree.
         run('chown', '-R', 'aguja:aguja', '/run/aguja-platform')
+    import tailnet_config
+    try:
+        tailnet_config.boot_apply()
+    except (OSError,ValueError,subprocess.SubprocessError):
+        print('Tailnet Desk preferences unavailable; existing profile preserved.',flush=True)
     subprocess.run(["rfkill", "unblock", "wifi"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.run(["nmcli", "radio", "wifi", "on"], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.run(["iw", "reg", "set", c["wifi_country"]], check=False)

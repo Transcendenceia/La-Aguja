@@ -67,6 +67,7 @@ systemctl enable NetworkManager ssh
 systemctl set-default multi-user.target
 systemctl mask systemd-networkd.service systemd-networkd.socket systemd-networkd-wait-online.service
 EOF
+AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-desktop.sh"
 AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-runtime.sh"
 # Version locks: do not silently upgrade agents in release builds.
 NODE_VERSION=$(jq -r .node.version "$PROJECT/config/harnesses.json")

@@ -16,3 +16,6 @@ operations/
 desktop/tests/*.png
 desktop/tests/*.fixture.json
 .venv/
+
+# Separate local desktop candidate artifacts
+dist-desk/

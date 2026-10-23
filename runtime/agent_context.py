@@ -6,7 +6,7 @@ import tempfile
 
 BEGIN = '<!-- LA_AGUJA_CANONICAL_CONTEXT_BEGIN -->'
 END = '<!-- LA_AGUJA_CANONICAL_CONTEXT_END -->'
-POINTER = BEGIN + '\nRead the current live instructions in /usr/share/aguja/AGENT-CONTEXT.md and /usr/share/aguja/SECRETS.md before using credentials or disk recovery keys. First run aguja hardware --json and aguja plan --json; read /usr/share/aguja/MISSIONS.md and /usr/share/aguja/BACKUP.md before planning interventions. Run aguja secrets --json and sudo aguja recovery status --json; metadata only. Preserve the owner instructions elsewhere in this file. Never print, log or publish credential values.\n' + END + '\n'
+POINTER = BEGIN + '\nRead the current live instructions in /usr/share/aguja/AGENT-CONTEXT.md and /usr/share/aguja/SECRETS.md before using credentials or disk recovery keys. Apply /usr/share/aguja/ODD.md. Canonical instructions are English; answer in the operator requested language or configured live locale. AI requires Internet and an authorized remote provider; no local models are included. First run aguja hardware --json and aguja plan --json; read /usr/share/aguja/MISSIONS.md and /usr/share/aguja/BACKUP.md before planning interventions. Run aguja secrets --json and sudo aguja recovery status --json; metadata only. Preserve the owner instructions elsewhere in this file. Never print, log or publish credential values.\n' + END + '\n'
 
 
 def ensure(workspace, canonical=Path('/usr/share/aguja/AGENT-CONTEXT.md')):

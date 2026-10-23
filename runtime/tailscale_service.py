@@ -133,6 +133,12 @@ def connect_tailscale(binary, config):
         command.append('--login-server=' + config['login_server'])
     if config.get('hostname'):
         command.append('--hostname=' + config['hostname'])
+    import tailnet_config
+    extra=tailnet_config.saved()
+    if extra:
+        # Desk flags replace the small legacy subset, not duplicate CLI switches.
+        command=cli(binary)+['up','--reset','--auth-key=file:'+str(KEY_FILE),'--timeout=40s']+tailnet_config.options(extra)
+        if extra['login_server']:command.append('--login-server='+extra['login_server'])
     try:
         result = subprocess.run(command, capture_output=True, text=True, timeout=50)
     except subprocess.TimeoutExpired:

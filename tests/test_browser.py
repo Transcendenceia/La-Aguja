@@ -74,12 +74,14 @@ class BrowserProtocolTests(unittest.TestCase):
             if argv[0]=='chromium':
                 self.assertNotIn(url,' '.join(argv))
                 self.assertFalse(any(a in ('--no-sandbox','--disable-setuid-sandbox') for a in argv))
-                page=Path(next(a for a in argv if a.startswith('--app=')).split('file://',1)[1])
+                from urllib.parse import unquote, urlsplit
+                page=Path(unquote(urlsplit(argv[-1]).path))
                 self.assertIn(url,page.read_text());self.assertEqual(page.stat().st_mode&0o777,0o600)
                 profile_paths.append(page.parent)
             return SimpleNamespace(poll=lambda:0)
         with tempfile.TemporaryDirectory() as d,patch.object(auth,'read_record',return_value=record),\
-             patch.object(browser,'SelectionOwners',Selection),patch.object(subprocess,'Popen',side_effect=spawn):
+             patch.object(browser,'SelectionOwners',Selection),patch.dict(os.environ,{'DISPLAY':':99'}),\
+             patch('web.binary',return_value='chromium'),patch.object(os,'getuid',return_value=1000),patch.object(subprocess,'Popen',side_effect=spawn):
             # No clipboard process nor DOM interrogation is created. The code
             # remains in the provider page until the user explicitly pastes.
             self.assertEqual(browser.user_session(Path(d)),0)

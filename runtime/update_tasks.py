@@ -24,7 +24,6 @@ def plan(items,choices):
  if not set(choices)<=set(known) or any(v not in MODES for v in choices.values()):raise ValueError('Selección de actualización no válida')
  result={mode:[dict(r) for r in items if choices.get(r['id'],'no')==mode] for mode in MODES[1:]}
  if any(r['kind']=='release' for r in result['session']):raise ValueError('El Rescue Disk completo requiere Sí persistente y el próximo arranque.')
- if any(r['kind']=='release' for r in result['persistent']) and len(result['persistent'])>1:raise ValueError('Actualiza Rescue Disk o los componentes por separado, no en la misma operación.')
  return result
 
 def verify_live_ram():
@@ -98,7 +97,14 @@ def apply(items,choices):
   progress.emit('start','Sí persistente' if mode=='persistent' else 'Sí · solo esta sesión',mode=mode,items=[r['id'] for r in group])
   try:
    if mode=='session':result=session_update(group)
-   elif group[0]['kind']=='release':result=u.release_update(expected_version=group[0]['latest'])
+   elif any(r['kind']=='release' for r in group):
+    release=next(r for r in group if r['kind']=='release');components=[r for r in group if r['kind']!='release']
+    if not components:result=u.release_update(expected_version=release['latest'])
+    else:
+     staged=u.release_update(expected_version=release['latest'],stage_only=True)
+     packages=package_items(components);harnesses=harness_items(components)
+     result=u.package_generation(bool(packages),bool(harnesses),package_items=packages,harness_items=harnesses,base_generation=staged['generation'])
+     result['rescue_version']=staged['version']
    else:
     packages=package_items(group);harnesses=harness_items(group)
     result=u.package_generation(bool(packages),bool(harnesses),package_items=packages,harness_items=harnesses)

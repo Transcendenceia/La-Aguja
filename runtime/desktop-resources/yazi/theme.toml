@@ -1,0 +1,23 @@
+[app]
+overall = { bg = "#090b10" }
+[mgr]
+cwd = { fg = "#d9afff" }
+border_style = { fg = "#534660" }
+[indicator]
+parent = { fg = "#f7f6f1", bg = "#242032" }
+current = { fg = "#f7f6f1", bg = "#242032" }
+preview = { fg = "#d9afff", underline = true }
+[status]
+overall = { fg = "#f7f6f1", bg = "#11141b" }
+perm_type = { fg = "#a5baff" }
+perm_read = { fg = "#d9afff" }
+perm_write = { fg = "#ff9dcc" }
+perm_exec = { fg = "#ffad8a" }
+[mode]
+normal_main = { fg = "#090b10", bg = "#d9afff", bold = true }
+normal_alt = { fg = "#d9afff", bg = "#191d26" }
+[filetype]
+rules = [
+ { url = "*/", fg = "#a5baff", bold = true },
+ { url = "*", fg = "#f7f6f1" },
+]

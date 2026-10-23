@@ -1198,7 +1198,19 @@
       "Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter": "Choose a task · profile resolved at boot · ↑↓ and Enter",
       "Una pequeña entrada. Grandes posibilidades.": "A small entry. Great possibilities.",
       "Incluye la última versión oficial de Rescue Disk, con catálogo firmado.": "Includes the latest official Rescue Disk, with a signed catalog.",
-      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH locked · check the boot unlock gate"
+      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH locked · check the boot unlock gate",
+      "Centro gráfico": "Rescue Desk",
+      "Formularios, archivos y configuración": "Forms, files and settings",
+      "Navegador web": "Web browser",
+      "Helium · navegación y acceso a agentes": "Helium · browsing and agent sign-in",
+      "Archivos": "Files",
+      "Yazi · explorar, previsualizar y editar": "Yazi · browse, preview and edit",
+      "Centro gráfico disponible en la consola local; por SSH usa aguja tools.": "Rescue Desk is available on the local console; over SSH use aguja tools.",
+      "Todo · No": "All · No",
+      "Todo · RAM": "All · RAM",
+      "Todo · persistente": "All · persistent",
+      "La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.": "The complete Rescue image requires persistence; components were selected for RAM.",
+      "0: todo No · R: todo RAM · P: todo persistente · A: aplicar": "0: all No · R: all RAM · P: all persistent · A: apply"
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -2246,7 +2258,19 @@
       "Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter": "选择任务 · 配置已在启动时处理 · ↑↓ 和回车",
       "Una pequeña entrada. Grandes posibilidades.": "小小入口，无限可能。",
       "Incluye la última versión oficial de Rescue Disk, con catálogo firmado.": "包含最新官方 Rescue Disk，使用签名目录验证。",
-      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH 已锁定 · 请检查启动解锁"
+      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH 已锁定 · 请检查启动解锁",
+      "Centro gráfico": "图形工作台",
+      "Formularios, archivos y configuración": "表单、文件和设置",
+      "Navegador web": "网页浏览器",
+      "Helium · navegación y acceso a agentes": "Helium · 浏览和代理登录",
+      "Archivos": "文件",
+      "Yazi · explorar, previsualizar y editar": "Yazi · 浏览、预览和编辑",
+      "Centro gráfico disponible en la consola local; por SSH usa aguja tools.": "图形工作台需在本地控制台使用；通过 SSH 请用 aguja tools。",
+      "Todo · No": "全部 · 否",
+      "Todo · RAM": "全部 · RAM",
+      "Todo · persistente": "全部 · 持久",
+      "La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.": "完整 Rescue 镜像需要持久存储；组件已选择在 RAM 中更新。",
+      "0: todo No · R: todo RAM · P: todo persistente · A: aplicar": "0：全部否 · R：全部 RAM · P：全部持久 · A：应用"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -3294,7 +3318,19 @@
       "Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter": "Choisir une tâche · profil résolu au démarrage · ↑↓ et Entrée",
       "Una pequeña entrada. Grandes posibilidades.": "Une petite entrée. De grandes possibilités.",
       "Incluye la última versión oficial de Rescue Disk, con catálogo firmado.": "Inclut la dernière version officielle de Rescue Disk, avec catalogue signé.",
-      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH bloqué · vérifier le déverrouillage au démarrage"
+      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH bloqué · vérifier le déverrouillage au démarrage",
+      "Centro gráfico": "Centre graphique",
+      "Formularios, archivos y configuración": "Formulaires, fichiers et configuration",
+      "Navegador web": "Navigateur web",
+      "Helium · navegación y acceso a agentes": "Helium · navigation et accès aux agents",
+      "Archivos": "Fichiers",
+      "Yazi · explorar, previsualizar y editar": "Yazi · explorer, prévisualiser et modifier",
+      "Centro gráfico disponible en la consola local; por SSH usa aguja tools.": "Le centre graphique est disponible sur la console locale ; via SSH, utilisez aguja tools.",
+      "Todo · No": "Tout · Non",
+      "Todo · RAM": "Tout · RAM",
+      "Todo · persistente": "Tout · persistant",
+      "La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.": "L’image Rescue complète exige un stockage persistant ; les composants ont été sélectionnés en RAM.",
+      "0: todo No · R: todo RAM · P: todo persistente · A: aplicar": "0 : tout Non · R : tout RAM · P : tout persistant · A : appliquer"
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -4342,7 +4378,19 @@
       "Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter": "Escolha uma tarefa · perfil resolvido no arranque · ↑↓ e Enter",
       "Una pequeña entrada. Grandes posibilidades.": "Uma pequena entrada. Grandes possibilidades.",
       "Incluye la última versión oficial de Rescue Disk, con catálogo firmado.": "Inclui a versão oficial mais recente do Rescue Disk, com catálogo assinado.",
-      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH bloqueado · confira o desbloqueio no arranque"
+      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH bloqueado · confira o desbloqueio no arranque",
+      "Centro gráfico": "Centro gráfico",
+      "Formularios, archivos y configuración": "Formulários, arquivos e configuração",
+      "Navegador web": "Navegador web",
+      "Helium · navegación y acceso a agentes": "Helium · navegação e acesso aos agentes",
+      "Archivos": "Arquivos",
+      "Yazi · explorar, previsualizar y editar": "Yazi · explorar, visualizar e editar",
+      "Centro gráfico disponible en la consola local; por SSH usa aguja tools.": "O centro gráfico está disponível no console local; por SSH, use aguja tools.",
+      "Todo · No": "Todos · Não",
+      "Todo · RAM": "Todos · RAM",
+      "Todo · persistente": "Todos · persistente",
+      "La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.": "A imagem completa do Rescue exige persistência; os componentes foram selecionados em RAM.",
+      "0: todo No · R: todo RAM · P: todo persistente · A: aplicar": "0: todos Não · R: todos RAM · P: todos persistente · A: aplicar"
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -5390,7 +5438,19 @@
       "Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter": "Aufgabe wählen · Profil beim Start entsperrt · ↑↓ und Enter",
       "Una pequeña entrada. Grandes posibilidades.": "Ein kleiner Einstieg. Große Möglichkeiten.",
       "Incluye la última versión oficial de Rescue Disk, con catálogo firmado.": "Enthält die neueste offizielle Rescue-Disk-Version mit signiertem Katalog.",
-      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH gesperrt · Entsperrung beim Start prüfen"
+      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH gesperrt · Entsperrung beim Start prüfen",
+      "Centro gráfico": "Grafische Zentrale",
+      "Formularios, archivos y configuración": "Formulare, Dateien und Einstellungen",
+      "Navegador web": "Webbrowser",
+      "Helium · navegación y acceso a agentes": "Helium · Surfen und Agent-Anmeldung",
+      "Archivos": "Dateien",
+      "Yazi · explorar, previsualizar y editar": "Yazi · durchsuchen, ansehen und bearbeiten",
+      "Centro gráfico disponible en la consola local; por SSH usa aguja tools.": "Die grafische Zentrale ist an der lokalen Konsole verfügbar; über SSH aguja tools verwenden.",
+      "Todo · No": "Alle · Nein",
+      "Todo · RAM": "Alle · RAM",
+      "Todo · persistente": "Alle · persistent",
+      "La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.": "Das vollständige Rescue-Abbild benötigt persistenten Speicher; Komponenten wurden für RAM ausgewählt.",
+      "0: todo No · R: todo RAM · P: todo persistente · A: aplicar": "0: alle Nein · R: alle RAM · P: alle persistent · A: anwenden"
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -6438,7 +6498,19 @@
       "Elige una tarea · perfil resuelto al arrancar · ↑↓ y Enter": "Scegli una missione · profilo risolto all’avvio · ↑↓ e Invio",
       "Una pequeña entrada. Grandes posibilidades.": "Un piccolo ingresso. Grandi possibilità.",
       "Incluye la última versión oficial de Rescue Disk, con catálogo firmado.": "Include l’ultima versione ufficiale di Rescue Disk, con catalogo firmato.",
-      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH bloccato · controlla lo sblocco all’avvio"
+      "SSH bloqueado · revisa el desbloqueo al arrancar": "SSH bloccato · controlla lo sblocco all’avvio",
+      "Centro gráfico": "Centro grafico",
+      "Formularios, archivos y configuración": "Moduli, file e configurazione",
+      "Navegador web": "Browser web",
+      "Helium · navegación y acceso a agentes": "Helium · navigazione e accesso agli agenti",
+      "Archivos": "File",
+      "Yazi · explorar, previsualizar y editar": "Yazi · esplora, visualizza e modifica",
+      "Centro gráfico disponible en la consola local; por SSH usa aguja tools.": "Il centro grafico è disponibile sulla console locale; via SSH usa aguja tools.",
+      "Todo · No": "Tutti · No",
+      "Todo · RAM": "Tutti · RAM",
+      "Todo · persistente": "Tutti · persistente",
+      "La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.": "L’immagine Rescue completa richiede persistenza; i componenti sono stati selezionati in RAM.",
+      "0: todo No · R: todo RAM · P: todo persistente · A: aplicar": "0: tutti No · R: tutti RAM · P: tutti persistente · A: applica"
     }
   }
 }

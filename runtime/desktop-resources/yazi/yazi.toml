@@ -1,0 +1,19 @@
+[mgr]
+ratio = [1, 3, 4]
+show_hidden = false
+sort_by = "natural"
+sort_dir_first = true
+[preview]
+max_width = 1200
+max_height = 900
+[opener]
+edit = [{ run = 'mousepad -- %s', orphan = true, desc = "Edit · graphical" }, { run = 'nano -- %s', block = true, desc = "Edit · terminal" }]
+open = [{ run = 'aguja-open %s', orphan = true, desc = "Open · native viewer" }]
+
+[open]
+rules = [
+ { url = "*/", use = "open" },
+ { mime = "text/*", use = ["edit", "open"] },
+ { mime = "application/{json,xml,javascript,x-shellscript}", use = ["edit", "open"] },
+ { url = "*", use = "open" },
+]

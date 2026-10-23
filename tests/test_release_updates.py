@@ -37,4 +37,10 @@ class ReleaseUpdates(unittest.TestCase):
   with patch.object(u.sources,'catalog',return_value=[bad]),patch.object(u.sources,'fetch',self.fetch):
    with self.assertRaises(ValueError):u.release_update()
   self.assertFalse((self.cfg/'aguja-update.cfg').exists());self.assertIsNone(u.state()['active'])
+ def test_stage_only_verifies_image_without_changing_boot_selection(self):
+  with patch.object(u.sources,'catalog',return_value=[self.release]),patch.object(u.sources,'fetch',self.fetch),patch.object(u,'activate') as activate:
+   result=u.release_update(expected_version='1.0.1',stage_only=True)
+  self.assertTrue(result['staged']);self.assertFalse(result['reboot_required']);activate.assert_not_called()
+  self.assertFalse((self.cfg/'aguja-update.cfg').exists());self.assertIsNone(u.state()['active'])
+  live=u.generation_live(result['generation']);self.assertTrue((live/'filesystem.squashfs').is_file())
 if __name__=='__main__':unittest.main()

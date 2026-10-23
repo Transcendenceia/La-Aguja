@@ -1,192 +1,148 @@
-# LA AGUJA — Instrucciones para el agente en Linux live
+# LA AGUJA — canonical instructions for AI agents on the live system
 
-Estás en una plataforma Linux live x86-64 iniciada desde un USB, NO en el sistema instalado.
-Construir, configurar, investigar y rescatar son misiones posibles; no reduzcas el objetivo del usuario a reparar un sistema existente.
-Marca: **LA AGUJA Rescue Disk**. Mascota: **Agujita**. Identificadores técnicos: `aguja`, `AGUJA_*`.
-Esta es la guía canónica instalada en `/usr/share/aguja/AGENT-CONTEXT.md`.
-Las copias de trabajo pueden contener instrucciones del propietario: léelas también.
+You are on **LA AGUJA Rescue Disk**, an x86-64 Linux live booted from removable
+media, NOT the operating system installed on the target computer. **Agujita**
+is the original mascot. Technical identifiers remain `aguja` and `AGUJA_*`.
+Rescue, investigation, deployment, development and configuration are possible
+missions: understand the operator's objective before assuming a repair task.
 
-## 1. Orientación inicial por SSH o consola
+These instructions apply equally to installed agents and external agents
+connected through SSH/MCP. Read owner/project instructions too. Use the
+operational ODD method in `/usr/share/aguja/ODD.md`; do not install global hooks
+or external memory services as a side effect. Canonical guidance is English;
+**respond in the operator's requested language, otherwise the configured live
+locale** (`locale`, `/etc/default/locale`). Keep commands and paths literal.
 
-Usuario: `aguja`. `sudo -n` concede root completo en el hardware, sin contraseña sudo.
-La sesión live no es un contenedor. Desde 0.9.10, Codex Seguro añade sandbox workspace-write, red deshabilitada y aprobación humana para salir; su puerta PreToolUse confirma cada herramienta. Otros arneses conservan sus propias confirmaciones. Fuera del sandbox, el usuario mantiene sudo completo y cada cambio puede afectar al equipo real.
-La contraseña SSH de fábrica es pública y conocida, `aguja`; puede haber una personalizada
-o acceso solo por clave. Nunca imprimas credenciales personalizadas.
+## AI and Internet
 
-Antes de actuar:
+There is **no local model runtime or bundled model**. AI functionality requires
+Internet, a supported remote provider and the operator's authorized account.
+An IP address does not prove Internet, successful OAuth or provider inference.
+Local file, disk, backup and diagnostic tools can work offline, but the full
+agent-assisted platform requires connectivity. No provider accounts or tokens
+are shipped. Never infer valid access from an installed CLI or a copied profile.
+
+## First observation and authority
+
+The `aguja` owner has full passwordless `sudo -n`; this live is not a container.
+Native Safe/Unsafe harness modes are independent of sudo. Codex Safe uses its
+workspace-write sandbox, network restrictions, human approvals and PreToolUse
+confirmation. Unsafe/YOLO is explicit. Preserve these choices and the owner's
+access. Permissions do not authorize work outside the requested objective.
+
+Start with bounded read-only observations:
 
     aguja status --json
-    aguja doctor
     aguja doctor --json
+    aguja hardware --json
+    aguja plan --json
     aguja tools
     lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
     findmnt
     sudo -n id
     date
 
-`status --json` ofrece IPs/interfaz, hostname/mDNS, puerto/estado SSH y workspace,
-sin contraseñas, tokens ni keyfiles. Una IP no prueba Internet ni acceso a un proveedor.
-El estado vivo tiene prioridad sobre esta guía y sobre recuerdos de otro equipo.
-Determina el objetivo del usuario y qué equipos, sistemas o discos participan. Un laboratorio o desarrollo puede no necesitar tocar ningún disco interno.
+Current observations override this guide and memories from another machine.
+Identify exact sources/destinations by model, serial, capacity, filesystem and
+firmware before writes. Do not mount or repair internal disks automatically.
+Use `aguja run --label "Short public task name" -- COMMAND` for visible tasks;
+stdin scripts remain private. Never put secrets in labels, argv or output.
 
-Da nombres públicos y breves a los trabajos visibles usando
-`aguja run --label "Inventario de hardware" -- sudo -n python3 -` para scripts
-recibidos por stdin. No incluir secretos en la etiqueta ni en argv. La etiqueta,
-estado y duración aparecen en el panel; los scripts/entradas privadas no se registran.
-Diagnósticos simples como `aguja run --label "Memoria" -- free -h` permiten salida
-filtrada. Los códigos y bytes recibidos por SSH conservan su significado.
+## Storage boundaries
 
-## 2. Almacenamiento y persistencia
+- `/` is squashfs with a RAM overlay. Changing it does not change the installed OS.
+- `/run/live/medium` is the running live media, NEVER a rescue target.
+- `/config` is the same USB's AGUJA_CFG; literal settings are private.
+- `/data` is AGUJA_DATA on the live USB, not an internal target partition.
+- `/data/workspace` persists job artifacts if DATA is mounted. HOME is RAM unless
+  the operator chose `persistent_home=yes`; that choice alone is not encryption.
+- Protected profiles unlock before cockpit/SSH/agents. LUKS protects the profile
+  vault at `/config/private`, **not all DATA**. Legacy/automatic profiles still work.
+- `aguja profile status --json` reports protection state; never print its secrets.
+- SSH host identity persists in `/data/ssh`; config backups are root-private in
+  `/data/config-backups`. Preserve owner settings and recovery material.
 
-- `/` es squashfs + overlay RAM. Modificar el Linux live NO instala ni repara el OS del disco.
-- `/run/live/medium` es el propio medio arrancable. Nunca lo uses como disco objetivo.
-- `/config/aguja.conf` pertenece a AGUJA_CFG en el USB; contiene valores literales privados.
-- `/data` es AGUJA_DATA del mismo USB, no una partición interna.
-- `/data/workspace` conserva informes/scripts/archivos de trabajo cuando DATA está montada.
-- HOME está en RAM salvo `persistent_home=yes`; su persistencia NO añade cifrado.
-- La host key SSH se crea para este USB y se conserva en `/data/ssh`.
-- `/data/config-backups` conserva configuraciones previas, solo accesibles con sudo.
-- `/mnt/target` es una ruta convencional para un montaje explícito del disco que se rescate.
+`aguja desk` opens the on-demand local graphical Desk. `aguja files` opens its
+file page with Yazi, previews, editing and explicit target mounts. Mounted host
+files are accessible; ext4 read-only mounts use noload, XFS uses norecovery.
+Read-only is not forensic hardware write-blocking. Never run fsck on a mounted
+filesystem or launch an unknown binary merely to preview it. Avoid host/VM
+simultaneous writes to one volume. QEMU/KVM/TCG, qemu-img, qemu-nbd, OVMF and
+SeaBIOS are available; read TOOLBOX.md and measure RAM/space before using them.
 
-Los discos internos no se montan, reparan ni particionan al iniciar.
-Identifica modelo, serie, tamaño, particiones y modo UEFI/BIOS antes de escribir.
-El USB live puede aparecer como disco ISO9660 con particiones/vistas loop: eso es normal.
-Comprueba `findmnt`, `lsblk --tree` y los offsets antes de sacar conclusiones sobre un loop.
-No confundas AGUJA_CFG/DATA ni el USB de rescate con el disco objetivo.
+## Connectivity, browser and accounts
 
-## 3. Consola, conectividad y sesiones
-
-La consola local entra automáticamente; Zsh tiene Tab, sugerencias y colores listos.
-`aguja` abre el panel interactivo. `aguja help` explica uso y comandos.
-La pantalla física anuncia las sesiones SSH autenticadas y muestra comandos y procesos
-asociados; `aguja activity --json` devuelve la misma vista temporal. Solo se refleja la
-salida de diagnósticos permitidos: las entradas de teclado nunca se registran, y las
-operaciones sensibles/protocolos/scripts por stdin no exponen contenidos. No vuelques
-credenciales pensando que el filtro siempre identificará cualquier secreto desconocido.
-El monitor no cambia permisos ni autoriza acciones y no conserva transcripciones en DATA.
-En SSH conserva una sesión con `tmux new -s rescate` y reconecta con `tmux attach -t rescate`.
-No reinicies ni apagues sin coordinarlo: perderás la conexión y los cambios de la raíz RAM.
-
-Red:
-
-    aguja network --wait       # JSON; espera hasta 30 segundos por una IP
-    aguja wifi                 # asistente local/SSH interactivo; guarda Wi-Fi en el USB
+    aguja network --wait
+    aguja wifi
     nmcli device status
     rfkill list
     ip route
-    sudo nmtui                 # perfiles avanzados, empresariales y Ethernet
-    avahi-browse -rt _ssh._tcp  # descubrir servicios SSH en una LAN con mDNS
+    aguja desk network
+    aguja desk tailnet
+    aguja tailscale
 
-La red guardada se activa automáticamente; Centro de rescate permanece visible incluso sin red.
-Avahi anuncia el hostname `.local` y SSH en la LAN; el panel refleja el nombre real si hay colisión.
-No hay publicación WAN, port-forwarding de router ni túneles automáticos.
-No cambies la red si estás trabajando por ella sin una vía de reconexión.
-`aguja password` pide y guarda una contraseña personalizada sin imprimirla.
-`sudo passwd aguja` solo cambia la contraseña de la sesión actual.
+The local Desk configures Wi-Fi, network profiles and Tailscale/Headscale:
+HTTPS login URL, native browser enrollment or auth-key file, hostname, DNS,
+routes, exit nodes, LAN access, tags, SSH, shields, SNAT and forwarding. Route
+and exit-node advertisement also require server approval/policy. Control and
+transport are distinct. Changing network settings may disconnect remote work.
+Do not publish WAN ports or enable tunnels merely because a feature exists.
+The public factory SSH password is `aguja`; a custom password/key may replace
+it. Use `aguja password` or Desk settings without printing custom credentials.
 
-## 4. Herramientas y posibilidades
-
-Consulta `aguja tools`: es el inventario comprobable de los binarios instalados.
-
-| Objetivo | Herramientas |
-|---|---|
-| Sesiones/scripts | Zsh, Bash, tmux, Python, Git, jq, ripgrep, nano |
-| Copiar/recuperar | rsync, scp, GNU ddrescue/ddrescuelog, TestDisk/PhotoRec |
-| Diagnóstico físico | smartctl, nvme-cli, hdparm, lshw, lspci, lsusb |
-| Particiones/arranque | lsblk, blkid, parted, gdisk/sgdisk, efibootmgr, GRUB BIOS/UEFI |
-| Filesystems | e2fsprogs, Btrfs/XFS, NTFS, FAT, exFAT |
-| Cifrado/volúmenes | cryptsetup/LUKS, LVM, mdadm, Dislocker (con clave BitLocker) |
-| Desplegar un OS | debootstrap, arch-install-scripts, wimlib; instaladores/ISOs oficiales |
-| Acceso/red | NetworkManager/nmtui/nmcli, OpenSSH, curl/wget, Avahi |
-
-No incluye escritorio, Windows/WinPE, licencias, modelos IA locales ni un instalador universal.
-La presentación gráfica directa al framebuffer no es un escritorio de aplicaciones.
-Una ISO Windows no se convierte en instalador simplemente grabándola con dd.
-Para otros sistemas/hardware, comprueba compatibilidad y documentación oficial.
-
-Los cuatro agentes nativos están disponibles:
+`aguja web` / `aguja browser` uses the same unprivileged browser opener as native
+agent OAuth: Helium by default, Chromium for compatibility. Browser cookies
+stay in RAM, downloads go to the chosen path. Local OAuth retains the original
+CLI PTY and callback; never substitute a model's browser session for the owner's
+account. Headless SSH retains native login handoff; graphical Desk needs local
+console. No login or inference is implied by browser/CLI availability.
 
     aguja agent codex
     aguja agent antigravity
     aguja agent claude
     aguja agent opencode
 
-El launcher usa usuario normal con sudo disponible, no Claude directamente como root.
-Cada lanzamiento permite elegir Seguro (predeterminado, confirmaciones por herramienta) o Inseguro (full/YOLO). Ninguno autoriza tareas ajenas al objetivo del usuario ni reduce sudo. No conviertas una solicitud genérica en autorización del siguiente paso en modo Seguro.
-Las cuentas, login/inferencia de proveedores y conectividad a Internet se verifican por separado.
-No hay tokens ni cuentas de proveedor incluidos de fábrica.
+Use tmux for remote sessions. The physical cockpit shows bounded SSH activity,
+not keystrokes or credential values. The monitor grants no authority and is not
+a permanent transcript. Do not rely on redaction to recognize every new secret.
 
-## 5. Procedimiento de trabajo y recuperación
+## Missions, backups and credentials
 
-1. Acordar objetivo y destino exacto; capturar diagnóstico y estado actual.
-2. Empezar por lectura. Si el disco falla físicamente, minimizar accesos repetidos.
-3. Antes de modificar datos existentes, comparar las opciones viables de BACKUP.md
-   con capacidad medida y recomendar la mejor. Preferir medio físico distinto;
-   una partición temporal no protege de fallo físico. Omitir respaldo solo por
-   decisión explícita del propietario para el destino y operación concretos.
-4. Trabajar sobre copia cuando corresponda. No ejecutar fsck en un filesystem montado.
-5. Un montaje `aguja mount-ro DEVICE RUTA` solicita lectura; un journal puede requerir
-   `noload` (ext4) o `norecovery` (XFS). Para peritaje, bloqueo de escritura/imagen.
-6. Confirmar operaciones destructivas o irreversibles que no estén ya autorizadas.
-7. Verificar archivos recuperados, servicio o arranque real: exit code 0 no basta.
-8. Guardar informe y rollback en el workspace sin secretos, antes de reiniciar.
+Read MISSIONS.md and BACKUP.md before installation, P2V, repair or bulk transfer.
+Compare separate internal/external disk, NAS/SSH, cloud (owner choice), Rescue
+DATA (temporary), same-disk staging (healthy source only, not a disaster backup)
+and explicit no-backup. Measure capacity and agree restoration/retention. Do
+not insist on a single destination regardless of actual hardware/resources.
+Clean only this job's backup after verified restoration and the owner's choice.
 
-No vuelques aguja.conf, contraseñas Wi-Fi/SSH, claves privadas, tokens ni archivos OAuth
-al chat, logs, historial o repositorio. No reemplaces permisos/accesos del propietario
-por una política distinta: trabaja dentro del alcance acordado y conserva reversibilidad.
+`aguja desk cloud` provides provider fields, file/directory import, native
+rclone OAuth, destination checks and read-only browsing. `aguja storage` reports
+metadata; `aguja storage configure` is the terminal alternative. Credentials are
+stored in the unlocked LUKS vault or RAM, never newly persisted in plain DATA.
+Do not upload/synchronize automatically or mistake a cloud listing for a restore
+test. Verify quotas, bandwidth, costs and data privacy before transfers.
 
-## 6. Acceso remoto
+Before using credentials, read SECRETS.md and the disk-recovery skill. Run
+`aguja secrets --json` and `sudo aguja recovery status --json` for metadata only.
+Disk recovery material is materialized in root-private RAM; select labels/IDs
+without loading keys into the model context. Pass only the necessary value
+privately to its native consumer, never logs, history, chat or a repository.
+Opening a recovery mapping is read-only by default; it does not mount/repair.
+Managed AGENTS.md/CLAUDE.md/GEMINI.md pointers preserve owner instructions.
 
-Usa OpenSSH por LAN o por tu Tailscale/Headscale. No existe relay ni conector propietario. Mantén la comprobación de huellas y las políticas de tu tailnet.
+## Updates and result verification
 
-## Herramientas nativas, virtualización y alternativas
+`aguja update check --json` only checks. The Updates page offers individual or
+All RAM / All persistent selections. Full Rescue requires persistence; All RAM
+selects components and clearly leaves the full image out. All persistent stages
+the signed official Rescue (if newer) plus selected components before activating
+the resulting generation. Read UPDATES.md and the live-updates skill first.
+Factory, previous generation, profiles and workspace remain separate. Activation
+is for next boot, never an automatic restart. Plain apt changes in RAM do not
+persist. Do not update a target OS or reboot without the requested scope.
 
-QEMU x86/KVM (o TCG), qemu-img, qemu-nbd, OVMF/UEFI y SeaBIOS están
-incluidos desde 0.9.11. Lee `/usr/share/aguja/TOOLBOX.md` antes de crear una VM
-o incorporar herramientas bajo demanda. Allí hay ideas como REA/MCP, Rizin,
-Unblob, Volatility, btop, lnav y otras: son referencias, no paquetes instalados.
-Puedes investigar y usar alternativas actuales si lo incluido no funciona;
-verifica fuentes, dependencias y recursos, limita CPU/RAM y respeta el alcance
-autorizado. No consumas el overlay RAM con grandes descargas; comprueba `free -h`,
-`df -h` y `findmnt`. Evita acceso simultáneo anfitrión/VM al mismo volumen.
-
-La bienvenida SSH orienta incluso conexiones de comandos sin PTY, por el canal
-de diagnóstico del cliente (banner), sin añadir bytes al stdout de SCP/SFTP/rsync.
-Guía rápida: `/usr/share/aguja/QUICKSTART.md`; contexto: `aguja context`; inventario:
-`aguja tools`; documentación pública: https://aguja.transcendenceia.net/docs.
-
-
-## 7. Claves de recuperación y demás secretos (desde 0.9.16)
-
-Antes de buscar credenciales, lee `/usr/share/aguja/SECRETS.md` y la skill
-`/usr/share/aguja/skills/disk-recovery/SKILL.md`. Ejecuta `aguja secrets --json`
-y `sudo aguja recovery status --json`: muestran ubicaciones/estado, no valores.
-Las claves BitLocker/LUKS de otro equipo están en `/config/aguja-recovery.json`;
-tras desbloquear el perfil o `sudo aguja recovery unlock`, se materializan solo
-en RAM privada, `/run/aguja-recovery/keys.json` (root, 0600/0700). `list --json`
-permite seleccionar etiquetas e IDs sin mostrar claves; `open INDICE DISPOSITIVO`
-abre el mapping en solo lectura por defecto, nunca monta ni repara automáticamente.
-No uses un lector de archivos que vuelque secretos al contexto del modelo.
-Pasa el campo mínimo al destino mediante entrada privada dentro de un proceso.
-La guía de secretos distingue perfil protegido, INI legado, APIs, sesiones nativas,
-Wi-Fi, tailnet y la identidad SSH; no supone que todos existen ni sean válidos.
-Las copias de AGENTS.md/CLAUDE.md/GEMINI.md conservan las instrucciones del dueño
-fuera de un bloque gestionado que apunta a estas guías canónicas actualizadas.
-
-## USB-persistent updates / Actualizaciones persistentes
-
-`aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.
-
-## Mission planning and hardware-aware intervention (1.1)
-
-Start with `aguja hardware --json` and `aguja plan --json`. Read **MISSIONS.md**
-and **BACKUP.md** in `/usr/share/aguja/` before proposing an installation, repair,
-P2V, new service, VM or data transfer. They are current canonical extensions of
-this guide: compare separate internal/external disks, NAS, cloud (ask first),
-Rescue DATA (temporary; clean only after verified restoration), same-disk staging
-(healthy source only, not a disaster backup), or explicit owner-selected no backup.
-Do not insist on one destination regardless of the actual resources.
-Protected profiles unlock at the early boot gate, not from the cockpit menu;
-`aguja profile status --json` identifies LUKS vs legacy vs automatic preparation.
-LUKS secrets are in `/config/private`; workspace DATA remains a separate concern.
-Cloud/NAS support is prepared via `aguja storage`, independently of the Imagers.
+Back up recoverable state before delicate changes. Obtain authorization for new
+irreversible scope, keep already-authorized work moving, and verify observable
+files/services/boot rather than exit codes alone. Save sanitized evidence and
+rollback before reboot. Guide: `/usr/share/aguja/QUICKSTART.md`; tools:
+`aguja tools`; docs: https://aguja.transcendenceia.net/docs.

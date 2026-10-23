@@ -153,6 +153,7 @@ def tools():
     groups = {
         "Agentes IA (tu cuenta / Internet)": ("codex", "agy", "claude", "opencode"),
         "Consola y sesiones": ("zsh", "tmux", "nano", "less", "rg", "jq", "git", "python3"),
+        "Navegador y archivos": ("helium", "chromium", "yazi", "mousepad", "feh", "zathura", "mpv"),
         "Cloud y NAS": ("rclone", "restic", "mount.cifs", "mount.nfs", "sshfs"),
         "Red y acceso": ("nmcli", "nmtui", "ssh", "scp", "rsync", "curl", "avahi-browse"),
         "Recuperación de datos": ("ddrescue", "ddrescuelog", "testdisk", "photorec"),
@@ -171,7 +172,7 @@ def tools():
 
 def main():
     p = argparse.ArgumentParser(description="LA AGUJA Rescue Disk · AI-first rescue Linux")
-    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "recovery", "secrets", "tailscale", "locale", "donate", "hardware", "plan", "storage"])
+    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "web", "files", "desk", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "recovery", "secrets", "tailscale", "locale", "donate", "hardware", "plan", "storage"])
     p.add_argument("args", nargs=argparse.REMAINDER, help="tailscale: status [--json]")
     arguments=sys.argv[1:]
     if arguments[:1]==['qr']:arguments[0]='browser'  # hidden legacy alias; no QR UI
@@ -248,8 +249,12 @@ def main():
         return locale_settings.main(a.args)
     elif a.command == "donate":
         return cockpit.donate()
-    elif a.command == "browser":
-        return cockpit.menu_auth()
+    elif a.command in ("browser", "web"):
+        import web
+        return web.main(a.args)
+    elif a.command in ('desk','files'):
+        import gui_session
+        return gui_session.run('files' if a.command=='files' else (a.args[0] if a.args else 'home'))
     elif a.command == "activity":
         snapshot = activity.snapshot()
         if "--json" in a.args:

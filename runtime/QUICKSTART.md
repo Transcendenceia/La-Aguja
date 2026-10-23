@@ -254,3 +254,15 @@ borra de forma segura rastros previos de flash. No requiere actualizar Imagers.
 Al convertir un perfil anterior, se valida su frase antigua y se guardan perfil y
 resguardos normalizados dentro de LUKS: el siguiente arranque requiere solo la frase
 LUKS nueva. La identidad tailnet se conserva si su estado anterior se puede validar.
+
+## Centro gráfico (1.1.1)
+
+`aguja desk` abre formularios locales; `aguja web` el navegador compartido con
+OAuth y `aguja files` el acceso a Yazi, visores y montajes explícitos.
+Cloud/NAS permite campos manuales o importar rclone.conf desde archivo/directorio;
+las claves referenciadas se copian al almacén privado. Navegación remota en solo
+lectura; no sincroniza automáticamente. Red privada configura Tailscale/Headscale
+sin depender del Imager. Todo RAM/Todo persistente están en Actualizaciones.
+Los agentes necesitan Internet y acceso a un proveedor: no hay modelos locales.
+Instrucciones canónicas en inglés; respuesta en tu idioma. Método ODD:
+`/usr/share/aguja/ODD.md`.

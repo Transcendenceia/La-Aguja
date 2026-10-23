@@ -18,10 +18,10 @@ class BackgroundJobs(unittest.TestCase):
  def test_only_one_job_runs_and_a_second_apply_does_not_install(self):
   jobs.submit('check')
   items=[{'id':'package:curl','kind':'package','name':'curl','current':'1','latest':'2'}]
-  with self.assertRaises(ValueError):jobs.submit('apply',items,{'package:curl':'persistent'})
+  with self.assertRaises(ValueError):jobs.submit('apply',items,{'package:curl':'session'})
   self.assertEqual(self.systemd.call_count,1)
  def test_apply_survives_reopening_and_preserves_verified_reboot_receipt(self):
-  items=[{'id':'package:curl','kind':'package','name':'curl','current':'1','latest':'2'}];choices={'package:curl':'persistent'}
+  items=[{'id':'package:curl','kind':'package','name':'curl','current':'1','latest':'2'}];choices={'package:curl':'session'}
   record=jobs.submit('apply',items,choices)
   with patch.object(update_tasks,'apply',return_value={'ok':True,'completed':['package:curl'],'reboot_required':True}) as apply:self.assertEqual(jobs.worker(record['id']),0)
   apply.assert_called_once_with(items,choices);snapshot=json.loads(jobs.PUBLIC.read_text());self.assertTrue(snapshot['reboot_required']);self.assertEqual(ui.Model().phase,'done')

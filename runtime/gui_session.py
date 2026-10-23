@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import pwd
 import secrets
+import shutil
 import signal
 import stat
 import struct
@@ -13,7 +14,7 @@ import sys
 import tempfile
 import time
 
-ACTIONS = {'home', 'browser', 'files', 'cloud', 'tailnet', 'network', 'updates', 'guide', 'backup', 'settings'}
+ACTIONS = {'home', 'browser', 'files', 'cloud', 'tailnet', 'network', 'updates', 'persist', 'guide', 'backup', 'settings'}
 
 
 def read_request(directory, uid):
@@ -142,12 +143,8 @@ def direct(action,url=None):
     if action=='browser':
         import web
         return web.open_browser(url).wait()
-    # The owner explicitly requested a root explorer. No setup page or mounts.
-    return subprocess.call(['xterm','-class','aguja-files','-T','LA AGUJA · Archivos · root',
-        '-bg','#090b10','-fg','#f7f6f1','-cr','#ff9dcc','-fa','DejaVu Sans Mono','-fs','12',
-        '-xrm','*VT100.translations: #override Ctrl Shift <Key>V: insert-selection(CLIPBOARD)',
-        '-e','sudo','-n','env','DISPLAY='+os.environ['DISPLAY'],
-        'XAUTHORITY='+os.environ['XAUTHORITY'],'YAZI_CONFIG_HOME=/usr/share/aguja/desktop/yazi','yazi','/'])
+    import file_manager
+    return file_manager.launch('/')
 
 
 def session(directory):
@@ -159,6 +156,8 @@ def session(directory):
     try:
         wait_window_manager(window_manager)
         os.environ.update(environment)
+        if shutil.which('xsetroot'):
+            subprocess.run(['xsetroot','-cursor_name','left_ptr'],env=environment,check=False)
         if record['action'] in ('browser','files'):
             return direct(record['action'],record.get('url'))
         return subprocess.call(['/usr/bin/python3','/usr/lib/aguja/desk.py',record['action']], env=environment)

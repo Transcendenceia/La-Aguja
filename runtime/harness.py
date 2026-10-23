@@ -36,6 +36,11 @@ def invocation(name, mode, extras=()):
         raise ValueError('Seguro no permite reemplazar el sandbox ni la aprobación humana')
     binary = BINS[name]
     args, env = [binary], {}
+    if name == 'codex' and not any(a=='agents' or a=='--remote' or a.startswith('--remote=') for a in extras):
+        # This live ships the standalone native executable, not a complete npm
+        # daemon installation. Keep each launch self-contained and avoid stale
+        # daemon/package state surviving a CLI self-update in RAM.
+        args += ['--no-daemon']
     if name == 'codex' and os.environ.get('TMUX') and os.environ.get('AGUJA_LOCAL_CONSOLE') == '1':
         args += ['--no-alt-screen']
     if mode == 'unsafe':

@@ -8,7 +8,7 @@ import updates as u
 class ReleaseUpdates(unittest.TestCase):
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory();self.p=Path(self.temp.name);self.data=self.p/'data';self.cfg=self.p/'cfg';self.root=self.data/'updates';self.cfg.mkdir();self.root.mkdir(parents=True);self.pin=self.p/'pin.json';self.pin.write_text('{}')
-  self.patches=[patch.object(u,'DATA',self.data),patch.object(u,'CFG',self.cfg),patch.object(u,'ROOT',self.root),patch.object(u,'STATE',self.root/'state.json'),patch.object(u,'PIN',self.pin),patch.object(u,'lock',contextlib.nullcontext),patch.object(u,'capacity',lambda n:None),patch.object(u.Path,'read_text',autospec=True,side_effect=self.read_text)]
+  self.patches=[patch.object(u,'DATA',self.data),patch.object(u,'CFG',self.cfg),patch.object(u,'ROOT',self.root),patch.object(u,'STATE',self.root/'state.json'),patch.object(u,'PIN',self.pin),patch.object(u,'lock',return_value=contextlib.nullcontext()),patch.object(u,'capacity',lambda n:None),patch.object(u.Path,'read_text',autospec=True,side_effect=self.read_text)]
   for p in self.patches:p.start()
   root=self.p/'fixture-root';share=root/'usr/share/aguja';share.mkdir(parents=True);(share/'VERSION').write_text('1.0.1\n');(share/'update-protocol.json').write_text(json.dumps({'schema':1,'profile_schema':1,'config_partition':4,'data_partition':5}))
   tree=self.p/'iso/live';tree.mkdir(parents=True)

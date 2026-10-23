@@ -1,9 +1,9 @@
-"""Explicit No / session / persistent update plans; no implicit all-upgrade."""
+"""Session-only installers. Global persistence is a separate owner action."""
 import json,os,re,shutil,tempfile,uuid
 from pathlib import Path
 import updates as u
 import update_progress as progress
-MODES=('no','session','persistent')
+MODES=('no','session')
 STAGE=Path('/var/cache/aguja-session-updates')
 PACKAGE=re.compile(r'[a-z0-9][a-z0-9+.-]*(?::[a-z0-9][a-z0-9-]*)?')
 VERSION=re.compile(r'[A-Za-z0-9][A-Za-z0-9.+:~_-]{0,199}')
@@ -24,7 +24,7 @@ def plan(items,choices):
  known={r['id']:r for r in items}
  if not set(choices)<=set(known) or any(v not in MODES for v in choices.values()):raise ValueError('Selección de actualización no válida')
  result={mode:[dict(r) for r in items if choices.get(r['id'],'no')==mode] for mode in MODES[1:]}
- if any(r['kind']=='release' for r in result['session']):raise ValueError('El Rescue Disk completo requiere Sí persistente y el próximo arranque.')
+ if any(r['kind']=='release' for r in result['session']) and len(result['session'])!=1:raise ValueError('Prepara la imagen completa de Rescue por separado de los paquetes y agentes.')
  return result
 
 def verify_live_ram():
@@ -74,6 +74,8 @@ def preflight_session(packages,harnesses,folder):
   raise ValueError('RAM insuficiente para la selección completa. No se inició la instalación; selecciona menos componentes.')
 
 def session_update(items):
+ if len(items)==1 and items[0]['kind']=='release':
+  return u.release_update(expected_version=items[0]['latest'],stage_ram=True)
  packages=package_items(items);harnesses=harness_items(items);completed=[];started=False
  with u.lock(check_capacity=False):
   verify_live_ram()
@@ -96,10 +98,11 @@ def session_update(items):
     completed.extend(r['id'] for r in items if r['kind']=='package')
     clean_session_cache(folder);cache.mkdir(mode=0o700)
    if harnesses:
-    backups={}
+    backups={};codex_metadata=Path('/opt/aguja/agents/codex/package.json');codex_before=None
     try:
      for name in harnesses:
       target=Path('/')/u.BINS[name];backup=folder/(name+'.before');shutil.copy2(target,backup);backups[target]=backup
+     if 'codex' in harnesses and codex_metadata.exists():codex_before=codex_metadata.read_bytes()
      record=Path('/usr/share/aguja/installed-harnesses.json');record_before=record.read_bytes() if record.exists() else None
      u.install_harnesses(Path('/'),harnesses,cache,reserve=128*1024**2)
      progress.emit('verify','Verificando las versiones de esta sesión',mode='session')
@@ -110,6 +113,9 @@ def session_update(items):
      completed.extend(r['id'] for r in items if r['kind']=='harness')
     except Exception:
      for target,backup in backups.items():os.replace(backup,target)
+     if 'codex' in harnesses:
+      if codex_before is not None:u.atomic(codex_metadata,codex_before);codex_metadata.chmod(0o644)
+      else:codex_metadata.unlink(missing_ok=True)
      if 'record_before' in locals() and record_before is not None:u.atomic(record,record_before)
      raise
     finally:
@@ -124,23 +130,12 @@ def session_update(items):
 def apply(items,choices):
  selected=plan(items,choices);completed=[];results=[]
  if not any(selected.values()):return {'ok':True,'completed':[],'results':[],'no_changes':True}
- for mode in ('persistent','session'):
+ for mode in ('session',):
   group=selected[mode]
   if not group:continue
-  progress.emit('start','Sí persistente' if mode=='persistent' else 'Sí · solo esta sesión',mode=mode,items=[r['id'] for r in group])
+  progress.emit('start','Sí · solo esta sesión',mode=mode,items=[r['id'] for r in group])
   try:
-   if mode=='session':result=session_update(group)
-   elif any(r['kind']=='release' for r in group):
-    release=next(r for r in group if r['kind']=='release');components=[r for r in group if r['kind']!='release']
-    if not components:result=u.release_update(expected_version=release['latest'])
-    else:
-     staged=u.release_update(expected_version=release['latest'],stage_only=True)
-     packages=package_items(components);harnesses=harness_items(components)
-     result=u.package_generation(bool(packages),bool(harnesses),package_items=packages,harness_items=harnesses,base_generation=staged['generation'])
-     result['rescue_version']=staged['version']
-   else:
-    packages=package_items(group);harnesses=harness_items(group)
-    result=u.package_generation(bool(packages),bool(harnesses),package_items=packages,harness_items=harnesses)
+   result=session_update(group)
    results.append({'mode':mode,**result})
    if not result.get('ok',True):
     completed.extend(result.get('completed',[]))

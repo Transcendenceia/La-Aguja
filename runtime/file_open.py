@@ -26,7 +26,9 @@ def terminal(argv, title='LA AGUJA · Files'):
 
 def open_file(path):
     path=Path(path).absolute()
-    if path.is_dir(): return terminal(['yazi',str(path)])
+    if path.is_dir():
+        import file_manager
+        return file_manager.spawn(str(path))
     if not path.is_file(): raise ValueError('Choose a regular file')
     result=subprocess.run(['file','--brief','--mime-type','--',str(path)],capture_output=True,text=True,check=True)
     kind=result.stdout.strip()

@@ -23,6 +23,13 @@ mount -t tmpfs -o mode=755,nosuid tmpfs "$ROOT/dev";OWN_MOUNTS+=(dev)
 for name in null zero random urandom; do
     touch "$ROOT/dev/$name";mount --bind "/dev/$name" "$ROOT/dev/$name"
 done
+python3 - "$ROOT" "$PROJECT/config/harnesses.json" <<'PYCODEX'
+import json,sys
+from pathlib import Path
+root=Path(sys.argv[1]);expected=json.loads(Path(sys.argv[2]).read_text())['codex']
+metadata=json.loads((root/'opt/aguja/agents/codex/package.json').read_text())
+assert metadata.get('name')=='@openai/codex' and metadata.get('version')==expected,'Codex executable/package mismatch'
+PYCODEX
 mount -t proc proc "$ROOT/proc";OWN_MOUNTS+=(proc)
 
 chown "$(chroot "$ROOT" id -u aguja):$(chroot "$ROOT" id -g aguja)" "$VERIFY_HOME"

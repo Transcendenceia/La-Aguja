@@ -465,12 +465,16 @@ def ethernet_keyfile(ethernet):
     return out + '[ipv6]\nmethod=' + ('disabled' if method == 'disabled' else 'auto') + '\n'
 
 
-def apply(capsule, home='/home/aguja', state='/run/aguja-platform', tailnet_state=None):
+def apply(capsule, home='/home/aguja', state='/run/aguja-platform', tailnet_state=None, preserve_native=False):
     """Write only owner auth/config files and narrow runtime state, no shell data."""
     c = validate(capsule)
     home, state = Path(home), Path(state)
     env = {}
-    for name, provider in c['providers'].items():
+    if preserve_native:
+        saved = home / '.config/aguja/provider-env.json'
+        if saved.is_file():
+            env = json.loads(saved.read_text())
+    for name, provider in (() if preserve_native else c['providers'].items()):
         if provider['mode'] == 'none':
             continue
         if provider['mode'] == 'import':

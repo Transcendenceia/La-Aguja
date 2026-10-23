@@ -18,7 +18,7 @@ ASSETS = Path('/usr/share/aguja/desktop')
 GUIDES = Path('/usr/share/aguja')
 ERROR = 'Operation not completed. Check the fields, connectivity and permissions.'
 PAGES = [('home','Home'),('browser','Web browser'),('files','Files'),('cloud','Cloud and NAS'),
-         ('tailnet','Private network'),('network','Network'),('updates','Updates'),
+         ('tailnet','Private network'),('network','Network'),('updates','Updates'),('persist','Persist changes'),
          ('guide','Missions and methods'),('backup','Backup planning'),('settings','Settings')]
 CLOUD = {
  'drive': [('client_id','Client ID'),('client_secret','Client secret'),('token','Token JSON'),('service_account_file','Service account JSON'),('root_folder_id','Root folder ID')],
@@ -55,7 +55,7 @@ class Desk(Gtk.Window):
         bar=Gtk.Box();bar.get_style_context().add_class('spectrum');root.pack_start(bar,False,False,0)
         body=Gtk.Box();root.pack_start(body,True,True,0)
         # Only the requested task is constructed. No second menu or eager pages.
-        page=page if page in ('cloud','tailnet','network') else 'network'
+        page=page if page in ('cloud','tailnet','network','persist') else 'network'
         self.stack=Gtk.Stack();body.pack_start(self.stack,True,True,0)
         title=dict(PAGES)[page]
         scroll=Gtk.ScrolledWindow();scroll.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
@@ -135,6 +135,78 @@ class Desk(Gtk.Window):
             GLib.idle_add(finish)
         threading.Thread(target=worker,daemon=True).start()
 
+    def page_persist(self,box):
+        self.note(box,'Save the whole live: installed packages, agents, settings, personal files and sessions.')
+        self.note(box,'The snapshot is encrypted on the boot USB. Keep its password: it is requested at the next boot.')
+        self.note(box,'Mounted disks, temporary files and running processes are not copied. Workspace and the protected profile remain separate.')
+        self.persist_target=self.note(box,'Checking the boot USB…')
+        self.persist_password=self.field(box,'Snapshot password',secret=True)
+        self.persist_confirmation=self.field(box,'Repeat password',secret=True)
+        self.persist_bar=Gtk.ProgressBar();self.persist_bar.set_show_text(True);box.pack_start(self.persist_bar,False,False,0)
+        self.persist_spinner=Gtk.Spinner();box.pack_start(self.persist_spinner,False,False,0)
+        self.persist_detail=self.note(box,'Ready')
+        self.persist_active=False
+        self.persist_button=self.button(box,'Persist changes',self.persist_start,True)
+        self.persist_button.set_sensitive(False)
+        def check():
+            try:
+                result=subprocess.run(['sudo','-n','/usr/bin/python3','/usr/lib/aguja/persistence.py','status'],capture_output=True,timeout=15)
+                value=json.loads(result.stdout)
+            except (ValueError,OSError,subprocess.SubprocessError):value={'available':False,'message':tr(ERROR)}
+            def finish():
+                if value.get('available'):
+                    target=value['target'];self.persist_target.set_text(target['disk']+' · DATA '+target['data']+f" · {value['free_bytes']/1024**3:.1f} GiB libres")
+                    self.persist_button.set_sensitive(True)
+                else:self.persist_target.set_text(value.get('message',tr(ERROR)))
+                return False
+            GLib.idle_add(finish)
+        threading.Thread(target=check,daemon=True).start()
+
+    def persist_start(self):
+        if self.persist_active:return
+        password=self.persist_password.get_text()
+        if len(password)<8 or password!=self.persist_confirmation.get_text():
+            self.status.set_text(tr('Use at least 8 characters and repeat the same password.'));return
+        self.persist_active=True;self.persist_button.set_sensitive(False)
+        self.persist_spinner.start()
+        self.persist_password.set_text('');self.persist_confirmation.set_text('')
+        self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.'))
+        stages={'scan':'Scanning the live','encrypt':'Preparing encrypted storage','copy':'Copying live files','initramfs':'Preparing the next boot',
+                'compress':'Compressing the snapshot','sync':'Synchronizing the USB','compact':'Compacting encrypted storage',
+                'verify':'Verifying saved bytes','activate':'Activating the next boot','done':'Changes saved and verified',
+                'failed':'Changes were not saved'}
+        def update(event):
+            label=tr(stages.get(event.get('stage'),'Working…'))
+            done,total=event.get('completed'),event.get('total')
+            if isinstance(done,(int,float)) and isinstance(total,(int,float)) and total>0:
+                self.persist_bar.set_fraction(max(0,min(1,done/total)))
+            else:self.persist_bar.pulse()
+            if isinstance(done,(int,float)):
+                if event.get('unit')=='bytes':label+=f' · {done/1024**2:.1f} MiB'+(f' / {total/1024**2:.1f} MiB' if total else '')
+                elif event.get('unit')=='percent':label+=f' · {done:.0f}%'
+                elif event.get('unit')=='files':label+=f' · {done:.0f} '+tr('files')
+            self.persist_bar.set_text(label);self.persist_detail.set_text(event.get('error') or label)
+            if event.get('stage')=='done':
+                self.persist_bar.set_fraction(1);self.status.set_text(tr('Saved and encrypted. Restart when ready; factory and previous generation remain available.'))
+            elif event.get('stage')=='failed':self.status.set_text(event.get('error') or tr(ERROR))
+            return False
+        def worker(secret):
+            final=None
+            try:
+                with subprocess.Popen(['sudo','-n','unshare','--mount','--propagation','private',
+                        '/usr/bin/python3','/usr/lib/aguja/persistence.py','worker'],stdin=subprocess.PIPE,
+                        stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True) as process:
+                    process.stdin.write(json.dumps({'password':secret}));process.stdin.close();secret=None
+                    for line in process.stdout:
+                        event=json.loads(line);final=event;GLib.idle_add(update,event)
+                    code=process.wait()
+                    if code and (not final or final.get('stage')!='failed'):GLib.idle_add(update,{'stage':'failed'})
+            except (OSError,ValueError,subprocess.SubprocessError):GLib.idle_add(update,{'stage':'failed'})
+            def finish():
+                self.persist_active=False;self.persist_spinner.stop();self.persist_button.set_sensitive(True);return False
+            GLib.idle_add(finish)
+        threading.Thread(target=worker,args=(password,),daemon=True).start()
+
     def spawn(self,argv):
         try:
             process=subprocess.Popen(argv,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
@@ -177,7 +249,7 @@ class Desk(Gtk.Window):
             if url and '://' not in url:
                 from urllib.parse import quote
                 url='https://'+url if '.' in url and ' ' not in url else 'https://duckduckgo.com/?q='+quote(url)
-            self.children.append(web.open_browser(url,directory=runtime/'aguja-web-session',choice=choice))
+            self.children.append(web.open_browser(url,choice=choice))
         except (OSError,ValueError):self.status.set_text(tr(ERROR))
         return False
 
@@ -188,8 +260,7 @@ class Desk(Gtk.Window):
         self.button(row,'Select directory',lambda:self.choose(self.path,True))
         self.button(row,'Open',self.open_path,True)
         row=self.row(box)
-        self.button(row,'Yazi explorer',lambda:self.yazi(False))
-        self.button(row,'Root file explorer',lambda:self.yazi(True))
+        self.button(row,'Root file explorer',self.open_explorer)
         self.volumes_combo=self.combo(box,'Target partition',[])
         self.writable=self.check(box,'Writable mount')
         self.note(box,'Read-only is the default; ext4/XFS journal replay is disabled.')
@@ -201,12 +272,10 @@ class Desk(Gtk.Window):
         try:self.children.append(file_open.open_file(self.path.get_text()))
         except (OSError,ValueError,subprocess.SubprocessError):self.status.set_text(tr(ERROR))
 
-    def yazi(self,root=False):
-        import file_open
+    def open_explorer(self):
+        import file_manager
         path=self.path.get_text() or '/'
-        command=['yazi',path]
-        if root:command=['sudo','-n','env','DISPLAY='+os.environ.get('DISPLAY',''),'XAUTHORITY='+os.environ.get('XAUTHORITY',''),'YAZI_CONFIG_HOME=/usr/share/aguja/desktop/yazi',*command]
-        self.children.append(file_open.terminal(command))
+        self.children.append(file_manager.spawn(path))
 
     def refresh_volumes(self):
         def ready(value):
@@ -300,8 +369,8 @@ class Desk(Gtk.Window):
         name=self.remotes.get_active_id()
         if not name:return
         def ready(result):
-            import file_open
-            self.children.append(file_open.terminal(['yazi',result['mountpoint']]))
+            import file_manager
+            self.children.append(file_manager.spawn(result['mountpoint']))
         self.perform('cloud-mount',{'name':name},ready)
 
     def page_tailnet(self,box):
@@ -373,57 +442,8 @@ class Desk(Gtk.Window):
         self.perform('wifi-connect',data,lambda _:self.wifi_password.set_text(''))
 
     def page_updates(self,box):
-        self.note(box,'Full Rescue needs persistent storage; All RAM selects components only.')
-        row=self.row(box);self.button(row,'Check updates',lambda:self.perform('update-submit',{'operation':'check'},self.accept_updates),True)
-        row=self.row(box)
-        for label,mode in [('All · No','no'),('All · RAM','session'),('All · persistent','persistent')]:self.button(row,label,lambda m=mode:self.all_updates(m))
-        self.update_box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=10);box.pack_start(self.update_box,False,False,0)
-        self.update_message=self.note(box,'Installed → available')
-        self.button(box,'Review selection',self.review_updates,True)
-
-    def all_updates(self,mode):
-        skipped=0
-        for item in self.items:
-            value='no' if item['kind']=='release' and mode=='session' else mode
-            skipped+=value!=mode;self.choices[item['id']]=value
-            self.widgets[item['id']].set_active_id(value)
-        if skipped:self.update_message.set_text(tr('Full Rescue needs persistent storage; All RAM selects components only.'))
-
-    def accept_updates(self,result):
-        job=result.get('job')
-        inventory=result.get('inventory')
-        if job:
-            if job.get('operation')=='check' and job.get('state')=='done':inventory=job.get('result')
-            event=job.get('event') or {};message=event.get('detail') or job.get('state','')
-            self.update_message.set_text(str(message))
-            if job.get('state') in ('failed','done') and job.get('operation')=='apply':
-                value=job.get('result',{})
-                self.update_message.set_text(tr('Restart required; previous and factory generations remain available.') if value.get('reboot_required') else str(value.get('error') or message))
-        if not inventory:return
-        signature=json.dumps(inventory,sort_keys=True)
-        if signature==self.update_signature:return
-        self.update_signature=signature;self.inventory=inventory
-        import update_tasks
-        self.items=update_tasks.rows(inventory);self.choices={i['id']:'no' for i in self.items};self.widgets={}
-        for child in self.update_box.get_children():child.destroy()
-        for item in self.items:
-            row=self.row(self.update_box);label=self.label(item['name']+'\n'+str(item['current'])+' → '+str(item['latest']))
-            label.set_hexpand(True);row.pack_start(label,True,True,0)
-            combo=Gtk.ComboBoxText()
-            for mode,title in [('no','No'),('session','Yes · RAM'),('persistent','Yes · persistent')]:
-                if item['kind']!='release' or mode!='session':combo.append(mode,tr(title))
-            combo.set_active_id('no');combo.connect('changed',lambda w,k=item['id']:self.choices.update({k:w.get_active_id()}))
-            row.pack_end(combo,False,False,0);self.widgets[item['id']]=combo
-        self.update_box.show_all()
-
-    def poll_updates(self):
-        if self.current=='updates' and not self.busy:self.perform('update-state',done=self.accept_updates)
-        return True
-
-    def review_updates(self):
-        selected=[i['name']+' · '+tr('Yes · RAM' if self.choices[i['id']]=='session' else 'Yes · persistent') for i in self.items if self.choices.get(i['id'],'no')!='no']
-        if selected and self.confirm(tr('Apply selection')+'?\n\n'+'\n'.join(selected)):
-            self.perform('update-submit',{'operation':'apply','items':self.items,'choices':self.choices},self.accept_updates)
+        self.note(box,'Install updates for this session. Save everything later from Persist changes.')
+        self.button(box,'Open updates',lambda:self.terminal(['/usr/local/bin/aguja','update','menu']),True)
 
     def page_guide(self,box):
         self.note(box,'Canonical agent instructions are in English. Agents should answer in your chosen language.')
@@ -462,6 +482,9 @@ class Desk(Gtk.Window):
         self.children.append(file_open.terminal(argv))
 
     def close(self,*_):
+        if getattr(self,'persist_active',False):
+            self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.'))
+            return True
         for child in self.children:
             if child.poll() is None:
                 child.terminate()

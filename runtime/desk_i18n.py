@@ -2,6 +2,21 @@
 from i18n import ui_language
 
 ES={
+ 'Persist changes':'Persistir cambios',
+ 'Save the whole live: installed packages, agents, settings, personal files and sessions.':'Guarda el live completo: paquetes instalados, agentes, ajustes, archivos personales y sesiones.',
+ 'The snapshot is encrypted on the boot USB. Keep its password: it is requested at the next boot.':'La instantánea se cifra en el pendrive de arranque. Conserva su clave: se pedirá al volver a arrancar.',
+ 'Mounted disks, temporary files and running processes are not copied. Workspace and the protected profile remain separate.':'No se copian discos montados, temporales ni procesos en ejecución. El workspace y el perfil protegido se conservan aparte.',
+ 'Checking the boot USB…':'Comprobando el pendrive de arranque…',
+ 'Snapshot password':'Clave de la instantánea',
+ 'Use at least 8 characters and repeat the same password.':'Usa al menos 8 caracteres y repite la misma clave.',
+ 'Saving. Keep the USB connected until verification finishes.':'Guardando. Mantén el pendrive conectado hasta terminar la verificación.',
+ 'Scanning the live':'Examinando el live', 'Preparing encrypted storage':'Preparando el almacenamiento cifrado', 'Preparing the next boot':'Preparando el próximo arranque',
+ 'Copying live files':'Copiando los archivos del live', 'Compressing the snapshot':'Comprimiendo la instantánea',
+ 'Synchronizing the USB':'Sincronizando el pendrive', 'Compacting encrypted storage':'Compactando el almacenamiento cifrado',
+ 'Verifying saved bytes':'Verificando los bytes guardados', 'Activating the next boot':'Activando el próximo arranque',
+ 'Changes saved and verified':'Cambios guardados y verificados', 'Changes were not saved':'No se guardaron los cambios',
+ 'Saved and encrypted. Restart when ready; factory and previous generation remain available.':'Guardado y cifrado. Reinicia cuando quieras; fábrica y generación anterior siguen disponibles.',
+ 'files':'archivos',
  'Browse destination':'Explorar destino','Empty destination':'Destino vacío',
  'Full Rescue needs persistent storage; All RAM selects components only.':'Rescue completo requiere persistencia; Todo RAM selecciona solo componentes.',
  'Helium is beta. Select Chromium if a website needs compatibility.':'Helium está en beta. Elige Chromium si una web necesita compatibilidad.',

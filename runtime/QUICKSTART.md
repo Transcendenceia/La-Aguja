@@ -178,7 +178,8 @@ vez desbloqueada. Sin red/tailnet el rescate local continúa disponible.
 - `/data/config-backups`: configuración anterior recuperable, solo accesible con sudo.
 - El Wi-Fi y la contraseña personalizada se guardan en aguja.conf, en texto plano.
 - Sin USB configurable (solo ISO), los cambios quedan en la sesión actual.
-- HOME/tokens solo persisten al elegir `persistent_home=yes`; no se cifran.
+- «Persistir cambios» guarda HOME, cuentas nativas y raíz en una instantánea cifrada.
+- El modo heredado `persistent_home=yes` es independiente y no cifra HOME.
 - `sudo passwd aguja` cambia solo esta sesión. Para conservarlo, usa `aguja password`.
 
 ## Rescate y agentes IA
@@ -186,7 +187,7 @@ vez desbloqueada. Sin red/tailnet el rescate local continúa disponible.
 El sistema instalado y sus discos no se montan ni reparan automáticamente.
 Empieza identificando discos y modelo/serie, diagnostica en lectura y acuerda el objetivo.
 Usa otro disco para recuperaciones grandes: el USB de rescate no tiene capacidad ilimitada.
-La raíz del sistema live está en RAM; tus cambios al OS live no persisten al reiniciar.
+La raíz del sistema live está en RAM; tus cambios al OS live no persisten al reiniciar salvo que uses «Persistir cambios».
 
 Codex, OpenCode, Claude Code y Antigravity se incluyen en la imagen personal completa, aunque no prepares credenciales. Para usar IA necesitan tu propia cuenta
 y conectividad para usar servicios IA. Las herramientas tradicionales funcionan offline.
@@ -234,10 +235,15 @@ La bienvenida SSH muestra estos caminos también al conectarse sin terminal.
 
 Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. The early boot profile gate also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
 
-## USB-persistent updates / Actualizaciones persistentes
+## Actualizaciones y persistencia global
 
-`aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.
-
+`aguja update check --json` consulta; `aguja update menu` instala lo elegido en RAM.
+Actualizar no guarda ni activa generaciones en el USB. Después, **Persistir cambios**
+en el menú principal (`aguja persist save`) guarda el live completo cifrado:
+paquetes, agentes, ajustes, archivos y borrados. Muestra copia, compresión y
+verificación reales; conserva fábrica y generación anterior. La clave elegida
+se pide al arrancar. No copia discos montados, temporales ni procesos activos.
+Consulta `/usr/share/aguja/UPDATES.md` y la skill live-updates. Sin reinicio automático.
 
 ## Rescue 1.1 · equipo, misiones y respaldos
 
@@ -256,13 +262,13 @@ Al convertir un perfil anterior, se valida su frase antigua y se guardan perfil 
 resguardos normalizados dentro de LUKS: el siguiente arranque requiere solo la frase
 LUKS nueva. La identidad tailnet se conserva si su estado anterior se puede validar.
 
-## Menú único (1.2.0)
+## Menú único (1.3.0)
 
 Agentes, Conexiones, Herramientas y Ajustes agrupan las operaciones. Navegador
-abre directamente el mismo navegador usado por OAuth. Archivos abre Yazi como
-root sin configuración intermedia; no monta discos automáticamente. Actualizaciones
-incluye selección por componente, Todo RAM / Todo persistente, botón Instalar
-selección, confirmación y progreso real en segundo plano.
+abre directamente el mismo navegador usado por OAuth. Archivos abre Thunar como
+root, con ratón y montaje/desmontaje explícito. No monta discos automáticamente.
+Actualizaciones instala en esta sesión con selección por componente y progreso.
+«Persistir cambios» es una entrada principal independiente para guardar todo el live.
 
 Conexiones abre solo el formulario elegido: Internet, Tailscale/Headscale o Cloud/NAS.
 Cloud/NAS permite campos manuales o importar rclone.conf desde archivo/directorio;

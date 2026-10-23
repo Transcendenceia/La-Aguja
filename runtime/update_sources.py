@@ -59,7 +59,7 @@ def harnesses(names=None):
   r=get('https://api.github.com/repos/openai/codex/releases/latest');v=r['tag_name'].removeprefix('rust-v');semver(v)
   a=next(x for x in r['assets'] if x['name']=='codex-x86_64-unknown-linux-musl.tar.gz');digest=a.get('digest','')
   if not re.fullmatch('sha256:[a-f0-9]{64}',digest):raise ValueError('Codex no publica un hash verificable')
-  result['codex']={'version':v,'url':url(a['browser_download_url']),'algorithm':'sha256','digest':digest[7:],'bytes':a['size'],'member':'codex-x86_64-unknown-linux-musl'}
+  result['codex']={'version':v,'url':url(a['browser_download_url']),'algorithm':'sha256','digest':digest[7:],'bytes':a['size'],'member':'codex-x86_64-unknown-linux-musl','npm':codex_metadata(v)}
  for name,pkg,member in [('claude','@anthropic-ai/claude-code-linux-x64','package/claude'),('opencode','opencode-linux-x64-baseline','package/bin/opencode')]:
   if name not in names:continue
   r=get('https://registry.npmjs.org/'+pkg+'/latest');semver(r['version']);dist=r['dist'];integrity=dist['integrity']
@@ -70,3 +70,13 @@ def harnesses(names=None):
   if not re.fullmatch('[a-f0-9]{128}',r['sha512']):raise ValueError('Integridad Antigravity no válida')
   result['antigravity']={'version':r['version'],'url':url(r['url']),'algorithm':'sha512','digest':r['sha512'],'member':'antigravity'}
  return result
+
+def codex_metadata(version):
+ semver(version)
+ package=get('https://registry.npmjs.org/@openai/codex/'+version)
+ if package.get('name')!='@openai/codex' or package.get('version')!=version:raise ValueError('Metadatos Codex no coinciden con el ejecutable')
+ integrity=package['dist']['integrity']
+ if not integrity.startswith('sha512-'):raise ValueError('Integridad de metadatos Codex no válida')
+ digest=base64.b64decode(integrity[7:],validate=True).hex()
+ if not re.fullmatch('[a-f0-9]{128}',digest):raise ValueError('Integridad de metadatos Codex no válida')
+ return {'version':version,'url':url(package['dist']['tarball']),'algorithm':'sha512','digest':digest}

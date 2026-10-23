@@ -4,16 +4,21 @@ set -euo pipefail
 PROJECT=${AGUJA_PROJECT:-$(cd "$(dirname "$0")/.." && pwd)}
 ROOT=${AGUJA_ROOT:-$PROJECT/build/rootfs}
 [[ $EUID == 0 && -f "$ROOT/etc/debian_version" && $(realpath "$ROOT") != / ]] || { echo 'Rootfs Debian aislada requerida'; exit 1; }
+python3 "$PROJECT/scripts/install-codex-metadata.py" "$ROOT"
+install -d "$ROOT/etc/codex"
+# Native standalone live sessions do not implicitly start an npm-managed daemon.
+printf '[features]\ndaemon_auto_start = false\n' > "$ROOT/etc/codex/config.toml"
 ln -sfn /etc/machine-id "$ROOT/var/lib/dbus/machine-id"
 AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-tailscale.sh"
 install -d "$ROOT/usr/lib/aguja" "$ROOT/usr/share/aguja" "$ROOT/etc/aguja" \
   "$ROOT/etc/skel" "$ROOT/etc/profile.d" "$ROOT/etc/systemd/system" "$ROOT/usr/local/share/zsh/site-functions"
-printf '{"schema":1,"features":["early-profile-gate-v1","luks-profile-v1","hardware-preflight-v1","storage-credentials-v1","direct-tools-v1","operational-odd-v1","bulk-updates-v1"]}\n' > "$ROOT/usr/share/aguja/capabilities.json"
+printf '{"schema":1,"features":["early-profile-gate-v1","luks-profile-v1","hardware-preflight-v1","storage-credentials-v1","direct-tools-v1","operational-odd-v1","bulk-updates-v1","global-snapshot-luks2-v1","thunar-files-v1"]}\n' > "$ROOT/usr/share/aguja/capabilities.json"
 # The factory account is locked until boot's profile gate configures owner access.
 chroot "$ROOT" passwd -l aguja
 # Persistent update infrastructure, copied only into the isolated factory.
 install -m 755 "$PROJECT/runtime/update-root-worker.sh" "$ROOT/usr/lib/aguja/update-root-worker.sh"
 install -m 755 "$PROJECT/runtime/update-session-worker.sh" "$ROOT/usr/lib/aguja/update-session-worker.sh"
+install -m 755 "$PROJECT/runtime/snapshot-initrd.sh" "$ROOT/usr/lib/aguja/snapshot-initrd.sh"
 install -m 644 "$PROJECT/desktop/resources/release-key.json" "$ROOT/usr/share/aguja/release-key.json"
 install -m 644 "$PROJECT/config/harnesses.json" "$ROOT/usr/share/aguja/harnesses.json"
 install -m 644 "$PROJECT/runtime/update-protocol.json" "$ROOT/usr/share/aguja/update-protocol.json"

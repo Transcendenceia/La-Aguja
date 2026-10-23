@@ -137,9 +137,9 @@ class Release(unittest.TestCase):
         rows=update_tasks.rows(inventory)
         self.assertEqual(rows[0]['kind'],'release')
         with patch.object(updates,'release_update',return_value={'ok':True}) as upgrade:
-            result=update_tasks.apply(rows,{'release:rescue':'persistent'})
+            result=update_tasks.apply(rows,{'release:rescue':'session'})
             self.assertTrue(result['ok'])
-            upgrade.assert_called_once_with(expected_version='1.1.0')
+            upgrade.assert_called_once_with(expected_version='1.1.0',stage_ram=True)
 
     def test_release_catalog_change_is_not_silently_accepted(self):
         with patch.object(updates,'lock',return_value=contextlib.nullcontext()), patch.object(updates.sources,'catalog',return_value=[{'version':'1.2.0'}]), patch.object(Path,'read_text',return_value='{}'), patch.object(updates,'capacity') as capacity:

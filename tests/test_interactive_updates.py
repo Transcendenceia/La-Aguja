@@ -11,45 +11,44 @@ class Selection(unittest.TestCase):
   with patch.object(u,'package_generation') as persistent,patch.object(tasks,'session_update') as temporary:
    result=tasks.apply(self.items,{r['id']:'no' for r in self.items})
   self.assertTrue(result['no_changes']);persistent.assert_not_called();temporary.assert_not_called()
- def test_mixed_selection_only_sends_requested_items_to_each_destination(self):
-  choices={'package:curl':'persistent','harness:codex':'session'}
-  with patch.object(u,'package_generation',return_value={'ok':True,'generation':'gen-'+'a'*32,'reboot_required':True}) as persistent,patch.object(tasks,'session_update',return_value={'ok':True,'reboot_required':False}) as temporary:
+ def test_selection_only_installs_requested_session_items_without_usb_fallback(self):
+  choices={'package:curl':'session','harness:codex':'session'}
+  with patch.object(u,'package_generation') as persistent,patch.object(tasks,'session_update',return_value={'ok':True,'completed':['package:curl','harness:codex']}) as temporary:
    result=tasks.apply(self.items,choices)
-  self.assertTrue(result['ok']);self.assertEqual(result['completed'],['package:curl','harness:codex'])
-  self.assertEqual(persistent.call_args.kwargs,{'package_items':[{'name':'curl','version':'1.1'}],'harness_items':{}})
-  self.assertEqual([r['id'] for r in temporary.call_args.args[0]],['harness:codex']);self.assertTrue(result['reboot_required'])
- def test_invalid_modes_unknown_items_and_incompatible_release_never_start(self):
-  for choices in [{'package:curl':'yes'},{'package:unknown':'session'},{'release:rescue':'session'}]:
-   with patch.object(u,'package_generation') as mutate:
+  self.assertTrue(result['ok']);persistent.assert_not_called()
+  self.assertEqual([r['id'] for r in temporary.call_args.args[0]],['package:curl','harness:codex'])
+
+ def test_persistent_modes_unknown_items_and_incompatible_release_never_start(self):
+  for choices in [{'package:curl':'persistent'},{'package:unknown':'session'},{'release:rescue':'session','package:curl':'session'}]:
+   with patch.object(tasks,'session_update') as mutate:
     with self.assertRaises(ValueError):tasks.apply(self.items,choices)
     mutate.assert_not_called()
- def test_all_persistent_stages_release_before_component_activation(self):
-  choices={r['id']:'persistent' for r in self.items};calls=[]
-  def stage(**kw):calls.append(('release',kw));return {'generation':'gen-'+'a'*32,'version':'1.0.1'}
-  def components(*args,**kw):calls.append(('components',kw));return {'ok':True,'reboot_required':True}
-  with patch.object(u,'release_update',side_effect=stage),patch.object(u,'package_generation',side_effect=components):
-   result=tasks.apply(self.items,choices)
-  self.assertTrue(result['ok']);self.assertEqual(calls[0],('release',{'expected_version':'1.0.1','stage_only':True}))
-  self.assertEqual(calls[1][1]['base_generation'],'gen-'+'a'*32);self.assertEqual(len(result['completed']),len(self.items))
- def test_combined_staging_failure_never_starts_components_or_session(self):
-  with patch.object(u,'release_update',side_effect=ValueError('Fixture failure')),patch.object(u,'package_generation') as generate,patch.object(tasks,'session_update') as session:
-   result=tasks.apply(self.items,{'release:rescue':'persistent','package:curl':'persistent','harness:codex':'session'})
-  self.assertFalse(result['ok']);self.assertFalse(result['completed']);generate.assert_not_called();session.assert_not_called()
+
+ def test_full_release_is_staged_in_ram_without_generation_activation(self):
+  with patch.object(u,'release_update',return_value={'ok':True,'staged':True,'persistence_required':True}) as stage,patch.object(u,'activate') as activate:
+   result=tasks.apply(self.items,{'release:rescue':'session'})
+  self.assertTrue(result['ok']);stage.assert_called_once_with(expected_version='1.0.1',stage_ram=True);activate.assert_not_called()
+
+ def test_failed_full_release_staging_never_activates_a_generation(self):
+  with patch.object(u,'release_update',side_effect=ValueError('Fixture failure')),patch.object(u,'activate') as activate:
+   result=tasks.apply(self.items,{'release:rescue':'session'})
+  self.assertFalse(result['ok']);self.assertFalse(result['completed']);activate.assert_not_called()
+
  def test_select_all_ram_excludes_only_full_release(self):
   with patch('update_jobs.status',return_value=None),patch('update_jobs.cached_inventory',return_value=None):model=ui.Model()
   model.items=self.items;model.phase='list';model.select_all('session')
   self.assertEqual(model.choices['release:rescue'],'no')
   self.assertTrue(all(model.choices[r['id']]=='session' for r in self.items if r['kind']!='release'))
-  model.select_all('persistent');self.assertTrue(all(v=='persistent' for v in model.choices.values()))
+  model.select_all('persistent');self.assertNotIn('persistent',model.choices.values())
  def test_partial_temporary_failure_is_not_reported_as_success(self):
   with patch.object(tasks,'session_update',side_effect=ValueError('SYNTHETIC FAILURE')):
    result=tasks.apply(self.items,{'package:curl':'session'})
   self.assertFalse(result['ok']);self.assertEqual(result['completed'],[]);self.assertTrue(result['session_may_be_partial'])
- def test_failing_persistence_does_not_start_temporary_or_claim_completion(self):
-  events=[]
-  with progress.listen(events.append),patch.object(u,'package_generation',side_effect=ValueError('No space')),patch.object(tasks,'session_update') as temporary:
-   result=tasks.apply(self.items,{'package:curl':'persistent','harness:codex':'session'})
-  self.assertFalse(result['ok']);self.assertFalse(result['completed']);temporary.assert_not_called();self.assertNotIn('group_done',[e['stage'] for e in events])
+ def test_ram_failure_never_falls_back_to_persistence(self):
+  with patch.object(tasks,'session_update',side_effect=ValueError('No space')),patch.object(u,'package_generation') as persistent:
+   result=tasks.apply(self.items,{'package:curl':'session'})
+  self.assertFalse(result['ok']);self.assertFalse(result['completed']);persistent.assert_not_called()
+
  def test_shell_fragments_cannot_be_package_names_or_versions(self):
   for name,version in [('curl;id','1.1'),('curl','1.1\nBAD=yes'),('--root','1.0')]:
    with self.assertRaises(ValueError):tasks.rows({'packages':[{'name':name,'latest':version,'current':'1'}]})
@@ -58,11 +57,11 @@ class Selection(unittest.TestCase):
   with patch.object(update_jobs,'status',return_value=None),patch.object(update_jobs,'cached_inventory',return_value=None):m=ui.Model()
   m.inventory_result({'packages':[{'name':'curl','latest':'1.1','current':'1.0'}]})
   self.assertEqual(m.phase,'list');self.assertEqual(m.choices,{'package:curl':'no'});m.start('apply');self.assertIsNone(m.thread)
-  m.cycle();self.assertEqual(m.choices['package:curl'],'session');m.cycle();self.assertEqual(m.choices['package:curl'],'persistent')
+  m.cycle();self.assertEqual(m.choices['package:curl'],'session');m.cycle();self.assertEqual(m.choices['package:curl'],'no')
   m.phase='applying';self.assertFalse(m.back());m.job='a'*32;self.assertTrue(m.back());self.assertEqual(m.phase,'applying')
   m.accept({'operation':'apply','state':'done','result':{'ok':True,'results':[]}});self.assertEqual(m.phase,'done')
- def test_release_never_cycles_to_an_unsupported_ram_update(self):
-  m=ui.Model();m.phase='list';m.items=[next(row for row in self.items if row['kind']=='release')];m.choices={'release:rescue':'no'};m.cycle();self.assertEqual(m.choices['release:rescue'],'persistent');m.cycle();self.assertEqual(m.choices['release:rescue'],'no')
+ def test_release_only_prepares_in_ram(self):
+  m=ui.Model();m.phase='list';m.items=[next(row for row in self.items if row['kind']=='release')];m.choices={'release:rescue':'no'};m.cycle();self.assertEqual(m.choices['release:rescue'],'session');m.cycle();self.assertEqual(m.choices['release:rescue'],'no')
  def test_busy_model_ignores_second_submission_but_can_leave_progress(self):
   import threading,update_jobs
   entered=threading.Event();release=threading.Event()

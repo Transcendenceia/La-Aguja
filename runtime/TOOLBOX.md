@@ -121,6 +121,12 @@ puntos de partida, **no prohíbe herramientas nuevas**.
 
 Read `/usr/share/aguja/SECRETS.md`; run `aguja secrets --json` and `sudo aguja recovery status --json` for metadata only. The early boot profile gate also unlocks matching recovery keys in RAM. Select with `sudo aguja recovery list --json`; never print key values. The native `open` action requires an exact disk and defaults to read-only, without mounting.
 
-## USB-persistent updates / Actualizaciones persistentes
+## Actualizaciones y persistencia global
 
-`aguja update status --json` shows the USB generation and cached notices. `aguja update check --json` checks only; `aguja update menu` offers optional persistent system, live and harness upgrades. Read `/usr/share/aguja/UPDATES.md` and `/usr/share/aguja/skills/live-updates/SKILL.md` before updating. Root generations are separate from profiles/secrets/DATA workspaces. Updates take effect on next boot, not automatically; retain factory and previous generations. Ordinary apt/CLI updates in RAM are not persistent. Never upgrade a target internal disk or reboot without the owner’s requested scope.
+`aguja update check --json` consulta; `aguja update menu` instala lo elegido en RAM.
+Actualizar no guarda ni activa generaciones en el USB. Después, **Persistir cambios**
+en el menú principal (`aguja persist save`) guarda el live completo cifrado:
+paquetes, agentes, ajustes, archivos y borrados. Muestra copia, compresión y
+verificación reales; conserva fábrica y generación anterior. La clave elegida
+se pide al arrancar. No copia discos montados, temporales ni procesos activos.
+Consulta `/usr/share/aguja/UPDATES.md` y la skill live-updates. Sin reinicio automático.

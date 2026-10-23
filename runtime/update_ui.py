@@ -64,11 +64,11 @@ class Model:
  def select(self,index,mode):
   if self.phase!='list' or not 0<=index<len(self.items):return
   row=self.items[index]
-  if row['kind']=='release' and mode=='session':self.error='El Rescue Disk completo requiere Sí persistente y el próximo arranque.';return
+  if mode not in tasks.MODES:return
   self.selected=index;self.choices[row['id']]=mode;self.error=''
  def cycle(self,direction=1):
   if not self.items:return
-  row=self.items[self.selected];modes=('no','persistent') if row['kind']=='release' else tasks.MODES
+  row=self.items[self.selected];modes=tasks.MODES
   self.select(self.selected,modes[(modes.index(self.choices[row['id']])+direction)%len(modes)])
  def select_all(self,mode):
   if self.phase!='list' or mode not in tasks.MODES:return
@@ -77,14 +77,14 @@ class Model:
    selected='no' if row['kind']=='release' and mode=='session' else mode
    skipped|=selected!=mode
    self.choices[row['id']]=selected
-  self.error='La imagen completa de Rescue requiere persistencia; el resto se seleccionó en RAM.' if skipped else ''
+  self.error='La imagen completa de Rescue se prepara por separado; el resto se seleccionó para instalar.' if skipped else ''
  def back(self):
   if self.busy:return self.job is not None
   if self.phase=='home':return True
   self.phase='home';self.error='';return False
 
 STAGES={'check':'Comprobando actualizaciones','prepare':'Preparando un sistema limpio','download':'Descargando','install':'Instalando','save':'Guardando en el pendrive','verify':'Verificando','activate':'Preparando el próximo arranque','start':'Iniciando','group_done':'Completado'}
-LABELS={'no':'No','session':'Sí · RAM','persistent':'Sí persistente'}
+LABELS={'no':'No','session':'Sí · actualizar'}
 MESSAGES=set(STAGES.values())|{'Paquetes del sistema','Rescue Disk','Preparando un sistema limpio','Descargando Rescue Disk','Instalando las actualizaciones seleccionadas','Guardando el sistema en el pendrive','Verificando los archivos guardados','Preparando el próximo arranque','Sí persistente','Sí · solo esta sesión','Guardado y verificado','Actualizado en RAM','Actualizando los paquetes en RAM','Verificando las versiones de esta sesión'}
 
 def measurement(event):
@@ -130,18 +130,18 @@ def menu(language=None):
       width=width or round(260*scale);box=(x,y,x+width,y+round(44*scale));canvas.rounded_rectangle(box,radius=8,fill=display.CARD,outline=display.CYAN if enabled else display.EDGE,width=2);canvas.text((x+12,y+round(9*scale)),text,font=small,fill=display.WHITE if enabled else display.DIM)
       if enabled:boxes.append((box,action))
      write(margin,tr('LA AGUJA · Actualizaciones'),display.CYAN,large=True)
-     write(margin+round(43*scale),tr('Comprueba primero. Tú decides qué actualizar y dónde guardarlo.'),display.DIM)
+     write(margin+round(43*scale),tr('Actualiza esta sesión. Para conservar todo, usa Persistir cambios en el menú principal.'),display.DIM)
      y=body_top
      if model.phase=='home':
       write(y,tr('1. Comprobar actualizaciones'),display.WHITE);y+=line*2
       write(y,tr('Incluye la última versión oficial de Rescue Disk, con catálogo firmado.'));y+=line
       write(y,tr('Sí: actualiza solo esta sesión en RAM.'));y+=line
-      write(y,tr('Sí persistente: guarda en el pendrive para el próximo arranque.'));y+=line*2
+      write(y,tr('Persistir cambios, en el menú principal, guarda el live completo.'));y+=line*2
       button(tr('C · Comprobar actualizaciones'),'check',margin,y,round(360*scale))
       button(tr('Esc · Volver al menú'),'exit',margin,fb.height-round(72*scale))
      elif model.phase=='list':
       count=len(model.items);write(y,tr('Actualizaciones disponibles: {count}').format(count=count),display.GOLD);y+=line
-      for index,(label,mode) in enumerate((('Todo · No','no'),('Todo · RAM','session'),('Todo · persistente','persistent'))):
+      for index,(label,mode) in enumerate((('Todo · No','no'),('Todo · actualizar','session'))):
        button(tr(label),('all',mode),margin+index*round(280*scale),y,round(260*scale))
       y+=round(60*scale)
       if model.inventory.get('restart_required'):write(y,tr('Hay una generación guardada pendiente de reinicio.'),display.GOLD);y+=line
@@ -149,8 +149,8 @@ def menu(language=None):
       capacity=max(1,int((bottom-y-line)/line));model.offset=max(0,min(model.offset,max(0,count-capacity)))
       if model.selected<model.offset:model.offset=model.selected
       if model.selected>=model.offset+capacity:model.offset=model.selected-capacity+1
-      name_x=margin;version_x=round(fb.width*.35);modes_x=[round(fb.width*x) for x in (.64,.72,.82)];mode_widths=[round(fb.width*x) for x in (.065,.09,.16)]
-      for x,text in zip(modes_x,[tr('No'),tr('Sí · RAM'),tr('Sí persistente')]):canvas.text((x,y),text,font=small,fill=display.CYAN)
+      name_x=margin;version_x=round(fb.width*.35);modes_x=[round(fb.width*x) for x in (.72,.82)];mode_widths=[round(fb.width*x) for x in (.08,.16)]
+      for x,text in zip(modes_x,[tr('No'),tr('Sí · actualizar')]):canvas.text((x,y),text,font=small,fill=display.CYAN)
       y+=line
       if not count:write(y,tr('No hay actualizaciones confirmadas; consulta incompleta.' if model.inventory.get('errors') else 'No hay actualizaciones disponibles.'),display.GREEN)
       for index,row in enumerate(model.items[model.offset:model.offset+capacity],model.offset):
@@ -158,7 +158,7 @@ def menu(language=None):
        name=display.clean(row['name']);limit=max(10,int(fb.width*.31/(font.getlength('M') or 10)));name=name if len(name)<=limit else name[:limit-1]+'…'
        canvas.text((name_x,y),name,font=font,fill=display.WHITE);canvas.text((version_x,y),display.clean(str(row['current']))+' → '+display.clean(row['latest']),font=small,fill=display.DIM)
        for mode,x,width in zip(tasks.MODES,modes_x,mode_widths):
-        allowed=not(row['kind']=='release' and mode=='session');selected=model.choices[row['id']]==mode
+        allowed=True;selected=model.choices[row['id']]==mode
         text=('●' if selected else '○') if allowed else '—'
         canvas.text((x+width//3,y),text,font=font,fill=display.GREEN if selected else display.DIM)
         if allowed:boxes.append(((x,y,x+width,y+line),('select',index,mode)))
@@ -169,7 +169,7 @@ def menu(language=None):
       button(tr('Esc · Volver'),'home',fb.width-margin-round(200*scale),fb.height-round(65*scale),round(200*scale))
      elif model.phase=='confirm':
       chosen=tasks.plan(model.items,model.choices);write(y,tr('Revisa antes de aplicar'),display.GOLD);y+=line*1.5
-      for mode in ('session','persistent'):
+      for mode in ('session',):
        group=chosen[mode]
        write(y,tr(LABELS[mode])+': '+str(len(group)),display.CYAN);y+=line
        names=', '.join(r['name'] for r in group) or '—'
@@ -177,7 +177,7 @@ def menu(language=None):
        write(y,display.clean(names)[:max(40,int(fb.width/(font.getlength('M') or 12)))-5]);y+=line*1.5
       if model.target:write(y,tr('Destino persistente: {device}').format(device=model.target['disk']+' · DATA '+model.target['data']),display.CYAN);y+=line
       write(y,tr('Se instalarán también las dependencias necesarias.'));y+=line
-      write(y,tr('RAM se pierde al reiniciar. Persistente se aplica en el próximo arranque.'));y+=line
+      write(y,tr('Los cambios son de esta sesión. Guárdalos después desde Persistir cambios.'));y+=line
       write(y,tr('No se reinicia el equipo automáticamente.'));y+=line*1.5
       button(tr('Enter · Instalar ahora'),'apply',margin,fb.height-round(65*scale),round(340*scale));button(tr('Esc · Revisar lista'),'list',margin+round(360*scale),fb.height-round(65*scale),round(290*scale))
      elif model.busy:
@@ -192,14 +192,14 @@ def menu(language=None):
       for event in list(model.events)[-6:]:
        if y>=bottom:break
        write(y,tr(STAGES.get(event.get('stage'),'Iniciando'))+' · '+text_for_event(event),display.DIM);y+=line
-      write(fb.height-round(105*scale),tr('Puedes seguir usando LA AGUJA. No apagues ni retires el USB.'),display.GOLD)
+      write(fb.height-round(105*scale),tr('Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.'),display.GOLD)
       button(tr('Esc · Continuar en segundo plano'),'exit',margin,fb.height-round(65*scale),round(450*scale),enabled=model.job is not None)
      elif model.phase=='done':
       result=model.result or {};ok=result.get('ok',False);write(y,tr('Actualización terminada' if ok else 'La actualización no terminó'),display.GREEN if ok else display.RED);y+=line*1.5
       if result.get('error'):write(y,tr(result['error']),display.RED);y+=line*2
       for item in result.get('results',[]):
        if not item.get('ok',True):continue
-       write(y,tr('Guardado en el pendrive y verificado' if item['mode']=='persistent' else 'Actualizado en RAM · solo esta sesión'),display.CYAN);y+=line
+       write(y,tr('Actualizado en RAM · solo esta sesión'),display.CYAN);y+=line
       if result.get('reboot_required'):write(y,tr('Reinicio pendiente: fábrica y versión anterior siguen disponibles.'));y+=line
       if result.get('session_may_be_partial'):write(y,tr('Puede haber cambios parciales en RAM; revisa antes de reintentar.'),display.GOLD);y+=line
       button(tr('Enter · Volver al menú'),'exit',margin,max(y+line,fb.height-round(85*scale)),round(350*scale))
@@ -213,7 +213,7 @@ def menu(language=None):
       except curses.error:pass
     line(0,tr('LA AGUJA · Actualizaciones'))
     if model.phase=='home':
-     for n,text in enumerate(['C · Comprobar actualizaciones','No: no cambia nada.','Sí: actualiza solo esta sesión en RAM.','Sí persistente: guarda en el pendrive para el próximo arranque.','Esc · Volver al menú'],3):line(n,tr(text))
+     for n,text in enumerate(['C · Comprobar actualizaciones','No: no cambia nada.','Sí: actualiza solo esta sesión en RAM.','Persistir cambios, en el menú principal, guarda el live completo.','Esc · Volver al menú'],3):line(n,tr(text))
     elif model.phase=='list':
      line(2,tr('Actualizaciones disponibles: {count}').format(count=len(model.items)))
      size=max(1,h-9);model.offset=max(0,min(model.selected-size+1,model.offset));
@@ -222,15 +222,15 @@ def menu(language=None):
       index=n+model.offset;mode='['+tr(LABELS[model.choices[row['id']]])+']';name_width=max(8,min(30,(w-len(mode)-6)//2));version_width=max(4,w-len(mode)-name_width-6);versions=str(row['current'])+' → '+row['latest'];line(4+n,('> ' if index==model.selected else '  ')+row['name'][:name_width].ljust(name_width)+' '+versions[:version_width].ljust(version_width)+' '+mode)
      if model.inventory.get('errors'):line(h-5,tr('Consulta incompleta: algunas fuentes no respondieron.'))
      if not model.items:line(4,tr('No hay actualizaciones disponibles.'))
-     line(h-3,tr('0: todo No · R: todo RAM · P: todo persistente · A: aplicar'))
+     line(h-3,tr('0: todo No · R: todo actualizar · A: aplicar'))
     elif model.phase=='confirm':
      line(2,tr('Revisa antes de aplicar'));chosen=tasks.plan(model.items,model.choices)
-     for n,mode in enumerate(('session','persistent')):line(4+n,tr(LABELS[mode])+': '+', '.join(r['name'] for r in chosen[mode]))
-     line(7,tr('Se instalarán también las dependencias necesarias.'));line(8,tr('RAM se pierde al reiniciar. Persistente se aplica en el próximo arranque.'));line(10,tr('Enter · Instalar ahora'));line(11,tr('Esc · Revisar lista'))
+     for n,mode in enumerate(('session',)):line(4+n,tr(LABELS[mode])+': '+', '.join(r['name'] for r in chosen[mode]))
+     line(7,tr('Se instalarán también las dependencias necesarias.'));line(8,tr('Los cambios son de esta sesión. Guárdalos después desde Persistir cambios.'));line(10,tr('Enter · Instalar ahora'));line(11,tr('Esc · Revisar lista'))
     elif model.busy:
      line(3,'|/-\\'[int(time.monotonic()*5)%4]+' '+tr(STAGES.get(model.event.get('stage'),'Iniciando')));line(5,text_for_event(model.event));line(6,measurement(model.event))
      for n,event in enumerate(list(model.events)[-max(1,h-12):],8):line(n,tr(STAGES.get(event.get('stage'),'Iniciando'))+' · '+text_for_event(event))
-     line(h-3,tr('Esc · Continuar en segundo plano'));line(h-2,tr('Puedes seguir usando LA AGUJA. No apagues ni retires el USB.'))
+     line(h-3,tr('Esc · Continuar en segundo plano'));line(h-2,tr('Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.'))
     else:
      result=model.result or {};line(3,tr('Actualización terminada' if result.get('ok') else 'La actualización no terminó'))
      line(5,tr(result.get('error','Reinicio pendiente: fábrica y versión anterior siguen disponibles.' if result.get('reboot_required') else 'Actualizado en RAM · solo esta sesión')));line(h-3,tr('Enter · Volver al menú'))
@@ -247,7 +247,7 @@ def menu(language=None):
      try:
       chosen=tasks.plan(model.items,model.choices)
       if any(chosen.values()):
-       model.target=updates.verify_persistent_target() if chosen['persistent'] else None
+       model.target=None
        model.phase='confirm';model.error=''
       else:model.error='Selecciona al menos una actualización.'
      except ValueError as e:model.error=str(e)
@@ -293,7 +293,6 @@ def menu(language=None):
     elif model.phase=='list':
      if key==ord('0'):model.select_all('no')
      elif key in (ord('r'),ord('R')):model.select_all('session')
-     elif key in (ord('p'),ord('P')):model.select_all('persistent')
      elif key==curses.KEY_UP:model.selected=max(0,model.selected-1)
      elif key==curses.KEY_DOWN:model.selected=min(max(0,len(model.items)-1),model.selected+1)
      elif key==curses.KEY_NPAGE:model.selected=min(max(0,len(model.items)-1),model.selected+8)

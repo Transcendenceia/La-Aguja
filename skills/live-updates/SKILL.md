@@ -1,17 +1,37 @@
 ---
 name: live-updates
-description: Check and explicitly select temporary RAM or USB-persistent LA AGUJA updates, track real progress, and preserve configuration, secrets, previous boot and owner workspace.
+description: Update a LA AGUJA RAM session, then explicitly persist the whole live with measured progress and recoverable encrypted snapshots.
 metadata:
-  version: "1.0.1"
+  version: "1.3.0"
 ---
-# Interactive and persistent live updates
+# Session updates and independent global persistence
 
-This operates an already booted LA AGUJA live, not the preparer's installed OS or target recovery disks. A check never authorizes installing, rebooting, writing to internal disks or changing provider authentication.
+This operates an already booted LA AGUJA live, never target recovery disks.
 
-1. Read `/usr/share/aguja/UPDATES.md`. Inspect `aguja update status --json`, `findmnt`, `lsblk`, `df -h /data` and `free -h`. Observe the exact boot medium. Persistence requires CFG and DATA as verified mounted siblings of that removable USB, with enough space/RAM. A plain ISO is not a writable update destination.
-2. Prefer `aguja update menu`: Check → installed/available list → each row **No / Yes · RAM / Yes, persistent** → review → explicit apply. Every check resets choices to No. RAM choices are temporary and do not alter the USB boot selection; persistence takes effect next boot, also on another computer. A complete signed Rescue release is persistent-only, separately from other persistent components. Required dependencies can change alongside selected packages.
-3. `check --json` queries official repositories, providers and the signed catalogue, caching in RAM. Partial/offline sources are not an all-current verdict. Notifications only check. The menu shows download bytes/APT measurements when available and otherwise activity by stage, then a result that waits for Back to menu. Do not infer percentages from elapsed time or claim completion before verification/commit.
-4. Advanced `packages`, `harnesses`, `all` and `release` CLI operations remain explicitly persistent; the menu provides per-item/session choices. Explain the actual scope and resource budget first. Run one manager operation at a time. Temporary package updates require a live RAM overlay, minimal devices and read-only USB views in their private namespace. Do not promise rollback of partially installed RAM packages.
-5. Persistent roots originate from the verified selected pending/running generation or factory, never decrypted HOME or RAM overlay. The manager verifies archives/catalogue, installs in a private mount/PID namespace without host block devices, packs kernel/initrd/root and commits only verified synced bytes. Only fixed manifest-verified public updater code/docs can accompany that clean root. Never copy profiles, recovery keys, sessions, network identities or owner work into it. CLI version is not provider authentication/inference proof.
-6. Report temporary changes, saved generation, verification and **reboot pending** separately. No automatic restart. At an authorized next boot verify the actual versions/kernel and preservation of CFG/DATA. BIOS/UEFI and changed device topology are separate checks. Existing pre-1.0 USBs need new boot infrastructure; CFG editing or a skill update alone cannot supply it.
-7. `rollback` selects previous/factory for next boot. `cleanup` retires only inactive unmounted generations, never active/previous/running or personal files. If resources or validation fail, preserve the previous boot, report the observed error and avoid filling the USB. Do not recreate the fresh-media DATA initialization marker on an existing USB.
+1. Read `/usr/share/aguja/UPDATES.md`. Inspect `aguja update status --json`,
+   `aguja persist status --json`, findmnt, lsblk, df and free; confirm the real boot
+   medium and resource budget. An ISO/CD is not a writable persistence target.
+2. Use `aguja update menu`: Check → No / Yes · update → review → install. CLI
+   packages/harnesses/all also update RAM only. Never choose a persistent mode in
+   Updates or silently write to USB on low RAM. A full signed Rescue release is
+   prepared separately in RAM and committed only through Persist changes.
+3. Observe measured native download/APT progress and the final result. Background
+   jobs survive closing the update UI; partial failures preserve completed-item
+   evidence and may leave partial RAM changes. CLI versions are not login proof.
+4. Use **Persist changes** or `aguja persist save` only when saving is authorized.
+   It captures the whole merged live, including manual modifications/deletions,
+   installed tools, settings and native sessions, into an encrypted snapshot.
+   Keep password input private; never send it via argv/environment or log it.
+5. Confirm CFG/DATA are observed siblings of the removable boot USB. Keep mounted
+   target disks, CFG/DATA, pseudofs, temporary files and processes out of root
+   capture. Known volatile application data is encrypted inside the snapshot;
+   workspace/profile stay separate. Staging must be encrypted too.
+6. Follow actual scan counts, copy bytes, compression and verified bytes. Other
+   phases show activity, not invented percentages. Verify/readback/sync before
+   boot-selection commit. Failures must retain factory/previous boot and report
+   incomplete work rather than success. Do not automatically restart.
+7. At an authorized test boot verify saved files, deletions, packages and sessions
+   from that selected generation. Test BIOS/UEFI independently. Rollback selects
+   previous/factory; cleanup retires only inactive unmounted generations, never
+   active/previous/running or owner data. Never recreate DATA growth markers on
+   an existing USB. Do not publish private global snapshots.

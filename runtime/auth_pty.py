@@ -12,8 +12,27 @@ import termios
 import time
 import subprocess
 import tty
+import re
 
 import auth
+
+
+class NativeLoginChoice:
+    """The explicit Google-login menu action selects only the native method.
+
+    This never signs in, approves consent, submits a code or sends a model prompt.
+    Ordinary agent launches keep the provider's full native method selector.
+    """
+    def __init__(self,name,login):
+        self.active=name=='antigravity' and login
+        self.buffer=b''
+    def feed(self,data):
+        if not self.active:return None
+        self.buffer=(self.buffer+data)[-8192:]
+        clean=re.sub(rb'\x1b\[[0-?]*[ -/]*[@-~]',b'',self.buffer).decode(errors='replace')
+        if 'Select login method:' in clean and re.search(r'[>❯›]\s*1\.\s*Google OAuth',clean):
+            self.active=False;self.buffer=b'';return b'\r'
+        return None
 
 
 def write_all(fd,data):
@@ -60,6 +79,7 @@ def run(argv,name,login=False):
     import browser
     relay=browser.Relay(session.directory)
     detector=auth.LinkDetector();seen=None;announced=None;reaped=False;gui=None
+    login_choice=NativeLoginChoice(name,login)
     expected={"claude":"Claude Code","antigravity":"Antigravity","codex":"Codex"}[name]
     def open_browser():
         nonlocal gui
@@ -88,6 +108,8 @@ def run(argv,name,login=False):
                 if fd==master:
                     detector.feed(data)
                     write_all(1,data);relay.output(data)
+                    choice=login_choice.feed(data)
+                    if choice:write_all(master,choice)
                 else:
                     # Ctrl+] is an explicit request, never a model-output action.
                     for part_index,part in enumerate(data.split(b'\x1d')):

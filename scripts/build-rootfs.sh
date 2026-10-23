@@ -47,7 +47,7 @@ apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-s
   gddrescue testdisk smartmontools nvme-cli hdparm pciutils usbutils lshw \
   parted gdisk dosfstools e2fsprogs btrfs-progs xfsprogs ntfs-3g exfatprogs \
   rclone restic cifs-utils nfs-common sshfs ethtool bluez \
-  cryptsetup lvm2 mdadm dislocker wimtools debootstrap arch-install-scripts \
+  cryptsetup cryptsetup-initramfs lvm2 mdadm dislocker wimtools debootstrap arch-install-scripts \
   grub-pc-bin grub-efi-amd64-bin efibootmgr rsync zstd xz-utils unzip iproute2 iputils-ping dnsutils \
   locales kbd console-setup plymouth plymouth-themes fonts-dejavu-core fonts-noto-cjk \
   chromium chromium-sandbox xserver-xorg-core xserver-xorg-input-libinput xserver-xorg-video-all \

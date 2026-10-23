@@ -54,15 +54,18 @@ stdin scripts remain private. Never put secrets in labels, argv or output.
 - `/run/live/medium` is the running live media, NEVER a rescue target.
 - `/config` is the same USB's AGUJA_CFG; literal settings are private.
 - `/data` is AGUJA_DATA on the live USB, not an internal target partition.
-- `/data/workspace` persists job artifacts if DATA is mounted. HOME is RAM unless
-  the operator chose `persistent_home=yes`; that choice alone is not encryption.
+- `/data/workspace` persists job artifacts if DATA is mounted. HOME and root
+  changes stay in RAM until the operator uses **Persist changes**. That action
+  captures the whole live in an encrypted snapshot, with a password at boot.
+  Legacy `persistent_home=yes` is separate and is not encryption.
 - Protected profiles unlock before cockpit/SSH/agents. LUKS protects the profile
   vault at `/config/private`, **not all DATA**. Legacy/automatic profiles still work.
 - `aguja profile status --json` reports protection state; never print its secrets.
 - SSH host identity persists in `/data/ssh`; config backups are root-private in
   `/data/config-backups`. Preserve owner settings and recovery material.
 
-`aguja files` opens root Yazi directly, without configuration or automatic mounts.
+`aguja files` opens root Thunar directly, with a visible pointer and native
+mount/unmount controls. It never mounts internal disks automatically at boot.
 The single cockpit groups agents, connections, tools and settings. Connection
 forms are on demand; there is no second graphical hub. Mounted host
 files are accessible; ext4 read-only mounts use noload, XFS uses norecovery.
@@ -93,7 +96,8 @@ it. Use `aguja password` or Desk settings without printing custom credentials.
 
 `aguja web` / `aguja browser` uses the same unprivileged browser opener as native
 agent OAuth: Helium by default, Chromium for compatibility. Browser cookies
-stay in RAM, downloads go to the chosen path. Local OAuth retains the original
+stay in RAM unless saved in an encrypted global snapshot; downloads go to the
+chosen path. The transient OAuth browser remains separate. Local OAuth retains the original
 CLI PTY and callback; never substitute a model's browser session for the owner's
 account. Headless SSH retains native login handoff; graphical tools need the local
 console. No login or inference is implied by browser/CLI availability.
@@ -133,14 +137,15 @@ Managed AGENTS.md/CLAUDE.md/GEMINI.md pointers preserve owner instructions.
 
 ## Updates and result verification
 
-`aguja update check --json` only checks. The Updates page offers individual or
-All RAM / All persistent selections. Full Rescue requires persistence; All RAM
-selects components and clearly leaves the full image out. All persistent stages
-the signed official Rescue (if newer) plus selected components before activating
-the resulting generation. Read UPDATES.md and the live-updates skill first.
-Factory, previous generation, profiles and workspace remain separate. Activation
-is for next boot, never an automatic restart. Plain apt changes in RAM do not
-persist. Do not update a target OS or reboot without the requested scope.
+`aguja update check --json` only checks. Updates installs selected components in
+this RAM session; a full Rescue release is prepared separately in RAM. It never
+activates a USB generation. **Persist changes** in the main menu (or
+`aguja persist save`) captures the complete resulting live: packages, settings,
+files, deletions and native account state. It shows measured progress and verifies
+the encrypted snapshot before activation. Keep its password for the next boot.
+Mounted disks, volatile runtime trees, profiles and DATA workspaces are separate.
+Factory and previous generations remain selectable. Read UPDATES.md and the
+live-updates skill first. No automatic restart or target-OS updates.
 
 Back up recoverable state before delicate changes. Obtain authorization for new
 irreversible scope, keep already-authorized work moving, and verify observable

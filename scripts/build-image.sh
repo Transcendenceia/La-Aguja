@@ -50,7 +50,7 @@ for helper in browser-session; do
     cmp -s "$PROJECT/runtime/$helper" "$ROOT/usr/lib/aguja/$helper" || { echo 'Instala el navegador OAuth actual'; exit 1; }
 done
 cmp -s "$PROJECT/runtime/browser-launch" "$ROOT/usr/local/bin/aguja-browser-launch" || { echo 'Instala el launcher del navegador'; exit 1; }
-for browser_binary in helium yazi xxd chromium Xorg openbox xclip xterm xdotool; do
+for browser_binary in helium thunar udisksctl eject xsetroot xxd chromium Xorg openbox xclip xterm xdotool; do
     chroot "$ROOT" /bin/sh -c 'command -v "$1" >/dev/null' sh "$browser_binary" || { echo 'Falta un componente del navegador OAuth'; exit 1; }
 done
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/lib/chromium/chrome-sandbox") == 0:0:4755 ]] || { echo 'Incluye chromium-sandbox con sus permisos oficiales'; exit 1; }
@@ -59,7 +59,7 @@ for runtime in "$PROJECT/runtime/"*.py "$PROJECT/runtime/locale-catalog.json" "$
     cmp -s "$runtime" "$ROOT/usr/lib/aguja/$(basename "$runtime")" || { echo 'Instala el runtime actual antes de empaquetar'; exit 1; }
 done
 # Persistent update code, protocol, boot guard and timer are release capabilities.
-for item in 'update-session-worker.sh:usr/lib/aguja/update-session-worker.sh' 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer' 'aguja-tailscale.service:etc/systemd/system/aguja-tailscale.service' 'aguja-tailscaled.service:etc/systemd/system/aguja-tailscaled.service' 'aguja-tailnet-save.service:etc/systemd/system/aguja-tailnet-save.service' 'aguja-tailnet-save.path:etc/systemd/system/aguja-tailnet-save.path' 'aguja-tailnet-save.timer:etc/systemd/system/aguja-tailnet-save.timer' 'aguja-update-job@.service:etc/systemd/system/aguja-update-job@.service'; do
+for item in 'update-session-worker.sh:usr/lib/aguja/update-session-worker.sh' 'snapshot-initrd.sh:usr/lib/aguja/snapshot-initrd.sh' 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer' 'aguja-tailscale.service:etc/systemd/system/aguja-tailscale.service' 'aguja-tailscaled.service:etc/systemd/system/aguja-tailscaled.service' 'aguja-tailnet-save.service:etc/systemd/system/aguja-tailnet-save.service' 'aguja-tailnet-save.path:etc/systemd/system/aguja-tailnet-save.path' 'aguja-tailnet-save.timer:etc/systemd/system/aguja-tailnet-save.timer' 'aguja-update-job@.service:etc/systemd/system/aguja-update-job@.service'; do
     source=${item%%:*}; target=${item#*:}
     cmp -s "$PROJECT/runtime/$source" "$ROOT/$target" || { echo 'Instala la infraestructura persistente actual'; exit 1; }
 done
@@ -81,8 +81,17 @@ mkdir -p "$ISO_TREE/live" "$ISO_TREE/boot/grub" "$DIST"
 mkdir -p "$ISO_TREE/boot/grub/themes/aguja"
 cp "$PROJECT/branding/grub/"* "$ISO_TREE/boot/grub/themes/aguja/"
 grub-mkfont -s 18 -o "$ISO_TREE/boot/grub/themes/aguja/menu.pf2" /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
-cp "$(find "$ROOT/boot" -maxdepth 1 -name 'vmlinuz-*' | sort -V | tail -1)" "$ISO_TREE/live/vmlinuz"
-cp "$(find "$ROOT/boot" -maxdepth 1 -name 'initrd.img-*' | sort -V | tail -1)" "$ISO_TREE/live/initrd.img"
+BOOT_FILES=$(chroot "$ROOT" /usr/bin/python3 - <<'PYBOOT'
+import sys
+from pathlib import Path
+sys.path.insert(0,'/usr/lib/aguja')
+from updates import boot_pair
+for path in boot_pair(Path('/')):print(path)
+PYBOOT
+)
+mapfile -t BOOT_FILES <<< "$BOOT_FILES"
+cp "$ROOT${BOOT_FILES[0]}" "$ISO_TREE/live/vmlinuz"
+cp "$ROOT${BOOT_FILES[1]}" "$ISO_TREE/live/initrd.img"
 # These directories must exist in the live root for initramfs mount handover.
 # build-rootfs unmounts all bind mounts before this stage.
 for p in dev proc sys; do
@@ -109,7 +118,7 @@ for guide in AGENT-CONTEXT.md QUICKSTART.md TOOLBOX.md SSH-WELCOME.txt SECRETS.m
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "usr/share/aguja/$guide" | cmp -s "$PROJECT/runtime/$guide" - || { echo 'Guía empaquetada no coincide'; exit 1; }
 done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/share/aguja/skills/disk-recovery/SKILL.md | cmp -s "$PROJECT/skills/disk-recovery/SKILL.md" - || { echo 'Skill de recuperación empaquetada no coincide'; exit 1; }
-for item in 'update-session-worker.sh:usr/lib/aguja/update-session-worker.sh' 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer' 'aguja-tailscale.service:etc/systemd/system/aguja-tailscale.service' 'aguja-tailscaled.service:etc/systemd/system/aguja-tailscaled.service' 'aguja-tailnet-save.service:etc/systemd/system/aguja-tailnet-save.service' 'aguja-tailnet-save.path:etc/systemd/system/aguja-tailnet-save.path' 'aguja-tailnet-save.timer:etc/systemd/system/aguja-tailnet-save.timer' 'aguja-update-job@.service:etc/systemd/system/aguja-update-job@.service'; do
+for item in 'update-session-worker.sh:usr/lib/aguja/update-session-worker.sh' 'snapshot-initrd.sh:usr/lib/aguja/snapshot-initrd.sh' 'update-root-worker.sh:usr/lib/aguja/update-root-worker.sh' 'live-update-guard.sh:lib/live/boot/9999-aguja-update.sh' 'update-initramfs-hook:etc/initramfs-tools/hooks/aguja-update' 'update-protocol.json:usr/share/aguja/update-protocol.json' 'aguja-update-check.service:etc/systemd/system/aguja-update-check.service' 'aguja-update-check.timer:etc/systemd/system/aguja-update-check.timer' 'aguja-tailscale.service:etc/systemd/system/aguja-tailscale.service' 'aguja-tailscaled.service:etc/systemd/system/aguja-tailscaled.service' 'aguja-tailnet-save.service:etc/systemd/system/aguja-tailnet-save.service' 'aguja-tailnet-save.path:etc/systemd/system/aguja-tailnet-save.path' 'aguja-tailnet-save.timer:etc/systemd/system/aguja-tailnet-save.timer' 'aguja-update-job@.service:etc/systemd/system/aguja-update-job@.service'; do
     source=${item%%:*}; target=${item#*:}
     unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" "$target" | cmp -s "$PROJECT/runtime/$source" - || { echo 'Infraestructura persistente empaquetada no coincide'; exit 1; }
 done
@@ -191,7 +200,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$BUILD/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1','global-snapshot-luks2-v1','thunar-files-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$BUILD/release.json" ::release.json
 printf '{"schema":1,"state":"pending"}\n' > "$BUILD/data-initialize.json"

@@ -30,10 +30,11 @@ MENU = (
     ('shell', '1', 'Consola Zsh', 'Terminal y sesiones tmux', 'TRABAJAR'),
     ('agents', 'A', 'Agentes IA', 'Codex · Claude · Antigravity · OpenCode', 'TRABAJAR'),
     ('web', 'V', 'Navegador web', 'Abrir directamente · navegación y OAuth', 'TRABAJAR'),
-    ('files', 'E', 'Archivos · root', 'Abrir Yazi directamente con acceso completo', 'TRABAJAR'),
+    ('files', 'E', 'Archivos · root', 'Thunar · montar, desmontar y gestionar archivos', 'TRABAJAR'),
     ('connections', '2', 'Conexiones', 'Internet · Tailscale / Headscale · Cloud y NAS', 'CONECTAR'),
     ('tools', '3', 'Herramientas y respaldo', 'Misiones · métodos · diagnóstico', 'TRABAJAR'),
-    ('update', 'T', 'Actualizaciones', 'Instalar selección · progreso · RAM / persistente', 'SISTEMA'),
+    ('update', 'T', 'Actualizaciones', 'Instalar actualizaciones en esta sesión', 'SISTEMA'),
+    ('persist', 'P', 'Persistir cambios', 'Guardar el live completo en el pendrive · progreso', 'SISTEMA'),
     ('settings', 'I', 'Ajustes', 'Idioma y teclado · contraseña SSH · proyecto', 'SISTEMA'),
 )
 
@@ -388,6 +389,7 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
             elif key == ord("9"):
                 return "password"
             elif key in (ord("p"),ord("P")):
+                if control.view=='help':return 'persist'
                 paused = not paused
                 next_activity = 0
             elif key == curses.KEY_PPAGE:
@@ -450,7 +452,7 @@ def menu(auto_setup=False):
             action = {"w": "wifi", "h": "guide", "4": "codex", "r": "remote"}.get(value, "shell")
         automatic = False
         groups={
-            'agents':('Agentes IA', [('Codex','codex'),('Claude Code','claude'),('Antigravity','antigravity'),('OpenCode','opencode')]),
+            'agents':('Agentes IA', [('Codex','codex'),('Claude Code','claude'),('Antigravity','antigravity'),('OpenCode','opencode'),('Iniciar sesión · Codex','login-codex'),('Iniciar sesión · Claude Code','login-claude'),('Google OAuth · Antigravity','login-antigravity')]),
             'connections':('Conexiones', [('Internet y Wi-Fi','wifi'),('Tailscale / Headscale','remote'),('Cloud y NAS','storage')]),
             'tools':('Herramientas y respaldo', [('Misiones y herramientas','guide'),('Planificar respaldo','backup'),('Diagnóstico de Rescue','doctor')]),
             'settings':('Ajustes', [('Idioma y teclado','locale'),('Contraseña SSH','password'),('Apoyar LA AGUJA','donate')]),
@@ -463,9 +465,17 @@ def menu(auto_setup=False):
             banner(compact=True)
             return "shell"
         if action in ("codex", "antigravity", "claude", "opencode"):
-            return action
+            code=subprocess.call(['/usr/local/bin/aguja','agent',action])
+            if code not in (0,130):
+                print(t('El agente terminó con un error. Revisa el mensaje nativo de arriba.'),flush=True)
+                input(t('Enter: volver al panel…'))
+            continue
+        if action.startswith('login-'):
+            print(t('Acceso nativo: usa las flechas y Enter para elegir el método. El navegador se abre dentro de LA AGUJA.'),flush=True)
+            subprocess.call(['/usr/local/bin/aguja','login',action.removeprefix('login-')])
+            continue
         import browser
-        graphical={'web':'browser','files':'files','storage':'cloud','remote':'tailnet','wifi':'network'}
+        graphical={'web':'browser','files':'files','storage':'cloud','remote':'tailnet','wifi':'network','persist':'persist'}
         if action in graphical and browser.local_console():
             import gui_session
             if gui_session.run(graphical[action]) == 0:
@@ -493,6 +503,8 @@ def menu(auto_setup=False):
         elif action == 'update':
             subprocess.call(['/usr/local/bin/aguja','update','menu'])
             continue
+        elif action == 'persist':
+            subprocess.call(['/usr/local/bin/aguja','persist','save'])
         elif action == 'donate':
             donate()
             continue

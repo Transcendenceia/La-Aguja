@@ -180,11 +180,14 @@ def main(profile_override=None, profile_passphrase=None):
     if capsule:
         secure_write('/etc/NetworkManager/system-connections/aguja-ethernet.nmconnection',
                      platform_profile.ethernet_keyfile(capsule['network']['ethernet']))
-        platform_profile.apply(capsule, tailnet_state='/run/aguja-tailnet-private')
+        import persistence
+        platform_profile.apply(capsule, tailnet_state='/run/aguja-tailnet-private', preserve_native=persistence.running_snapshot())
         import tailnet_identity
         tailnet_identity.configure(capsule, capsule_path.read_bytes(), profile_passphrase)
         # Tailnet credentials live separately, never in this owner-writable tree.
         run('chown', '-R', 'aguja:aguja', '/run/aguja-platform')
+    import persistence
+    persistence.restore_state()
     import tailnet_config
     try:
         tailnet_config.boot_apply()

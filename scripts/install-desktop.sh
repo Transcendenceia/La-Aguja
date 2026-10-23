@@ -20,8 +20,10 @@ chroot "$ROOT" /usr/bin/env DEBIAN_FRONTEND=noninteractive /bin/bash -e <<'INSTA
 apt-get update -qq
 apt-get install -y --no-install-recommends python3-gi gir1.2-gtk-3.0 librsvg2-common network-manager-gnome \
   file bat fzf fd-find 7zip xxd poppler-utils ffmpegthumbnailer chafa feh zathura zathura-pdf-poppler \
-  mpv mousepad xdg-utils shared-mime-info adwaita-icon-theme \
+  mpv mousepad xdg-utils shared-mime-info adwaita-icon-theme thunar gvfs gvfs-backends udisks2 eject x11-xserver-utils \
   /tmp/aguja-desktop-packages/helium.deb /tmp/aguja-desktop-packages/yazi.deb
 apt-get clean
 INSTALL
 install -m 644 "$PROJECT/config/desktop-tools.json" "$ROOT/usr/share/aguja/desktop-tools.json"
+install -d "$ROOT/etc/xdg/xfce4/xfconf/xfce-perchannel-xml"
+install -m 644 "$PROJECT/runtime/desktop-resources/thunar.xml" "$ROOT/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/thunar.xml"

@@ -1,7 +1,8 @@
 """One unprivileged browser opener for browsing, native OAuth and file viewing.
 
-Private redirect files keep URLs out of process arguments. Profiles/cookies are
-per-session RAM, never copied to DATA. Chromium remains an explicit alternative.
+Private redirect files keep URLs out of process arguments. Normal profiles are
+in HOME (RAM until an explicit encrypted snapshot); OAuth remains transient.
+Chromium remains an explicit alternative.
 """
 import html
 import json
@@ -35,7 +36,9 @@ def open_browser(url=None, directory=None, choice=None):
     if directory is None:
         runtime = Path('/run/user') / str(os.getuid())
         runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
-        directory = runtime / 'aguja-web-session'
+        # HOME is RAM in a nonpersistent live. Explicit global snapshots can
+        # now retain normal browsing state encrypted, unlike transient OAuth.
+        directory = Path.home() / '.local/share/aguja/browser'
     directory = Path(directory)
     directory.mkdir(mode=0o700, parents=True, exist_ok=True)
     if url:

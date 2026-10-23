@@ -8,9 +8,9 @@ import auth,browser,display,gui_session,update_tasks as tasks,updates
 
 class EfficientRuntime(unittest.TestCase):
  def test_root_explorer_is_direct_not_a_settings_page(self):
-  with patch.dict(os.environ,{'DISPLAY':':20','XAUTHORITY':'/tmp/private'}),patch('subprocess.call',return_value=0) as call:
+  with patch.dict(os.environ,{'DISPLAY':':20','XAUTHORITY':'/tmp/private'}),patch('file_manager.subprocess.Popen',return_value=SimpleNamespace(wait=lambda:0)) as call:
    self.assertEqual(gui_session.direct('files'),0)
-  argv=call.call_args.args[0];self.assertIn('sudo',argv);self.assertEqual(argv[-2:],['yazi','/']);self.assertNotIn('desk.py',' '.join(argv))
+  argv=call.call_args.args[0];self.assertIn('sudo',argv);self.assertEqual(Path(argv[-2]).name,'file_manager.py');self.assertEqual(argv[-1],'/');self.assertNotIn('desk.py',' '.join(argv))
  def test_regular_browser_is_direct_and_waited(self):
   with patch('web.open_browser',return_value=SimpleNamespace(wait=lambda:0)) as opened:
    self.assertEqual(gui_session.direct('browser'),0)

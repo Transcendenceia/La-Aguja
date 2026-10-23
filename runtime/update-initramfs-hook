@@ -4,3 +4,12 @@ PREREQ=''
 case $1 in prereqs) echo "$PREREQ"; exit 0;; esac
 . /usr/share/initramfs-tools/hook-functions
 copy_exec /usr/bin/sha256sum /bin/sha256sum
+copy_exec /sbin/cryptsetup /sbin/cryptsetup
+copy_exec /lib/cryptsetup/askpass /lib/cryptsetup/askpass
+manual_add_modules dm_crypt
+manual_add_modules dm_mod
+manual_add_modules loop
+manual_add_modules ext4
+manual_add_modules xts
+manual_add_modules aes_generic
+manual_add_modules aesni_intel

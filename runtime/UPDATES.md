@@ -1,113 +1,74 @@
-# LA AGUJA · interactive updates
+# LA AGUJA · updates and global persistence
 
-Open **Updates** in the live panel, or run `aguja update menu`. The first action is **Check for updates**. Checking queries the official OS repositories, the four native AI providers and the signed Rescue catalogue. It does not install anything; its cache lives in RAM. An incomplete/offline source is shown as incomplete, not “everything is current”.
+## Update this running session
 
-## Choose for each update
+Open **Updates → Check** (`aguja update menu`). The check queries official OS
+repositories, the four native agent providers and the signed Rescue catalogue.
+It does not install anything or modify USB boot selection. Partial/offline sources
+are incomplete, not an all-current verdict. Each component starts at **No**.
+Choose **Yes · update**, review with **A**, then **Enter · Install now**.
+Dependencies can also change. There is no persistent choice in this screen.
 
-The list shows the component/package and its installed → available version. Every row starts at **No**:
+`aguja update packages`, `harnesses` and `all` install in the current RAM session.
+Ordinary apt, agent self-updates, settings and files are also temporary until saved
+through **Persist changes**. The updater never silently falls back to USB writing.
+Downloads/APT use measured progress, not time-based estimates. Work is detached
+from the interface; return to Updates to view its result. A partial failure reports
+verified completed components and possible RAM changes, not success or rollback.
 
-| Choice | Effect |
-| --- | --- |
-| No | Do not install this update. |
-| Yes · RAM | Apply it only to this running live session. These changes disappear at reboot and do not change the USB boot selection. |
-| Yes, persistent | Build and verify a clean system generation on this boot USB's DATA. It takes effect at the next boot, including on another computer. |
+A newer signed complete Rescue release can be prepared separately in RAM with
+`aguja update release` or its own row. Archive hashes, version/protocol and the
+protected-profile gate are checked. This may require more RAM than component
+updates; insufficient RAM fails before downloading and does not write to USB.
+Preparing it does not replace the running kernel. **Persist changes** rebases the
+captured live modifications over that prepared root, verifies it and selects it
+for the next boot. A reboot remains the operator's decision.
 
-A complete Rescue Disk release is **persistent only**: replacing the running kernel/root in RAM is not offered. Update a complete Rescue release separately from selected persistent components. Required package dependencies may also change; “No” is not a promise to break dependencies of another explicitly selected package.
+## Persist the whole live
 
-Use **Up/Down** to choose a row and **Left/Right/Space** to change its choice, or click its radio field. Mouse wheel/Page Up/Page Down scroll a long list. **A** reviews the selection, counts RAM/persistent choices and displays the exact persistent target. **Enter** on that review starts the work; **Escape** returns to the list without installing. There is no automatic approval. The graphical local panel and text/SSH fallback use the same plan.
+Choose **Persist changes** in the main menu (`P`), or `aguja persist save` on an
+interactive terminal/SSH. This is independent of updating: save manual package
+installs, files created/changed/deleted, system settings, agent sessions and normal
+browser state. It creates a **private encrypted global snapshot** on this same
+boot USB, not a public/shareable Rescue image. Choose a password of at least eight
+characters; it is requested when booting that snapshot. It is separate from an
+existing profile-vault password and never stored in argv, logs or on the USB.
 
-## Watch it finish
+The source is the merged live root, so overlay deletions are honored. Mounted
+external/internal disks, CFG, DATA/workspace, /dev, /proc, /sys, /run, /tmp and
+package-download staging are not recursively copied. DATA/workspace and the
+protected profile keep their existing storage. Known cloud/NAS, tailnet and
+recovery application state is saved inside the encrypted snapshot and restored
+after the profile gate; sockets, processes and transient OAuth requests are not.
+Normal browsing profiles live in HOME (RAM by default); transient OAuth profiles
+remain temporary. A mounted legacy persistent HOME stays separate on DATA.
 
-The screen stays open through checking, download, installation, USB saving, verification and boot-selection commit. Download bytes and APT progress are shown when actually measured; an activity indicator means work is running, not a guessed percentage. **Saving on USB** means a persistent generation is being written, not that RAM changes somehow survived a reboot.
+The screen reports actual file counts, copied bytes, native compression progress
+and verified bytes. Scanning, encryption, compaction, sync and activation show
+activity when no meaningful total exists. Staging is encrypted too. It needs
+space for the staged root and compressed root at once, then compacts the saved
+container. No guessed overall percentage, automatic reboot or USB removal.
 
-The final screen distinguishes **updated in RAM** from **saved on USB and verified**. A persistent result says **reboot pending**. It never reboots automatically. Press **Enter · Back to menu** after reading the result. A failure is not completion: the previous boot stays selectable; failed temporary package operations may have changed part of the RAM session and need inspection before retrying.
+Only after readback verification, synchronization and re-observing the boot USB
+is the new boot selection committed. Failed/incomplete snapshots never replace
+the previous selection. Factory and the previous generation remain in GRUB.
+`aguja update status --json` distinguishes selected and running generations;
+`aguja update rollback` and `cleanup` remain advanced generation-maintenance
+commands. Cleanup never removes active/previous/running generations or owner data.
+A CD/ISO can run and update in RAM but is not a writable persistence target.
 
-## Persistence and recovery
+## Español
 
-Generation roots start from a verified clean selected generation/factory, never decrypted RAM HOME or the current overlay. A previously saved pending generation is the next build base, so another update does not discard it. Fixed hash-verified public updater files can accompany the clean generation; profiles, recovery capsules, sessions and workspace cannot.
+**Actualizaciones** solo instala lo elegido en esta sesión: **No / Sí · actualizar**.
+No guarda globalmente ni ofrece «Sí persistente». Si quieres conservar lo hecho,
+sal al menú principal y abre **Persistir cambios**; funciona aunque no hayas usado
+el actualizador. También conserva instalaciones y modificaciones manuales.
 
-Persistent package installation runs in a private mount/PID namespace with minimal character devices and service starts blocked. Temporary package installation requires a live RAM overlay, hides block devices from its helper and makes its USB views read-only inside that helper namespace. Configuration, keys and workspace remain separate. The USB is not encrypted in full by encrypting a profile capsule.
+Elige y repite una clave: la instantánea completa y su staging quedan cifrados.
+Se pedirá esa clave al arrancar los cambios guardados. Mira las fases y medidas
+reales hasta **Cambios guardados y verificados**. Fábrica y anterior quedan como
+recuperación; no se reinicia solo. No se copian discos montados, temporales ni
+procesos vivos, y workspace/CFG se mantienen aparte. Una ISO/CD no permite guardar.
 
-A writable boot USB with sufficient DATA and RAM is required for persistence. Factory and the verified previous generation remain available in GRUB. `aguja update rollback` selects the previous/factory entry for the next boot. `aguja update cleanup` retires only inactive unmounted update generations, not active/previous/running generations or personal files. Maintenance commands remain available outside the simplified interactive flow.
-
-`aguja update status --json` distinguishes the running and selected generation. `aguja update check --json` is a noninteractive check. Advanced `packages`, `harnesses`, `all` and `release` commands retain their explicitly persistent behavior; use the interactive list for per-item RAM/persistent choices. Ordinary apt or client self-updates outside the manager remain temporary and do not gain its progress/verification guarantees.
-
-Older media made before 1.0 needs to be prepared again with a compatible image; editing CFG alone cannot add the boot infrastructure. Back up personal DATA before reflashing. A verified executable version does not prove provider login/inference or universal firmware support. Current illustrated guide: https://aguja.transcendenceia.net/en/docs#reinicios
-
-## Español · uso paso a paso
-
-1. Abre **Actualizaciones → Comprobar actualizaciones**. Consultar no instala ni guarda actualizaciones en el USB; la caché de consulta está en RAM. Si falla una fuente, la consulta se indica como incompleta.
-2. Revisa la lista con versión instalada y disponible. Cada fila empieza en **No**. Elige **Sí · RAM** para esta sesión o **Sí persistente** para guardarla en el pendrive. El Rescue completo solo admite persistencia y próximo arranque; no se combina con otros componentes persistentes en la misma operación.
-3. Usa flechas/espacio o los campos con el ratón. **A · Revisar selección** muestra el plan y el USB de destino. **Enter · Aplicar selección** confirma; Escape vuelve sin instalar. También se instalarán las dependencias necesarias.
-4. Mira el progreso: consulta, descarga, instalación, guardado en el pendrive y verificación. Los bytes/porcentajes solo aparecen cuando están medidos. Un indicador de actividad no es un porcentaje inventado.
-5. Espera el resultado. **Actualizado en RAM** se pierde al reiniciar. **Guardado en el pendrive y verificado** queda pendiente del próximo arranque, también en otra máquina. No se reinicia automáticamente. **Enter · Volver al menú** cierra el resultado.
-
-Fábrica y la generación anterior siguen disponibles. Una generación pendiente ya guardada no se descarta al preparar otra actualización. Los secretos, las sesiones y el workspace no se copian desde RAM al sistema empaquetado. Si falla una instalación temporal puede haber cambios parciales en RAM; revisa el estado antes de repetir. `rollback` y `cleanup` permanecen como herramientas avanzadas, no como siete opciones mezcladas con la consulta inicial.
-
-## Boot verification
-
-Normal boot checks generation selection and root-image availability without
-rehashing the complete root image. Download, write and activation verification
-remain mandatory. For a full pre-boot root checksum diagnostic, temporarily add
-`aguja.verify=full` to the kernel command line in GRUB. This detects changes since
-activation, at the cost of reading the entire root image before startup.
-
-## Background work and startup notices (1.0.2)
-
-A read-only update check starts shortly after boot, without delaying the panel.
-The panel reports available updates or incomplete/offline checks. Nothing installs
-without your selection and confirmation. Opening Updates reuses the inventory.
-
-Confirmed work runs in a separate system service, with lower CPU/I/O priority.
-Press Escape to return to other tools; reopen Updates to see progress and the
-verified result. Closing a local menu or SSH session does not cancel the job.
-Keep the USB connected and do not power off while a write is active. Persisted
-changes become active only after the existing full verification and commit; a
-restart remains your choice. A failed/interrupted task is reported as such.
-
-## Portable tailnet identity (1.0.2)
-
-The first connected enrollment triggers an immediate background identity
-checkpoint on this boot USB. Further native state changes are observed, with a
-retry timer and a final checkpoint during clean daemon shutdown. Success means
-atomic file write, fsync and readback all completed; until then the panel says
-pending/saving, or reports an error. Unchanged state does not rewrite the USB.
-
-The next boot restores that native identity before starting the daemon, even on
-another computer. It does not enroll a replacement just because a saved state
-cannot be read. Automatic profiles restore without prompts. For an encrypted
-profile the checkpoint is encrypted too and restores only after the existing
-local profile unlock; its key stays in private RAM, never on the USB. Node
-revocation/expiry still applies. Configuration, identity and workspace are not
-included in clean public system generations. Do not run cloned copies of the
-same provisioned identity simultaneously.
-
-
-## Official Rescue releases (1.1)
-
-Every interactive/background check queries the signed latest Rescue catalog first,
-independently of APT or agent provider failures. A newer Rescue release is the first
-row in the list; choose **No** or **Sí persistente** (not RAM). The reviewed version
-is pinned for the operation: a changed catalog requires another review, not a silent
-upgrade to different bytes. Download parts and assembled image hashes are verified,
-then a new boot generation is staged. CFG, LUKS vault and DATA/workspace are not
-reflashed. Factory/previous remain available; no automatic reboot. If a LUKS vault
-is present, a release without the early gate capability is rejected. Catalog errors
-mean “unverified”, not “up to date”. This does not update Flash Imager.
-
-## Bulk selection (single cockpit)
-
-All RAM selects all component updates, not the complete Rescue image, which
-requires persistent storage. All persistent can combine the signed official
-Rescue and components: stage the verified release without activation, update
-components in a new generation based on it, and activate only the final verified
-generation. Components already at a newer version in the Rescue are not
-downgraded. A failed stage leaves the previous active generation unchanged.
-No automatic reboot. Closing the UI does not stop background update jobs.
-
-RAM preflight checks the complete selection before package installation. Download
-staging uses the verified live RAM overlay under /var/cache/aguja-session-updates,
-not the much smaller /run tmpfs. Owned archives are reclaimed on success/failure;
-private receipts remain. A later failure reports verified completed components
-and does not claim the whole selection succeeded. The fixed Install footer opens
-confirmation; measured APT/download progress remains visible or can be reattached.
+Normal boot validates selection, encrypted-container type and availability. Add
+`aguja.verify=full` in GRUB for a complete preboot root checksum diagnostic.

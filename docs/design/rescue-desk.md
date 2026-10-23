@@ -31,7 +31,7 @@ Bulk updates must respect actual constraints: a complete Rescue image cannot run
 
 ## State / next action
 
-Implementation and isolated BIOS/UEFI validation completed. Candidate Rescue 1.1.1 built and copied to CachyOS with matching hashes. Research is in ignored operations/rescue-desk-20261023/research; source links retained in product docs. No owner VM changes made.
+The initial 1.1.1 candidate passed isolated USB BIOS/UEFI checks, but failed the owner's real CD/no-DATA boot. Do not treat those earlier checks as coverage of the CD path. The 1.1.2 correction below supersedes that delivery. Research is in ignored operations/rescue-desk-20261023/research; source links retained in product docs.
 
 ## Browser and native tool decision
 
@@ -60,3 +60,53 @@ relative key copying, blank-field retention, metadata-only status, route/tag
 normalization and flags accepted by the bundled tailscale CLI. No real cloud
 account used. Focused update/auth/network/boot regressions are recorded in
 operations/rescue-desk-20261023. Final image: 62 source/rootfs/squashfs files matched; isolated BIOS and UEFI runs passed real cockpit→Xorg/GTK→Helium/Yazi→normal cockpit return, with SSH preserved. 124 focused regressions: 120 passed, 4 omitted on the host; the six i18n checks passed inside the Debian rootfs. See operations/rescue-desk-20261023/DELIVERY.md and delivery-evidence.json. Real cloud/provider accounts and physical GPU/Wi-Fi remain unverified.
+
+## Owner VM regression / 1.1.2 correction (2026-10-23)
+
+Owner: Angie. Scope: reproduce and fix the failure in the running CachyOS
+virt-manager VM, then boot the corrected artifact in that same VM. Exclusions:
+no mounted target disks, USB/Imager changes, real account enrollment or transfers.
+The original domain XML and previous image are retained for rollback.
+
+Observed on the actual SPICE viewer: G/Enter immediately returned to text.
+The VM used UEFI, VirtIO/virgl and the 1.1.1 IMG as read-only CD. Xorg initialized
+successfully; GTK crashed constructing its Files page because Python 3.13
+`Path('/data/workspace').exists()` raised `PermissionError` on private DATA.
+All pages were constructed eagerly, so this prevented every graphical entry.
+The previous USB/profile QA had an accessible DATA directory and missed this.
+
+Correction: choose DATA only if traversable/readable by the owner, then the
+owner workspace/home. Reuse the choice for mission notes without relaxing DATA
+permissions. Keep normal-user applications and browser sandbox unchanged.
+Report graphical launch failure as such instead of incorrectly claiming SSH.
+Give suggested-action labels explicit dark text on their paper background.
+
+Before rebuilding, the RAM hotfix was exercised in the owner's same VM:
+Helium opened the live documentation over HTTPS; Yazi opened AGENTS.md in
+Mousepad; a synthetic SFTP destination was saved through the GUI and removed;
+Cloud/NAS, tailnet and bulk RAM update selection were interactive. No actual
+remote account was authorized, no updates applied, no target disks mounted.
+
+Candidate 1.1.2 IMG SHA-256:
+`bd80eb20a74cdbee236a629c323ddded8e3509ce0ce7f79813e0a21bcddb1277`.
+The final image boot, actual-viewer captures and delivery record are tracked in
+`operations/rescue-vm-review-20261023` in the shared workspace; do not substitute
+RAM-hotfix observations for that final boot check.
+
+Final artifact verification completed: the exact 1.1.2 hash above booted as CD
+in the owner's existing UEFI/VirtIO/virgl VM and in an isolated BIOS CD VM.
+Both completed panel → GTK → Helium/Yazi → normal panel return → new SSH.
+The owner VM also exercised R from the cockpit, the native directory chooser,
+Cloud/NAS controls and both bulk-update selections (selection only, no apply).
+All 52 compared runtime/version/style files in the live guest matched source.
+Focused regressions: 72 passed / 4 skipped; the three permission/path regressions
+also passed under Debian's Python 3.13 as the normal owner. The BIOS smoke
+recorded nine successful checks and terminated its own QEMU process.
+
+The owner VM is left running 1.1.2 with Desk open. Only its read-only CD source
+was changed; XML comparisons confirmed unchanged target-disk and video settings,
+and live mount listings showed no target disks mounted. The previous CD image
+and pre-change domain XML remain available for rollback. IMG, ISO and IMG.ZST
+are in `~/Aguja/rescue-desk-fix-20261023/` on CachyOS with SHA256SUMS. Real
+OAuth/enrollment, provider inference, cloud transfers, persistent update apply
+and physical hardware remain separate, unexercised checks.

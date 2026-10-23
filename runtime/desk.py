@@ -12,6 +12,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from desk_i18n import tr
+from file_open import workspace_directory
 
 ASSETS = Path('/usr/share/aguja/desktop')
 GUIDES = Path('/usr/share/aguja')
@@ -190,7 +191,7 @@ class Desk(Gtk.Window):
 
     def page_files(self,box):
         self.note(box,'Mounted host files are available here. Internal disks are never mounted automatically.')
-        self.path=self.field(box,'Files',file=True);self.path.set_text('/data/workspace' if Path('/data/workspace').exists() else str(Path.home()))
+        self.path=self.field(box,'Files',file=True);self.path.set_text(str(workspace_directory()))
         row=self.row(box)
         self.button(row,'Select directory',lambda:self.choose(self.path,True))
         self.button(row,'Open',self.open_path,True)
@@ -447,7 +448,7 @@ class Desk(Gtk.Window):
         self.button(box,'Create mission note',self.mission_note,True)
 
     def mission_note(self):
-        folder=Path('/data/workspace' if Path('/data/workspace').exists() else str(Path.home()/'workspace'))/'odd/tasks'
+        folder=workspace_directory()/'odd/tasks'
         folder.mkdir(parents=True,exist_ok=True)
         from datetime import datetime
         path=folder/(datetime.now().strftime('%Y%m%d-%H%M%S')+'-mission.md')

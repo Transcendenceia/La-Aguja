@@ -17,6 +17,7 @@ button { background: #191d26; color: #f7f6f1; border: 1px solid #534660; border-
 button:hover { background: #242032; border-color: #d9afff; }
 button:focus, entry:focus, combobox:focus { outline: 2px solid #d9afff; outline-offset: 2px; }
 button.suggested-action { background: #f7f6f1; color: #090b10; border-color: #f7f6f1; font-weight: 600; }
+button.suggested-action label { color: #090b10; }
 button.destructive-action { background: #30232a; color: #ff9dcc; }
 entry, textview, textview text, treeview, viewport { background: #11141b; color: #f7f6f1; border-color: #3e354b; caret-color: #ff9dcc; }
 entry { border: 1px solid #534660; border-radius: 7px; padding: 9px; }

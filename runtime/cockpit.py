@@ -467,7 +467,10 @@ def menu(auto_setup=False):
         elif action == 'locale':
             subprocess.call(['/usr/local/bin/aguja', 'locale'])
         elif action in ('desk','web','files'):
-            print(t('Centro gráfico disponible en la consola local; por SSH usa aguja tools.'))
+            if browser.local_console():
+                print(t('No se pudo iniciar el centro gráfico. Ejecuta aguja doctor para revisar el entorno.'))
+            else:
+                print(t('Centro gráfico disponible en la consola local; por SSH usa aguja tools.'))
         elif action in ('hardware', 'backup', 'storage'):
             command = {'hardware':'hardware', 'backup':'plan', 'storage':'storage'}[action]
             output = subprocess.run(['/usr/local/bin/aguja', command], capture_output=True, text=True)

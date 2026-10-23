@@ -59,7 +59,10 @@ def run(action='home', url=None):
         record = {'action': action, 'url': url, 'pid': os.getpid(), 'stamp': auth.process_stamp(os.getpid())}
         auth_path = directory/'request.json'
         auth_path.write_text(json.dumps(record)); auth_path.chmod(0o600)
-        return subprocess.call(['sudo', '-n', '/usr/bin/python3', '/usr/lib/aguja/gui_session.py', 'launch', str(directory)])
+        result = subprocess.call(['sudo', '-n', '/usr/bin/python3', '/usr/lib/aguja/gui_session.py', 'launch', str(directory)])
+        if result:
+            print(f'LA AGUJA: graphical session failed (exit {result}); returning to console.', file=sys.stderr)
+        return result
 
 
 def launch(directory):

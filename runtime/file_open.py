@@ -5,6 +5,17 @@ import subprocess
 import sys
 
 
+def workspace_directory():
+    """Prefer DATA only when this user can traverse it (CD/no-vault boots cannot)."""
+    for path in (Path('/data/workspace'), Path.home()/'workspace', Path.home()):
+        try:
+            if path.is_dir() and os.access(path, os.R_OK | os.X_OK):
+                return path
+        except OSError:
+            continue
+    return Path.home()
+
+
 def terminal(argv, title='LA AGUJA · Files'):
     return subprocess.Popen(['xterm','-T',title,'-fa','DejaVu Sans Mono','-fs','12',
                              '-bg','#090b10','-fg','#f7f6f1','-cr','#ff9dcc',

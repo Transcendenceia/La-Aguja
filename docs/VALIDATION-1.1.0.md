@@ -31,10 +31,10 @@ website; three signed/checksummed IMG parts are GitHub release assets.
 
 ## Final image and prior feature evidence
 
-Final BIOS/UEFI result is recorded after the native test run. The test uses
+The final IMG passed **16/16 checks**, eight each under BIOS and UEFI. Tests used
 file-only USB overlays, 2 vCPUs/2 GiB, normal browser and a synthetic OAuth fixture,
 physical QEMU key positions, live layout/variant changes and the next-boot CFG
-preference. No provider account, host disk or physical USB is used.
+preference. Both boots verified installed version/runtime hashes; QEMU key positions produced `ñÑ@€á` in Helium, live layout/variant changes retained the same Xorg process, and UEFI recovered US/international saved by BIOS. Closing each browser left a working new SSH connection. The shell-started OAuth fixture returns to its invoking shell, not automatically to the cockpit. No provider account, host disk or physical USB was used.
 
 The early LUKS/legacy/automatic-profile matrix, snapshot save/boot/deletion
 retention and rollback/factory recovery were exercised on earlier development

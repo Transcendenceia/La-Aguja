@@ -11,7 +11,7 @@
       ],
       [
         "Early LUKS2 profiles",
-        "Protected profiles unlock before cockpit, SSH and agents. Automatic plain profiles and explicitly identified legacy capsules remain compatible; DATA is not blanket encrypted."
+        "Protected profiles unlock before cockpit, SSH and agents. Automatic plain profiles and explicitly identified legacy capsules remain compatible; DATA is not blanket encrypted. Reusable .aguja profiles remain supported."
       ],
       [
         "Encrypted global snapshots",
@@ -97,7 +97,7 @@
       ],
       [
         "Perfiles LUKS2 desde el arranque",
-        "Los perfiles protegidos se desbloquean antes de cockpit, SSH y agentes. Siguen compatibles los automáticos sin cifrar y las cápsulas legacy identificadas; no cifra todo DATA."
+        "Los perfiles protegidos se desbloquean antes de cockpit, SSH y agentes. Siguen compatibles los automáticos sin cifrar y las cápsulas legacy identificadas; no cifra todo DATA. Se mantienen los perfiles .aguja reutilizables."
       ],
       [
         "Persistencia global cifrada",
@@ -183,7 +183,7 @@
       ],
       [
         "Profils LUKS2 précoces",
-        "Déverrouillage avant cockpit, SSH et agents. Profils automatiques non chiffrés et capsules legacy conservés ; DATA n’est pas entièrement chiffré."
+        "Déverrouillage avant cockpit, SSH et agents. Profils automatiques non chiffrés et capsules legacy conservés ; DATA n’est pas entièrement chiffré. Les profils .aguja réutilisables restent pris en charge."
       ],
       [
         "Snapshots globaux chiffrés",
@@ -269,7 +269,7 @@
       ],
       [
         "Frühe LUKS2-Profile",
-        "Entsperren vor Cockpit, SSH und Agenten. Unverschlüsselte automatische Profile und alte Kapseln bleiben kompatibel; DATA wird nicht pauschal verschlüsselt."
+        "Entsperren vor Cockpit, SSH und Agenten. Unverschlüsselte automatische Profile und alte Kapseln bleiben kompatibel; DATA wird nicht pauschal verschlüsselt. Wiederverwendbare .aguja-Profile bleiben unterstützt."
       ],
       [
         "Verschlüsselte globale Snapshots",
@@ -355,7 +355,7 @@
       ],
       [
         "Perfis LUKS2 no arranque",
-        "Desbloqueio antes do cockpit, SSH e agentes. Perfis automáticos sem cifra e cápsulas antigas continuam compatíveis; não cifra todo DATA."
+        "Desbloqueio antes do cockpit, SSH e agentes. Perfis automáticos sem cifra e cápsulas antigas continuam compatíveis; não cifra todo DATA. Os perfis .aguja reutilizáveis continuam disponíveis."
       ],
       [
         "Snapshots globais cifrados",
@@ -441,7 +441,7 @@
       ],
       [
         "Profili LUKS2 all’avvio",
-        "Sblocco prima di cockpit, SSH e agenti. Profili automatici non cifrati e capsule legacy restano compatibili; DATA non viene cifrato interamente."
+        "Sblocco prima di cockpit, SSH e agenti. Profili automatici non cifrati e capsule legacy restano compatibili; DATA non viene cifrato interamente. Restano supportati i profili .aguja riutilizzabili."
       ],
       [
         "Snapshot globali cifrati",
@@ -527,7 +527,7 @@
       ],
       [
         "Vroege LUKS2-profielen",
-        "Ontgrendelen vóór cockpit, SSH en agenten. Automatische onversleutelde profielen en oude capsules blijven werken; niet heel DATA wordt versleuteld."
+        "Ontgrendelen vóór cockpit, SSH en agenten. Automatische onversleutelde profielen en oude capsules blijven werken; niet heel DATA wordt versleuteld. Herbruikbare .aguja-profielen blijven ondersteund."
       ],
       [
         "Versleutelde globale snapshots",
@@ -613,7 +613,7 @@
       ],
       [
         "启动早期 LUKS2 配置",
-        "在控制台、SSH 和代理启动前解锁。保留未加密自动配置与旧版胶囊兼容性；不对整个 DATA 统一加密。"
+        "在控制台、SSH 和代理启动前解锁。保留未加密自动配置与旧版胶囊兼容性；不对整个 DATA 统一加密。 继续支持可重复使用的 .aguja 配置文件。"
       ],
       [
         "加密全局快照",

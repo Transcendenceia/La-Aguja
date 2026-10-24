@@ -19,7 +19,8 @@ test('all localized download cards use existing 1.0 release asset names and the 
  const skillVersion=fs.readFileSync(new URL('../../skills/flash-imager/SKILL.md',import.meta.url),'utf8').match(/^  version: "([^"]+)"$/m)[1];
  const productAssets=[`aguja-flash-imager-${imagerVersion}-win-x64.exe`,`aguja-flash-imager-${imagerVersion}-x86_64.AppImage`,`aguja-flash-imager-${imagerVersion}-amd64.deb`,`aguja-flash-imager-${imagerVersion}-linux-x64.tar.gz`,`SHA256SUMS-imager-${imagerVersion}-windows`,`SHA256SUMS-imager-${imagerVersion}-linux`,`aguja-${currentVersion}-amd64.img.zst`,`aguja-${currentVersion}-amd64.iso`,'SHA256SUMS'];
  const skillAssets=[`aguja-flash-imager-skill-${skillVersion}.zip`,`aguja-flash-imager-skill-${skillVersion}.tar.gz`,`SHA256SUMS-flash-imager-skill-${skillVersion}`];
- const expected=new Set([...productAssets.map(n=>repo+`download/v${n.includes('imager')?imagerVersion:currentVersion}/`+n),...skillAssets.map(n=>repo+`download/flash-imager-skill-v${skillVersion}/`+n),repo+`tag/v${currentVersion}`]);
+ const imageBase=JSON.parse(fs.readFileSync(new URL('../../config/image-hosting.json',import.meta.url),'utf8'))[currentVersion]||repo+`download/v${currentVersion}/`;
+ const expected=new Set([...productAssets.map(n=>n.endsWith('.iso')||n.endsWith('.img.zst')?imageBase+n:repo+`download/v${n.includes('imager')?imagerVersion:currentVersion}/`+n),...skillAssets.map(n=>repo+`download/flash-imager-skill-v${skillVersion}/`+n),repo+`tag/v${currentVersion}`]);
  for(const lang of ['en','es','fr','de','pt','it','nl','zh']){
   const html=await(await fetch(base+'/'+lang)).text();
   const links=[...html.matchAll(/href="([^"]*\/releases\/[^"]+)"/g)].map(m=>m[1]);

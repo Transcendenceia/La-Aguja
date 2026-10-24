@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import {createSite} from '../app.mjs';
 const imagerVersion=JSON.parse(fs.readFileSync(new URL('../../desktop/package.json',import.meta.url),'utf8')).version;
 const currentVersion=fs.readFileSync(new URL('../../VERSION',import.meta.url),'utf8').trim();
+const imageBase=JSON.parse(fs.readFileSync(new URL('../../config/image-hosting.json',import.meta.url),'utf8'))[currentVersion]||`https://github.com/Transcendenceia/La-Aguja/releases/download/v${currentVersion}/`;
 const languages=['en','es','fr','de','pt','it','nl','zh'];
 test('locale routes preserve anonymous access, content structure and localised navigation',async()=>{
  const site=createSite();await new Promise(r=>site.server.listen(0,'127.0.0.1',r));
@@ -22,7 +23,7 @@ test('locale routes preserve anonymous access, content structure and localised n
      assert.equal((html.match(/class="zoom-image"/g)||[]).length,11);assert(html.includes('class="checklist"'));assert(html.includes('id="situation"'));assert(html.includes('property="og:image"'));
     }else if(route===''){
      assert(html.includes(`v${imagerVersion}/aguja-flash-imager-${imagerVersion}-win-x64.exe`));
-     assert(html.includes(`/releases/download/v${currentVersion}/aguja-${currentVersion}-amd64.img.zst`));assert(!html.includes('Tu LA AGUJA'));
+     assert(html.includes(imageBase+`aguja-${currentVersion}-amd64.img.zst`));assert(html.includes(imageBase+`aguja-${currentVersion}-amd64.iso`));assert(!html.includes('Tu LA AGUJA'));
     }
    }
   }

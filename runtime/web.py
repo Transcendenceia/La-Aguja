@@ -17,6 +17,33 @@ from urllib.parse import urlsplit
 ASSETS = Path('/usr/share/aguja/desktop')
 
 
+def redirect_document(url):
+    """A visible same-tab handoff, even when startup navigation is cancelled."""
+    target = json.dumps(url).replace('<', '\\u003c')
+    return ('<!doctype html><html lang="en"><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<meta name="referrer" content="no-referrer"><title>LA AGUJA · Open</title>'
+            '<style>body{margin:0;background:#090b10;color:#f7f6f1;'
+            'font:18px Inter,"Noto Sans",system-ui,sans-serif}'
+            'main{max-width:560px;margin:15vh auto;padding:32px}'
+            'small{color:#d9afff}h1{font-size:32px}p{color:#9a9da6;line-height:1.6}'
+            'a{display:inline-block;background:#f7f6f1;color:#090b10;padding:14px 24px;'
+            'border:2px solid #d9afff;border-radius:10px;text-decoration:none}'
+            'a:focus-visible{outline:3px solid #ff9dcc;outline-offset:5px}</style>'
+            '<body><main><small>LA AGUJA</small><h1 id="title">Opening your destination</h1>'
+            '<p id="help">If this page stays open, select Continue.</p>'
+            '<a id="continue" rel="noreferrer" href="' + html.escape(url, quote=True) + '">Continue</a>'
+            '</main><script>const target=' + target + ';'
+            'if(navigator.language.startsWith("es")){document.documentElement.lang="es";'
+            'document.getElementById("title").textContent="Abriendo tu destino";'
+            'document.getElementById("help").textContent="Si esta página sigue abierta, pulsa Continuar.";'
+            'document.getElementById("continue").textContent="Continuar";}'
+            # Do not navigate while the HTML parser is still constructing the
+            # initial startup document. The real link also works without JS.
+            'window.addEventListener("load",()=>setTimeout(()=>location.replace(target),0),{once:true});'
+            '</script></body></html>')
+
+
 def binary(choice=None):
     if choice is None:
         try:
@@ -46,8 +73,7 @@ def open_browser(url=None, directory=None, choice=None):
         if parsed.scheme not in ('https', 'http', 'file') or parsed.username or parsed.password:
             raise ValueError('Use an HTTP(S) address or local file')
         page = directory / 'open.html'
-        page.write_text('<!doctype html><meta charset="utf-8"><title>LA AGUJA</title>'
-                        '<script>location.replace(' + json.dumps(url).replace('<', '\\u003c') + ')</script>')
+        page.write_text(redirect_document(url))
         page.chmod(0o600)
     else:
         page = ASSETS / 'home.html'

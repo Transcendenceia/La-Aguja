@@ -444,6 +444,9 @@ def apply_locale(capsule=None, root='/', runner=None, respect_override=True):
         target.chmod(0o644)
     (runner or subprocess.run)(['setupcon', '--keyboard-only', '--save', '--force'],
                                check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if base == Path('/'):
+        import gui_session
+        gui_session.apply_active_keyboards()
     return selection
 
 

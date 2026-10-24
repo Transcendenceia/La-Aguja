@@ -4,7 +4,9 @@ import json
 import os
 from pathlib import Path
 import pwd
+import re
 import secrets
+import shlex
 import shutil
 import signal
 import stat
@@ -15,6 +17,37 @@ import tempfile
 import time
 
 ACTIONS = {'home', 'browser', 'files', 'cloud', 'tailnet', 'network', 'updates', 'persist', 'guide', 'backup', 'settings'}
+
+
+def apply_keyboard(path='/etc/default/keyboard', environment=None):
+    """Xorg started directly does not inherit setupcon's console keymap."""
+    from i18n import DEFAULT_LOCALE, KEYBOARD_VARIANTS
+    try:
+        entries = shlex.split(Path(path).read_text(), comments=True)
+    except FileNotFoundError:
+        entries = []
+    values = dict(entry.split('=', 1) for entry in entries if '=' in entry)
+    layout = values.get('XKBLAYOUT', DEFAULT_LOCALE['keyboard'])
+    variant = values.get('XKBVARIANT', '')
+    if layout not in KEYBOARD_VARIANTS or variant not in KEYBOARD_VARIANTS[layout]:
+        raise ValueError('Invalid graphical keyboard selection')
+    subprocess.run(['setxkbmap', '-model', 'pc105', '-layout', layout,
+                    '-variant', variant, '-option', ''], check=True, timeout=5,
+                   env=environment, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def apply_active_keyboards(proc='/proc'):
+    """Refresh local Xorg servers when the shared console preference changes."""
+    for process in Path(proc).glob('[0-9]*'):
+        try:
+            if (process/'comm').read_text().strip() != 'Xorg':
+                continue
+            args = (process/'cmdline').read_bytes().decode().split('\0')
+            display = next(arg for arg in args if re.fullmatch(r':\d+', arg))
+            authority = args[args.index('-auth')+1]
+        except (OSError, UnicodeError, ValueError, IndexError, StopIteration):
+            continue
+        apply_keyboard(environment=dict(os.environ, DISPLAY=display, XAUTHORITY=authority))
 
 
 def read_request(directory, uid):
@@ -155,6 +188,7 @@ def session(directory):
                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
         wait_window_manager(window_manager)
+        apply_keyboard()
         os.environ.update(environment)
         if shutil.which('xsetroot'):
             subprocess.run(['xsetroot','-cursor_name','left_ptr'],env=environment,check=False)

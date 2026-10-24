@@ -50,7 +50,7 @@ for helper in browser-session; do
     cmp -s "$PROJECT/runtime/$helper" "$ROOT/usr/lib/aguja/$helper" || { echo 'Instala el navegador OAuth actual'; exit 1; }
 done
 cmp -s "$PROJECT/runtime/browser-launch" "$ROOT/usr/local/bin/aguja-browser-launch" || { echo 'Instala el launcher del navegador'; exit 1; }
-for browser_binary in helium thunar udisksctl eject xsetroot xxd chromium Xorg openbox xclip xterm xdotool; do
+for browser_binary in helium thunar udisksctl eject xsetroot xxd chromium Xorg openbox xclip xterm xdotool setxkbmap; do
     chroot "$ROOT" /bin/sh -c 'command -v "$1" >/dev/null' sh "$browser_binary" || { echo 'Falta un componente del navegador OAuth'; exit 1; }
 done
 [[ $(stat -c '%u:%g:%a' "$ROOT/usr/lib/chromium/chrome-sandbox") == 0:0:4755 ]] || { echo 'Incluye chromium-sandbox con sus permisos oficiales'; exit 1; }

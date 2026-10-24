@@ -233,8 +233,9 @@ def user_session(directory):
         page.write_text('<!doctype html><meta charset="utf-8"><title>LA AGUJA · Login</title>'
                         '<script>location.replace('+json.dumps(record['url']).replace('<','\\u003c')+')</script>')
         children.append(subprocess.Popen(['openbox','--config-file','/usr/share/aguja/desktop/openbox.xml'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL))
-        from gui_session import wait_window_manager
+        from gui_session import apply_keyboard, wait_window_manager
         wait_window_manager(children[-1])
+        apply_keyboard()
         terminal_process=subprocess.Popen(['xterm','-class','aguja-oauth-console','-T',
             'LA AGUJA | mismo CLI | copiar codigo lo envia | cerrar vuelve al texto',
             '-sb','-sl','10000',

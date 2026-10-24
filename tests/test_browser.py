@@ -80,11 +80,12 @@ class BrowserProtocolTests(unittest.TestCase):
                 profile_paths.append(page.parent)
             return SimpleNamespace(poll=lambda:0)
         with tempfile.TemporaryDirectory() as d,patch.object(auth,'read_record',return_value=record),\
-             patch('gui_session.wait_window_manager'),patch.object(browser,'read_clipboard',return_value=None),patch.dict(os.environ,{'DISPLAY':':99'}),\
+             patch('gui_session.wait_window_manager'),patch('gui_session.apply_keyboard') as keyboard,patch.object(browser,'read_clipboard',return_value=None),patch.dict(os.environ,{'DISPLAY':':99'}),\
              patch('web.binary',return_value='chromium'),patch.object(os,'getuid',return_value=1000),patch.object(subprocess,'Popen',side_effect=spawn):
             # No clipboard process nor DOM interrogation is created. The code
             # remains in the provider page until the user explicitly pastes.
             self.assertEqual(browser.user_session(Path(d)),0)
+            keyboard.assert_called_once_with()
         self.assertEqual([c[0] for c in calls],['openbox','xterm','chromium'])
         self.assertIn('-sb', calls[1])
         self.assertEqual(calls[1][calls[1].index('-sl')+1], '10000')

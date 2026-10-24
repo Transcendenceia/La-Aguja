@@ -18,6 +18,15 @@ English canonical agent/ODD docs, with instructions to reply in the owner's conf
 
 Helium + Yazi pinned to official release artifacts and published GitHub SHA-256 digests; Chromium retained for explicit compatibility selection. Browser shell/start page, GTK panels, terminal and Openbox share graphite/Inter/spectrum branding. The same browser opener serves normal navigation and OAuth; existing native CLI PTY/callback ownership stays intact.
 
+On-demand Xorg sessions do not inherit the console keymap applied by setupcon.
+Both normal Desk/browser and native OAuth sessions explicitly apply the validated
+layout and variant from `/etc/default/keyboard` before opening applications,
+using `gui_session.apply_keyboard`. Keyboard choice is independent of UI language;
+do not hard-code Spanish or infer a keyboard from LANG. The build explicitly
+includes `x11-xkb-utils` for setxkbmap. Applying a locale preference updates
+setupcon and every active local Xorg server through the same configuration file,
+so changing it from Settings or the CLI also updates applications already open.
+
 Bulk updates must respect actual constraints: a complete Rescue image cannot run only in RAM and is staged without activation before component updates in a separate derived generation. All RAM skips only the complete image and explains why. Activate only the final verified generation.
 
 ## Acceptance and evidence

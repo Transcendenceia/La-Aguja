@@ -51,7 +51,7 @@ apt-get install -y --no-install-recommends linux-image-amd64 live-boot systemd-s
   grub-pc-bin grub-efi-amd64-bin efibootmgr rsync zstd xz-utils unzip iproute2 iputils-ping dnsutils \
   locales kbd console-setup plymouth plymouth-themes fonts-dejavu-core fonts-noto-cjk \
   chromium chromium-sandbox xserver-xorg-core xserver-xorg-input-libinput xserver-xorg-video-all \
-  xinit openbox xclip x11-utils xauth dbus-x11 xterm xdotool
+  xinit openbox xclip x11-utils x11-xkb-utils xauth dbus-x11 xterm xdotool
 getent passwd aguja >/dev/null || useradd -m -s /bin/bash -G sudo aguja
 getent group kvm >/dev/null && usermod -a -G kvm aguja
 printf 'aguja ALL=(ALL:ALL) NOPASSWD: ALL\n' > /etc/sudoers.d/aguja

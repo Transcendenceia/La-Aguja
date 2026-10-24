@@ -66,7 +66,7 @@
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
-    "image": "Rescue Disk 1.0.2 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
+    "image": "Rescue Disk 1.0.3 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
     "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service.",
     "captureProvenance": "Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.",
     "updateCaptions": {
@@ -145,7 +145,7 @@
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
-    "image": "Rescue Disk 1.0.2 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
+    "image": "Rescue Disk 1.0.3 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
     "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
     "captureProvenance": "Capturas reales de la VM; QA con una versión oficial anterior de Codex controlada. La demostración de paquetes es sintética. Las versiones mostradas no prometen actualizaciones disponibles hoy.",
     "updateCaptions": {
@@ -224,7 +224,7 @@
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
-    "image": "Rescue Disk 1.0.2 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
+    "image": "Rescue Disk 1.0.3 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
     "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
     "captureProvenance": "Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.",
     "updateCaptions": {
@@ -303,7 +303,7 @@
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
-    "image": "Rescue Disk 1.0.2 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "image": "Rescue Disk 1.0.3 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
     "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
     "captureProvenance": "Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.",
     "updateCaptions": {
@@ -382,7 +382,7 @@
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
-    "image": "Rescue Disk 1.0.2 é o Linux de arranque. Imagens, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST para importação manual; ISO BIOS/UEFI não é uma IMG configurável.",
+    "image": "Rescue Disk 1.0.3 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
     "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
     "captureProvenance": "Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.",
     "updateCaptions": {
@@ -461,7 +461,7 @@
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
-    "image": "Rescue Disk 1.0.2 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
+    "image": "Rescue Disk 1.0.3 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
     "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
     "captureProvenance": "Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.",
     "updateCaptions": {
@@ -540,7 +540,7 @@
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
-    "image": "Rescue Disk 1.0.2 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "image": "Rescue Disk 1.0.3 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
     "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
     "captureProvenance": "Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.",
     "updateCaptions": {
@@ -619,7 +619,7 @@
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",
-    "image": "Rescue Disk 1.0.2 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
+    "image": "Rescue Disk 1.0.3 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
     "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
     "captureProvenance": "真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。",
     "updateCaptions": {

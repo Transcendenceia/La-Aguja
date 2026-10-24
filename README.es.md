@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 1.0.0 · Rescue Disk 1.0.2 · Experimental · x86-64**
+**Flash Imager 1.0.0 · Rescue Disk 1.0.3 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 

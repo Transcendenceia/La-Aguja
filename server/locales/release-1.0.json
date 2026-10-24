@@ -1,26 +1,33 @@
 {
   "en": {
-    "title": "Your USB grows with your projects.",
+    "title": "The native workstation release",
     "intro": [
-      "LA AGUJA 1.0 brings reusable profiles, configuration editing without reflashing, and persistent live updates. Keep your working environment ready for the next computer.",
-      "In 1.0.2, normal boot avoids hashing the whole system again. Update checks start in the background and show a notice without installing anything. Confirmed jobs continue when you leave with Escape or close SSH; reopen Updates to recover progress and the result. Do not remove the USB during an active write."
+      "1.1.0 is a feature release since 1.0.2, not a keyboard-only patch. One native cockpit opens tools directly; optional cloud AI still needs Internet and your provider account."
     ],
     "features": [
       [
-        "A seven-step preparation",
-        "The wizard ends at 07 · Create disk. Profiles and USB configuration, and Imager updates, are separate tools."
+        "One cockpit and native tools",
+        "Grouped agents/settings, direct Helium/Chromium and Thunar, Yazi/viewers and consistent graphite/spectrum styling; no automatic target-disk mounts."
       ],
       [
-        "Configure once, reuse deliberately",
-        "Save and open encrypted .aguja profiles, or read and edit an existing USB configuration without rewriting its image."
+        "Early LUKS2 profiles",
+        "Protected profiles unlock before cockpit, SSH and agents. Automatic plain profiles and explicitly identified legacy capsules remain compatible; DATA is not blanket encrypted."
       ],
       [
-        "Keep updates on your USB",
-        "For each row choose No, Yes · RAM, or Yes, persistent. No changes nothing. RAM updates only this session and is lost after reboot. Persistent saves a verified clean system in DATA on this USB for the next boot."
+        "Encrypted global snapshots",
+        "Persist changes saves packages, settings, file creations/modifications and deletions, separately from installing updates. LUKS2 generations, integrity checks, factory boot and rollback."
       ],
       [
-        "Your recovery keys, protected",
-        "Add BitLocker or LUKS keys for another computer. Windows offers local BitLocker first, before manual keys."
+        "Updates that explain their work",
+        "All RAM / all persistent / clear choices; visible installation and measured progress, space preflight and honest partial errors. A complete Rescue image cannot be applied only in RAM."
+      ],
+      [
+        "Cloud, NAS and private network",
+        "Manual/import forms for Drive, OneDrive, Dropbox, S3, SFTP, SMB and WebDAV; Tailscale/Headscale enrollment, DNS, routes and exit-node choices, subject to controller policy."
+      ],
+      [
+        "Keyboard, OAuth and agent method",
+        "Shared live keyboard/variant, visible OAuth continuation, native PTY handoff; English agent guidance with owner-language replies, mission/backup/resource planning and adapted operational ODD."
       ]
     ],
     "wizard": [
@@ -66,7 +73,7 @@
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
-    "image": "Rescue Disk 1.0.3 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
+    "image": "Rescue Disk 1.1.0 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
     "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service.",
     "captureProvenance": "Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.",
     "updateCaptions": {
@@ -79,27 +86,34 @@
     }
   },
   "es": {
-    "title": "Tu USB evoluciona con tus proyectos.",
+    "title": "El salto al taller nativo",
     "intro": [
-      "LA AGUJA 1.0 incorpora perfiles reutilizables, edición de configuración sin regrabar y actualizaciones persistentes del live. Tu entorno, listo para el próximo equipo.",
-      "En la 1.0.2, el arranque normal evita recalcular el hash del sistema completo. Las comprobaciones se ejecutan en segundo plano y avisan sin instalar nada. Los trabajos confirmados continúan al salir con Escape o cerrar SSH; vuelve a Actualizaciones para recuperar progreso y resultado. No retires el USB durante una escritura activa."
+      "1.1.0 reúne las funcionalidades nuevas desde 1.0.2, no solo un parche de teclado. Un cockpit nativo abre las herramientas directamente; la IA cloud sigue necesitando Internet y tu cuenta de proveedor."
     ],
     "features": [
       [
-        "Preparación en siete pasos",
-        "El asistente termina en 07 · Crear disco. Perfiles y USB y Actualizaciones del Imager son herramientas independientes."
+        "Cockpit único y herramientas nativas",
+        "Agentes/ajustes agrupados, Helium/Chromium y Thunar directos, Yazi/visores y estilo grafito/espectro coherente; sin montar automáticamente discos de destino."
       ],
       [
-        "Configura una vez, reutiliza con criterio",
-        "Guarda y abre perfiles .aguja cifrados o lee y edita la configuración de un USB existente sin reescribir la imagen."
+        "Perfiles LUKS2 desde el arranque",
+        "Los perfiles protegidos se desbloquean antes de cockpit, SSH y agentes. Siguen compatibles los automáticos sin cifrar y las cápsulas legacy identificadas; no cifra todo DATA."
       ],
       [
-        "Las actualizaciones viajan en el USB",
-        "En cada fila elige No, Sí · RAM o Sí persistente. No no cambia nada. RAM actualiza solo esta sesión y se pierde al reiniciar. Persistente guarda un sistema limpio y verificado en DATA de este pendrive para el próximo arranque."
+        "Persistencia global cifrada",
+        "Persistir cambios guarda paquetes, ajustes, archivos creados/modificados y borrados, separado de instalar actualizaciones. Generaciones LUKS2, integridad, fábrica y rollback."
       ],
       [
-        "Tus claves de recuperación, protegidas",
-        "Añade claves BitLocker o LUKS de otro equipo. En Windows, BitLocker de este PC aparece antes de las claves manuales."
+        "Actualizaciones con control visible",
+        "Todo RAM / todo persistente / limpiar, instalación visible, progreso medido, preflight de espacio y errores parciales honestos. La imagen Rescue completa no se aplica solo en RAM."
+      ],
+      [
+        "Nube, NAS y red privada",
+        "Formularios manuales/importación Drive, OneDrive, Dropbox, S3, SFTP, SMB y WebDAV; alta Tailscale/Headscale, DNS, rutas y nodo de salida sujetos a la política del servidor."
+      ],
+      [
+        "Teclado, OAuth y método del agente",
+        "Distribución/variante compartidas en vivo, Continuar OAuth visible y retorno a la PTY nativa; guías canónicas en inglés, respuesta en tu idioma, misiones/backup/recursos y ODD operativo adaptado."
       ]
     ],
     "wizard": [
@@ -145,7 +159,7 @@
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
-    "image": "Rescue Disk 1.0.3 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
+    "image": "Rescue Disk 1.1.0 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
     "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
     "captureProvenance": "Capturas reales de la VM; QA con una versión oficial anterior de Codex controlada. La demostración de paquetes es sintética. Las versiones mostradas no prometen actualizaciones disponibles hoy.",
     "updateCaptions": {
@@ -158,27 +172,34 @@
     }
   },
   "fr": {
-    "title": "Votre clé USB évolue avec vos projets.",
+    "title": "La station de travail native",
     "intro": [
-      "LA AGUJA 1.0 ajoute des profils réutilisables, la modification de configuration sans réécriture et des mises à jour persistantes du live. Votre environnement reste prêt pour le prochain ordinateur.",
-      "En 1.0.2, le démarrage normal évite de recalculer l’empreinte du système complet. La recherche en arrière-plan affiche un avis sans rien installer. Les tâches confirmées continuent après Échap ou la fermeture SSH ; rouvrez Mises à jour pour retrouver progression et résultat. Ne retirez pas le support pendant une écriture."
+      "1.1.0 rassemble les nouvelles fonctions depuis 1.0.2, pas seulement le clavier. Un cockpit natif ouvre les outils directement ; l’IA cloud exige Internet et votre compte fournisseur."
     ],
     "features": [
       [
-        "Sept étapes de préparation",
-        "L’assistant se termine à 07 · Créer le disque. Profils/USB et mises à jour Imager sont des outils séparés."
+        "Un cockpit, des outils natifs",
+        "Agents/réglages regroupés, Helium/Chromium et Thunar directs, Yazi/visionneuses, style graphite/spectre ; aucun montage automatique des disques cibles."
       ],
       [
-        "Configurer puis réutiliser",
-        "Enregistrez et ouvrez des profils .aguja chiffrés, ou modifiez la configuration d’une clé existante sans réécrire l’image."
+        "Profils LUKS2 précoces",
+        "Déverrouillage avant cockpit, SSH et agents. Profils automatiques non chiffrés et capsules legacy conservés ; DATA n’est pas entièrement chiffré."
       ],
       [
-        "Des mises à jour sur la clé",
-        "Par ligne : Non, Oui · RAM ou Oui, persistant. Non ne change rien. RAM ne concerne que cette session. Persistant enregistre un système propre et vérifié dans DATA sur la clé pour le prochain démarrage."
+        "Snapshots globaux chiffrés",
+        "Conserve paquets, réglages et fichiers créés/modifiés/supprimés, séparément des mises à jour. Générations LUKS2, intégrité, usine et rollback."
       ],
       [
-        "Vos clés de récupération protégées",
-        "Ajoutez les clés BitLocker ou LUKS d’un autre PC. Sous Windows, BitLocker local précède les clés manuelles."
+        "Mises à jour contrôlées",
+        "Tout RAM / tout persistant / effacer, installation visible, progression mesurée, espace vérifié et erreurs partielles explicites. Une image Rescue complète ne s’applique pas uniquement en RAM."
+      ],
+      [
+        "Cloud, NAS et réseau privé",
+        "Formulaires/import Drive, OneDrive, Dropbox, S3, SFTP, SMB, WebDAV ; Tailscale/Headscale, DNS, routes et nœud de sortie soumis au contrôleur."
+      ],
+      [
+        "Clavier, OAuth et méthode",
+        "Clavier/variante partagés en direct, lien Continuer et PTY native ; guides anglais, réponse dans votre langue, missions/backup/ressources et ODD adapté."
       ]
     ],
     "wizard": [
@@ -224,7 +245,7 @@
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
-    "image": "Rescue Disk 1.0.3 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
+    "image": "Rescue Disk 1.1.0 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
     "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
     "captureProvenance": "Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.",
     "updateCaptions": {
@@ -237,27 +258,34 @@
     }
   },
   "de": {
-    "title": "Dein USB-Stick wächst mit deinen Projekten.",
+    "title": "Die native Werkzeugumgebung",
     "intro": [
-      "LA AGUJA 1.0 bietet wiederverwendbare Profile, Konfigurationsänderungen ohne erneutes Schreiben und dauerhafte Live-Updates. Deine Umgebung bleibt für den nächsten Rechner bereit.",
-      "In 1.0.2 entfällt beim normalen Start das erneute Hashen des gesamten Systems. Hintergrundprüfungen melden Updates, installieren aber nichts. Bestätigte Aufgaben laufen nach Escape oder dem Schließen von SSH weiter; Updates zeigt Fortschritt und Ergebnis beim erneuten Öffnen. USB während eines Schreibvorgangs nicht entfernen."
+      "1.1.0 bündelt neue Funktionen seit 1.0.2, nicht nur eine Tastaturkorrektur. Ein natives Cockpit öffnet Werkzeuge direkt; Cloud-KI benötigt Internet und ein eigenes Anbieterkonto."
     ],
     "features": [
       [
-        "Vorbereitung in sieben Schritten",
-        "Der Assistent endet bei 07 · Datenträger erstellen. Profile/USB und Imager-Updates sind getrennte Werkzeuge."
+        "Ein Cockpit, native Werkzeuge",
+        "Gruppierte Agenten/Einstellungen, Helium/Chromium und Thunar direkt, Yazi/Betrachter und Graphit/Spektrum-Stil; keine automatischen Zielplatten-Mounts."
       ],
       [
-        "Einrichten und gezielt wiederverwenden",
-        "Verschlüsselte .aguja-Profile speichern/öffnen oder die Konfiguration eines vorhandenen USB-Sticks ohne Neuschreiben ändern."
+        "Frühe LUKS2-Profile",
+        "Entsperren vor Cockpit, SSH und Agenten. Unverschlüsselte automatische Profile und alte Kapseln bleiben kompatibel; DATA wird nicht pauschal verschlüsselt."
       ],
       [
-        "Updates reisen auf dem USB-Stick mit",
-        "Je Zeile: Nein, Ja · RAM oder Ja, dauerhaft. Nein ändert nichts. RAM gilt nur für diese Sitzung. Dauerhaft speichert ein sauberes, geprüftes System in DATA auf diesem USB für den nächsten Start."
+        "Verschlüsselte globale Snapshots",
+        "Speichert Pakete, Einstellungen sowie neue/geänderte/gelöschte Dateien getrennt von Updates. LUKS2-Generationen, Integrität, Werkzustand und Rollback."
       ],
       [
-        "Geschützte Wiederherstellungsschlüssel",
-        "BitLocker- oder LUKS-Schlüssel eines anderen PCs hinzufügen. Unter Windows steht lokales BitLocker vor manuellen Schlüsseln."
+        "Kontrollierte Updates",
+        "Alles RAM / alles persistent / leeren, sichtbare Installation, gemessener Fortschritt, Platzprüfung und ehrliche Teilergebnisse. Ein vollständiges Rescue-Image lässt sich nicht nur im RAM anwenden."
+      ],
+      [
+        "Cloud, NAS und privates Netz",
+        "Formulare/Import für Drive, OneDrive, Dropbox, S3, SFTP, SMB, WebDAV; Tailscale/Headscale, DNS, Routen und Exit-Node gemäß Controller-Richtlinien."
+      ],
+      [
+        "Tastatur, OAuth und Methode",
+        "Gemeinsames Layout/Variante in laufenden Sitzungen, sichtbarer Weiter-Link und native PTY; englische Anleitungen, Antworten in Ihrer Sprache, Missions-/Backupplanung und angepasstes ODD."
       ]
     ],
     "wizard": [
@@ -303,7 +331,7 @@
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
-    "image": "Rescue Disk 1.0.3 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "image": "Rescue Disk 1.1.0 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
     "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
     "captureProvenance": "Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.",
     "updateCaptions": {
@@ -316,27 +344,34 @@
     }
   },
   "pt": {
-    "title": "O teu USB evolui com os teus projetos.",
+    "title": "O ambiente de trabalho nativo",
     "intro": [
-      "LA AGUJA 1.0 traz perfis reutilizáveis, edição da configuração sem regravar e atualizações persistentes do live. O teu ambiente fica pronto para o próximo computador.",
-      "Na 1.0.2, o arranque normal evita recalcular o hash do sistema completo. A verificação em segundo plano avisa sem instalar nada. Tarefas confirmadas continuam após Escape ou fechar SSH; reabre Atualizações para recuperar progresso e resultado. Não retires o USB durante uma escrita ativa."
+      "1.1.0 reúne funções novas desde 1.0.2, não apenas o teclado. Um cockpit nativo abre ferramentas diretamente; a IA cloud exige Internet e conta própria do fornecedor."
     ],
     "features": [
       [
-        "Preparação em sete passos",
-        "O assistente termina em 07 · Criar disco. Perfis/USB e atualizações do Imager são ferramentas separadas."
+        "Um cockpit, ferramentas nativas",
+        "Agentes/definições agrupados, Helium/Chromium e Thunar diretos, Yazi/visores e estilo grafite/espectro; sem montar discos internos automaticamente."
       ],
       [
-        "Configurar e reutilizar",
-        "Guarda e abre perfis .aguja encriptados ou edita a configuração de um USB existente sem reescrever a imagem."
+        "Perfis LUKS2 no arranque",
+        "Desbloqueio antes do cockpit, SSH e agentes. Perfis automáticos sem cifra e cápsulas antigas continuam compatíveis; não cifra todo DATA."
       ],
       [
-        "Atualizações que viajam no USB",
-        "Em cada linha: Não, Sim · RAM ou Sim persistente. Não não altera nada. RAM dura só nesta sessão. Persistente guarda um sistema limpo e verificado em DATA deste USB para o próximo arranque."
+        "Snapshots globais cifrados",
+        "Guarda pacotes, definições e ficheiros criados/alterados/apagados, separado das atualizações. Gerações LUKS2, integridade, fábrica e rollback."
       ],
       [
-        "Chaves de recuperação protegidas",
-        "Adiciona chaves BitLocker ou LUKS de outro PC. No Windows, BitLocker local aparece antes das chaves manuais."
+        "Atualizações controladas",
+        "Tudo RAM / tudo persistente / limpar, instalação visível, progresso medido, espaço validado e erros parciais claros. A imagem Rescue completa não se aplica apenas em RAM."
+      ],
+      [
+        "Cloud, NAS e rede privada",
+        "Formulários/importação Drive, OneDrive, Dropbox, S3, SFTP, SMB, WebDAV; Tailscale/Headscale, DNS, rotas e nó de saída sujeitos à política do servidor."
+      ],
+      [
+        "Teclado, OAuth e método",
+        "Teclado/variante partilhados em direto, ligação Continuar e PTY nativa; guias em inglês, resposta no teu idioma, missões/backup/recursos e ODD adaptado."
       ]
     ],
     "wizard": [
@@ -382,7 +417,7 @@
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
-    "image": "Rescue Disk 1.0.3 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
+    "image": "Rescue Disk 1.1.0 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
     "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
     "captureProvenance": "Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.",
     "updateCaptions": {
@@ -395,27 +430,34 @@
     }
   },
   "it": {
-    "title": "La tua USB cresce con i tuoi progetti.",
+    "title": "La postazione nativa",
     "intro": [
-      "LA AGUJA 1.0 aggiunge profili riutilizzabili, modifica della configurazione senza riscrittura e aggiornamenti live persistenti. Il tuo ambiente resta pronto per il prossimo computer.",
-      "In 1.0.2, l’avvio normale evita di ricalcolare l’hash dell’intero sistema. Il controllo in background avvisa senza installare nulla. Le attività confermate continuano dopo Esc o la chiusura SSH; riapri Aggiornamenti per ritrovare avanzamento e risultato. Non rimuovere la USB durante una scrittura."
+      "1.1.0 riunisce le nuove funzioni da 1.0.2, non solo la tastiera. Un cockpit nativo apre direttamente gli strumenti; l’IA cloud richiede Internet e il proprio account fornitore."
     ],
     "features": [
       [
-        "Preparazione in sette passi",
-        "La procedura termina a 07 · Crea disco. Profili/USB e aggiornamenti Imager sono strumenti separati."
+        "Un cockpit, strumenti nativi",
+        "Agenti/impostazioni raggruppati, Helium/Chromium e Thunar diretti, Yazi/visualizzatori e stile grafite/spettro; nessun montaggio automatico dei dischi di destinazione."
       ],
       [
-        "Configura e riutilizza",
-        "Salva e apri profili .aguja cifrati o modifica la configurazione di una USB esistente senza riscrivere l’immagine."
+        "Profili LUKS2 all’avvio",
+        "Sblocco prima di cockpit, SSH e agenti. Profili automatici non cifrati e capsule legacy restano compatibili; DATA non viene cifrato interamente."
       ],
       [
-        "Aggiornamenti sulla USB",
-        "Per ogni riga: No, Sì · RAM o Sì persistente. No non cambia nulla. RAM vale solo per questa sessione. Persistente salva un sistema pulito e verificato in DATA su questa USB per il prossimo avvio."
+        "Snapshot globali cifrati",
+        "Conserva pacchetti, impostazioni e file creati/modificati/eliminati, separatamente dagli aggiornamenti. Generazioni LUKS2, integrità, fabbrica e rollback."
       ],
       [
-        "Chiavi di recupero protette",
-        "Aggiungi chiavi BitLocker o LUKS di un altro PC. In Windows, BitLocker locale precede le chiavi manuali."
+        "Aggiornamenti controllati",
+        "Tutto RAM / tutto persistente / azzera, installazione visibile, avanzamento misurato, controllo spazio ed errori parziali chiari. L’immagine Rescue completa non si applica solo in RAM."
+      ],
+      [
+        "Cloud, NAS e rete privata",
+        "Moduli/import Drive, OneDrive, Dropbox, S3, SFTP, SMB, WebDAV; Tailscale/Headscale, DNS, route e nodo d’uscita secondo le regole del controller."
+      ],
+      [
+        "Tastiera, OAuth e metodo",
+        "Layout/variante condivisi in tempo reale, link Continua e PTY nativa; guide inglesi, risposta nella tua lingua, missioni/backup/risorse e ODD adattato."
       ]
     ],
     "wizard": [
@@ -461,7 +503,7 @@
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
-    "image": "Rescue Disk 1.0.3 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
+    "image": "Rescue Disk 1.1.0 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
     "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
     "captureProvenance": "Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.",
     "updateCaptions": {
@@ -474,27 +516,34 @@
     }
   },
   "nl": {
-    "title": "Je USB groeit mee met je projecten.",
+    "title": "De native werkplaats",
     "intro": [
-      "LA AGUJA 1.0 biedt herbruikbare profielen, configuratiebewerking zonder opnieuw schrijven en blijvende live-updates. Je omgeving staat klaar voor de volgende computer.",
-      "In 1.0.2 wordt bij normaal opstarten niet opnieuw het hele systeem gehasht. Achtergrondcontroles melden updates zonder iets te installeren. Bevestigde taken gaan door na Escape of het sluiten van SSH; open Updates opnieuw voor voortgang en resultaat. Verwijder de USB niet tijdens schrijven."
+      "1.1.0 bundelt nieuwe functies sinds 1.0.2, niet alleen een toetsenbordfix. Eén native cockpit opent gereedschap direct; cloud-AI vraagt internet en je eigen provideraccount."
     ],
     "features": [
       [
-        "Voorbereiden in zeven stappen",
-        "De wizard eindigt bij 07 · Schijf maken. Profielen/USB en Imager-updates zijn aparte hulpmiddelen."
+        "Eén cockpit, native gereedschap",
+        "Gegroepeerde agenten/instellingen, direct Helium/Chromium en Thunar, Yazi/viewers en grafiet/spectrumstijl; geen automatisch aankoppelen van doelschijven."
       ],
       [
-        "Instellen en bewust hergebruiken",
-        "Bewaar en open versleutelde .aguja-profielen of bewerk een bestaande USB-configuratie zonder het image te herschrijven."
+        "Vroege LUKS2-profielen",
+        "Ontgrendelen vóór cockpit, SSH en agenten. Automatische onversleutelde profielen en oude capsules blijven werken; niet heel DATA wordt versleuteld."
       ],
       [
-        "Updates reizen mee op USB",
-        "Per rij: Nee, Ja · RAM of Ja, blijvend. Nee verandert niets. RAM geldt alleen voor deze sessie. Blijvend bewaart een schoon, gecontroleerd systeem in DATA op deze USB voor de volgende start."
+        "Versleutelde globale snapshots",
+        "Bewaart pakketten, instellingen en gemaakte/gewijzigde/verwijderde bestanden, los van updates. LUKS2-generaties, integriteit, fabrieksstart en rollback."
       ],
       [
-        "Beschermde herstelsleutels",
-        "Voeg BitLocker- of LUKS-sleutels van een andere pc toe. Windows toont lokale BitLocker vóór handmatige sleutels."
+        "Gecontroleerde updates",
+        "Alles RAM / alles persistent / wissen, zichtbare installatie, gemeten voortgang, ruimtecontrole en eerlijke deelfouten. Een volledig Rescue-image kan niet alleen in RAM worden toegepast."
+      ],
+      [
+        "Cloud, NAS en privénetwerk",
+        "Formulieren/import voor Drive, OneDrive, Dropbox, S3, SFTP, SMB, WebDAV; Tailscale/Headscale, DNS, routes en exit-node volgens controllerbeleid."
+      ],
+      [
+        "Toetsenbord, OAuth en methode",
+        "Gedeeld layout/variant in actieve sessies, zichtbare Doorgaan-link en native PTY; Engelse gidsen, antwoord in je taal, missie-/backupplanning en aangepast ODD."
       ]
     ],
     "wizard": [
@@ -540,7 +589,7 @@
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
-    "image": "Rescue Disk 1.0.3 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "image": "Rescue Disk 1.1.0 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
     "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
     "captureProvenance": "Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.",
     "updateCaptions": {
@@ -553,27 +602,34 @@
     }
   },
   "zh": {
-    "title": "让 USB 随你的项目一起成长。",
+    "title": "原生工作台版本",
     "intro": [
-      "LA AGUJA 1.0 带来可复用配置、无需重写镜像的 USB 配置编辑，以及持久化 live 更新。工作环境随时准备好迎接下一台电脑。",
-      "1.0.2 正常启动不再重复计算整个系统的哈希。后台检查只提示更新，不自动安装。确认后的任务在按 Escape 返回或关闭 SSH 后继续运行；重新打开更新可恢复进度与结果。正在写入时不要拔出 USB。"
+      "1.1.0 汇集自 1.0.2 以来的新功能，不只是键盘修复。统一原生控制台直接打开工具；云端 AI 仍需要互联网和自己的提供商账户。"
     ],
     "features": [
       [
-        "七步完成准备",
-        "向导在 07 · 创建磁盘结束。配置档案/USB 和 Imager 更新是独立工具。"
+        "统一控制台与原生工具",
+        "分组代理与设置、直接打开 Helium/Chromium 和 Thunar、Yazi 与查看器、统一石墨/光谱风格；不自动挂载目标磁盘。"
       ],
       [
-        "配置一次，按需复用",
-        "保存和打开加密的 .aguja 配置，或编辑现有 USB 的配置而不重写镜像。"
+        "启动早期 LUKS2 配置",
+        "在控制台、SSH 和代理启动前解锁。保留未加密自动配置与旧版胶囊兼容性；不对整个 DATA 统一加密。"
       ],
       [
-        "更新随 USB 一起走",
-        "每行选择“不”“是 · RAM”或“是，持久保存”。“不”不更改任何内容。RAM 仅影响本次会话，重启后丢失。持久更新将干净且经过验证的系统保存到此 USB 的 DATA，供下次启动使用。"
+        "加密全局快照",
+        "独立于安装更新，保存软件包、设置以及创建/修改/删除的文件。LUKS2 代际、完整性校验、出厂启动与回滚。"
       ],
       [
-        "保护恢复密钥",
-        "添加其他电脑的 BitLocker 或 LUKS 密钥。Windows 先显示本机 BitLocker，再显示手动密钥。"
+        "可控更新",
+        "全部 RAM／全部持久／清空选择，可见安装、实测进度、空间预检和真实部分失败。完整 Rescue 镜像不能仅应用到 RAM。"
+      ],
+      [
+        "云端、NAS 与私有网络",
+        "Drive、OneDrive、Dropbox、S3、SFTP、SMB、WebDAV 表单与导入；Tailscale/Headscale、DNS、路由和出口节点受控制器策略约束。"
+      ],
+      [
+        "键盘、OAuth 与工作方法",
+        "运行中的共享布局/变体、可见继续链接和原生 PTY；英文标准指南、按用户语言回答、任务/备份/资源规划与适配 ODD。"
       ]
     ],
     "wizard": [
@@ -619,7 +675,7 @@
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",
-    "image": "Rescue Disk 1.0.3 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
+    "image": "Rescue Disk 1.1.0 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
     "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
     "captureProvenance": "真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。",
     "updateCaptions": {

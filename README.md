@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
-**Flash Imager 1.0.0 · Rescue Disk 1.0.3 · Experimental · x86-64**
+**Flash Imager 1.0.0 · Rescue Disk 1.1.0 · Experimental · x86-64**
 English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
 **Your computer does not need an installed OS to start its next project.** LA AGUJA boots an independent Linux from USB, including on a machine with a blank disk. Bring **Codex CLI, OpenCode, Claude Code and Antigravity**, root-capable Linux tools and optional SSH to the hardware: install and configure systems, bootstrap a server, build software, extend the session into a virtual lab, migrate storage or recover data. Recovery is one mission, not the whole product.
@@ -170,4 +170,4 @@ Every machine can become the start of something new. If LA AGUJA helps you build
 **Included since 0.9.11:** Windows Wi-Fi import requests scoped UAC and preserves WPA3. Rescue Disk includes QEMU/KVM, TCG, qemu-img/qemu-nbd, OVMF and SeaBIOS. SSH orientation and an [optional tools guide](runtime/TOOLBOX.md) help agents investigate and install alternatives on demand—without bundling the suggested specialist tools. [Release notes](docs/RELEASE-0.9.11.md).
 
 
-**Rescue 1.0.3:** native Desk and file manager, encrypted global snapshots, one shared keyboard selection and a visible OAuth continuation fallback. Existing background updates and USB identity support remain. Flash Imager stays at 1.0.0. [Release notes](docs/RELEASE-1.0.3.md) · [Illustrated update guide](docs/en/USER-GUIDE.md).
+**Rescue 1.1.0:** one native cockpit, direct browser/Thunar, early LUKS2 profiles, encrypted whole-system snapshots, bulk updates, cloud/NAS and Tailscale/Headscale forms, shared keyboard/OAuth, resource/backup planning and expanded agent/ODD guides. Flash Imager stays at 1.0.0. [Complete release notes](docs/RELEASE-1.1.0.md) · [Illustrated guide](docs/en/USER-GUIDE.md).

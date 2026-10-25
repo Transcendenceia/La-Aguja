@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 1.0.0 · Rescue Disk 1.1.0 · Experimental · x86-64**
+**Flash Imager 1.1.0 · Rescue Disk 1.1.2 · Experimental · x86-64**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
@@ -18,7 +18,7 @@ Sin cuenta de LA AGUJA, relay propietario ni terminal alojado. La IA en nube sí
 
 > **Control real, responsabilidad real.** La cuenta `aguja` tiene sudo/root ilimitado. En la imagen 0.9.9, Seguro pide confirmación de tareas pero **no es un sandbox**. La versión 0.9.10 añade un sandbox para Codex: [política y alcance](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Arrancar no monta, repara, instala ni escribe automáticamente en discos internos. Identifica origen y destino, conserva una copia y autoriza los cambios antes de realizarlos.
 
-## Candidata Rescue 1.1 · solo Rescue
+## Rescue 1.1.2 · versión de mantenimiento
 
 Menú por tareas con estilo TranscendenceIA y Agujita original; perfil LUKS antes
 del menú y SSH; inventario de recursos y respaldo adaptado al escenario; cloud/NAS
@@ -27,7 +27,7 @@ del menú y SSH; inventario de recursos y respaldo adaptado al escenario; cloud/
 Consulta [misiones](runtime/MISSIONS.md), [respaldos](runtime/BACKUP.md) y
 [alcance/aceptación](docs/design/rescue-next.md). Imagers sin cambios: perfiles
 automáticos siguen automáticos y cápsulas antiguas se abren al arrancar.
-LUKS cifra la bóveda de perfil, no toda DATA. Candidata, no anuncio de publicación.
+LUKS cifra la bóveda de perfil, no toda DATA. Consulta [correcciones y alcance de 1.1.2](docs/RELEASE-1.1.2.md).
 Las nuevas versiones oficiales se consultan primero y se ofrecen como generaciones
 persistentes verificadas, conservando perfil/DATA y arranque anterior, sin reinicio automático.
 
@@ -63,7 +63,7 @@ Más allá: migración físico→virtual, laboratorio PXE, imágenes Linux propi
 
 ## Primeros pasos
 
-1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.0.0). El EXE/AppImage es el preparador, no la imagen de rescate.
+1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.1.0). El EXE/AppImage es el preparador, no la imagen de rescate.
 2. **Selecciona la imagen.** Usa el catálogo firmado o descomprime el `.img.zst` descargado manualmente antes de elegir el `.img`. La ISO sirve para pruebas de arranque en VM.
 3. **Configura idioma, teclado, red y SSH.** Sustituye la contraseña SSH pública de fábrica `aguja` por una propia o una clave pública. IA y tailnet son opcionales.
 4. **Protege el perfil.** Cifra la cápsula si contiene secretos. Cambia la frase inicial pública `aguja` y guarda la nueva fuera del USB. Esto no cifra HOME persistente ni todo AGUJA_DATA.

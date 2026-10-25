@@ -1,10 +1,18 @@
 {
   "en": {
-    "title": "Visible unlock and deliberate power",
+    "title": "Tailnet identity and reliable startup",
     "intro": [
-      "1.1.1 builds on the 1.1.0 workstation: visible LUKS unlock, extended-profile compatibility, verified persist-and-power actions and firmware Continue."
+      "1.1.2 fixes encrypted tailnet identity saving with extended Imager profiles and startup when a VM presents the boot medium as a fixed disk. The 1.1.1 workstation and power features remain included."
     ],
     "features": [
+      [
+        "Tailnet: connected is not the same as saved",
+        "Connection and identity persistence have distinct states. Matching imported preferences retain the encrypted identity checkpoint."
+      ],
+      [
+        "Fixed-disk VM boot",
+        "DATA expansion is deferred on a fixed or non-removable boot medium. Startup continues with existing capacity; internal disks are not automatically repartitioned."
+      ],
       [
         "Visible LUKS unlock",
         "Masked input in a dedicated console before SSH and cockpit. Extended .aguja profiles retain storage, literal variables, ordered Wi-Fi and advanced tailnet settings."
@@ -73,7 +81,7 @@
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
-    "image": "Rescue Disk 1.1.1 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
+    "image": "Rescue Disk 1.1.2 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
     "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service.",
     "captureProvenance": "Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.",
     "updateCaptions": {
@@ -86,11 +94,19 @@
     }
   },
   "es": {
-    "title": "Desbloqueo visible y apagado con criterio",
+    "title": "Identidad tailnet y arranque fiable",
     "intro": [
-      "1.1.1 amplía la estación 1.1.0: LUKS visible, compatibilidad de perfiles ampliados, persistir y apagar con verificación, y Continuar desde el firmware."
+      "1.1.2 corrige el guardado cifrado de identidad tailnet con perfiles ampliados del Imager y el arranque cuando una VM presenta el medio como disco fijo. Conserva las funciones de trabajo y energía de 1.1.1."
     ],
     "features": [
+      [
+        "Tailnet: conectado no es lo mismo que guardado",
+        "Conexión y persistencia de identidad tienen estados distintos. Las preferencias importadas del mismo perfil conservan el guardado cifrado."
+      ],
+      [
+        "Arranque en VM con disco fijo",
+        "Se pospone ampliar DATA si el medio de arranque es fijo o no extraíble. El inicio continúa con la capacidad existente, sin reparticionar discos internos automáticamente."
+      ],
       [
         "Desbloqueo LUKS visible",
         "Entrada enmascarada en consola dedicada antes de SSH y cockpit. Los perfiles .aguja ampliados conservan almacenamiento, variables literales, Wi-Fi ordenadas y opciones tailnet."
@@ -159,7 +175,7 @@
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
-    "image": "Rescue Disk 1.1.1 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
+    "image": "Rescue Disk 1.1.2 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
     "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
     "captureProvenance": "Capturas reales de la VM; QA con una versión oficial anterior de Codex controlada. La demostración de paquetes es sintética. Las versiones mostradas no prometen actualizaciones disponibles hoy.",
     "updateCaptions": {
@@ -172,11 +188,19 @@
     }
   },
   "fr": {
-    "title": "Déverrouillage visible et arrêt maîtrisé",
+    "title": "Identité tailnet et démarrage fiable",
     "intro": [
-      "1.1.1 complète la station 1.1.0 : LUKS visible, profils étendus compatibles, persistance vérifiée avant arrêt et retour au démarrage normal."
+      "1.1.2 corrige la sauvegarde chiffrée de l’identité tailnet avec les profils Imager étendus et le démarrage sur un disque présenté comme fixe par une VM. Les fonctions de 1.1.1 sont conservées."
     ],
     "features": [
+      [
+        "Connexion et sauvegarde distinctes",
+        "Les préférences importées du même profil conservent le point de sauvegarde chiffré de l’identité."
+      ],
+      [
+        "Démarrage VM sur disque fixe",
+        "L’agrandissement de DATA est différé sur un support fixe ou non amovible. Le démarrage continue avec la capacité existante, sans repartitionnement automatique."
+      ],
       [
         "LUKS visible",
         "Saisie masquée sur console dédiée avant SSH et cockpit. Les profils .aguja étendus conservent stockage, variables littérales, Wi-Fi ordonné et options tailnet."
@@ -245,7 +269,7 @@
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
-    "image": "Rescue Disk 1.1.1 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
+    "image": "Rescue Disk 1.1.2 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
     "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
     "captureProvenance": "Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.",
     "updateCaptions": {
@@ -258,11 +282,19 @@
     }
   },
   "de": {
-    "title": "Sichtbares Entsperren, bewusstes Ausschalten",
+    "title": "Tailnet-Identität und zuverlässiger Start",
     "intro": [
-      "1.1.1 ergänzt die Arbeitsumgebung 1.1.0: sichtbares LUKS, erweiterte Profile, geprüftes Speichern vor dem Ausschalten und normales Weiterbooten."
+      "1.1.2 korrigiert das verschlüsselte Speichern der Tailnet-Identität bei erweiterten Imager-Profilen und den VM-Start mit fest eingebundenem Medium. Die Funktionen von 1.1.1 bleiben erhalten."
     ],
     "features": [
+      [
+        "Verbunden und gespeichert sind getrennte Zustände",
+        "Importierte Einstellungen desselben Profils behalten den verschlüsselten Identitätsprüfpunkt."
+      ],
+      [
+        "VM-Start mit Festplattenmedium",
+        "DATA wird auf einem festen oder nicht wechselbaren Startmedium nicht automatisch vergrößert. Der Start nutzt die vorhandene Kapazität, ohne interne Datenträger neu zu partitionieren."
+      ],
       [
         "Sichtbares LUKS",
         "Verdeckte Eingabe in eigener Konsole vor SSH und Cockpit. Erweiterte .aguja-Profile behalten Speicher, literale Variablen, WLAN-Reihenfolge und Tailnet-Optionen."
@@ -331,7 +363,7 @@
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
-    "image": "Rescue Disk 1.1.1 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "image": "Rescue Disk 1.1.2 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
     "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
     "captureProvenance": "Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.",
     "updateCaptions": {
@@ -344,11 +376,19 @@
     }
   },
   "pt": {
-    "title": "Desbloqueio visível e energia controlada",
+    "title": "Identidade tailnet e arranque fiável",
     "intro": [
-      "1.1.1 amplia a estação 1.1.0: LUKS visível, perfis avançados compatíveis, persistência verificada antes de desligar e arranque normal."
+      "1.1.2 corrige a gravação cifrada da identidade tailnet com perfis Imager avançados e o arranque quando a VM apresenta o suporte como disco fixo. Mantém as funções de 1.1.1."
     ],
     "features": [
+      [
+        "Ligação e identidade guardada são estados distintos",
+        "Preferências importadas do mesmo perfil mantêm o checkpoint cifrado da identidade."
+      ],
+      [
+        "Arranque em VM com disco fixo",
+        "A expansão de DATA é adiada num suporte fixo ou não removível. O arranque continua com a capacidade existente, sem reparticionar discos internos automaticamente."
+      ],
       [
         "LUKS visível",
         "Entrada mascarada numa consola dedicada antes de SSH e cockpit. Perfis .aguja avançados conservam armazenamento, variáveis literais, Wi-Fi ordenado e opções tailnet."
@@ -417,7 +457,7 @@
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
-    "image": "Rescue Disk 1.1.1 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
+    "image": "Rescue Disk 1.1.2 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
     "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
     "captureProvenance": "Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.",
     "updateCaptions": {
@@ -430,11 +470,19 @@
     }
   },
   "it": {
-    "title": "Sblocco visibile e spegnimento controllato",
+    "title": "Identità tailnet e avvio affidabile",
     "intro": [
-      "1.1.1 amplia la postazione 1.1.0: LUKS visibile, profili estesi compatibili, persistenza verificata prima dello spegnimento e avvio normale."
+      "1.1.2 corregge il salvataggio cifrato dell’identità tailnet con profili Imager estesi e l’avvio quando una VM presenta il supporto come disco fisso. Mantiene le funzioni di 1.1.1."
     ],
     "features": [
+      [
+        "Connessione e identità salvata sono stati distinti",
+        "Le preferenze importate dallo stesso profilo mantengono il checkpoint cifrato dell’identità."
+      ],
+      [
+        "Avvio VM da disco fisso",
+        "L’espansione di DATA è rinviata su supporti fissi o non rimovibili. L’avvio continua con la capacità esistente, senza ripartizionare automaticamente i dischi interni."
+      ],
       [
         "LUKS visibile",
         "Input mascherato in una console dedicata prima di SSH e cockpit. I profili .aguja estesi mantengono storage, variabili letterali, Wi-Fi ordinato e opzioni tailnet."
@@ -503,7 +551,7 @@
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
-    "image": "Rescue Disk 1.1.1 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
+    "image": "Rescue Disk 1.1.2 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
     "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
     "captureProvenance": "Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.",
     "updateCaptions": {
@@ -516,11 +564,19 @@
     }
   },
   "nl": {
-    "title": "Zichtbaar ontgrendelen en bewust afsluiten",
+    "title": "Tailnet-identiteit en betrouwbaar opstarten",
     "intro": [
-      "1.1.1 vult werkstation 1.1.0 aan: zichtbaar LUKS, uitgebreide profielen, gecontroleerd opslaan vóór afsluiten en normaal verder opstarten."
+      "1.1.2 herstelt versleutelde opslag van de tailnet-identiteit bij uitgebreide Imager-profielen en opstarten wanneer een VM het medium als vaste schijf presenteert. Functies van 1.1.1 blijven behouden."
     ],
     "features": [
+      [
+        "Verbonden en opgeslagen zijn aparte toestanden",
+        "Geïmporteerde instellingen van hetzelfde profiel behouden het versleutelde identiteitscheckpoint."
+      ],
+      [
+        "VM opstarten vanaf vaste schijf",
+        "DATA-uitbreiding wordt uitgesteld op vaste of niet-verwisselbare opstartmedia. Opstarten gebruikt de bestaande capaciteit, zonder interne schijven automatisch opnieuw in te delen."
+      ],
       [
         "Zichtbaar LUKS",
         "Verborgen invoer in een eigen console vóór SSH en cockpit. Uitgebreide .aguja-profielen behouden opslag, letterlijke variabelen, wifi-volgorde en tailnet-opties."
@@ -589,7 +645,7 @@
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
-    "image": "Rescue Disk 1.1.1 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "image": "Rescue Disk 1.1.2 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
     "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
     "captureProvenance": "Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.",
     "updateCaptions": {
@@ -602,11 +658,19 @@
     }
   },
   "zh": {
-    "title": "可见解锁与受控关机",
+    "title": "Tailnet 身份与可靠启动",
     "intro": [
-      "1.1.1 在 1.1.0 工作台基础上加入可见 LUKS 解锁、扩展配置兼容、验证后持久化关机，以及固件继续启动。"
+      "1.1.2 修复扩展 Imager 配置的 tailnet 身份加密保存，以及虚拟机将启动介质识别为固定磁盘时的启动问题。保留 1.1.1 的工作台与电源功能。"
     ],
     "features": [
+      [
+        "连接和身份保存分别显示",
+        "同一配置导入的扩展选项保留加密身份检查点。连接成功不等于身份已持久保存。"
+      ],
+      [
+        "从虚拟机固定磁盘启动",
+        "固定或不可移除启动介质将暂缓扩展 DATA，使用现有容量继续启动，不会自动对内部磁盘重新分区。"
+      ],
       [
         "可见 LUKS 解锁",
         "在 SSH 和控制台启动前，于专用终端输入隐藏密码。扩展 .aguja 配置保留存储、字面环境变量、Wi-Fi 顺序和高级 tailnet 设置。"
@@ -675,7 +739,7 @@
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",
-    "image": "Rescue Disk 1.1.1 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
+    "image": "Rescue Disk 1.1.2 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
     "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
     "captureProvenance": "真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。",
     "updateCaptions": {

@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
-**Flash Imager 1.0.0 · Rescue Disk 1.1.0 · Experimental · x86-64**
+**Flash Imager 1.1.0 · Rescue Disk 1.1.2 · Experimental · x86-64**
 English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
 **Your computer does not need an installed OS to start its next project.** LA AGUJA boots an independent Linux from USB, including on a machine with a blank disk. Bring **Codex CLI, OpenCode, Claude Code and Antigravity**, root-capable Linux tools and optional SSH to the hardware: install and configure systems, bootstrap a server, build software, extend the session into a virtual lab, migrate storage or recover data. Recovery is one mission, not the whole product.
@@ -17,7 +17,7 @@ No LA AGUJA account, proprietary relay or hosted terminal. Cloud AI still requir
 
 > **Real control, real responsibility.** The `aguja` account has unrestricted sudo/root. In the 0.9.9 image, Safe asks for task confirmation but is **not a sandbox**. Version 0.9.10 adds a Codex sandbox: [policy and scope](docs/HARNESSES.md#corrección-de-codex-seguro--2026-10-10). Booting does not automatically mount, repair, install or write to internal disks. Identify the source and destination, preserve a backup and approve changes before making them.
 
-## Rescue 1.1 candidate · Rescue only
+## Rescue 1.1.2 · maintenance release
 
 Task-oriented TranscendenceIA cockpit with the original Agujita; early LUKS profile
 gate; hardware/resource preflight and scenario-aware backup planning; cloud/NAS
@@ -26,8 +26,7 @@ credential preparation (rclone/restic); expanded Debian firmware and microcode.
 Read [mission guide](runtime/MISSIONS.md), [backup choices](runtime/BACKUP.md) and
 [design/acceptance](docs/design/rescue-next.md). Existing Imagers stay unchanged:
 automatic profiles remain automatic, legacy encrypted capsules unlock at boot.
-LUKS protects a profile vault, not all DATA. Candidate image/hardware validation
-is tracked separately; this section does not announce a published release.
+LUKS protects a profile vault, not all DATA. See [1.1.2 fixes and validation scope](docs/RELEASE-1.1.2.md).
 Official Rescue upgrades are checked first and offered as verified persistent
 generations, preserving profile/DATA and previous boot; no automatic reboot.
 
@@ -63,7 +62,7 @@ Beyond those starting points: physical-to-virtual migration, a PXE lab, custom L
 
 ## Get started
 
-1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.0.0). The EXE/AppImage is the preparer, not the rescue image.
+1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.1.0). The EXE/AppImage is the preparer, not the rescue image.
 2. **Select the image.** Use the signed catalogue, or decompress a manually downloaded `.img.zst` before selecting the `.img`. The ISO is useful for VM boot tests.
 3. **Set language, keyboard, networking and SSH.** Replace the public factory SSH password `aguja` with your own password or public key. AI and tailnet preparation are optional.
 4. **Protect the profile.** Use an encrypted capsule for secrets. Replace the public initial unlock phrase `aguja` and keep the new phrase outside the USB. This does not encrypt persistent HOME or all AGUJA_DATA.

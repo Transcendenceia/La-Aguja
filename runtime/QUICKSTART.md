@@ -290,7 +290,9 @@ password is required at its next boot; factory and previous generations remain.
 The desktop offers the same choices and progress; SSH uses the terminal menu.
 
 **GRUB → Continue** returns control to the firmware's next boot option without
-changing permanent boot order. Firmware determines the next device. If it returns
+changing permanent boot order. BIOS exits GRUB; UEFI declines the Rescue option
+so firmware can try the next entry, without guessing an installed OS path.
+Firmware determines the next device. If it returns
 to the USB or has no next option, use its boot selector or remove the USB before
 booting the installed system. Diagnostic and graphics-compatibility entries remain;
 these are not a claim of Secure Boot support.

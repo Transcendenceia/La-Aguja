@@ -33,6 +33,8 @@ npm run build:win
 
 La compilación del medio requiere Debian amd64, debootstrap, squashfs-tools,
 grub-pc-bin, grub-efi-amd64-bin, xorriso, mtools, gdisk, dosfstools y e2fsprogs.
+Para el módulo Continuar de UEFI también requiere gcc, binutils y gnu-efi.
+Véase [su construcción y contrato](BUILD-CONTINUE.md).
 Las claves/identidades tailnet y los componentes de relay retirados provocan
 rechazo antes de empaquetar. No usar una raíz de un dispositivo de usuario.
 

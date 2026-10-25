@@ -139,6 +139,7 @@ unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/lib/aguja/browser-sessi
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja-browser-launch | cmp -s "$PROJECT/runtime/browser-launch" - || { echo 'Launcher navegador empaquetado no coincide'; exit 1; }
 cp "$PROJECT/config/aguja.conf" "$ISO_TREE/aguja.conf"
 cp "$PROJECT/config/grub.cfg" "$ISO_TREE/boot/grub/grub.cfg"
+bash "$PROJECT/scripts/build-continue.sh" "$ISO_TREE/boot/grub/aguja_continue.mod"
 grub-script-check "$ISO_TREE/boot/grub/grub.cfg"
 ISO="$DIST/aguja-personal-$VERSION-amd64.iso"
 grub-mkrescue -o "$ISO" "$ISO_TREE" -- -volid AGUJA_LIVE -hfsplus off

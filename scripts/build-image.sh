@@ -7,9 +7,12 @@ BUILD="${AGUJA_BUILD:-$PROJECT/build}"
 ISO_TREE="$BUILD/iso"
 DIST="${AGUJA_DIST:-$PROJECT/dist}"
 VERSION=$(cat "$PROJECT/VERSION")
-# This complete image contains provider-owned clients, not GPL project assets.
-# Keep personal media out of public release pipelines until distribution is cleared.
-[[ ${1:-} == --personal && $# == 1 ]] || { echo "Usa --personal para la imagen completa de uso propio; no es una entrega pública."; exit 1; }
+# Provider clients retain their own terms; NOTICE.md accompanies every image.
+# Public output always starts from an audited factory root, never an operator live.
+[[ $# == 1 && ( $1 == --personal || $1 == --public ) ]] || { echo 'Usa --personal o --public (raíz de fábrica limpia)'; exit 1; }
+DISTRIBUTION=${1#--}
+PREFIX=aguja-personal
+[[ $DISTRIBUTION != public ]] || PREFIX=aguja
 [[ $EUID == 0 ]] || { echo 'Ejecuta con sudo'; exit 1; }
 AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/verify-required-clis.sh"
 cmp -s "$PROJECT/VERSION" "$ROOT/usr/share/aguja/VERSION" || { echo 'Instala la versión actual en rootfs antes de empaquetar'; exit 1; }
@@ -141,10 +144,10 @@ cp "$PROJECT/config/aguja.conf" "$ISO_TREE/aguja.conf"
 cp "$PROJECT/config/grub.cfg" "$ISO_TREE/boot/grub/grub.cfg"
 bash "$PROJECT/scripts/build-continue.sh" "$ISO_TREE/boot/grub/aguja_continue.mod"
 grub-script-check "$ISO_TREE/boot/grub/grub.cfg"
-ISO="$DIST/aguja-personal-$VERSION-amd64.iso"
+ISO="$DIST/$PREFIX-$VERSION-amd64.iso"
 grub-mkrescue -o "$ISO" "$ISO_TREE" -- -volid AGUJA_LIVE -hfsplus off
 # Build hybrid image entirely with files: no loop devices or host-disk mutations.
-IMG="$DIST/aguja-personal-$VERSION-amd64.img"
+IMG="$DIST/$PREFIX-$VERSION-amd64.img"
 cp --reflink=auto "$ISO" "$IMG"
 ISO_SECTORS=$(( ($(stat -c %s "$ISO") + 511) / 512 ))
 CFG_START=$(( (ISO_SECTORS / 2048 + 1) * 2048 ))
@@ -161,10 +164,10 @@ CFG="$BUILD/config.fat"
 truncate -s "$((CFG_SECTORS * 512))" "$CFG"
 mkfs.vfat -F 32 -n AGUJA_CFG "$CFG"
 mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
-python3 - "$VERSION" "$BUILD/release.json" <<'PYPROFILE'
+python3 - "$VERSION" "$BUILD/release.json" "$DISTRIBUTION" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['imager-profile-v2','platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1','global-snapshot-luks2-v1','thunar-files-v1','power-menu-v1','visible-profile-unlock-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':sys.argv[3],'required_clis':['codex','agy','claude','opencode'],'features':['imager-profile-v2','platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1','global-snapshot-luks2-v1','thunar-files-v1','power-menu-v1','visible-profile-unlock-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$BUILD/release.json" ::release.json
 printf '{"schema":1,"state":"pending"}\n' > "$BUILD/data-initialize.json"
@@ -179,5 +182,5 @@ dd if="$DATA" of="$IMG" bs=512 seek="$DATA_START" conv=notrunc,sparse status=non
 sgdisk -v "$IMG"
 cp "$PROJECT/config/harnesses.json" "$DIST/harnesses.json"
 chroot "$ROOT" dpkg-query -W > "$DIST/packages.tsv"
-(cd "$DIST" && sha256sum "aguja-personal-$VERSION-amd64.iso" "aguja-personal-$VERSION-amd64.img" packages.tsv harnesses.json > SHA256SUMS)
+(cd "$DIST" && sha256sum "$PREFIX-$VERSION-amd64.iso" "$PREFIX-$VERSION-amd64.img" packages.tsv harnesses.json > SHA256SUMS)
 echo "Construidas: $ISO y $IMG"

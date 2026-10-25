@@ -1,0 +1,98 @@
+# LA AGUJA Rescue Disk 1.1.1 — visible unlock, verified persist and power
+
+## English
+
+- The early encrypted-profile gate now leaves Plymouth and opens a dedicated text
+  console with instructions and masked input. SSH and the cockpit wait for unlock.
+- **Power off computer** adds **Power off**, **Restart**, **Persist and power off**,
+  and **Persist and restart**. Open it with **X** in the cockpit or `aguja power`.
+  The local graphical form and interactive terminal use the same power worker.
+- Persist actions save the whole live into a LUKS2-encrypted USB generation. Real
+  scan, copy, compression and hash progress remain visible. The worker verifies,
+  activates, closes its mounts and synchronizes before requesting power. Failure
+  cancels the power action; cancellation at the menu changes nothing. The snapshot
+  password is requested again at its next boot. Save work in applications first:
+  this captures files/settings, not running processes or open application buffers.
+- Factory and the previous verified generation remain available. Mounted internal
+  disks are excluded. Workspace and the protected provisioning profile are separate.
+- GRUB includes **Aguja rescue disk**, diagnostics, graphics compatibility,
+  restart, power off, and **Continue with normal computer boot**. Continue uses
+  BIOS `exit` and a small UEFI GRUB module that declines the rescue boot option:
+  firmware then tries its next device, rather than reopening the boot manager.
+  No guessed Windows/Linux loader, NVRAM writes or permanent boot-order changes.
+  What boots next depends on the firmware's configured order;
+  if the USB returns, use the firmware boot selector or remove it. The compatibility
+  entry is not Secure Boot certification.
+- Distribution images are built from a clean factory root, not an operator's live
+  session. No private provider sessions, profile, Wi-Fi, tailnet identity or SSH
+  host keys are part of the distribution. The documented factory `aguja` password
+  is unchanged; provision your own access before use on untrusted networks.
+
+- Extended Imager profiles are accepted without discarding settings: ordered Wi-Fi
+  profiles, portable storage configuration, literal custom environment variables
+  and advanced tailnet options. The runtime inventory includes their materializer.
+- A profile validation/schema error is no longer treated as a bad password. A
+  plain profile inside LUKS opens with the single LUKS phrase; legacy AES capsules
+  still retry an incorrect phrase.
+
+Flash Imager is versioned separately and is not changed by this release.
+Validation evidence and exact image hashes accompany the distribution assets.
+
+GRUB references: [manual](https://www.gnu.org/software/grub/manual/grub/grub.html),
+[UEFI boot manager](https://uefi.org/specs/UEFI/2.11/03_Boot_Manager.html),
+[BIOS exit implementation](https://chromium.googlesource.com/chromiumos/third_party/grub2/+/11508780425a8cd9a8d40370e2d2d4f458917a73/grub-core/kern/i386/pc/startup.S).
+
+## Español
+
+- El desbloqueo temprano sale del splash y muestra instrucciones y contraseña
+  enmascarada en una consola dedicada. SSH y el panel esperan al desbloqueo.
+- **Apagar equipo** incorpora **Apagar**, **Reiniciar**, **Persistir y apagar** y
+  **Persistir y reiniciar**. Acceso con **X** en el panel o con `aguja power`.
+- Las opciones de persistencia muestran el progreso real de copia, compresión y
+  verificación de la instantánea LUKS2 en el USB. Solo tras verificar, activar,
+  cerrar los montajes y sincronizar se apaga o reinicia. Si falla, el equipo sigue
+  encendido. Cancelar en el menú no cambia nada. Conserva la contraseña: se pedirá
+  al arrancar esa generación. Guarda primero el trabajo abierto en las aplicaciones.
+- Fábrica y generación anterior se conservan. No se copian discos montados ni
+  procesos en ejecución; el workspace y el perfil protegido siguen separados.
+- GRUB conserva diagnóstico y compatibilidad gráfica e incorpora **Continuar**,
+  además de Rescue, reiniciar y apagar. En BIOS sale de GRUB; en UEFI rechaza la
+  opción Rescue para que el firmware pruebe la siguiente, sin cambiar el orden
+  permanente ni adivinar rutas de Windows/Linux. El siguiente arranque depende
+  de la configuración del equipo. Compatibilidad
+  gráfica no significa compatibilidad certificada con Secure Boot.
+- La imagen para terceros parte de fábrica limpia: sin perfiles, sesiones,
+  credenciales de red, identidad tailnet ni claves SSH personales.
+
+- Compatibilidad con perfiles ampliados del Imager sin descartar ajustes: varias
+  Wi-Fi ordenadas, almacenamiento, variables literales y opciones avanzadas tailnet.
+- Los fallos de formato/validación ya no se confunden con una contraseña errónea.
+  Un perfil interior sin cifrado adicional requiere solo la frase LUKS; las
+  cápsulas AES heredadas conservan su reintento de autenticación.
+
+Flash Imager mantiene su versión independiente. Las evidencias de validación y
+los hashes exactos acompañan a los archivos de distribución.
+
+## Download and use / Descarga y uso
+
+Use Flash Imager 1.0.0 and select Rescue Disk 1.1.1 from the signed catalogue.
+The Imager and preparation skill keep their independent versions. This image
+retains the tools and workstation features documented in
+[1.1.0](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.1.0).
+
+- Factory SSH: `aguja` / `aguja`. Provision your own access in Imager.
+- IMG.ZST: decompress before manual import. Do not flash a single IMG part.
+- IMG parts: join in numerical order; verify the complete SHA-256 from VALIDATION.
+- ISO: standalone BIOS/UEFI live format, not the configurable Imager IMG.
+- No owner accounts, sessions, profile, Wi-Fi, SSH keys or tailnet enrollment.
+- AI clients need Internet and your own provider authorization. Third-party
+  software keeps its own terms; see NOTICE.md and the package inventory.
+- Persistence saves files and settings, not running processes or unsaved buffers.
+  Keep snapshot phrases: they are needed at next boot. DATA is not wholly encrypted.
+- Secure Boot and universal physical-hardware compatibility are not certified.
+
+Usa Flash Imager y el catálogo firmado para preparar tu acceso propio. Para uso
+manual, descomprime IMG.ZST o concatena todas las partes en orden y comprueba el
+SHA-256 completo. La contraseña de fábrica es pública; la imagen no incluye
+ningún perfil, sesión ni credencial personal. Las notas VALIDATION adjuntas
+separan las pruebas del archivo final de las comprobaciones históricas.

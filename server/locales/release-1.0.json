@@ -1,21 +1,21 @@
 {
   "en": {
-    "title": "The native workstation release",
+    "title": "Visible unlock and deliberate power",
     "intro": [
-      "1.1.0 is a feature release since 1.0.2, not a keyboard-only patch. One native cockpit opens tools directly; optional cloud AI still needs Internet and your provider account."
+      "1.1.1 builds on the 1.1.0 workstation: visible LUKS unlock, extended-profile compatibility, verified persist-and-power actions and firmware Continue."
     ],
     "features": [
       [
-        "One cockpit and native tools",
-        "Grouped agents/settings, direct Helium/Chromium and Thunar, Yazi/viewers and consistent graphite/spectrum styling; no automatic target-disk mounts."
+        "Visible LUKS unlock",
+        "Masked input in a dedicated console before SSH and cockpit. Extended .aguja profiles retain storage, literal variables, ordered Wi-Fi and advanced tailnet settings."
       ],
       [
-        "Early LUKS2 profiles",
-        "Protected profiles unlock before cockpit, SSH and agents. Automatic plain profiles and explicitly identified legacy capsules remain compatible; DATA is not blanket encrypted. Reusable .aguja profiles remain supported."
+        "Save, verify, then power",
+        "Power off, restart, persist and power off, or persist and restart. Encrypted global snapshots show real progress; a failure cancels the power action."
       ],
       [
-        "Encrypted global snapshots",
-        "Persist changes saves packages, settings, file creations/modifications and deletions, separately from installing updates. LUKS2 generations, integrity checks, factory boot and rollback."
+        "Continue normal boot",
+        "BIOS/UEFI return to firmware so it can try its next configured device, without changing permanent boot order or NVRAM."
       ],
       [
         "Updates that explain their work",
@@ -73,7 +73,7 @@
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
-    "image": "Rescue Disk 1.1.0 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
+    "image": "Rescue Disk 1.1.1 is the Linux you boot. ISO and IMG.ZST are hosted on this website; verified IMG parts, signed catalogue and checksums are on GitHub. Flash Imager verifies the signature and SHA-256. Decompress IMG.ZST before manual import; ISO is a separate BIOS/UEFI format, not a configurable IMG.",
     "privacy": "Images, the signed catalogue, Imager packages and optional update downloads come from GitHub Releases, which processes requests under its own policy. Hosting may record technical data needed to operate the service.",
     "captureProvenance": "Actual VM captures; a controlled previous official Codex version was used for QA. The package demonstration is synthetic. Versions shown are not a promise of currently available updates.",
     "updateCaptions": {
@@ -86,22 +86,22 @@
     }
   },
   "es": {
-    "title": "El salto al taller nativo",
+    "title": "Desbloqueo visible y apagado con criterio",
     "intro": [
-      "1.1.0 reúne las funcionalidades nuevas desde 1.0.2, no solo un parche de teclado. Un cockpit nativo abre las herramientas directamente; la IA cloud sigue necesitando Internet y tu cuenta de proveedor."
+      "1.1.1 amplía la estación 1.1.0: LUKS visible, compatibilidad de perfiles ampliados, persistir y apagar con verificación, y Continuar desde el firmware."
     ],
     "features": [
       [
-        "Cockpit único y herramientas nativas",
-        "Agentes/ajustes agrupados, Helium/Chromium y Thunar directos, Yazi/visores y estilo grafito/espectro coherente; sin montar automáticamente discos de destino."
+        "Desbloqueo LUKS visible",
+        "Entrada enmascarada en consola dedicada antes de SSH y cockpit. Los perfiles .aguja ampliados conservan almacenamiento, variables literales, Wi-Fi ordenadas y opciones tailnet."
       ],
       [
-        "Perfiles LUKS2 desde el arranque",
-        "Los perfiles protegidos se desbloquean antes de cockpit, SSH y agentes. Siguen compatibles los automáticos sin cifrar y las cápsulas legacy identificadas; no cifra todo DATA. Se mantienen los perfiles .aguja reutilizables."
+        "Guardar, verificar y apagar",
+        "Apagar, reiniciar, persistir y apagar, o persistir y reiniciar. Las instantáneas cifradas muestran progreso real; un fallo cancela el apagado."
       ],
       [
-        "Persistencia global cifrada",
-        "Persistir cambios guarda paquetes, ajustes, archivos creados/modificados y borrados, separado de instalar actualizaciones. Generaciones LUKS2, integridad, fábrica y rollback."
+        "Continuar el arranque normal",
+        "BIOS/UEFI devuelven el control al firmware para probar su siguiente dispositivo, sin modificar NVRAM ni el orden permanente."
       ],
       [
         "Actualizaciones con control visible",
@@ -159,7 +159,7 @@
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
-    "image": "Rescue Disk 1.1.0 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
+    "image": "Rescue Disk 1.1.1 es el Linux que arrancas. ISO e IMG.ZST están en esta web; las partes verificadas de la IMG, el catálogo firmado y las sumas están en GitHub. Flash Imager verifica firma y SHA-256. Descomprime IMG.ZST antes de importarla; ISO es un formato BIOS/UEFI separado, no una IMG configurable.",
     "privacy": "Las imágenes, el catálogo firmado, los paquetes del Imager y las descargas opcionales de actualizaciones proceden de GitHub Releases, que procesa las solicitudes conforme a su política. El alojamiento puede registrar datos técnicos necesarios para operar el servicio.",
     "captureProvenance": "Capturas reales de la VM; QA con una versión oficial anterior de Codex controlada. La demostración de paquetes es sintética. Las versiones mostradas no prometen actualizaciones disponibles hoy.",
     "updateCaptions": {
@@ -172,22 +172,22 @@
     }
   },
   "fr": {
-    "title": "La station de travail native",
+    "title": "Déverrouillage visible et arrêt maîtrisé",
     "intro": [
-      "1.1.0 rassemble les nouvelles fonctions depuis 1.0.2, pas seulement le clavier. Un cockpit natif ouvre les outils directement ; l’IA cloud exige Internet et votre compte fournisseur."
+      "1.1.1 complète la station 1.1.0 : LUKS visible, profils étendus compatibles, persistance vérifiée avant arrêt et retour au démarrage normal."
     ],
     "features": [
       [
-        "Un cockpit, des outils natifs",
-        "Agents/réglages regroupés, Helium/Chromium et Thunar directs, Yazi/visionneuses, style graphite/spectre ; aucun montage automatique des disques cibles."
+        "LUKS visible",
+        "Saisie masquée sur console dédiée avant SSH et cockpit. Les profils .aguja étendus conservent stockage, variables littérales, Wi-Fi ordonné et options tailnet."
       ],
       [
-        "Profils LUKS2 précoces",
-        "Déverrouillage avant cockpit, SSH et agents. Profils automatiques non chiffrés et capsules legacy conservés ; DATA n’est pas entièrement chiffré. Les profils .aguja réutilisables restent pris en charge."
+        "Enregistrer, vérifier, arrêter",
+        "Arrêter, redémarrer, persister puis arrêter ou redémarrer. Progression réelle des snapshots chiffrés ; un échec annule l’arrêt."
       ],
       [
-        "Snapshots globaux chiffrés",
-        "Conserve paquets, réglages et fichiers créés/modifiés/supprimés, séparément des mises à jour. Générations LUKS2, intégrité, usine et rollback."
+        "Continuer le démarrage",
+        "BIOS/UEFI rendent la main au firmware et à son prochain périphérique configuré, sans modifier NVRAM ni ordre permanent."
       ],
       [
         "Mises à jour contrôlées",
@@ -245,7 +245,7 @@
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
-    "image": "Rescue Disk 1.1.0 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
+    "image": "Rescue Disk 1.1.1 est le Linux à démarrer. ISO et IMG.ZST sont sur ce site ; les parties IMG vérifiées, le catalogue signé et les sommes sont sur GitHub. Imager vérifie signature et SHA-256. Décompressez IMG.ZST avant import ; l’ISO BIOS/UEFI n’est pas une IMG configurable.",
     "privacy": "Images, catalogue signé, paquets Imager et téléchargements facultatifs de mises à jour proviennent de GitHub Releases, selon sa politique. L’hébergement peut enregistrer les données techniques nécessaires au service.",
     "captureProvenance": "Captures réelles de VM ; QA avec une ancienne version officielle contrôlée de Codex. Démonstration de paquet synthétique. Les versions ne promettent pas des mises à jour disponibles aujourd’hui.",
     "updateCaptions": {
@@ -258,22 +258,22 @@
     }
   },
   "de": {
-    "title": "Die native Werkzeugumgebung",
+    "title": "Sichtbares Entsperren, bewusstes Ausschalten",
     "intro": [
-      "1.1.0 bündelt neue Funktionen seit 1.0.2, nicht nur eine Tastaturkorrektur. Ein natives Cockpit öffnet Werkzeuge direkt; Cloud-KI benötigt Internet und ein eigenes Anbieterkonto."
+      "1.1.1 ergänzt die Arbeitsumgebung 1.1.0: sichtbares LUKS, erweiterte Profile, geprüftes Speichern vor dem Ausschalten und normales Weiterbooten."
     ],
     "features": [
       [
-        "Ein Cockpit, native Werkzeuge",
-        "Gruppierte Agenten/Einstellungen, Helium/Chromium und Thunar direkt, Yazi/Betrachter und Graphit/Spektrum-Stil; keine automatischen Zielplatten-Mounts."
+        "Sichtbares LUKS",
+        "Verdeckte Eingabe in eigener Konsole vor SSH und Cockpit. Erweiterte .aguja-Profile behalten Speicher, literale Variablen, WLAN-Reihenfolge und Tailnet-Optionen."
       ],
       [
-        "Frühe LUKS2-Profile",
-        "Entsperren vor Cockpit, SSH und Agenten. Unverschlüsselte automatische Profile und alte Kapseln bleiben kompatibel; DATA wird nicht pauschal verschlüsselt. Wiederverwendbare .aguja-Profile bleiben unterstützt."
+        "Speichern, prüfen, ausschalten",
+        "Ausschalten, Neustart oder beides nach Persistierung. Verschlüsselte Snapshots zeigen echten Fortschritt; ein Fehler verhindert das Ausschalten."
       ],
       [
-        "Verschlüsselte globale Snapshots",
-        "Speichert Pakete, Einstellungen sowie neue/geänderte/gelöschte Dateien getrennt von Updates. LUKS2-Generationen, Integrität, Werkzustand und Rollback."
+        "Normal weiterbooten",
+        "BIOS/UEFI geben an die Firmware und deren nächstes konfiguriertes Gerät zurück, ohne NVRAM oder dauerhafte Bootreihenfolge zu ändern."
       ],
       [
         "Kontrollierte Updates",
@@ -331,7 +331,7 @@
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
-    "image": "Rescue Disk 1.1.0 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
+    "image": "Rescue Disk 1.1.1 ist das bootfähige Linux. ISO und IMG.ZST liegen auf dieser Website; geprüfte IMG-Teile, signierter Katalog und Prüfsummen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor dem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
     "privacy": "Images, signierter Katalog, Imager-Pakete und optionale Update-Downloads stammen von GitHub Releases gemäß dessen Richtlinien. Das Hosting kann erforderliche technische Betriebsdaten protokollieren.",
     "captureProvenance": "Echte VM-Aufnahmen; QA mit kontrollierter älterer offizieller Codex-Version. Paketdemo synthetisch. Gezeigte Versionen versprechen keine heute verfügbaren Updates.",
     "updateCaptions": {
@@ -344,22 +344,22 @@
     }
   },
   "pt": {
-    "title": "O ambiente de trabalho nativo",
+    "title": "Desbloqueio visível e energia controlada",
     "intro": [
-      "1.1.0 reúne funções novas desde 1.0.2, não apenas o teclado. Um cockpit nativo abre ferramentas diretamente; a IA cloud exige Internet e conta própria do fornecedor."
+      "1.1.1 amplia a estação 1.1.0: LUKS visível, perfis avançados compatíveis, persistência verificada antes de desligar e arranque normal."
     ],
     "features": [
       [
-        "Um cockpit, ferramentas nativas",
-        "Agentes/definições agrupados, Helium/Chromium e Thunar diretos, Yazi/visores e estilo grafite/espectro; sem montar discos internos automaticamente."
+        "LUKS visível",
+        "Entrada mascarada numa consola dedicada antes de SSH e cockpit. Perfis .aguja avançados conservam armazenamento, variáveis literais, Wi-Fi ordenado e opções tailnet."
       ],
       [
-        "Perfis LUKS2 no arranque",
-        "Desbloqueio antes do cockpit, SSH e agentes. Perfis automáticos sem cifra e cápsulas antigas continuam compatíveis; não cifra todo DATA. Os perfis .aguja reutilizáveis continuam disponíveis."
+        "Guardar, verificar e desligar",
+        "Desligar, reiniciar, persistir e desligar ou reiniciar. Snapshots cifrados mostram progresso real; uma falha cancela a ação de energia."
       ],
       [
-        "Snapshots globais cifrados",
-        "Guarda pacotes, definições e ficheiros criados/alterados/apagados, separado das atualizações. Gerações LUKS2, integridade, fábrica e rollback."
+        "Continuar o arranque",
+        "BIOS/UEFI devolvem o controlo ao firmware e ao próximo dispositivo configurado, sem alterar NVRAM nem a ordem permanente."
       ],
       [
         "Atualizações controladas",
@@ -417,7 +417,7 @@
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
-    "image": "Rescue Disk 1.1.0 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
+    "image": "Rescue Disk 1.1.1 é o Linux de arranque. ISO e IMG.ZST estão neste site; partes IMG verificadas, catálogo assinado e somas estão no GitHub. Imager verifica assinatura e SHA-256. Descomprime IMG.ZST antes de importar; a ISO BIOS/UEFI não é uma IMG configurável.",
     "privacy": "Imagens, catálogo assinado, pacotes Imager e transferências opcionais de atualizações vêm de GitHub Releases, segundo a sua política. O alojamento pode registar dados técnicos necessários ao serviço.",
     "captureProvenance": "Capturas reais da VM; QA com versão oficial anterior controlada de Codex. Pacote demonstrativo sintético. Versões não garantem atualizações disponíveis hoje.",
     "updateCaptions": {
@@ -430,22 +430,22 @@
     }
   },
   "it": {
-    "title": "La postazione nativa",
+    "title": "Sblocco visibile e spegnimento controllato",
     "intro": [
-      "1.1.0 riunisce le nuove funzioni da 1.0.2, non solo la tastiera. Un cockpit nativo apre direttamente gli strumenti; l’IA cloud richiede Internet e il proprio account fornitore."
+      "1.1.1 amplia la postazione 1.1.0: LUKS visibile, profili estesi compatibili, persistenza verificata prima dello spegnimento e avvio normale."
     ],
     "features": [
       [
-        "Un cockpit, strumenti nativi",
-        "Agenti/impostazioni raggruppati, Helium/Chromium e Thunar diretti, Yazi/visualizzatori e stile grafite/spettro; nessun montaggio automatico dei dischi di destinazione."
+        "LUKS visibile",
+        "Input mascherato in una console dedicata prima di SSH e cockpit. I profili .aguja estesi mantengono storage, variabili letterali, Wi-Fi ordinato e opzioni tailnet."
       ],
       [
-        "Profili LUKS2 all’avvio",
-        "Sblocco prima di cockpit, SSH e agenti. Profili automatici non cifrati e capsule legacy restano compatibili; DATA non viene cifrato interamente. Restano supportati i profili .aguja riutilizzabili."
+        "Salvare, verificare, spegnere",
+        "Spegnere, riavviare, persistere e spegnere o riavviare. Snapshot cifrati con progresso reale; un errore annulla l’azione di alimentazione."
       ],
       [
-        "Snapshot globali cifrati",
-        "Conserva pacchetti, impostazioni e file creati/modificati/eliminati, separatamente dagli aggiornamenti. Generazioni LUKS2, integrità, fabbrica e rollback."
+        "Continuare l’avvio",
+        "BIOS/UEFI restituiscono il controllo al firmware e al successivo dispositivo configurato, senza modificare NVRAM o ordine permanente."
       ],
       [
         "Aggiornamenti controllati",
@@ -503,7 +503,7 @@
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
-    "image": "Rescue Disk 1.1.0 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
+    "image": "Rescue Disk 1.1.1 è il Linux avviabile. ISO e IMG.ZST sono su questo sito; parti IMG verificate, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST prima dell’importazione; l’ISO BIOS/UEFI non è una IMG configurabile.",
     "privacy": "Immagini, catalogo firmato, pacchetti Imager e download opzionali di aggiornamenti provengono da GitHub Releases, secondo la sua politica. L’hosting può registrare dati tecnici necessari al servizio.",
     "captureProvenance": "Catture reali della VM; QA con versione ufficiale precedente controllata di Codex. Pacchetto dimostrativo sintetico. Le versioni non promettono aggiornamenti disponibili oggi.",
     "updateCaptions": {
@@ -516,22 +516,22 @@
     }
   },
   "nl": {
-    "title": "De native werkplaats",
+    "title": "Zichtbaar ontgrendelen en bewust afsluiten",
     "intro": [
-      "1.1.0 bundelt nieuwe functies sinds 1.0.2, niet alleen een toetsenbordfix. Eén native cockpit opent gereedschap direct; cloud-AI vraagt internet en je eigen provideraccount."
+      "1.1.1 vult werkstation 1.1.0 aan: zichtbaar LUKS, uitgebreide profielen, gecontroleerd opslaan vóór afsluiten en normaal verder opstarten."
     ],
     "features": [
       [
-        "Eén cockpit, native gereedschap",
-        "Gegroepeerde agenten/instellingen, direct Helium/Chromium en Thunar, Yazi/viewers en grafiet/spectrumstijl; geen automatisch aankoppelen van doelschijven."
+        "Zichtbaar LUKS",
+        "Verborgen invoer in een eigen console vóór SSH en cockpit. Uitgebreide .aguja-profielen behouden opslag, letterlijke variabelen, wifi-volgorde en tailnet-opties."
       ],
       [
-        "Vroege LUKS2-profielen",
-        "Ontgrendelen vóór cockpit, SSH en agenten. Automatische onversleutelde profielen en oude capsules blijven werken; niet heel DATA wordt versleuteld. Herbruikbare .aguja-profielen blijven ondersteund."
+        "Opslaan, controleren, afsluiten",
+        "Uitschakelen, herstarten, opslaan en uitschakelen of herstarten. Versleutelde snapshots tonen echte voortgang; fouten annuleren de stroomactie."
       ],
       [
-        "Versleutelde globale snapshots",
-        "Bewaart pakketten, instellingen en gemaakte/gewijzigde/verwijderde bestanden, los van updates. LUKS2-generaties, integriteit, fabrieksstart en rollback."
+        "Normaal verder opstarten",
+        "BIOS/UEFI geven terug aan firmware en het volgende ingestelde apparaat, zonder NVRAM of permanente opstartvolgorde te wijzigen."
       ],
       [
         "Gecontroleerde updates",
@@ -589,7 +589,7 @@
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
-    "image": "Rescue Disk 1.1.0 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
+    "image": "Rescue Disk 1.1.1 is de Linux die je opstart. ISO en IMG.ZST staan op deze website; gecontroleerde IMG-delen, ondertekende catalogus en controlesommen op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit vóór import; de BIOS-/UEFI-ISO is geen configureerbare IMG.",
     "privacy": "Images, ondertekende catalogus, Imager-pakketten en optionele updatedownloads komen van GitHub Releases volgens hun beleid. Hosting kan noodzakelijke technische bedrijfsgegevens vastleggen.",
     "captureProvenance": "Echte VM-opnamen; QA met een gecontroleerde oudere officiële Codex-versie. Synthetische pakketdemo. Versies beloven geen vandaag beschikbare updates.",
     "updateCaptions": {
@@ -602,22 +602,22 @@
     }
   },
   "zh": {
-    "title": "原生工作台版本",
+    "title": "可见解锁与受控关机",
     "intro": [
-      "1.1.0 汇集自 1.0.2 以来的新功能，不只是键盘修复。统一原生控制台直接打开工具；云端 AI 仍需要互联网和自己的提供商账户。"
+      "1.1.1 在 1.1.0 工作台基础上加入可见 LUKS 解锁、扩展配置兼容、验证后持久化关机，以及固件继续启动。"
     ],
     "features": [
       [
-        "统一控制台与原生工具",
-        "分组代理与设置、直接打开 Helium/Chromium 和 Thunar、Yazi 与查看器、统一石墨/光谱风格；不自动挂载目标磁盘。"
+        "可见 LUKS 解锁",
+        "在 SSH 和控制台启动前，于专用终端输入隐藏密码。扩展 .aguja 配置保留存储、字面环境变量、Wi-Fi 顺序和高级 tailnet 设置。"
       ],
       [
-        "启动早期 LUKS2 配置",
-        "在控制台、SSH 和代理启动前解锁。保留未加密自动配置与旧版胶囊兼容性；不对整个 DATA 统一加密。 继续支持可重复使用的 .aguja 配置文件。"
+        "保存、验证、关机",
+        "支持关机、重启、持久化后关机或重启。加密快照显示实际进度；失败会取消电源操作。"
       ],
       [
-        "加密全局快照",
-        "独立于安装更新，保存软件包、设置以及创建/修改/删除的文件。LUKS2 代际、完整性校验、出厂启动与回滚。"
+        "继续正常启动",
+        "BIOS/UEFI 将控制权交回固件以尝试下一个已配置设备，不修改 NVRAM 或永久启动顺序。"
       ],
       [
         "可控更新",
@@ -675,7 +675,7 @@
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",
-    "image": "Rescue Disk 1.1.0 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
+    "image": "Rescue Disk 1.1.1 是可启动 Linux。ISO 和 IMG.ZST 托管在本站；已校验的 IMG 分卷、签名目录和校验和位于 GitHub。Imager 验证签名和 SHA-256。手动导入前须解压 IMG.ZST；BIOS/UEFI ISO 不是可配置 IMG。",
     "privacy": "镜像、签名目录、Imager 软件包及可选更新下载来自 GitHub Releases，按其政策处理请求。托管服务可记录运行服务所需的技术数据。",
     "captureProvenance": "真实虚拟机截图；QA 使用受控的旧版官方 Codex。软件包演示为合成测试。图中版本不代表今天必有可用更新。",
     "updateCaptions": {

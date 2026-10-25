@@ -79,9 +79,12 @@ def validate(capsule):
     """Validate typed literal values, before any writes or process launch."""
     if not isinstance(capsule, dict) or capsule.get('schema') != SCHEMA:
         raise ValueError('Versión de perfil no compatible')
-    if set(capsule) - {'schema', 'hostname', 'network', 'ssh', 'providers', 'remote', 'locale', 'tailscale'}:
+    if set(capsule) - {'schema', 'hostname', 'network', 'ssh', 'providers', 'remote', 'locale', 'tailscale', 'extensions'}:
         raise ValueError('Campo de perfil desconocido')
     c = json.loads(json.dumps(capsule))
+    if 'extensions' in c:
+        from profile_extensions import validate as validate_extensions
+        c['extensions'] = validate_extensions(c['extensions'])
     # Keep locale absent in old capsules, so they remain consumable by 0.4.1.
     if 'locale' in c:
         c['locale'] = validate_locale(c['locale'])
@@ -89,6 +92,8 @@ def validate(capsule):
     if not re.fullmatch(r'[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?', hostname):
         raise ValueError('Nombre de equipo no válido')
     from config import DEFAULTS, parse
+    if c.get('extensions', {}).get('wifi_profiles'):
+        c.setdefault('network', {})['wifi'] = c['extensions']['wifi_profiles'][0]
     wifi = c.setdefault('network', {}).setdefault('wifi', {})
     if set(c['network']) - {'wifi', 'ethernet'} or set(wifi) - {'ssid', 'password', 'security', 'country', 'hidden'}:
         raise ValueError('Red no válida')
@@ -533,9 +538,10 @@ def apply(capsule, home='/home/aguja', state='/run/aguja-platform', tailnet_stat
             if model:
                 cfg['model'] = provider_id + '/' + model if url or '/' not in model else model
             private_write(home / '.config/opencode/opencode.json', json.dumps(cfg))
+    private_write(home / '.config/aguja/custom-env.json', json.dumps(c.get('extensions', {}).get('environment', {})))
     private_write(home / '.config/aguja/provider-env.json', json.dumps(env))
     # Direct native launches receive API environments too, without shell eval.
-    for name in env:
+    for name in (set(env) | (set(IMPORTS) if c.get('extensions', {}).get('environment') else set())):
         binary = {'antigravity': 'agy'}.get(name, name)
         launcher = '#!/usr/bin/python3\nimport os,sys\nsys.path.insert(0,"/usr/lib/aguja")\nfrom profile import provider_environment,locale_environment\nos.environ.update(locale_environment())\nos.environ.update(provider_environment(' + repr(name) + '))\nos.execv("/usr/local/bin/' + binary + '",["' + binary + '"]+sys.argv[1:])\n'
         target = home / '.local/bin' / binary
@@ -576,13 +582,14 @@ def apply_tailnet(config, state='/run/aguja-tailnet-private'):
 
 def provider_environment(name, home=None):
     path = Path(home or Path.home()) / '.config/aguja/provider-env.json'
-    if not path.exists():
-        return {}
-    value = json.loads(path.read_text()).get(name, {})
+    from profile_extensions import environment
+    custom_path = path.parent / 'custom-env.json'
+    custom = environment(json.loads(custom_path.read_text())) if custom_path.exists() else {}
+    value = json.loads(path.read_text()).get(name, {}) if path.exists() else {}
     allowed = {'OPENAI_API_KEY', 'ANTHROPIC_API_KEY', 'ANTHROPIC_MODEL', 'ANTHROPIC_BASE_URL', 'GEMINI_API_KEY', 'GOOGLE_GEMINI_BASE_URL'}
     if set(value) - allowed:
         raise ValueError('Entorno de proveedor no válido')
-    return {k: text(v) for k, v in value.items()}
+    return custom | {k: text(v) for k, v in value.items()}
 
 
 def update_plain_settings(path, changes):

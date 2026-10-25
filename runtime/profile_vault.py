@@ -123,9 +123,17 @@ def gate():
     protection = 'luks2' if private_root() else 'none'
     if path.is_file():
         raw = regular(path).read_bytes()
+        # A schema/validation failure is not an authentication failure. In
+        # particular, an already-open LUKS profile must not ask forever for a
+        # nonexistent inner password when its settings need newer support.
+        encrypted = json.loads(raw).get('protection') == 'encrypted'
+        if not encrypted:
+            capsule = profile.open_capsule(raw, password)
+            return capsule, path, password, 'automatic' if protection == 'none' else protection
+        from cryptography.exceptions import InvalidTag
         try:
             capsule = profile.open_capsule(raw, password)
-        except Exception:
+        except InvalidTag:
             capsule = None
         # Existing Imager encrypted capsules still boot, without an Imager change.
         while capsule is None:
@@ -136,7 +144,7 @@ def gate():
                 raise ValueError('Profile unlock cancelled')
             try:
                 capsule = profile.open_capsule(raw, password)
-            except Exception:
+            except InvalidTag:
                 print('Perfil: frase no válida; reintenta.', flush=True)
                 time.sleep(.5)
         if protection == 'none':

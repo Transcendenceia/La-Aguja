@@ -12,7 +12,7 @@ ln -sfn /etc/machine-id "$ROOT/var/lib/dbus/machine-id"
 AGUJA_PROJECT="$PROJECT" AGUJA_ROOT="$ROOT" bash "$PROJECT/scripts/install-tailscale.sh"
 install -d "$ROOT/usr/lib/aguja" "$ROOT/usr/share/aguja" "$ROOT/etc/aguja" \
   "$ROOT/etc/skel" "$ROOT/etc/profile.d" "$ROOT/etc/systemd/system" "$ROOT/usr/local/share/zsh/site-functions"
-printf '{"schema":1,"features":["early-profile-gate-v1","luks-profile-v1","hardware-preflight-v1","storage-credentials-v1","direct-tools-v1","operational-odd-v1","bulk-updates-v1","global-snapshot-luks2-v1","thunar-files-v1","power-menu-v1","visible-profile-unlock-v1"]}\n' > "$ROOT/usr/share/aguja/capabilities.json"
+printf '{"schema":1,"features":["imager-profile-v2","early-profile-gate-v1","luks-profile-v1","hardware-preflight-v1","storage-credentials-v1","direct-tools-v1","operational-odd-v1","bulk-updates-v1","global-snapshot-luks2-v1","thunar-files-v1","power-menu-v1","visible-profile-unlock-v1"]}\n' > "$ROOT/usr/share/aguja/capabilities.json"
 # The factory account is locked until boot's profile gate configures owner access.
 chroot "$ROOT" passwd -l aguja
 # Persistent update infrastructure, copied only into the isolated factory.

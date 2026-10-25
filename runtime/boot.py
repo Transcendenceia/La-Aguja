@@ -182,6 +182,8 @@ def main(profile_override=None, profile_passphrase=None):
                      platform_profile.ethernet_keyfile(capsule['network']['ethernet']))
         import persistence
         platform_profile.apply(capsule, tailnet_state='/run/aguja-tailnet-private', preserve_native=persistence.running_snapshot())
+        from profile_extensions import system_apply
+        system_apply(capsule)
         import tailnet_identity
         tailnet_identity.configure(capsule, capsule_path.read_bytes(), profile_passphrase)
         # Tailnet credentials live separately, never in this owner-writable tree.

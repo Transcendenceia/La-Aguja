@@ -19,6 +19,28 @@ import update_tasks
 
 
 class Gate(unittest.TestCase):
+    def test_open_luks_extended_profile_does_not_ask_for_inner_password(self):
+        import profile
+        from test_platform_profile import capsule
+        value = capsule()
+        value['extensions'] = {'environment': {'CUSTOM': 'literal fixture'}}
+        with tempfile.TemporaryDirectory() as folder:
+            cfg = Path(folder)
+            (cfg/'aguja-profile.json').write_bytes(profile.seal(value, {'mode':'plain'}))
+            with patch.object(vault,'VAULT',cfg/'vault'), patch.object(vault,'private_root',return_value=cfg), patch.object(vault,'ask') as ask:
+                result, _, _, protection = vault.gate()
+                self.assertEqual(protection, 'luks2')
+                self.assertEqual(result['extensions'], value['extensions'])
+                ask.assert_not_called()
+
+    def test_invalid_plain_schema_is_not_reported_as_wrong_password(self):
+        with tempfile.TemporaryDirectory() as folder:
+            cfg=Path(folder)
+            (cfg/'aguja-profile.json').write_text(json.dumps({'format':'aguja-profile','schema':1,'protection':'plain','capsule':{'schema':1,'unsupported':True}}))
+            with patch.object(vault,'VAULT',cfg/'vault'), patch.object(vault,'private_root',return_value=cfg), patch.object(vault,'ask') as ask:
+                with self.assertRaises(ValueError):vault.gate()
+                ask.assert_not_called()
+
     def test_question_reveals_local_console_and_keeps_secret_off_display(self):
         from unittest.mock import mock_open
         terminal = mock_open()

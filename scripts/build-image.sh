@@ -138,45 +138,8 @@ done
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/lib/aguja/browser-session | cmp -s "$PROJECT/runtime/browser-session" - || { echo 'Sesión navegador empaquetada no coincide'; exit 1; }
 unsquashfs -cat "$ISO_TREE/live/filesystem.squashfs" usr/local/bin/aguja-browser-launch | cmp -s "$PROJECT/runtime/browser-launch" - || { echo 'Launcher navegador empaquetado no coincide'; exit 1; }
 cp "$PROJECT/config/aguja.conf" "$ISO_TREE/aguja.conf"
-cat > "$ISO_TREE/boot/grub/grub.cfg" <<'EOF'
-set timeout=5
-set default=0
-set color_normal=light-gray/black
-set color_highlight=black/light-cyan
-if loadfont /boot/grub/themes/aguja/menu.pf2; then
-    insmod all_video
-    insmod gfxterm
-    insmod gfxmenu
-    insmod png
-    set gfxmode=1024x768,auto
-    set gfxpayload=keep
-    terminal_output gfxterm
-    set theme=/boot/grub/themes/aguja/theme.txt
-    export theme
-fi
-insmod part_gpt
-insmod fat
-insmod ext2
-insmod regexp
-regexp --set=1:aguja_drive '^([^,]+)' "$root"
-if [ -e ($aguja_drive,gpt4)/aguja-update.cfg ]; then
-    source ($aguja_drive,gpt4)/aguja-update.cfg
-fi
-menuentry 'LA AGUJA Rescue Disk · Fábrica' --id aguja-factory {
-    linux /live/vmlinuz boot=live components quiet splash plymouth.ignore-serial-consoles console=tty0 console=ttyS0,115200n8
-    initrd /live/initrd.img
-}
-menuentry 'Rescue Disk · Diagnostico (mensajes de arranque)' {
-    linux /live/vmlinuz boot=live components console=tty0 console=ttyS0,115200n8
-    initrd /live/initrd.img
-}
-menuentry 'Rescue Disk · Compatibilidad grafica (nomodeset)' {
-    linux /live/vmlinuz boot=live components nomodeset console=tty0 console=ttyS0,115200n8
-    initrd /live/initrd.img
-}
-menuentry 'Apagar' { halt; }
-menuentry 'Reiniciar' { reboot; }
-EOF
+cp "$PROJECT/config/grub.cfg" "$ISO_TREE/boot/grub/grub.cfg"
+grub-script-check "$ISO_TREE/boot/grub/grub.cfg"
 ISO="$DIST/aguja-personal-$VERSION-amd64.iso"
 grub-mkrescue -o "$ISO" "$ISO_TREE" -- -volid AGUJA_LIVE -hfsplus off
 # Build hybrid image entirely with files: no loop devices or host-disk mutations.
@@ -200,7 +163,7 @@ mcopy -i "$CFG" "$PROJECT/config/aguja.conf" ::aguja.conf
 python3 - "$VERSION" "$BUILD/release.json" <<'PYPROFILE'
 import json,sys
 from pathlib import Path
-Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1','global-snapshot-luks2-v1','thunar-files-v1']}))
+Path(sys.argv[2]).write_text(json.dumps({'version':sys.argv[1],'distribution':'personal','required_clis':['codex','agy','claude','opencode'],'features':['platform-profile-v1','antigravity-oauth-file-v1','locale-profile-v1','i18n-catalog-v1','tailscale-profile-v1','browser-oauth-v1','locale-preunlock-v1','local-console-scrollback-v1','mouse-wheel-scrollback-v1','codex-safe-workspace-sandbox-v1','native-virtualization-v1','agent-toolbox-v1','ssh-orientation-v1','disk-recovery-v1','secret-inventory-v1','agent-context-refresh-v1','persistent-updates-v1','interactive-updates-v1','usb-config-transaction-v1','persistent-tailnet-v1','background-updates-v1','fast-boot-v1','early-profile-gate-v1','luks-profile-v1','hardware-preflight-v1','backup-planning-v1','storage-credentials-v1','transcendence-cockpit-v1','rescue-desk-v1','operational-odd-v1','bulk-updates-v1','global-snapshot-luks2-v1','thunar-files-v1','power-menu-v1','visible-profile-unlock-v1']}))
 PYPROFILE
 mcopy -i "$CFG" "$BUILD/release.json" ::release.json
 printf '{"schema":1,"state":"pending"}\n' > "$BUILD/data-initialize.json"

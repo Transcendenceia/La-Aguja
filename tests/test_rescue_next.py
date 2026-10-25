@@ -19,10 +19,29 @@ import update_tasks
 
 
 class Gate(unittest.TestCase):
-    def test_graphical_question_uses_native_plymouth_without_agent_race(self):
-        with patch.object(vault.subprocess,'run',return_value=subprocess.CompletedProcess([],0)), patch.object(vault,'command',return_value=subprocess.CompletedProcess([],0,stdout=b'synthetic-pass\n')) as command:
+    def test_question_reveals_local_console_and_keeps_secret_off_display(self):
+        from unittest.mock import mock_open
+        terminal = mock_open()
+        with patch.object(vault.os,'open',return_value=123) as opened, \
+             patch.object(vault.os,'fdopen',terminal), patch.object(vault.fcntl,'ioctl'), \
+             patch.object(vault.subprocess,'run',return_value=subprocess.CompletedProcess([],0,stdout=b'synthetic-pass\n')) as run:
             self.assertEqual(vault.ask('fixed public prompt'),'synthetic-pass')
-            command.assert_called_once_with(['plymouth','ask-for-password','--prompt=fixed public prompt'])
+        opened.assert_called_once_with('/dev/tty1',os.O_RDWR | os.O_NOCTTY)
+        terminal.assert_called_once_with(123,'r+b',buffering=0)
+        self.assertEqual(run.call_args_list[0].args[0],['plymouth','quit'])
+        self.assertEqual(run.call_args_list[1].args[0],['chvt','1'])
+        last=run.call_args_list[-1]
+        self.assertEqual(last.args[0],['systemd-ask-password','--timeout=0','--echo=masked','fixed public prompt'])
+        self.assertTrue(last.kwargs['start_new_session'])
+        self.assertEqual(last.kwargs['stdout'],subprocess.PIPE)
+        self.assertEqual(last.kwargs['stderr'],terminal().__enter__())
+        self.assertNotIn(b'synthetic-pass',terminal().__enter__().write.call_args.args[0])
+
+    def test_console_failure_never_falls_back_to_invisible_prompt(self):
+        with patch.object(vault.os,'open',side_effect=OSError('no local terminal')), \
+             patch.object(vault.subprocess,'run') as run:
+            with self.assertRaises(OSError):vault.ask('fixed public prompt')
+        self.assertEqual(run.call_count,2)
 
     def test_factory_and_automatic_skip_prompt(self):
         with tempfile.TemporaryDirectory() as folder:

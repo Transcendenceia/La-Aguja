@@ -175,7 +175,7 @@ def tools():
 
 def main():
     p = argparse.ArgumentParser(description="LA AGUJA Rescue Disk · AI-first rescue Linux")
-    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "web", "files", "desk", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "persist", "recovery", "secrets", "tailscale", "locale", "donate", "hardware", "plan", "storage"])
+    p.add_argument("command", nargs="?", default="menu", choices=["menu", "welcome", "status", "activity", "run", "login", "browser", "web", "files", "desk", "network", "wifi", "password", "help", "tools", "doctor", "agent", "mount-ro", "config", "context", "profile", "update", "persist", "power", "recovery", "secrets", "tailscale", "locale", "donate", "hardware", "plan", "storage"])
     p.add_argument("args", nargs=argparse.REMAINDER, help="tailscale: status [--json]")
     arguments=sys.argv[1:]
     if arguments[:1]==['qr']:arguments[0]='browser'  # hidden legacy alias; no QR UI
@@ -210,6 +210,9 @@ def main():
     elif a.command == 'update':
         import updates
         return updates.main(a.args)
+    elif a.command == 'power':
+        import power
+        return power.main(a.args)
     elif a.command == 'persist':
         import persistence
         return persistence.main(a.args)

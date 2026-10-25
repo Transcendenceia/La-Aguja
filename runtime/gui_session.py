@@ -16,7 +16,7 @@ import sys
 import tempfile
 import time
 
-ACTIONS = {'home', 'browser', 'files', 'cloud', 'tailnet', 'network', 'updates', 'persist', 'guide', 'backup', 'settings'}
+ACTIONS = {'home', 'browser', 'files', 'cloud', 'tailnet', 'network', 'updates', 'persist', 'power', 'guide', 'backup', 'settings'}
 
 
 def apply_keyboard(path='/etc/default/keyboard', environment=None):

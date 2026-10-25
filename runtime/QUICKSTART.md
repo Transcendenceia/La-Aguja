@@ -277,3 +277,30 @@ lectura; no sincroniza automáticamente. No hay un segundo centro gráfico.
 Los agentes necesitan Internet y acceso a un proveedor: no hay modelos locales.
 Instrucciones canónicas en inglés; respuesta en tu idioma. Método ODD:
 `/usr/share/aguja/ODD.md`.
+
+## Power menu (1.1.1)
+
+Open **Power off computer** in the cockpit (X), or run `aguja power`. Choose
+**Power off**, **Restart**, **Persist and power off**, or **Persist and restart**.
+Plain power actions do not save RAM changes. The persist actions ask for a new
+snapshot password, show native scan/copy/compression/hash progress, verify and
+activate the encrypted generation, flush the USB, then act automatically. A failed
+save cancels the power action. Keep the USB connected throughout. The snapshot
+password is required at its next boot; factory and previous generations remain.
+The desktop offers the same choices and progress; SSH uses the terminal menu.
+
+**GRUB → Continue** returns control to the firmware's next boot option without
+changing permanent boot order. Firmware determines the next device. If it returns
+to the USB or has no next option, use its boot selector or remove the USB before
+booting the installed system. Diagnostic and graphics-compatibility entries remain;
+these are not a claim of Secure Boot support.
+
+### Español
+
+**Apagar equipo** (X), o `aguja power`: **Apagar**, **Reiniciar**, **Persistir y
+apagar**, **Persistir y reiniciar**. Las primeras no guardan cambios en RAM. Las
+últimas cifran la instantánea con la contraseña indicada, muestran el progreso
+real, verifican y activan la generación, sincronizan el USB y solo entonces apagan
+o reinician. Si falla el guardado, el equipo sigue encendido. No retires el USB.
+GRUB **Continuar** devuelve el control al firmware sin cambiar su orden permanente;
+el dispositivo siguiente depende de su configuración.

@@ -18,7 +18,7 @@ ASSETS = Path('/usr/share/aguja/desktop')
 GUIDES = Path('/usr/share/aguja')
 ERROR = 'Operation not completed. Check the fields, connectivity and permissions.'
 PAGES = [('home','Home'),('browser','Web browser'),('files','Files'),('cloud','Cloud and NAS'),
-         ('tailnet','Private network'),('network','Network'),('updates','Updates'),('persist','Persist changes'),
+         ('tailnet','Private network'),('network','Network'),('updates','Updates'),('persist','Persist changes'),('power','Power off computer'),
          ('guide','Missions and methods'),('backup','Backup planning'),('settings','Settings')]
 CLOUD = {
  'drive': [('client_id','Client ID'),('client_secret','Client secret'),('token','Token JSON'),('service_account_file','Service account JSON'),('root_folder_id','Root folder ID')],
@@ -55,7 +55,7 @@ class Desk(Gtk.Window):
         bar=Gtk.Box();bar.get_style_context().add_class('spectrum');root.pack_start(bar,False,False,0)
         body=Gtk.Box();root.pack_start(body,True,True,0)
         # Only the requested task is constructed. No second menu or eager pages.
-        page=page if page in ('cloud','tailnet','network','persist') else 'network'
+        page=page if page in ('cloud','tailnet','network','persist','power') else 'network'
         self.stack=Gtk.Stack();body.pack_start(self.stack,True,True,0)
         title=dict(PAGES)[page]
         scroll=Gtk.ScrolledWindow();scroll.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
@@ -135,6 +135,20 @@ class Desk(Gtk.Window):
             GLib.idle_add(finish)
         threading.Thread(target=worker,daemon=True).start()
 
+    def page_power(self,box):
+        import power
+        self.power_choice=self.combo(box,'Action',list(zip(power.ACTIONS,power.LABELS)))
+        self.note(box,'Unsaved RAM changes will be lost.')
+        self.page_persist(box)
+        self.persist_button.set_label(tr('Continue'))
+        self.power_choice.connect('changed',lambda _:self.power_fields())
+        self.power_fields()
+
+    def power_fields(self):
+        saving=self.power_choice.get_active_id().startswith('persist-')
+        self.persist_password.set_sensitive(saving);self.persist_confirmation.set_sensitive(saving)
+        self.persist_button.set_sensitive(not saving or getattr(self,'persist_available',False))
+
     def page_persist(self,box):
         self.note(box,'Save the whole live: installed packages, agents, settings, personal files and sessions.')
         self.note(box,'The snapshot is encrypted on the boot USB. Keep its password: it is requested at the next boot.')
@@ -156,6 +170,7 @@ class Desk(Gtk.Window):
             def finish():
                 if value.get('available'):
                     target=value['target'];self.persist_target.set_text(target['disk']+' · DATA '+target['data']+f" · {value['free_bytes']/1024**3:.1f} GiB libres")
+                    self.persist_available=True
                     self.persist_button.set_sensitive(True)
                 else:self.persist_target.set_text(value.get('message',tr(ERROR)))
                 return False
@@ -164,19 +179,20 @@ class Desk(Gtk.Window):
 
     def persist_start(self):
         if self.persist_active:return
+        import power
+        action=self.power_choice.get_active_id() if hasattr(self,'power_choice') else None
+        saving=action is None or action.startswith('persist-')
+        if action and not self.confirm('Save and verify the encrypted snapshot before the power action.' if saving else 'Unsaved RAM changes will be lost.'):return
         password=self.persist_password.get_text()
-        if len(password)<8 or password!=self.persist_confirmation.get_text():
+        if saving and (len(password)<8 or password!=self.persist_confirmation.get_text()):
             self.status.set_text(tr('Use at least 8 characters and repeat the same password.'));return
         self.persist_active=True;self.persist_button.set_sensitive(False)
+        if action:self.power_choice.set_sensitive(False)
         self.persist_spinner.start()
         self.persist_password.set_text('');self.persist_confirmation.set_text('')
-        self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.'))
-        stages={'scan':'Scanning the live','encrypt':'Preparing encrypted storage','copy':'Copying live files','initramfs':'Preparing the next boot',
-                'compress':'Compressing the snapshot','sync':'Synchronizing the USB','compact':'Compacting encrypted storage',
-                'verify':'Verifying saved bytes','activate':'Activating the next boot','done':'Changes saved and verified',
-                'failed':'Changes were not saved'}
+        self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.' if saving else 'Finishing and powering off / restarting'))
         def update(event):
-            label=tr(stages.get(event.get('stage'),'Working…'))
+            label=tr(power.STAGES.get(event.get('stage'),'Working…'))
             done,total=event.get('completed'),event.get('total')
             if isinstance(done,(int,float)) and isinstance(total,(int,float)) and total>0:
                 self.persist_bar.set_fraction(max(0,min(1,done/total)))
@@ -188,13 +204,15 @@ class Desk(Gtk.Window):
             self.persist_bar.set_text(label);self.persist_detail.set_text(event.get('error') or label)
             if event.get('stage')=='done':
                 self.persist_bar.set_fraction(1);self.status.set_text(tr('Saved and encrypted. Restart when ready; factory and previous generation remain available.'))
+            elif event.get('stage')=='power':self.status.set_text(tr('Finishing and powering off / restarting'))
             elif event.get('stage')=='failed':self.status.set_text(event.get('error') or tr(ERROR))
             return False
         def worker(secret):
-            final=None
+            final=None;code=1
             try:
-                with subprocess.Popen(['sudo','-n','unshare','--mount','--propagation','private',
-                        '/usr/bin/python3','/usr/lib/aguja/persistence.py','worker'],stdin=subprocess.PIPE,
+                argv=power.command(action) if action else ['sudo','-n','unshare','--mount','--propagation','private',
+                        '/usr/bin/python3','/usr/lib/aguja/persistence.py','worker']
+                with subprocess.Popen(argv,stdin=subprocess.PIPE,
                         stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True) as process:
                     process.stdin.write(json.dumps({'password':secret}));process.stdin.close();secret=None
                     for line in process.stdout:
@@ -203,7 +221,10 @@ class Desk(Gtk.Window):
                     if code and (not final or final.get('stage')!='failed'):GLib.idle_add(update,{'stage':'failed'})
             except (OSError,ValueError,subprocess.SubprocessError):GLib.idle_add(update,{'stage':'failed'})
             def finish():
-                self.persist_active=False;self.persist_spinner.stop();self.persist_button.set_sensitive(True);return False
+                self.persist_active=False;self.persist_spinner.stop();self.persist_button.set_sensitive(True)
+                if action:self.power_choice.set_sensitive(True)
+                if code:self.status.set_text(tr('Power action cancelled. The computer stays on.') if action else tr(ERROR))
+                return False
             GLib.idle_add(finish)
         threading.Thread(target=worker,args=(password,),daemon=True).start()
 
@@ -483,7 +504,7 @@ class Desk(Gtk.Window):
 
     def close(self,*_):
         if getattr(self,'persist_active',False):
-            self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.'))
+            self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.' if saving else 'Finishing and powering off / restarting'))
             return True
         for child in self.children:
             if child.poll() is None:

@@ -5,12 +5,14 @@ Plain Imager profiles are deliberately supported. Legacy AES capsules use the sa
 boot gate, but are never described as LUKS. No secret is passed via argv or logged.
 """
 import getpass
+import fcntl
 import json
 import os
 from pathlib import Path
 import shutil
 import stat
 import subprocess
+import termios
 import time
 
 CFG = Path('/config')
@@ -49,20 +51,37 @@ def settings_root():
 
 
 def ask(prompt):
-    # Talk directly to the active splash. Restarting a systemd password agent
-    # between retries can leave a visible but orphaned Plymouth question.
-    try:
-        graphical = subprocess.run(['plymouth', '--ping'], stdout=subprocess.DEVNULL,
-                                   stderr=subprocess.DEVNULL, timeout=3).returncode == 0
-    except (OSError, subprocess.TimeoutExpired):
-        graphical = False
-    if graphical:
-        result = command(['plymouth', 'ask-for-password', '--prompt=' + prompt])
-    else:
-        # Re-evaluate the path's ConditionPathExists after a splash-free boot.
-        subprocess.run(['systemctl', 'restart', 'systemd-ask-password-console.path'],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=5, check=False)
-        result = command(['systemd-ask-password', '--timeout=0', prompt])
+    # A running Plymouth daemon does not prove its password label is visible
+    # on the physical display. Reveal a dedicated local VT before requesting
+    # input; never route the question to the last kernel console (often serial).
+    for argv in (['plymouth', 'quit'], ['chvt', '1']):
+        try:
+            subprocess.run(argv, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                           timeout=5, check=False)
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+    # systemd services can be session leaders: a normal open would silently
+    # acquire tty1 for the parent and make the child's TIOCSCTTY fail (EPERM).
+    descriptor = os.open('/dev/tty1', os.O_RDWR | os.O_NOCTTY)
+    with os.fdopen(descriptor, 'r+b', buffering=0) as console:
+        # Explicit KD_TEXT also handles a splash which left the VT in graphics.
+        fcntl.ioctl(console, 0x4B3A, 0)  # KDSETMODE, KD_TEXT
+        console.write((
+            '\x1b[2J\x1b[H\n'
+            '  LA AGUJA | DESBLOQUEAR PERFIL / UNLOCK PROFILE\n'
+            '  ========================================================\n\n'
+            '  Tu perfil esta cifrado. Introduce su contrasena y pulsa Enter.\n'
+            '  Your profile is encrypted. Enter its password and press Enter.\n\n'
+            '  La entrada se oculta. / Your password will not be shown.\n'
+            '  El panel y SSH se abriran despues. / Access opens afterwards.\n\n'
+        ).encode('utf-8'))
+        # Run with an explicit controlling terminal, not a password-agent race.
+        # Only stdout carries the secret; stderr/prompt stay on the local VT.
+        result = subprocess.run(
+            ['systemd-ask-password', '--timeout=0', '--echo=masked', prompt],
+            stdin=console, stdout=subprocess.PIPE, stderr=console,
+            start_new_session=True,
+            preexec_fn=lambda: fcntl.ioctl(0, termios.TIOCSCTTY, 0), check=True)
     return result.stdout.rstrip(b'\n').decode('utf-8')
 
 

@@ -35,6 +35,7 @@ MENU = (
     ('tools', '3', 'Herramientas y respaldo', 'Misiones · métodos · diagnóstico', 'TRABAJAR'),
     ('update', 'T', 'Actualizaciones', 'Instalar actualizaciones en esta sesión', 'SISTEMA'),
     ('persist', 'P', 'Persistir cambios', 'Guardar el live completo en el pendrive · progreso', 'SISTEMA'),
+    ('power', 'X', 'Apagar equipo', 'Apagar · reiniciar · persistir antes de salir', 'SISTEMA'),
     ('settings', 'I', 'Ajustes', 'Idioma y teclado · contraseña SSH · proyecto', 'SISTEMA'),
 )
 
@@ -370,6 +371,8 @@ def choose(screen, auto_setup=False, delay=12, auth_view=False):
                 return "doctor"
             elif key in (ord("r"),ord("R")):
                 return "remote"
+            elif key in (ord('x'),ord('X')):
+                return 'power'
             elif key in (ord('i'),ord('I')):
                 return 'settings'
             elif key in (ord('e'),ord('E')):
@@ -475,7 +478,7 @@ def menu(auto_setup=False):
             subprocess.call(['/usr/local/bin/aguja','login',action.removeprefix('login-')])
             continue
         import browser
-        graphical={'web':'browser','files':'files','storage':'cloud','remote':'tailnet','wifi':'network','persist':'persist'}
+        graphical={'web':'browser','files':'files','storage':'cloud','remote':'tailnet','wifi':'network','persist':'persist','power':'power'}
         if action in graphical and browser.local_console():
             import gui_session
             if gui_session.run(graphical[action]) == 0:
@@ -503,6 +506,8 @@ def menu(auto_setup=False):
         elif action == 'update':
             subprocess.call(['/usr/local/bin/aguja','update','menu'])
             continue
+        elif action == 'power':
+            subprocess.call(['/usr/local/bin/aguja','power'])
         elif action == 'persist':
             subprocess.call(['/usr/local/bin/aguja','persist','save'])
         elif action == 'donate':

@@ -81,5 +81,15 @@ ES={
  'Rescue USB DATA (temporary)':'DATA del USB de Rescue (temporal)','Same-disk partition (limited)':'Partición en el mismo disco (limitado)','No backup (explicit decision)':'Sin respaldo (decisión explícita)',
 }
 
+ES.update({
+ 'Power off computer':'Apagar equipo','Power off':'Apagar','Restart':'Reiniciar',
+ 'Persist and power off':'Persistir y apagar','Persist and restart':'Persistir y reiniciar',
+ 'Continue':'Continuar','Action':'Acción',
+ 'Unsaved RAM changes will be lost.':'Se perderán los cambios en RAM que no hayas guardado.',
+ 'Save and verify the encrypted snapshot before the power action.':'Guardar y verificar la instantánea cifrada antes de apagar o reiniciar.',
+ 'Power action cancelled. The computer stays on.':'Acción cancelada. El equipo permanece encendido.',
+ 'Finishing and powering off / restarting':'Finalizando y apagando / reiniciando'
+})
+
 def tr(text):
     return ES.get(text,text) if ui_language()=='es' else text

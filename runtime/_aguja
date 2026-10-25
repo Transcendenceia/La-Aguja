@@ -14,6 +14,8 @@ commands=(
   'network:Estado de red JSON; --wait espera conexión'
   'wifi:Selector Wi-Fi y guardado en el USB'
   'password:Cambiar y guardar contraseña SSH'
+  'power:Apagar o reiniciar, con persistencia cifrada opcional'
+  'persist:Guardar el live completo cifrado en el USB'
   'update:Actualizaciones persistentes de paquetes, arneses y Rescue'
   'help:Guía de inicio y comandos'
   'hardware:Inventario actual de hardware y recursos; --json'

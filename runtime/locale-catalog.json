@@ -1246,7 +1246,9 @@
       "Iniciar sesión · Codex": "Sign in · Codex",
       "Iniciar sesión · Claude Code": "Sign in · Claude Code",
       "Iniciar sesión · Antigravity": "Sign in · Antigravity",
-      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "You can keep using LA AGUJA. When it finishes, save changes from the main menu."
+      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "You can keep using LA AGUJA. When it finishes, save changes from the main menu.",
+      "Apagar equipo": "Power off computer",
+      "Apagar · reiniciar · persistir antes de salir": "Power off · restart · save before leaving"
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -2342,7 +2344,9 @@
       "Iniciar sesión · Codex": "登录 · Codex",
       "Iniciar sesión · Claude Code": "登录 · Claude Code",
       "Iniciar sesión · Antigravity": "登录 · Antigravity",
-      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "你可以继续使用 LA AGUJA。完成后，请从主菜单保存更改。"
+      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "你可以继续使用 LA AGUJA。完成后，请从主菜单保存更改。",
+      "Apagar equipo": "Power off computer",
+      "Apagar · reiniciar · persistir antes de salir": "Power off · restart · save before leaving"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -3438,7 +3442,9 @@
       "Iniciar sesión · Codex": "Se connecter · Codex",
       "Iniciar sesión · Claude Code": "Se connecter · Claude Code",
       "Iniciar sesión · Antigravity": "Se connecter · Antigravity",
-      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Vous pouvez continuer à utiliser LA AGUJA. Une fois terminé, enregistrez les modifications depuis le menu principal."
+      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Vous pouvez continuer à utiliser LA AGUJA. Une fois terminé, enregistrez les modifications depuis le menu principal.",
+      "Apagar equipo": "Power off computer",
+      "Apagar · reiniciar · persistir antes de salir": "Power off · restart · save before leaving"
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -4534,7 +4540,9 @@
       "Iniciar sesión · Codex": "Entrar · Codex",
       "Iniciar sesión · Claude Code": "Entrar · Claude Code",
       "Iniciar sesión · Antigravity": "Entrar · Antigravity",
-      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Pode continuar a usar LA AGUJA. Quando terminar, guarde as alterações no menu principal."
+      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Pode continuar a usar LA AGUJA. Quando terminar, guarde as alterações no menu principal.",
+      "Apagar equipo": "Power off computer",
+      "Apagar · reiniciar · persistir antes de salir": "Power off · restart · save before leaving"
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -5630,7 +5638,9 @@
       "Iniciar sesión · Codex": "Anmelden · Codex",
       "Iniciar sesión · Claude Code": "Anmelden · Claude Code",
       "Iniciar sesión · Antigravity": "Anmelden · Antigravity",
-      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Du kannst LA AGUJA weiter verwenden. Speichere die Änderungen nach Abschluss über das Hauptmenü."
+      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Du kannst LA AGUJA weiter verwenden. Speichere die Änderungen nach Abschluss über das Hauptmenü.",
+      "Apagar equipo": "Power off computer",
+      "Apagar · reiniciar · persistir antes de salir": "Power off · restart · save before leaving"
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -6726,7 +6736,9 @@
       "Iniciar sesión · Codex": "Accedi · Codex",
       "Iniciar sesión · Claude Code": "Accedi · Claude Code",
       "Iniciar sesión · Antigravity": "Accedi · Antigravity",
-      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Puoi continuare a usare LA AGUJA. Al termine, salva le modifiche dal menu principale."
+      "Puedes seguir usando LA AGUJA. Guarda los cambios desde el menú principal cuando termine.": "Puoi continuare a usare LA AGUJA. Al termine, salva le modifiche dal menu principale.",
+      "Apagar equipo": "Power off computer",
+      "Apagar · reiniciar · persistir antes de salir": "Power off · restart · save before leaving"
     }
   }
 }

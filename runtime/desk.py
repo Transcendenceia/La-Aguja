@@ -504,6 +504,8 @@ class Desk(Gtk.Window):
 
     def close(self,*_):
         if getattr(self,'persist_active',False):
+            action=self.power_choice.get_active_id() if hasattr(self,'power_choice') else None
+            saving=action is None or action.startswith('persist-')
             self.status.set_text(tr('Saving. Keep the USB connected until verification finishes.' if saving else 'Finishing and powering off / restarting'))
             return True
         for child in self.children:

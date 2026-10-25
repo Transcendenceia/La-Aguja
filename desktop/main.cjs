@@ -11,7 +11,7 @@ const recovery=require('./disk-recovery.cjs');
 const imagerUpdates=require('./imager-updates.cjs');
 const usbConfig=require('./usb-config.cjs');
 const capsuleEdit=require('./capsule-edit.cjs');
-let availableImagerUpdate=null,usbSession=null;
+let availableImagerUpdate=null,usbSession=null,downloadController=null;let lastProgress={time:0,phase:''};
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
 const nativeImport=require('./windows-native-import.cjs');
@@ -37,7 +37,7 @@ let win; let selectedImage=null;let prepared=null;let releases=[];let verifiedCa
 // No crash reporter, analytics, renderer remote content, credentials in command arguments or logs.
 function receipt(ok,data={},error=''){return ok?{ok:true,...data}:{ok:false,error};}
 function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
-function progress(phase,detail={}){if(win&&!win.isDestroyed())win.webContents.send('progress',{phase,...detail,...(detail.message?{message:translate(detail.message)}:{})});}
+function progress(phase,detail={}){const now=Date.now();if(detail.total&&detail.done<detail.total&&phase===lastProgress.phase&&now-lastProgress.time<90)return;lastProgress={time:now,phase};if(win&&!win.isDestroyed())win.webContents.send('progress',{phase,...detail,...(detail.message?{message:translate(detail.message)}:{})});}
 function handle(channel,callback){ipcMain.handle(channel,async(event,...args)=>{
  if(event.sender!==win.webContents || event.senderFrame!==win.webContents.mainFrame)throw new Error('Origen no autorizado.');
  let result;
@@ -57,7 +57,7 @@ function run(command,args,input=null,{timeout=120000,limit=4*1024*1024,phase='wo
  const proc=spawn(command,args,{stdio:['pipe','pipe','pipe'],env:childEnv,windowsHide:true});let stdout='',stderr='',pending='',ended=false;const stdoutDecoder=new StringDecoder('utf8'),stderrDecoder=new StringDecoder('utf8');
  const finish=(error,value)=>{if(ended)return;ended=true;clearTimeout(timer);error?reject(error):resolve(value);};
  const timer=setTimeout(()=>{proc.kill('SIGTERM');finish(new Error('La operación tardó demasiado. Puedes volver a intentarlo.'));},timeout);
- proc.stdout.on('data',data=>{const decoded=stdoutDecoder.write(data);stdout+=decoded;pending+=decoded;let newline;while((newline=pending.indexOf('\n'))>=0){const line=pending.slice(0,newline);pending=pending.slice(newline+1);try{const value=JSON.parse(line);const captions={exclusive:'Liberando volúmenes del USB para uso exclusivo…',verify:'Comprobando imagen…',backup:'Respaldando USB…',write:'Grabando USB…',readback:'Verificando lectura del USB…',expand:'Ampliando la partición de datos…'};if(value.type==='progress'&&phase==='flash'&&captions[value.stage])progress('flash',{message:captions[value.stage]});}catch{}}if(stdout.length>limit){proc.kill();finish(new Error('La respuesta no es válida.'));}});
+ proc.stdout.on('data',data=>{const decoded=stdoutDecoder.write(data);stdout+=decoded;pending+=decoded;let newline;while((newline=pending.indexOf('\n'))>=0){const line=pending.slice(0,newline);pending=pending.slice(newline+1);try{const value=JSON.parse(line);const captions={exclusive:'Liberando volúmenes del USB para uso exclusivo…',verify:'Comprobando imagen…',backup:'Respaldando USB…',write:'Grabando USB…',readback:'Verificando lectura del USB…',expand:'Ampliando la partición de datos…'};if(value.type==='progress'&&phase==='flash'&&captions[value.stage])progress('flash',{message:captions[value.stage]});if(value.type==='progress'&&phase==='helper'){const safe={verify:'Comprobando imagen…',copy:'Copiando imagen privada…',inject:'Guardando perfil privado…',readback:'Verificando imagen privada…'};if(safe[value.stage])progress('prepare',{message:safe[value.stage]});}}catch{}}if(stdout.length>limit){proc.kill();finish(new Error('La respuesta no es válida.'));}});
  proc.stderr.on('data',data=>{stderr+=stderrDecoder.write(data);if(stderr.length>limit)stderr=stderr.slice(-limit);});
  proc.on('error',()=>finish(new Error('Falta una herramienta local necesaria.')));
  proc.on('close',code=>{stdout+=stdoutDecoder.end();stderr+=stderrDecoder.end();if(code!==0){
@@ -195,8 +195,9 @@ function installIPC(){
  handle('info',async()=>({version:app.getVersion(),platform:process.platform,prepareAvailable:isWindows||fs.existsSync(path.join(ROOT,'scripts','platform-profile.py')),bitlockerAvailable:isWindows}));
  handle('i18n-catalog',async()=>({catalog:core.LOCALE_CATALOG,language:uiLanguage,systemLanguage:app.getLocale?.()||'es'}));
  handle('i18n-language',async(value)=>{if(typeof value!=='string'||!['es',...Object.keys(core.LOCALE_CATALOG.translations)].includes(value))throw new Error('Idioma no compatible.');uiLanguage=value;await fs.promises.writeFile(path.join(app.getPath('userData'),'ui-language.json'),JSON.stringify({language:value}),{mode:0o600});return {language:value};});
+ handle('cancel-download',async()=>{if(downloadController){downloadController.abort();return {canceled:true};}return {canceled:false};});
  handle('catalog',async()=>{releases=await loadVerifiedCatalog({refresh:true});return {releases};});
- handle('download',async(index)=>exclusive(async()=>{if(!Number.isInteger(index)||!releases[index])throw new Error('Selecciona una versión del catálogo firmado.');const r=releases[index];const dest=await chooseSave('Guardar imagen pública',path.join(app.getPath('downloads'),'aguja-'+r.version+'.img'),['img']);if(!dest)return {canceled:true};progress('download',{done:0,total:r.bytes});const verified=await core.downloadImage(r,dest,d=>progress('download',d),undefined);selectedImage={path:dest,...verified,version:r.version,trusted:true,verification:'verified-catalog'};prepared=null;return {image:{name:path.basename(dest),...verified,version:r.version,trusted:true,verification:'verified-catalog'}};}));
+ handle('download',async(index)=>exclusive(async()=>{if(!Number.isInteger(index)||!releases[index])throw new Error('Selecciona una versión del catálogo firmado.');const r=releases[index];const dest=await chooseSave('Guardar imagen pública',path.join(app.getPath('downloads'),'aguja-'+r.version+'.img'),['img']);if(!dest)return {canceled:true};progress('download',{done:0,total:r.bytes});let verified;downloadController=new AbortController();try{verified=await core.downloadImage(r,dest,d=>progress('download',{...d,cancellable:true}),downloadController.signal);}finally{downloadController=null;}selectedImage={path:dest,...verified,version:r.version,trusted:true,verification:'verified-catalog'};prepared=null;return {image:{name:path.basename(dest),...verified,version:r.version,trusted:true,verification:'verified-catalog'}};}));
  handle('import-image',async(expected='')=>exclusive(async()=>{
   expected=core.normalizeImageSHA(expected);
   const pick=await showOpenDialog(win,{title:'Importar imagen de LA AGUJA',properties:['openFile'],filters:[{name:'Imagen sin comprimir',extensions:['img']}]});
@@ -212,6 +213,26 @@ function installIPC(){
  }));
  handle('import-locale',async()=>importLocale());
  handle('generate-password',async()=>({password:secretPassword()}));
+ handle('import-settings',async(kind)=>exclusive(async()=>{
+  if(!['environment','storage'].includes(kind))throw Error('Perfil de importación no válido.');
+  const pick=await showOpenDialog(win,{title:kind==='environment'?'Importar variables (.env / JSON)':'Importar configuración rclone',properties:['openFile']});
+  if(pick.canceled)return {canceled:true};
+  const file=pick.filePaths[0],stat=await fs.promises.lstat(file);
+  if(!stat.isFile()||stat.isSymbolicLink()||stat.size>512*1024)throw Error('Archivo de configuración privada no válido.');
+  const extensions=require('./profile-extensions.cjs'),raw=provisioning.decodeNative(await fs.promises.readFile(file));
+  if(kind==='environment')return {environment:extensions.parseEnvironment(raw)};
+  const storage=extensions.parseRclone(raw);
+  // Native credential-file references are portable only inside the chosen folder.
+  // Never follow a config reference into arbitrary files on this PC.
+  for(const remote of storage){for(const key of extensions.FILE_FIELDS){const ref=remote.fields[key];if(!ref)continue;
+   const asset=path.resolve(path.dirname(file),ref),base=await fs.promises.realpath(path.dirname(file));
+   const actual=await fs.promises.realpath(asset),relative=path.relative(base,actual);
+   const info=await fs.promises.lstat(asset);
+   if(relative.startsWith('..'+path.sep)||relative==='..'||path.isAbsolute(relative)||!info.isFile()||info.isSymbolicLink()||info.size>256*1024)throw Error('El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.');
+   (remote.files||={})[key]=(await fs.promises.readFile(asset)).toString('base64');remote.fields[key]=path.basename(asset);
+  }}
+  return {storage:extensions.validate({storage}).storage};
+ }));
  handle('import-wifi',async()=>exclusive(async()=>{
   if(isWindows)return importActiveWifi();
   if(process.platform!=='linux')throw new Error('La importación Wi-Fi está disponible en Linux y Windows.');
@@ -309,5 +330,5 @@ function installIPC(){
   return {verified:true,backupVerified:result.backup_verified===true,device:disk.device,serial:disk.serial,...(preparedReceipt?{prepared:preparedReceipt}:{})};
  }));
 }
-app.whenReady().then(async()=>{uiLanguage=i18n.language(core.LOCALE_CATALOG,app.getLocale?.()||'es');try{const preference=JSON.parse(await fs.promises.readFile(path.join(app.getPath('userData'),'ui-language.json'),'utf8'));uiLanguage=i18n.language(core.LOCALE_CATALOG,preference.language);}catch{}installIPC();win=new BrowserWindow({width:1240,height:880,minWidth:960,minHeight:700,title:'LA AGUJA Flash Imager',backgroundColor:'#0e1220',icon:path.join(__dirname,'ui/assets/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false,webSecurity:true}});win.removeMenu();win.webContents.setWindowOpenHandler(()=>({action:'deny'}));win.webContents.on('will-navigate',(event,url)=>{if(url!==win.webContents.getURL())event.preventDefault();});win.webContents.on('will-attach-webview',event=>event.preventDefault());win.loadFile(path.join(__dirname,'ui/index.html'));});
+app.whenReady().then(async()=>{uiLanguage=i18n.language(core.LOCALE_CATALOG,app.getLocale?.()||'es');try{const preference=JSON.parse(await fs.promises.readFile(path.join(app.getPath('userData'),'ui-language.json'),'utf8'));uiLanguage=i18n.language(core.LOCALE_CATALOG,preference.language);}catch{}installIPC();win=new BrowserWindow({width:1240,height:880,minWidth:560,minHeight:600,title:'LA AGUJA Flash Imager',backgroundColor:'#090b10',icon:path.join(__dirname,'ui/assets/icon.png'),webPreferences:{preload:path.join(__dirname,'preload.cjs'),contextIsolation:true,sandbox:true,nodeIntegration:false,webSecurity:true}});win.removeMenu();win.webContents.setWindowOpenHandler(()=>({action:'deny'}));win.webContents.on('will-navigate',(event,url)=>{if(url!==win.webContents.getURL())event.preventDefault();});win.webContents.on('will-attach-webview',event=>event.preventDefault());win.loadFile(path.join(__dirname,'ui/index.html'));});
 app.on('window-all-closed',()=>{selectedImage=null;prepared=null;for(const items of Object.values(approvedImports))nativeImport.clear(items);approvedImports={};app.quit();});

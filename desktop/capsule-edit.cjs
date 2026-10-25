@@ -24,6 +24,7 @@ function decode(files,passphrase){
 }
 function encode(input,oldFiles,oldPassphrase){
  const original=originalCapsule(oldFiles,oldPassphrase),capsule=core.validateCapsule(input.capsule);
+ if(capsule.extensions&&Object.keys(capsule.extensions).length){const release=oldFiles['release.json']?JSON.parse(Buffer.from(oldFiles['release.json'],'base64')):{};if(!release.features?.includes('imager-profile-v2'))throw Error('El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.');}
  for(const [id,p]of Object.entries(capsule.providers)){if(p.mode==='import'){
   const old=original.providers?.[id];if(!old?.files)throw Error('Importa primero la autenticación de '+id+'.');const files={};for(const [name,value]of Object.entries(old.files)){if(!Object.hasOwn(provisioning.IMPORTS[id],name)||typeof value!=='string')throw Error('Configuración privada no válida.');files[name]=provisioning.sanitize(id,name,Buffer.from(value,'base64url')).toString('base64url');}capsule.providers[id]={...p,files};
  }}

@@ -29,6 +29,27 @@ def capsule():
             'providers': {'antigravity': {'mode': 'api', 'api_key': 'synthetic-gemini-key'}}, 'remote': {'enabled': False}}
 
 
+class CapabilityFeedbackTests(unittest.TestCase):
+    def test_extended_profile_rejection_is_explicit_and_does_not_create_output(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source, output = Path(folder) / 'source.img', Path(folder) / 'private.img'
+            source.write_bytes(b'IMMUTABLE-SYNTHETIC-IMAGE')
+            request = {'image_path': str(source), 'output_path': str(output),
+                       'image_sha256': helper.sha256(source),
+                       'capsule': {'extensions': {'environment': {'CUSTOM': 'SYNTHETIC-PRIVATE'}}}}
+            def marker_file(*args, **kwargs):
+                Path(args[0][-1]).write_text(json.dumps({'features': ['platform-profile-v1']}))
+            with patch.object(helper.shutil, 'which', return_value='/usr/bin/mcopy'), patch.object(helper, 'config_partition', return_value=(0, 4096)), patch.object(helper.subprocess, 'run', side_effect=marker_file), patch.object(helper, 'materialize_imports') as imports:
+                result = helper.prepare(request)
+            self.assertFalse(result['ok'])
+            self.assertIn('imager-profile-v2', result['error'])
+            self.assertIn('Importa la imagen compatible', result['error'])
+            self.assertNotIn('SYNTHETIC-PRIVATE', json.dumps(result))
+            imports.assert_not_called()
+            self.assertFalse(output.exists())
+            self.assertEqual(source.read_bytes(), b'IMMUTABLE-SYNTHETIC-IMAGE')
+
+
 class ProfileTests(unittest.TestCase):
     def test_plain_round_trip_and_literal_values(self):
         c = capsule()

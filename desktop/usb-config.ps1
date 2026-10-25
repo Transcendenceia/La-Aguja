@@ -19,10 +19,10 @@ try{
  $marker=Bytes (Join-Path $folder 'release.json');if($null-eq$marker-or(([Text.Encoding]::UTF8.GetString($marker)|ConvertFrom-Json).features-notcontains'platform-profile-v1')){throw 'Release'}
  $old=@{};$hashes=[ordered]@{}
  # Cross-platform token is the hash of the exact stored files in sorted name order.
- foreach($n in @('aguja-locale.json','aguja-profile.json','aguja-recovery.json','aguja.conf')){$old[$n]=Bytes (Join-Path $folder $n);$hashes[$n]=Hash $old[$n]}
+ foreach($n in @('aguja-locale.json','aguja-profile.json','aguja-recovery.json','aguja.conf','release.json')){$old[$n]=Bytes (Join-Path $folder $n);$hashes[$n]=Hash $old[$n]}
  # Python default JSON spacing contract, not PowerShell's different formatter.
  $tokens=@();foreach($n in $hashes.Keys){$val=if($null-eq$hashes[$n]){'null'}else{'"'+$hashes[$n]+'"'};$tokens+=('"'+$n+'": '+$val)};$token=Hash ([Text.Encoding]::UTF8.GetBytes('{'+($tokens-join', ')+'}'))
- if($r.operation-eq'read'){$files=@{};foreach($n in $names){if($null-ne$old[$n]){$files[$n]=[Convert]::ToBase64String($old[$n])}};@{ok=$true;files=$files;snapshot=$token}|ConvertTo-Json -Depth 8 -Compress;return}
+ if($r.operation-eq'read'){$files=@{};foreach($n in $names){if($null-ne$old[$n]){$files[$n]=[Convert]::ToBase64String($old[$n])}};$files['release.json']=[Convert]::ToBase64String($marker);@{ok=$true;files=$files;snapshot=$token}|ConvertTo-Json -Depth 8 -Compress;return}
  if($r.operation-ne'write'-or$r.snapshot-ne$token){throw 'Changed'}
  if(@($r.files.PSObject.Properties).Count-ne4){throw 'Names'};$new=@{};foreach($n in $names){$new[$n]=[Convert]::FromBase64String([string]$r.files.$n);if($new[$n].Length-gt4194304){throw 'Large'}}
  Identify $r|Out-Null

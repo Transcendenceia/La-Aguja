@@ -1,4 +1,4 @@
-# LA AGUJA Flash Imager · Windows and Linux 1.0.0
+# LA AGUJA Flash Imager · Windows and Linux 1.1.0
 
 [Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
 
@@ -14,7 +14,7 @@ The numbered preparation flow has seven steps and ends at **Create disk**. **Pro
 - **Imager updates** checks a signed catalog and downloads the platform-specific SHA-256-verified app only when requested. Cancel leaves no success message; nothing runs or replaces the current application automatically.
 - In the live, `aguja update menu` offers OS packages, native harnesses and signed Rescue releases. Updates are stored as verified generations on DATA and become active on the next boot; factory and previous are retained. [Offline procedure](../runtime/UPDATES.md).
 
-## Imager 1.0.0 · languages, exclusive USB access and recovery keys
+## Imager 1.1.0 · languages, exclusive USB access and recovery keys
 
 All sections, live status messages and native confirmations follow the selected application language. Language/keyboard option labels also refresh; user-entered values, keys, disk identities and selected layouts stay unchanged.
 
@@ -64,7 +64,7 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-1.0.0-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-1.1.0-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 

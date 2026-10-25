@@ -25,8 +25,10 @@ test('native provider resolution uses absolute PATH then private local-bin fallb
   assert.equal(resolveProviderBinary('agy',{env:{},home:dir}),cli);
   const other=path.join(dir,'path with spaces');fs.mkdirSync(other);const inPath=path.join(other,'agy');fs.writeFileSync(inPath,'fixture',{mode:0o700});
   assert.equal(resolveProviderBinary('agy',{env:{PATH:other},home:dir}),inPath);
-  fs.chmodSync(inPath,0o600);assert.equal(resolveProviderBinary('agy',{env:{PATH:other},home:dir}),cli);
-  fs.chmodSync(cli,0o600);assert.equal(resolveProviderBinary('agy',{env:{PATH:'/unavailable'},home:dir}),null);
+  if(process.platform!=='win32'){
+   fs.chmodSync(inPath,0o600);assert.equal(resolveProviderBinary('agy',{env:{PATH:other},home:dir}),cli);
+   fs.chmodSync(cli,0o600);assert.equal(resolveProviderBinary('agy',{env:{PATH:'/unavailable'},home:dir}),null);
+  }
   assert.throws(()=>resolveProviderBinary('agy; echo private',{env:{},home:dir}));
   assert.throws(()=>resolveProviderBinary('../agy',{env:{},home:dir}));
  }finally{fs.rmSync(dir,{recursive:true});}
@@ -48,9 +50,9 @@ test('local import calculates provenance separately from digest matching',()=>{
  assert.equal(normalizeImageSHA(undefined),'');assert.equal(normalizeImageSHA('  '),'');
 });
 
-test('local hash rejects directories and symlinks without following them',async()=>{
+test('local hash rejects directories without following them',async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-image-type-'));
- try{const file=path.join(dir,'file.img');fs.writeFileSync(file,'fixture');const link=path.join(dir,'link.img');fs.symlinkSync(file,link);await assert.rejects(()=>hashFile(dir),/archivo de imagen/);await assert.rejects(()=>hashFile(link),/archivo de imagen/);}finally{fs.rmSync(dir,{recursive:true});}
+ try{const file=path.join(dir,'file.img');fs.writeFileSync(file,'fixture');await assert.rejects(()=>hashFile(dir),/archivo de imagen/);}finally{fs.rmSync(dir,{recursive:true});}
 });
 
 test('automatic catalog request uses a bounded timeout and GET with no uploaded image metadata',async()=>{
@@ -79,3 +81,5 @@ test('public downloads reject every credential header before making any request'
  assert.equal(requests,0);
  }finally{global.fetch=oldFetch;fs.rmSync(dir,{recursive:true,force:true});}
 });
+
+test('local hash rejects file symlinks without following them',{skip:process.platform==='win32'?'Requires Windows symlink privilege; covered on Linux':false},async()=>{const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-link-type-'));try{const file=path.join(dir,'file.img'),link=path.join(dir,'link.img');fs.writeFileSync(file,'fixture');fs.symlinkSync(file,link);await assert.rejects(()=>hashFile(link),/archivo de imagen/);}finally{fs.rmSync(dir,{recursive:true});}});

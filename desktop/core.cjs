@@ -18,7 +18,7 @@ async function hashFile(filename, progress=()=>{}) {
   const stat=await fs.promises.lstat(filename);
   if (stat.isSymbolicLink() || !stat.isFile()) fail('Selecciona un archivo de imagen.');
   const h=crypto.createHash('sha256'); let done=0;
-  for await (const data of fs.createReadStream(filename)) { h.update(data); done+=data.length; progress({done,total:stat.size}); }
+  for await (const data of fs.createReadStream(filename,{highWaterMark:4*1024*1024})) { h.update(data); done+=data.length; progress({done,total:stat.size}); }
   return {sha256:h.digest('hex'),bytes:stat.size};
 }
 function normalizeImageSHA(value='') {
@@ -119,11 +119,13 @@ function importedLocale({language='',keyboard='',variant=''}={}) {
 }
 function validateCapsule(input) {
   const c=structuredClone(input);
+  const extensions=c?.extensions===undefined?null:require('./profile-extensions.cjs').validate(c.extensions);
   if(!c || c.schema!==1 || !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(c.hostname||''))fail('El nombre admite letras minúsculas, números y guiones.');
   if(c.locale!==undefined)c.locale=validateLocale(c.locale);
   const eth=c.network?.ethernet;
   if(!eth || !['auto','manual'].includes(eth.method)) fail('Elige DHCP o una dirección fija.');
   if(eth.method==='manual') {if(net.isIP(eth.address)!==4 || !Number.isInteger(eth.prefix)||eth.prefix<1||eth.prefix>32 || eth.gateway && net.isIP(eth.gateway)!==4 || !Array.isArray(eth.dns)||eth.dns.length>4||eth.dns.some(x=>net.isIP(x)!==4))fail('Comprueba la dirección, prefijo, puerta de enlace y DNS.');}
+  if(extensions?.wifi_profiles?.length)c.network.wifi=extensions.wifi_profiles[0];
   const wifi=c.network.wifi;
   if(wifi) {cleanText(wifi.ssid,32);cleanText(wifi.password,64);if(Buffer.byteLength(wifi.ssid)>32||!['wpa-psk','sae','open'].includes(wifi.security)||!/^[A-Z]{2}$/.test(wifi.country)||typeof wifi.hidden!=='boolean')fail('Comprueba la configuración Wi-Fi.');if(wifi.ssid && wifi.security==='wpa-psk' && !(Buffer.byteLength(wifi.password)>=8 && Buffer.byteLength(wifi.password)<=63 || /^[a-fA-F0-9]{64}$/.test(wifi.password)))fail('La contraseña Wi-Fi necesita entre 8 y 63 caracteres.'); if(wifi.ssid&&wifi.security==='sae'&&!wifi.password)fail('WPA3 necesita una contraseña.');}
   if(!c.ssh||!Number.isInteger(c.ssh.port)||c.ssh.port<1||c.ssh.port>65535)fail('El puerto SSH debe estar entre 1 y 65535.');
@@ -153,7 +155,7 @@ function validateCapsule(input) {
   // Reusable profiles and helper input must never carry account sessions or
   // renderer-injected remote/provider credentials in unknown fields.
   const pick=(value,keys)=>Object.fromEntries(keys.filter(k=>value?.[k]!==undefined).map(k=>[k,value[k]]));
-  return {schema:1,hostname:c.hostname,...(c.locale?{locale:c.locale}:{}),network:{ethernet:pick(eth,['method','address','prefix','gateway','dns']),...(wifi?{wifi:pick(wifi,['ssid','password','security','country','hidden'])}:{})},ssh:pick(c.ssh,['password','public_key','port']),providers:Object.fromEntries(Object.entries(c.providers).map(([name,p])=>[name,pick(p,['mode','api_key','base_url','model'])])),remote:{enabled:false},tailscale:c.tailscale?.enabled?{...pick(c.tailscale,['enabled','auth_key','login_server','hostname']),ssh:c.tailscale.ssh??false,accept_routes:c.tailscale.accept_routes??false}:{enabled:false}};
+  return {...(extensions&&Object.keys(extensions).length?{extensions}:{}),schema:1,hostname:c.hostname,...(c.locale?{locale:c.locale}:{}),network:{ethernet:pick(eth,['method','address','prefix','gateway','dns']),...(wifi?{wifi:pick(wifi,['ssid','password','security','country','hidden'])}:{})},ssh:pick(c.ssh,['password','public_key','port']),providers:Object.fromEntries(Object.entries(c.providers).map(([name,p])=>[name,pick(p,['mode','api_key','base_url','model'])])),remote:{enabled:false},tailscale:c.tailscale?.enabled?{...pick(c.tailscale,['enabled','auth_key','login_server','hostname']),ssh:c.tailscale.ssh??false,accept_routes:c.tailscale.accept_routes??false}:{enabled:false}};
 }
 function resolveProviderBinary(binary,{env=process.env,home=os.homedir(),platform=process.platform}={}) {
   if(!/^[a-zA-Z0-9_-]+$/.test(binary)) fail('Proveedor no válido.');

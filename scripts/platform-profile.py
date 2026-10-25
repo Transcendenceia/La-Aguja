@@ -89,6 +89,8 @@ def prepare(request):
         marker = Path(work) / 'release.json'
         subprocess.run(['mcopy', '-i', str(source) + '@@' + str(offset), '::/release.json', str(marker)], check=True, capture_output=True)
         release = json.loads(marker.read_bytes())
+        if request['capsule'].get('extensions') and 'imager-profile-v2' not in release.get('features', []):
+            return {'ok': False, 'error': 'Estos ajustes necesitan Rescue Disk 1.1.1 o posterior con perfiles ampliados (imager-profile-v2). Importa la imagen compatible; no se ha escrito el USB.'}
         if request['capsule'].get('tailscale', {}).get('enabled') and 'tailscale-profile-v1' not in release.get('features', []):
             return {'ok': False, 'error': 'La imagen no admite alta automática Tailscale/Headscale; descarga una imagen compatible.'}
         if 'locale' in request['capsule'] and 'locale-profile-v1' not in release.get('features', []):
@@ -189,7 +191,10 @@ def main():
 
 if __name__ == '__main__':
     try:
-        emit(main())
+        result = main()
+        emit(result)
+        if not result.get("ok", False):
+            sys.exit(1)
     except Exception:
         # Exceptions from native tools/parsers could embed private values.
         emit({'ok': False, 'error': 'No se completó la operación. Comprueba imagen, destino, perfil y dependencias.'})

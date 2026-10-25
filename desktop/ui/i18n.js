@@ -14,7 +14,7 @@
   for(const template of templates(catalog)){const match=template.regex.exec(source);if(!match||!entries[template.source])continue;const values=Object.fromEntries(template.names.map((name,i)=>[name,match[i+1]]));return entries[template.source].replace(/\{(\w+)\}/g,(token,name)=>Object.hasOwn(values,name)?values[name]:token);}
   // Some local validation results combine several fixed warning sentences.
   const sentences=source.split(/(?<=\.) /);if(sentences.length>1&&sentences.every(sentence=>Object.hasOwn(entries,sentence)||Object.hasOwn(entries,' '+sentence)))return sentences.map(sentence=>(entries[sentence]??entries[' '+sentence]).trim()).join(' ');
-  return source;
+  return code!=='en'&&Object.hasOwn(catalog.translations.en||{},source)?catalog.translations.en[source]:source;
  }
  function create(catalog,locale){let current=language(catalog,locale);const originals=new WeakMap(),attributes=new WeakMap(),textNodes=[],attributeNodes=[];
   const reverseCatalogs=new Map();

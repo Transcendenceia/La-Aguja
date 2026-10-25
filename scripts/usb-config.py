@@ -44,11 +44,11 @@ def recover(folder):
 def snapshot(folder):
  files={n:read(folder/n) for n in FILES};release=read(folder/'release.json')
  if not release or 'platform-profile-v1' not in json.loads(release).get('features',[]):raise ValueError('El USB no contiene una versión compatible')
- hashes={n:digest(v) if v is not None else None for n,v in files.items()}
+ hashes={n:digest(v) if v is not None else None for n,v in files.items()};hashes['release.json']=digest(release)
  return files,digest(json.dumps(hashes,sort_keys=True).encode())
 def edit(folder,request):
  recover(folder);files,token=snapshot(folder)
- if request['operation']=='read':return {'files':{n:base64.b64encode(v).decode() for n,v in files.items() if v is not None},'snapshot':token}
+ if request['operation']=='read':return {'files':{n:base64.b64encode(v).decode() for n,v in (files | {'release.json':read(folder/'release.json')}).items() if v is not None},'snapshot':token}
  if request['operation']!='write' or request.get('snapshot')!=token:raise ValueError('La configuración del USB cambió; vuelve a leerla')
  payload=request.get('files',{})
  if set(payload)!=set(FILES):raise ValueError('Archivos de configuración no válidos')

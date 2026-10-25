@@ -1,4 +1,4 @@
-# LA AGUJA Flash Imager · Windows y Linux 1.0.0
+# LA AGUJA Flash Imager · Windows y Linux 1.1.0
 
 Prepara y graba tu Rescue Disk desde un PC. Conserva Agujita, herramientas IA, red, idioma/teclado, acceso SSH y soporte BitLocker Windows. La nueva conexión remota usa **tu propia Tailscale o Headscale**, no un túnel de nuestra plataforma.
 
@@ -39,9 +39,9 @@ La clave queda dentro de la cápsula. Cifrarla protege secretos en reposo mientr
 
 ## Windows
 
-Flash Imager **1.0.0** es la candidata pública. Publicación y comprobaciones nativas se registran por separado; no se atribuyen a esta versión las pruebas de otras versiones.
+Flash Imager **1.1.0** es la versión de la aplicación de preparación; Rescue Disk se versiona por separado. Los campos ampliados requieren Rescue **1.1.1** con `imager-profile-v2`. Las comprobaciones finales y las pruebas nativas históricas se detallan en la validación de la publicación.
 
-Abre `aguja-flash-imager-1.0.0-win-x64.exe` como tu usuario. Es portátil; no necesitas Node.js. No se promete instalador firmado ni ausencia de avisos SmartScreen. La app no necesita ejecutarse como administrador: **UAC eleva únicamente el grabador de USB**, no toda la interfaz Electron.
+Abre `aguja-flash-imager-1.1.0-win-x64.exe` como tu usuario. Es portátil; no necesitas Node.js. No se promete instalador firmado ni ausencia de avisos SmartScreen. La app no necesita ejecutarse como administrador: **UAC eleva únicamente el grabador de USB**, no toda la interfaz Electron.
 
 Tras confirmar el borrado y autorizar UAC, el grabador vuelve a comprobar **serie, capacidad y modelo exactos** del USB y rechaza discos internos, de sistema o de arranque. Conserva abierto el archivo de imagen verificado durante la escritura. El éxito exige grabación completa, sincronización y **lectura SHA-256 de todos los bytes de la imagen desde el USB**; no basta con que el proceso termine sin errores. Cancelar UAC no graba; cerrar la app durante una grabación puede dejar el USB incompleto y obliga a repetirla.
 
@@ -51,7 +51,7 @@ Tras confirmar el borrado y autorizar UAC, el grabador vuelve a comprobar **seri
 
 ## Linux
 
-- AppImage: `chmod +x aguja-flash-imager-1.0.0-x86_64.AppImage`, después ábrelo como tu usuario. Si falta FUSE, usa `--appimage-extract-and-run`; no desactiva el sandbox.
+- AppImage: `chmod +x aguja-flash-imager-1.1.0-x86_64.AppImage`, después ábrelo como tu usuario. Si falta FUSE, usa `--appimage-extract-and-run`; no desactiva el sandbox.
 - DEB: instala el paquete local con tu gestor de paquetes.
 - TAR: extrae la carpeta completa y ejecuta el binario de la aplicación.
 - No necesitas sudo para abrir, configurar o preparar la imagen. Importar Wi-Fi/grabar solicita Polkit.
@@ -96,7 +96,7 @@ Ejecuta el Imager con el mismo usuario de Windows que inició sesión en el CLI.
 
 Actualización exclusiva de los imagers Windows y Linux; Rescue Disk continúa en 0.9.11. Al terminar la grabación y la verificación por lectura, una ventana nativa confirma «Tu pendrive está listo». Expulsa el USB desde el sistema antes de desconectarlo. Si falla la preparación, la autorización, la escritura o la verificación, una ventana de error muestra la causa disponible y deja claro que el USB no está listo. Cancelar la confirmación no genera un falso éxito ni un error. El estado en la interfaz sigue disponible al cerrar la ventana.
 
-## Imager 1.0.0
+## Imager 1.1.0
 
 Traducción de todos los apartados, mensajes dinámicos, confirmaciones y opciones de idioma/teclado; los valores y claves escritos no cambian de contenido.
 

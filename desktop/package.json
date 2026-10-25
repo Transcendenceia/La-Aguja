@@ -1,7 +1,7 @@
 {
   "name": "aguja-companion",
   "productName": "LA AGUJA Flash Imager",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "author": {
     "name": "Transcendence IA",
@@ -58,7 +58,8 @@
       "imager-updates.cjs",
       "reusable-profile.cjs",
       "capsule-edit.cjs",
-      "usb-config.cjs"
+      "usb-config.cjs",
+      "profile-extensions.cjs"
     ],
     "extraResources": [
       {
@@ -78,7 +79,9 @@
           "config.py",
           "locale-catalog.json",
           "i18n.py",
-          "recovery_keys.py"
+          "recovery_keys.py",
+          "profile_extensions.py",
+          "tailnet_config.py"
         ]
       },
       {

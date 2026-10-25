@@ -14,7 +14,7 @@ test('homepage/manual/assets/health are anonymous and never set account cookies'
 test('retired account, relay and console endpoints cannot establish sessions',()=>fixture(async base=>{for(const route of ['/account','/auth/login','/connect/fixture','/v1/devices','/v1/account/tunnels']){const r=await fetch(base+route);assert.equal(r.status,410);assert.equal(r.headers.get('set-cookie'),null);}assert.equal((await fetch(base+'/v1/devices',{method:'POST'})).status,405);}));
 test('legacy downloads redirect to GitHub, not a local private release store',()=>fixture(async base=>{for(const [route,end] of [['/releases/SHA256SUMS','SHA256SUMS'],['/v1/catalog','catalog.json']]){const r=await fetch(base+route,{redirect:'manual'});assert.equal(r.status,302);assert.equal(r.headers.get('location'),'https://github.com/Transcendenceia/La-Aguja/releases/latest/download/'+end);}}));
 test('sensitive files, traversal and old account assets are not served',()=>fixture(async base=>{for(const route of ['/assets/../accounts.mjs','/assets/%2e%2e%2findex.mjs','/assets/account.js','/assets/../.env','/devices.json'])assert.equal((await fetch(base+route)).status,404,route);}));
-test('all localized download cards use existing 1.0 release asset names and the independent skill tag',()=>fixture(async base=>{
+test('localized download cards use the current Imager version and independent image/skill versions',()=>fixture(async base=>{
  const repo='https://github.com/Transcendenceia/La-Aguja/releases/';
  const skillVersion=fs.readFileSync(new URL('../../skills/flash-imager/SKILL.md',import.meta.url),'utf8').match(/^  version: "([^"]+)"$/m)[1];
  const productAssets=[`aguja-flash-imager-${imagerVersion}-win-x64.exe`,`aguja-flash-imager-${imagerVersion}-x86_64.AppImage`,`aguja-flash-imager-${imagerVersion}-amd64.deb`,`aguja-flash-imager-${imagerVersion}-linux-x64.tar.gz`,`SHA256SUMS-imager-${imagerVersion}-windows`,`SHA256SUMS-imager-${imagerVersion}-linux`,`aguja-${currentVersion}-amd64.img.zst`,`aguja-${currentVersion}-amd64.iso`,'SHA256SUMS'];
@@ -26,7 +26,7 @@ test('all localized download cards use existing 1.0 release asset names and the 
   const links=[...html.matchAll(/href="([^"]*\/releases\/[^"]+)"/g)].map(m=>m[1]);
   assert.deepEqual(new Set(links),expected,lang+' download contract');
   assert(!/href="\/releases\//.test(html),'No legacy proxy or nonexistent rescue checksum asset');
-  assert(html.includes('id="version-1"'));assert(html.includes('.aguja'));assert(html.includes('1.0.0'));
+  assert(html.includes('id="version-1"'));assert(html.includes('.aguja'));assert(html.includes(imagerVersion));
  }
 }));
 test('social crawlers receive the matching localized banner without JavaScript',()=>fixture(async base=>{

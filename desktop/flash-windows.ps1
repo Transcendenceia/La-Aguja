@@ -50,6 +50,14 @@ function Assert-Target([long]$ImageBytes) {
     if ($disk.Size -lt $ImageBytes) { throw 'El USB no tiene suficiente capacidad para la imagen.' }
     return $disk
 }
+function Get-TargetVolumes($Disk) {
+    # Storage cmdlets report ObjectNotFound on a blank RAW disk (and on an
+    # initialized disk with no partitions). That is a valid flash target,
+    # not an enumeration failure. Keep failures on populated disks fatal.
+    if ($Disk.PartitionStyle -eq 'RAW' -or $Disk.NumberOfPartitions -eq 0) { return }
+    Get-Partition -DiskNumber $Disk.Number -ErrorAction Stop |
+        Get-Volume -ErrorAction SilentlyContinue | Where-Object {$_.UniqueId}
+}
 try {
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $principal = New-Object Security.Principal.WindowsPrincipal($identity)
@@ -147,7 +155,7 @@ namespace Aguja {
     # Revalidate exact USB identity before releasing any owner handles.
     $disk = Assert-Target $imageBytes
     Emit-Json @{type='progress';stage='exclusive';message='Liberando volúmenes del USB para uso exclusivo…'}
-    $volumes = @(Get-Partition -DiskNumber $DiskNumber -ErrorAction Stop | Get-Volume -ErrorAction SilentlyContinue | Where-Object {$_.UniqueId})
+    $volumes = @(Get-TargetVolumes $disk)
     $sourceVolumePath = [Aguja.WindowsDiskLock]::FinalVolumePath($fileStream.SafeFileHandle)
     foreach ($volume in $volumes) {
         if ($sourceVolumePath.StartsWith([string]$volume.UniqueId,[StringComparison]::OrdinalIgnoreCase)) { throw 'La imagen que se va a grabar está dentro del USB seleccionado. Elige otra unidad de trabajo; no se borró nada.' }

@@ -4,6 +4,7 @@ from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'runtime'))
 import tailnet_identity as ti
 import profile
+import tailnet_config
 class PortableIdentity(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.p=Path(self.tmp.name)
@@ -62,4 +63,27 @@ class PortableIdentity(unittest.TestCase):
   self.configure()
   with patch('subprocess.run') as run:ti.request_save()
   self.assertIn('--no-block',run.call_args.args[0]);self.assertNotIn('SYNTHETIC',str(run.call_args))
+ def preferences(self,config=None):
+  data=tailnet_config.validate(config or self.c['tailscale'])
+  with patch.object(tailnet_config,'saved',return_value=data),patch('profile.apply_tailnet'),patch('profile_vault.private_root',return_value=None):
+   return tailnet_config.boot_apply()
+ def test_imported_extended_preferences_preserve_encrypted_identity_across_boots(self):
+  self.configure(True);key=ti.KEY.read_bytes();before=ti.SETTINGS.read_bytes()
+  self.assertTrue(self.preferences());self.assertEqual(ti.SETTINGS.read_bytes(),before);self.assertEqual(ti.KEY.read_bytes(),key)
+  self.native();self.assertTrue(ti.save());sealed=ti.SAVED.read_bytes()
+  self.assertNotIn(b'SYNTHETIC-MACHINE-IDENTITY',sealed)
+  ti.STATE.unlink();self.configure(True);self.preferences()
+  self.assertTrue(ti.restore());self.assertEqual(ti.STATE.read_bytes(),self.state)
+ def test_ram_identity_change_cannot_overwrite_capsule_checkpoint(self):
+  self.configure(True);self.native();ti.save();before=ti.SAVED.read_bytes()
+  self.preferences(self.c['tailscale'] | {'login_server':'https://other.example.test'})
+  self.assertFalse(ti.SETTINGS.exists());self.assertFalse(ti.KEY.exists());self.assertFalse(ti.save())
+  self.assertEqual(ti.SAVED.read_bytes(),before);self.assertEqual(json.loads(ti.STATUS.read_text())['state'],'session-only')
+ def test_preferences_without_unlocked_checkpoint_are_explicitly_session_only(self):
+  self.preferences();self.assertFalse(ti.SETTINGS.exists())
+  self.assertEqual(json.loads(ti.STATUS.read_text())['state'],'session-only')
+ def test_disabled_preferences_do_not_leave_pending_identity_status(self):
+  self.configure(True);self.preferences(self.c['tailscale'] | {'enabled':False})
+  self.assertFalse(ti.KEY.exists());self.assertFalse(ti.SETTINGS.exists())
+  self.assertEqual(json.loads(ti.STATUS.read_text())['state'],'disabled')
 if __name__=='__main__':unittest.main()

@@ -76,14 +76,17 @@ def boot_apply():
     import profile
     import tailnet_identity
     profile.apply_tailnet({key:data[key] for key in ('enabled','auth_key','login_server','hostname','ssh','accept_routes')})
-    # Extended options stay in their root-private preferences file. Native daemon
-    # state is inside the vault when present; without one it remains RAM-only.
+    # Same-profile imported flags must retain the encrypted capsule checkpoint.
+    # A different identity selected in RAM has no authority to rewrite it.
     from profile_vault import private_root
     if private_root():
         binding = {key:data[key] for key in ('enabled','auth_key','login_server','hostname')}
         tailnet_identity.configure({'tailscale':binding}, b'{"protection":"plain"}')
-    else:
+    elif not tailnet_identity.matches_configuration(data):
         tailnet_identity.SETTINGS.unlink(missing_ok=True)
+        tailnet_identity.KEY.unlink(missing_ok=True)
+        tailnet_identity.RESTORED.unlink(missing_ok=True)
+        tailnet_identity.status('session-only' if data['enabled'] else 'disabled')
     if data['forwarding']:
         subprocess.run(['sysctl','-w','net.ipv4.ip_forward=1','net.ipv6.conf.all.forwarding=1'],
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)

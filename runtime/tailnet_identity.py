@@ -23,6 +23,15 @@ def status(value,**values):
 def target():
  from updates import verify_persistent_target
  return verify_persistent_target()
+def binding(config):
+ return hashlib.sha256(json.dumps({k:config.get(k,'') for k in ('login_server','hostname','auth_key')},sort_keys=True).encode()).hexdigest()
+def matches_configuration(config):
+ """Retain capsule encryption only for the same explicitly unlocked identity."""
+ if not config.get('enabled') or not SETTINGS.exists():return False
+ s=settings()
+ if s['binding']!=binding(config):return False
+ if s['protection']=='encrypted' and len(read(KEY))!=32:raise ValueError('Invalid identity key')
+ return True
 def configure(capsule,envelope,passphrase=None):
  """Called only with the already validated/unlocked profile, before daemon start."""
  config=capsule.get('tailscale',{}) if capsule else {}
@@ -30,7 +39,7 @@ def configure(capsule,envelope,passphrase=None):
  if not config.get('enabled'):
   KEY.unlink(missing_ok=True);SETTINGS.unlink(missing_ok=True);RESTORED.unlink(missing_ok=True);status('disabled');return
  mode=json.loads(envelope).get('protection','plain')
- binding=hashlib.sha256(json.dumps({k:config.get(k,'') for k in ('login_server','hostname','auth_key')},sort_keys=True).encode()).hexdigest()
+ profile_binding=binding(config)
  if mode=='encrypted':
   if passphrase is None:raise ValueError('Protected identity requires the profile unlock')
   from profile import unb64
@@ -38,7 +47,7 @@ def configure(capsule,envelope,passphrase=None):
   e=json.loads(envelope);native=Scrypt(salt=unb64(e['salt']),length=32,n=32768,r=8,p=1).derive(passphrase.encode())
   write(KEY,hmac.new(native,b'aguja-tailnet-persistence:v1',hashlib.sha256).digest())
  else:KEY.unlink(missing_ok=True)
- write(SETTINGS,json.dumps({'schema':1,'protection':mode,'binding':binding}).encode());RESTORED.unlink(missing_ok=True);status('pending')
+ write(SETTINGS,json.dumps({'schema':1,'protection':mode,'binding':profile_binding}).encode());RESTORED.unlink(missing_ok=True);status('pending')
 
 def settings():
  s=json.loads(read(SETTINGS))

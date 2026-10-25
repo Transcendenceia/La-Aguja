@@ -1316,7 +1316,14 @@
       "Comprueba las redes, variables y configuración NAS/cloud del perfil.": "Check the profile’s networks, variables and NAS/cloud settings.",
       "El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.": "The credential file must be inside the selected rclone folder.",
       "Estos ajustes necesitan Rescue Disk con perfiles ampliados (imager-profile-v2). Selecciona la imagen compatible; no se descartarán tus ajustes.": "These settings need Rescue Disk with extended profiles (imager-profile-v2). Select a compatible image; your settings will not be discarded.",
-      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved."
+      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved.",
+      "Tailnet conectada": "Tailnet connected",
+      "Tailnet sin conexión": "Tailnet disconnected",
+      "identidad guardada": "identity saved",
+      "guardado pendiente": "save pending",
+      "guardando identidad": "saving identity",
+      "error al guardar identidad": "identity save failed",
+      "identidad solo en RAM": "identity in RAM only"
     },
     "zh": {
       "TU DISCO, A TU MEDIDA": "你的磁盘，由你定制",
@@ -2482,7 +2489,14 @@
       "Comprueba las redes, variables y configuración NAS/cloud del perfil.": "Check the profile’s networks, variables and NAS/cloud settings.",
       "El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.": "The credential file must be inside the selected rclone folder.",
       "Estos ajustes necesitan Rescue Disk con perfiles ampliados (imager-profile-v2). Selecciona la imagen compatible; no se descartarán tus ajustes.": "These settings need Rescue Disk with extended profiles (imager-profile-v2). Select a compatible image; your settings will not be discarded.",
-      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved."
+      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved.",
+      "Tailnet conectada": "tailnet 已连接",
+      "Tailnet sin conexión": "tailnet 未连接",
+      "identidad guardada": "身份已保存",
+      "guardado pendiente": "等待保存",
+      "guardando identidad": "正在保存身份",
+      "error al guardar identidad": "身份保存失败",
+      "identidad solo en RAM": "身份仅存于内存"
     },
     "fr": {
       "TU DISCO, A TU MEDIDA": "VOTRE DISQUE, À VOTRE IMAGE",
@@ -3648,7 +3662,14 @@
       "Comprueba las redes, variables y configuración NAS/cloud del perfil.": "Check the profile’s networks, variables and NAS/cloud settings.",
       "El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.": "The credential file must be inside the selected rclone folder.",
       "Estos ajustes necesitan Rescue Disk con perfiles ampliados (imager-profile-v2). Selecciona la imagen compatible; no se descartarán tus ajustes.": "These settings need Rescue Disk with extended profiles (imager-profile-v2). Select a compatible image; your settings will not be discarded.",
-      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved."
+      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved.",
+      "Tailnet conectada": "Tailnet connecté",
+      "Tailnet sin conexión": "Tailnet déconnecté",
+      "identidad guardada": "identité enregistrée",
+      "guardado pendiente": "enregistrement en attente",
+      "guardando identidad": "enregistrement de l’identité",
+      "error al guardar identidad": "échec de l’enregistrement",
+      "identidad solo en RAM": "identité en RAM uniquement"
     },
     "pt": {
       "TU DISCO, A TU MEDIDA": "SEU DISCO, DO SEU JEITO",
@@ -4814,7 +4835,14 @@
       "Comprueba las redes, variables y configuración NAS/cloud del perfil.": "Check the profile’s networks, variables and NAS/cloud settings.",
       "El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.": "The credential file must be inside the selected rclone folder.",
       "Estos ajustes necesitan Rescue Disk con perfiles ampliados (imager-profile-v2). Selecciona la imagen compatible; no se descartarán tus ajustes.": "These settings need Rescue Disk with extended profiles (imager-profile-v2). Select a compatible image; your settings will not be discarded.",
-      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved."
+      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved.",
+      "Tailnet conectada": "Tailnet conectada",
+      "Tailnet sin conexión": "Tailnet desconectada",
+      "identidad guardada": "identidade salva",
+      "guardado pendiente": "salvamento pendente",
+      "guardando identidad": "salvando identidade",
+      "error al guardar identidad": "falha ao salvar identidade",
+      "identidad solo en RAM": "identidade só na RAM"
     },
     "de": {
       "TU DISCO, A TU MEDIDA": "DEIN DATENTRÄGER, DEINE EINSTELLUNGEN",
@@ -5980,7 +6008,14 @@
       "Comprueba las redes, variables y configuración NAS/cloud del perfil.": "Check the profile’s networks, variables and NAS/cloud settings.",
       "El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.": "The credential file must be inside the selected rclone folder.",
       "Estos ajustes necesitan Rescue Disk con perfiles ampliados (imager-profile-v2). Selecciona la imagen compatible; no se descartarán tus ajustes.": "These settings need Rescue Disk with extended profiles (imager-profile-v2). Select a compatible image; your settings will not be discarded.",
-      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved."
+      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved.",
+      "Tailnet conectada": "Tailnet verbunden",
+      "Tailnet sin conexión": "Tailnet getrennt",
+      "identidad guardada": "Identität gespeichert",
+      "guardado pendiente": "Speichern ausstehend",
+      "guardando identidad": "Identität wird gespeichert",
+      "error al guardar identidad": "Speichern fehlgeschlagen",
+      "identidad solo en RAM": "Identität nur im RAM"
     },
     "it": {
       "TU DISCO, A TU MEDIDA": "IL TUO DISCO, A MODO TUO",
@@ -7146,7 +7181,14 @@
       "Comprueba las redes, variables y configuración NAS/cloud del perfil.": "Check the profile’s networks, variables and NAS/cloud settings.",
       "El archivo de credenciales debe estar dentro de la carpeta rclone seleccionada.": "The credential file must be inside the selected rclone folder.",
       "Estos ajustes necesitan Rescue Disk con perfiles ampliados (imager-profile-v2). Selecciona la imagen compatible; no se descartarán tus ajustes.": "These settings need Rescue Disk with extended profiles (imager-profile-v2). Select a compatible image; your settings will not be discarded.",
-      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved."
+      "El USB necesita Rescue Disk con perfiles ampliados; no se guardaron cambios.": "This USB needs Rescue Disk with extended profiles; no changes were saved.",
+      "Tailnet conectada": "Tailnet connessa",
+      "Tailnet sin conexión": "Tailnet disconnessa",
+      "identidad guardada": "identità salvata",
+      "guardado pendiente": "salvataggio in attesa",
+      "guardando identidad": "salvataggio identità",
+      "error al guardar identidad": "salvataggio identità fallito",
+      "identidad solo en RAM": "identità solo in RAM"
     }
   }
 }

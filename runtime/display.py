@@ -34,6 +34,18 @@ def clean(text):
     return ''.join(c if c == '\n' or (c.isprintable() and c not in '\u202a\u202b\u202d\u202e\u202c\u2066\u2067\u2068\u2069') else ' ' for c in text)
 
 
+def tailnet_summary(current):
+    """Connection is live daemon state; identity storage is a separate promise."""
+    saved = current.get('tailnet_persistence', {}).get('state')
+    labels = {'saved': 'identidad guardada', 'pending': 'guardado pendiente',
+              'saving': 'guardando identidad', 'error': 'error al guardar identidad',
+              'session-only': 'identidad solo en RAM'}
+    if saved not in labels:
+        return '', False
+    connected = bool((current.get('tailscale') or {}).get('connected'))
+    return (t('Tailnet conectada') if connected else t('Tailnet sin conexión')) + ' · ' + t(labels[saved]), not connected or saved != 'saved'
+
+
 def layout(width, height):
     if width < 320 or height < 240:
         raise ValueError('Framebuffer too small for a readable cockpit')
@@ -290,9 +302,8 @@ def render(width, height, current, activity=None, tick=0, paused=False, scroll=0
             gx = right+idx*145*s
             d.rounded_rectangle((gx,74*s,gx+120*s,77*s),radius=1,fill=EDGE)
             d.rounded_rectangle((gx,74*s,gx+120*s*max(0,min(100,stats.get(key,0)))/100,77*s),radius=1,fill=CYAN if key=='cpu' else GOLD)
-        saved=current.get('tailnet_persistence',{}).get('state')
-        identity_label={'saved':t('Identidad tailnet preservada'),'pending':t('Identidad tailnet pendiente'),'saving':t('Guardando identidad tailnet'),'error':t('No se pudo preservar la identidad tailnet')}
-        text(right, 87*s, identity_label.get(saved) or current.get('mdns') or t('mDNS esperando'), GOLD if saved in ('pending','saving','error') else DIM, small)
+        identity_label, identity_attention = tailnet_summary(current)
+        text(right, 87*s, identity_label or current.get('mdns') or t('mDNS esperando'), GOLD if identity_attention else DIM, small)
 
     if not geo['sidebar']:
         pose = expression_at(tick,bool(processes),False)

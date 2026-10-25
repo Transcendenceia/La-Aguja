@@ -15,6 +15,18 @@ except ImportError:
 
 
 class GeometryTests(unittest.TestCase):
+    def test_tailnet_connection_and_checkpoint_are_not_conflated(self):
+        with patch.object(display, 't', side_effect=lambda value: value):
+            current={'tailscale':{'connected':True},'tailnet_persistence':{'state':'pending'}}
+            label,attention=display.tailnet_summary(current)
+            self.assertEqual(label,'Tailnet conectada · guardado pendiente');self.assertTrue(attention)
+            current['tailnet_persistence']['state']='saved'
+            self.assertEqual(display.tailnet_summary(current),('Tailnet conectada · identidad guardada',False))
+            current['tailscale']['connected']=False
+            self.assertEqual(display.tailnet_summary(current),('Tailnet sin conexión · identidad guardada',True))
+            current['tailnet_persistence']['state']='session-only'
+            self.assertIn('solo en RAM',display.tailnet_summary(current)[0])
+
     def test_responsive_rectangles_stay_inside_screen(self):
         for w,h in ((320,240),(640,480),(800,600),(1280,720),(1920,1080),(3840,2160)):
             geo = display.layout(w,h)

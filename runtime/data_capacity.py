@@ -1,6 +1,13 @@
 """One-time initialization of fresh USB DATA, including Windows-written media."""
 import json,re,subprocess
 from pathlib import Path
+STATUS=Path('/run/aguja-data-initialization.json')
+
+def deferred():
+ from config_transaction import atomic
+ atomic(STATUS,json.dumps({'schema':1,'state':'deferred','reason':'boot-medium-not-removable-usb','disk_modified':False}).encode())
+ STATUS.chmod(0o644)
+ print('LA AGUJA: DATA no se amplía en un disco fijo o USB no extraíble; el arranque continúa con su capacidad actual.',flush=True)
 
 def initialize(cfg,disk,data):
  marker=Path(cfg)/'data-initialize.json'
@@ -8,7 +15,11 @@ def initialize(cfg,disk,data):
  release=json.loads((Path(cfg)/'release.json').read_text())
  if 'persistent-updates-v1' not in release.get('features',[]):raise ValueError('Inicialización no compatible')
  doc=json.loads(subprocess.check_output(['lsblk','--tree','-b','-J','-o','PATH,TYPE,TRAN,RM,SIZE,LABEL',disk]))['blockdevices'][0]
- if doc['path']!=disk or doc['type']!='disk' or doc.get('tran')!='usb' or not doc.get('rm'):raise ValueError('DATA solo se inicializa en el USB de arranque extraíble')
+ if doc['path']!=disk or doc['type']!='disk':raise ValueError('Medio de arranque no válido para DATA')
+ if doc.get('tran')!='usb' or not doc.get('rm'):
+  # The boot medium already has usable factory DATA. Defer expansion without
+  # writing its partition table; a VM bus mismatch is not an unlock failure.
+  deferred();return None
  children=doc.get('children',[])
  if int(Path('/sys/class/block/'+Path(data).name+'/partition').read_text())!=5 or any(int(Path('/sys/class/block/'+Path(x['path']).name+'/partition').read_text())>5 for x in children):raise ValueError('No se inicializa un diseño distinto al de fábrica')
  if len([x for x in children if x.get('label')=='AGUJA_CFG'])!=1 or len([x for x in children if x['path']==data and x.get('label')=='AGUJA_DATA'])!=1:raise ValueError('Particiones de arranque no válidas')

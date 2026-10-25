@@ -57,6 +57,19 @@ the previous selection. Factory and the previous generation remain in GRUB.
 commands. Cleanup never removes active/previous/running generations or owner data.
 A CD/ISO can run and update in RAM but is not a writable persistence target.
 
+## Explicit power actions (Rescue 1.1.1)
+
+`aguja power menu` offers Power off, Restart, Persist and power off, and Persist
+and restart. The direct `aguja power poweroff|reboot|persist-poweroff|persist-reboot`
+choices still request final confirmation. Cancel/Escape/EOF do not approve.
+Updating or saving does not by itself authorize a power action.
+
+Ordinary shutdown/restart discards unsaved RAM changes. A combined action prompts
+privately for the snapshot password, saves and verifies, syncs and finishes mount
+cleanup before requesting power. If persistence fails, power is cancelled and
+the computer stays on. Never chain an unconditional shutdown after a failed save.
+New boot activation is not evidence that the next boot has already succeeded.
+
 ## Español
 
 **Actualizaciones** solo instala lo elegido en esta sesión: **No / Sí · actualizar**.

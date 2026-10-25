@@ -85,6 +85,11 @@ SeaBIOS are available; read TOOLBOX.md and measure RAM/space before using them.
     aguja desk tailnet
     aguja tailscale
 
+Imager extended profiles (`imager-profile-v2`, public Rescue 1.1.1) can carry
+ordered Wi-Fi networks, NAS/cloud and literal custom environment values. Native
+agent launchers merge these values without shell expansion; provider-card keys
+take precedence. Read SECRETS.md for locations; do not dump environment/files.
+
 The local Desk configures Wi-Fi, network profiles and Tailscale/Headscale:
 HTTPS login URL, native browser enrollment or auth-key file, hostname, DNS,
 routes, exit nodes, LAN access, tags, SSH, shields, SNAT and forwarding. Route
@@ -146,6 +151,14 @@ the encrypted snapshot before activation. Keep its password for the next boot.
 Mounted disks, volatile runtime trees, profiles and DATA workspaces are separate.
 Factory and previous generations remain selectable. Read UPDATES.md and the
 live-updates skill first. No automatic restart or target-OS updates.
+
+`aguja power menu` exposes Power off, Restart, Persist and power off, and Persist
+and restart. Power actions require explicit operator scope and final interactive
+confirmation; update/save alone does not authorize reboot. A combined action
+powers off/restarts only after the encrypted snapshot is saved, verified, synced
+and mount cleanup completes. Failure cancels power and keeps the computer on.
+Ordinary shutdown discards unsaved RAM changes. Never bypass these choices with
+an unconditional shell shutdown chained to a failed save.
 
 Back up recoverable state before delicate changes. Obtain authorization for new
 irreversible scope, keep already-authorized work moving, and verify observable

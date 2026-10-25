@@ -28,12 +28,16 @@ def build(output):
         if source.is_symlink() or not source.is_file():
             raise ValueError('Missing or unsafe bundle source: ' + str(source.relative_to(ROOT)))
         files['flash-imager/' + destination] = source.read_bytes()
-    for name in ['SKILL.md','references/interface.md','references/harnesses.md','assets/request.example.json','scripts/imager.cjs','references/recovery.md']:
+    for name in ['SKILL.md','references/interface.md','references/harnesses.md','assets/request.example.json','assets/request.extended.example.json','scripts/imager.cjs','references/recovery.md']:
         add(ROOT/'skills/flash-imager'/name, name)
-    for name in ['core.cjs','image-storage.cjs','provisioning.cjs','fat32-writer.cjs','public-download.cjs','resources/release-key.json','disk-recovery.cjs','reusable-profile.cjs','package.json']:
+    for name in ['core.cjs','image-storage.cjs','provisioning.cjs','fat32-writer.cjs','public-download.cjs','resources/release-key.json','disk-recovery.cjs','reusable-profile.cjs','profile-extensions.cjs','package.json']:
         add(ROOT/'desktop'/name, 'scripts/lib/desktop/' + name)
     add(ROOT/'runtime/recovery_keys.py', 'scripts/lib/runtime/recovery_keys.py')
     add(ROOT/'runtime/locale-catalog.json', 'scripts/lib/runtime/locale-catalog.json')
+    for name in ['AGENT-CONTEXT.md','UPDATES.md','SECRETS.md']:
+        add(ROOT/'runtime'/name, 'references/live/' + name)
+    for name in ['disk-recovery','live-updates']:
+        add(ROOT/'skills'/name/'SKILL.md', 'references/live/skills/' + name + '/SKILL.md')
     add(ROOT/'LICENSE', 'LICENSE')
     add(ROOT/'NOTICE.md', 'NOTICE.md')
     # Pure JS, pinned existing Imager dependency; include its license, no Electron.
@@ -54,6 +58,7 @@ def build(output):
             add(source, 'scripts/lib/desktop/node_modules/jsonc-parser/' + source.relative_to(jsonc).as_posix())
     manifest = {'skill_version':VERSION,'engine':'Flash Imager','imager_version':json.loads((ROOT/'desktop/package.json').read_text())['version'],
                 'dependency':{'name':'@iarna/toml','version':package['version'],'integrity':lock['packages']['node_modules/@iarna/toml']['integrity']},
+                'dependencies':{name:{'version':lock['packages']['node_modules/'+name]['version'],'integrity':lock['packages']['node_modules/'+name]['integrity']} for name in ['@iarna/toml','jsonc-parser']},
                 'files':{name:hashlib.sha256(data).hexdigest() for name,data in sorted(files.items())}}
     files['flash-imager/BUNDLE-MANIFEST.json'] = (json.dumps(manifest,indent=2)+'\n').encode()
     base = 'aguja-flash-imager-skill-' + VERSION

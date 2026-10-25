@@ -59,13 +59,37 @@ test('standalone distributable prepares an image without checkout or npm install
     const script=path.join(extracted,'flash-imager/scripts/imager.cjs');const doctor=call('doctor',undefined,script);assert.equal(doctor.status,0);
     const manifest=JSON.parse(fs.readFileSync(path.join(extracted,'flash-imager/BUNDLE-MANIFEST.json')));
     const skillVersion=fs.readFileSync(path.join(extracted,'flash-imager/SKILL.md'),'utf8').match(/^  version: "([^"]+)"$/m)[1];
-    assert.equal(doctor.result.version,manifest.skill_version);assert.equal(manifest.skill_version,skillVersion);
+    assert.equal(doctor.result.version,manifest.skill_version);assert.equal(manifest.skill_version,skillVersion);assert.equal(doctor.result.imager_version,manifest.imager_version);
+    assert(fs.existsSync(path.join(extracted,'flash-imager/scripts/lib/desktop/profile-extensions.cjs')));
+    for(const [name,expected] of Object.entries(manifest.files)){assert.equal(hash(path.join(extracted,name)),expected,name);}
     const source=synthetic(dir),r=request(source,path.join(dir,'standalone-private.img'));
     r.disk_recovery=[{type:'bitlocker',label:'Other Windows',identifier:'',key:Array(8).fill('000011').join('-')}];
     assert.equal(call('prepare',r,script).status,1);
     r.protection={mode:'encrypted',passphrase:'SYNTHETIC-BUNDLE-UNLOCK'};
     assert.equal(call('prepare',r,script).status,0);assert(fs.existsSync(r.output_path));
+    verifyExtended(dir,script);
     const second=path.join(dir,'second');execFileSync('python3',[path.join(ROOT,'scripts/package-imager-skill.py'),second]);
     for(const name of fs.readdirSync(output))assert.equal(hash(path.join(output,name)),hash(path.join(second,name)));
   } finally {fs.rmSync(dir,{recursive:true,force:true});}
+});
+
+function verifyExtended(dir,script=cli){
+  const source=synthetic(dir);fat.writeFat32File(source,'AGUJA_CFG','release.json',JSON.stringify({version:'1.1.1',features:['platform-profile-v1','locale-profile-v1','locale-preunlock-v1','imager-profile-v2']}));
+  const before=hash(source),r=request(source,path.join(dir,'extended.img'));
+  const extras={wifi_profiles:[{ssid:'Public-fixture',password:'',security:'open',country:'ES',hidden:false},{ssid:'Private-fixture',password:'SYNTHETIC-WIFI-SECONDARY',security:'wpa-psk',country:'ES',hidden:false}],environment:{SYNTHETIC_VALUE:'literal-${HOME}-$(touch /NEVER-EXECUTE)'},storage:[{name:'Fixture NAS',type:'smb',fields:{host:'nas.example',user:'fixture',pass:'SYNTHETIC-NAS-PRIVATE'},obscured:false}],tailscale:{accept_dns:false,advertise_routes:'192.0.2.0/24',advertise_tags:'tag:fixture',forwarding:false}};
+  for(const extensions of [{wifi_profiles:extras.wifi_profiles},{environment:extras.environment},{storage:extras.storage}]){
+    const probe={...r,capsule:{...r.capsule,extensions}};const blocked=call('prepare',probe,script);assert.equal(blocked.status,1,blocked.stdout);assert(!fs.existsSync(r.output_path));assert(!blocked.stdout.includes('SYNTHETIC'));
+  }
+  r.capsule.extensions=extras;r.protection={mode:'encrypted',passphrase:'SYNTHETIC-EXTENDED-UNLOCK'};
+  const saved=path.join(dir,'extended.aguja'),save=call('save-profile',{capsule:r.capsule,disk_recovery:[],passphrase:r.protection.passphrase,output_path:saved},script);assert.equal(save.status,0,save.stdout);
+  const viaSaved={...r,profile_path:saved,profile_passphrase:r.protection.passphrase};delete viaSaved.capsule;
+  const prepared=call('prepare',viaSaved,script);assert.equal(prepared.status,0,prepared.stdout);assert.equal(prepared.result.profile_verified,true);assert.equal(prepared.result.source_unchanged,true);assert.equal(prepared.result.device_written,false);assert(!prepared.stdout.includes('SYNTHETIC'));assert.equal(prepared.stderr,'');
+  const raw=execFileSync('mtype',['-i',r.output_path+'@@1048576','::/aguja-profile.json']);assert(!raw.includes('SYNTHETIC'));
+  const py='import sys;sys.path.insert(0,sys.argv[1]);from profile import open_capsule;c=open_capsule(sys.stdin.buffer.read(),"SYNTHETIC-EXTENDED-UNLOCK");e=c["extensions"];assert e["wifi_profiles"][1]["password"]=="SYNTHETIC-WIFI-SECONDARY";assert e["storage"][0]["fields"]["pass"]=="SYNTHETIC-NAS-PRIVATE";assert e["environment"]["SYNTHETIC_VALUE"]=="literal-${HOME}-$(touch /NEVER-EXECUTE)";assert e["tailscale"]["advertise_routes"]=="192.0.2.0/24";print("extended runtime opened")';
+  assert.equal(execFileSync('/usr/bin/python3',['-I','-c',py,path.join(ROOT,'runtime')],{input:raw}).toString().trim(),'extended runtime opened');
+  const plain={...r,output_path:path.join(dir,'extended-explicit-plain.img'),protection:{mode:'plain'},allow_plain_secrets:true};const allowed=call('prepare',plain,script);assert.equal(allowed.status,0,allowed.stdout);assert.equal(allowed.result.protection,'plain');
+  const old=path.join(dir,'old.img');fs.copyFileSync(source,old);fat.writeFat32File(old,'AGUJA_CFG','release.json',JSON.stringify({version:'1.1.0',features:['platform-profile-v1','locale-profile-v1']}));const rejected=call('prepare',{...r,image_path:old,image_sha256:hash(old),output_path:path.join(dir,'old-rejected.img')},script);assert.equal(rejected.status,1);assert(!fs.existsSync(path.join(dir,'old-rejected.img')));assert.equal(hash(source),before);
+}
+test('extended profile CLI preserves literal settings and enforces private protection', {skip:process.platform==='win32'},()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-agent-extended-'));try{verifyExtended(dir);}finally{fs.rmSync(dir,{recursive:true,force:true});}
 });

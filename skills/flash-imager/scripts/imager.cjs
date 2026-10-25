@@ -13,7 +13,7 @@ const recovery = require(path.join(root, 'desktop/disk-recovery.cjs'));
 const engineVersion = JSON.parse(fs.readFileSync(path.join(root,'desktop/package.json'))).version;
 const pin = JSON.parse(fs.readFileSync(path.join(root, 'desktop/resources/release-key.json')));
 const reusableProfile=require(path.join(root,'desktop/reusable-profile.cjs'));
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 function emit(value) { process.stdout.write(JSON.stringify(value) + '\n'); }
 function requireValue(ok) { if (!ok) throw Error('invalid'); }
 function keys(value, allowed) {
@@ -53,7 +53,9 @@ function readProfile(image, filename='aguja-profile.json') {
 }
 function privateConfig(c, imports) {
   return Boolean(imports.length || c.network.wifi?.password || c.ssh.password ||
-    Object.values(c.providers).some(p => p.api_key) || c.tailscale?.enabled);
+    Object.values(c.providers).some(p => p.api_key) || c.tailscale?.enabled ||
+    c.extensions?.wifi_profiles?.some(w => w.password) ||
+    Object.keys(c.extensions?.environment || {}).length || c.extensions?.storage?.length);
 }
 async function prepare(r) {
   keys(r, ['image_path','output_path','image_sha256','capsule','protection','import_providers','allow_plain_secrets','disk_recovery','profile_path','profile_passphrase']);
@@ -120,8 +122,8 @@ async function saveProfile(r){
 async function main() {
   requireValue(Number(process.versions.node.split('.')[0]) >= 22);
   const [operation, ...extra] = process.argv.slice(2); requireValue(extra.length === 0);
-  if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare','save-profile','profile-info'],input:'JSON stdin for download, inspect and prepare',usb_writing:false};
-  if (operation === 'doctor') return {ok:true,version:VERSION,imager_version:engineVersion,recovery_types:['bitlocker','luks'],node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32',usb_writing:false};
+  if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare','save-profile','profile-info'],input:'JSON stdin for download, inspect, prepare, save-profile and profile-info',usb_writing:false};
+  if (operation === 'doctor') return {ok:true,version:VERSION,imager_version:engineVersion,recovery_types:['bitlocker','luks'],node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32',profile_extensions:['wifi_profiles','environment','storage','tailscale'],extended_profile_feature:'imager-profile-v2',usb_writing:false};
   if (operation === 'locales') return {ok:true,languages:core.LOCALE_CATALOG.languages,keyboards:core.LOCALE_CATALOG.keyboards};
   if (operation === 'catalog') return {ok:true,signature_verified:true,releases:await catalog()};
   const r = await input();

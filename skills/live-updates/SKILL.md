@@ -2,7 +2,7 @@
 name: live-updates
 description: Update a LA AGUJA RAM session, then explicitly persist the whole live with measured progress and recoverable encrypted snapshots.
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 # Session updates and independent global persistence
 
@@ -35,3 +35,18 @@ This operates an already booted LA AGUJA live, never target recovery disks.
    previous/factory; cleanup retires only inactive unmounted generations, never
    active/previous/running or owner data. Never recreate DATA growth markers on
    an existing USB. Do not publish private global snapshots.
+
+## Rescue 1.1.1 power actions
+
+`aguja power menu` offers Power off, Restart, Persist and power off, and Persist
+and restart. Direct interactive choices are `aguja power poweroff`, `reboot`,
+`persist-poweroff` and `persist-reboot`. They still ask for final confirmation;
+Cancel/Escape/EOF do not approve. Update or save authorization alone does not
+authorize a restart. Ordinary power actions discard unsaved RAM changes.
+
+For an explicitly authorized combined action, enter/repeat the snapshot password
+privately. The worker saves, reads back, syncs and finishes mount cleanup before
+powering off/restarting. A failed save cancels power: the computer stays on and
+previous boot remains available. Never bypass this by chaining `poweroff` after
+a failed persistence command, or call the internal `worker` interface to avoid
+interactive confirmation. Successful activation is not proof of the next boot.

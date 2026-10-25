@@ -81,9 +81,11 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Let an agent prepare the image
 
-**Flash Imager Agent Skill 1.0.5** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, network, SSH and optional AI/tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
+**Flash Imager Agent Skill 1.2.0** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, ordered Wi-Fi networks, SSH, NAS/cloud, literal environment values and optional AI/advanced tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/aguja-flash-imager-skill-1.1.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/aguja-flash-imager-skill-1.1.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/SHA256SUMS-flash-imager-skill-1.1.0) · [Install for your harness](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/SHA256SUMS-flash-imager-skill-1.2.0) · [Install for your harness](skills/flash-imager/references/harnesses.md)
+
+Extended profiles require `imager-profile-v2` (public Rescue 1.1.1); the bundled engine is Imager 1.1.0. The bundle also includes reference copies of the updated live skills; this does not update an existing boot image.
 
 Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw and manual loading. Portable format support does not certify every harness or OS.
 

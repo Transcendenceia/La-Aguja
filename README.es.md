@@ -81,9 +81,11 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 ### Deja que un agente prepare la imagen
 
-**Flash Imager Agent Skill 1.0.5** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, red, SSH y perfiles opcionales IA/tailnet, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
+**Flash Imager Agent Skill 1.2.0** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, varias redes Wi-Fi ordenadas, SSH, NAS/cloud, variables literales y perfiles opcionales IA/tailnet ampliada, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/aguja-flash-imager-skill-1.1.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/aguja-flash-imager-skill-1.1.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.1.0/SHA256SUMS-flash-imager-skill-1.1.0) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/SHA256SUMS-flash-imager-skill-1.2.0) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+
+Los perfiles ampliados requieren `imager-profile-v2` (Rescue público 1.1.1); el motor incluido es Imager 1.1.0. El paquete lleva copias de referencia de las skills del live: no actualiza una imagen de arranque existente.
 
 Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual. Un formato portátil no certifica todos los arneses o sistemas operativos.
 

@@ -1,0 +1,69 @@
+{
+  "image_path": "/absolute/path/aguja-base.img",
+  "output_path": "/absolute/private/path/my-aguja.img",
+  "image_sha256": "REPLACE_WITH_TRUSTED_BASE_SHA256",
+  "capsule": {
+    "schema": 1,
+    "hostname": "my-aguja",
+    "locale": {
+      "language": "en_US.UTF-8",
+      "keyboard": "us",
+      "variant": ""
+    },
+    "network": {
+      "ethernet": {
+        "method": "auto"
+      }
+    },
+    "ssh": {
+      "port": 22,
+      "password": "",
+      "public_key": "REPLACE_WITH_YOUR_SSH_PUBLIC_KEY"
+    },
+    "providers": {},
+    "tailscale": {
+      "enabled": false
+    },
+    "extensions": {
+      "wifi_profiles": [
+        {
+          "ssid": "REPLACE_WITH_AUTHORIZED_PRIMARY",
+          "password": "",
+          "security": "open",
+          "country": "ES",
+          "hidden": false
+        },
+        {
+          "ssid": "REPLACE_WITH_AUTHORIZED_SECONDARY",
+          "password": "REPLACE_PRIVATELY",
+          "security": "wpa-psk",
+          "country": "ES",
+          "hidden": false
+        }
+      ],
+      "environment": {
+        "EXAMPLE_LITERAL": "literal-${HOME}-not-expanded"
+      },
+      "storage": [
+        {
+          "name": "authorized-nas",
+          "type": "smb",
+          "fields": {
+            "host": "nas.example",
+            "user": "REPLACE_PRIVATELY",
+            "pass": "REPLACE_PRIVATELY"
+          },
+          "obscured": false
+        }
+      ],
+      "tailscale": {
+        "accept_dns": false
+      }
+    }
+  },
+  "protection": {
+    "mode": "encrypted",
+    "passphrase": "REPLACE_THROUGH_PRIVATE_INPUT"
+  },
+  "import_providers": []
+}

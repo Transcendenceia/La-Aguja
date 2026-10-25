@@ -35,13 +35,15 @@ BitLocker entries are 48-digit recovery passwords, not PINs, login passwords or 
 | --- | --- | --- |
 | Portable boot profile | `/config/aguja-profile.json` | Unlocked at the early boot gate; never dump the capsule |
 | Legacy literal Wi-Fi/SSH settings | `/config/aguja.conf` | Read only the needed setting privately; may be stale for an encrypted profile |
+| Literal custom environment | `/home/aguja/.config/aguja/custom-env.json` | Native launchers merge literal data; provider-card keys take precedence; never print its values |
+| NAS/cloud configuration | `/config/private/storage/rclone.conf` or `/run/aguja-storage/storage/rclone.conf` | `aguja storage status --json` selects the actual location; vault or private RAM, not plain DATA |
 | API settings for native agents | `/home/aguja/.config/aguja/provider-env.json` | Native launchers call `profile.provider_environment`; don't print `env` or `/proc/*/environ` |
 | Codex file login | `/home/aguja/.codex/auth.json` | Use the existing native login; absence may mean no portable session |
 | Claude file login | `/home/aguja/.claude/.credentials.json` | Native CLI consumes it; don't dump refresh/access tokens |
 | Antigravity imported login | `/home/aguja/.gemini/antigravity-cli/antigravity-oauth-token` | File-based imported login, not a promise about OS keychains |
 | OpenCode native login | `/home/aguja/.local/share/opencode/auth.json` | Use native CLI/settings, not a general export |
 | Tailnet enrollment | `/run/aguja-tailnet-private/auth.key` | Root-private service input; do not re-enroll or change ACLs just to test presence |
-| Active Wi-Fi keyfile | `/etc/NetworkManager/system-connections/aguja-wifi.nmconnection` | NetworkManager consumes it; don't print PSK/EAP credentials |
+| Active Wi-Fi keyfile | `/etc/NetworkManager/system-connections/aguja-wifi*.nmconnection` | NetworkManager consumes it; don't print PSK/EAP credentials |
 | USB-specific SSH host key | `/data/ssh/ssh_host_ed25519_key` | SSH server identity; not a client login or disk recovery key |
 
 Locations do not imply presence, validity or permission to use a credential. Encrypted profile secrets remain unavailable before unlock and in RAM afterwards; persistent HOME is disabled for protected profiles. A reboot clears the RAM cache and relocks the recovery/profile capsules. Do not create plaintext copies on DATA, in reports, project files, shell history or public release assets. Display/activity redaction is a last layer, not permission to print secrets.

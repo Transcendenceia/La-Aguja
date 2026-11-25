@@ -53,11 +53,11 @@
   "privacy": "Privacy",
   "footer": "Open source · GPL-3.0-or-later · Je eigen netwerk, zonder LA AGUJA-relay.",
   "docTitle": "Gebruikershandleiding · LA AGUJA",
-  "docDescription": "Start onafhankelijk Linux vanaf USB en geef de AI-agent een missie: systemen bouwen, Windows voorbereiden, virtuele labs maken of toegestane machines coördineren. Begin met hardware, niet de toestand van het geïnstalleerde systeem.",
+  "docDescription": "Start onafhankelijke Linux vanaf USB met AI-agents op elke x86-64 pc, flash ESP32-tailnetnodes met Flash Imager 1.2.0 of automatiseer voorbereiding met Agent Skill 1.3.0.",
   "docUI": [
     "Naar de handleiding",
     "Inhoud en zoeken",
-    "Herstellen. Begrijpen. Beslissen.",
+    "Opereren. Bouwen. Beslissen.",
     "Zoeken in deze handleiding",
     "Bekijk de inhoud of zoek een term.",
     "Afdrukken / opslaan als PDF",

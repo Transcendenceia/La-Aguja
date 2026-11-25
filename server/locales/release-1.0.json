@@ -39,14 +39,14 @@
       ]
     ],
     "wizard": [
-      "Follow Image, Network, SSH access, AI, Private network, Encrypted disks and Create disk. The wizard has seven steps, not nine. Profiles/USB and Imager updates sit outside it; returning preserves your settings."
+      "Follow Image, Network, SSH access, AI, Private network, Encrypted disks and Create disk for USB Rescue (seven steps), or switch to IoT · MCU in Flash Imager 1.2.0 for the 4-step ESP32 wizard. Profiles/USB and Imager updates sit outside both wizards; returning preserves your settings."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0: downloads, profiles and USB settings",
-        "Download the Windows EXE or Linux AppImage, DEB or portable archive from the official 1.0.0 release. Open it as your normal user; privileged disk operations ask for UAC/Polkit.",
-        "Profiles and USB configuration saves/opens encrypted .aguja profiles and reads, decrypts and edits an existing USB CFG without reflashing. Check the exact device before saving. DATA and boot generations are preserved. Editing an old USB does not upgrade its live system.",
-        "Imager updates checks the signed catalogue and downloads a verified package only when you choose. It does not replace or run the application automatically."
+        "Flash Imager 1.2.0: downloads, USB profiles, ESP32 IoT and Agent Skill 1.3.0",
+        "Download the Windows portable EXE or Linux AppImage, DEB or portable archive from the official v1.2.0 release. Open it as your normal user; only physical USB operations ask for UAC/Polkit. Windows builds bundle standalone Espressif esptool.exe and need zero Python for ESP32 flashing.",
+        "In USB mode, Profiles and USB saves/opens encrypted .aguja profiles (including extended imager-profile-v2 Wi-Fi, NAS/cloud, literal env and tailnet settings) and edits an existing USB CFG without reflashing. In IoT · MCU mode, Flash Imager 1.2.0 auto-detects connected ESP32 chips over USB, bundles 6 prebuilt v1.4.0 firmwares for 11 boards, generates pure-JS 48 KiB NVS v2 partitions (SoftAP disabled by default), verifies serial boot and offers 1-click flash erase.",
+        "For headless automation without Electron, Agent Skill 1.3.0 exposes the same GPT/FAT32 .img engine and ESP32 NVS v2 generator (iot-boards, iot-nvs) under Node 22+, stopping safely at verified files. Imager updates checks the signed catalogue and downloads verified packages only when you choose."
       ],
       "11": [
         "Secrets and reusable profiles",
@@ -70,14 +70,14 @@
         "A writable 1.0-compatible USB, free DATA space and sufficient RAM are required. Pending generations are preserved as build bases; profile secrets and workspace are not copied into the system. Editing CFG alone does not upgrade an older USB."
       ],
       "24": [
-        "Validation of 1.0 and its limits",
-        "The release documents Linux/Windows Imager checks, encrypted profiles and CFG editing, BIOS/UEFI virtual USB boots, persistent generations and rollback. The linked release validation records the tested scope.",
-        "Screenshots retain their labelled historical versions and synthetic QA data. Neither these checks nor a client version prove provider authentication/inference, successful customer recovery, universal hardware support or Secure Boot compatibility."
+        "Validation of Rescue 1.1.2, Imager 1.2.0 and IoT ESP32",
+        "Published validation documents cover Rescue Disk 1.1.2 (BIOS/UEFI boots, encrypted LUKS profile unlock, persistent generations, rollback and tailnet identity), Flash Imager 1.2.0 on Linux and Windows (USB profiles, CFG editing and live ESP32-C6 + ESP32-S3-WROOM-1 N16R8 flashing with zero-Python Windows esptool.exe), and Agent Skill 1.3.0 deterministic bundles.",
+        "Screenshots retain their labelled historical versions and synthetic QA data. Verified ESP32 hardware tests cover Seeed Studio XIAO ESP32-C6 and ESP32-S3-WROOM-1 N16R8; other ESP32 sub-variants ship compiled and packaged v1.4.0 firmwares pending individual field tests. Neither these checks nor client versions guarantee universal hardware, Secure Boot or third-party AI account access."
       ],
       "9": [
         "Step 5 · Your Tailscale or Headscale",
         "Remote access is optional. Enable private networking, provide an authorised auth/pre-auth key and optionally a node name. An empty Headscale URL selects official Tailscale; otherwise provide your own HTTPS Headscale endpoint. The live system registers at boot after networking and profile unlock. This does not enrol the preparation PC or create a proprietary LA AGUJA tunnel. Your connecting client must belong to the same authorised tailnet and satisfy its policies. A registration key is not an SSH password or AI API key. Registration alone does not prove that ACLs allow SSH; verify a real connection from the authorised client.",
-        "Since Rescue Disk 1.0.2, the USB restores its saved Tailscale/Headscale identity before connecting. The enrollment key is used for first registration, not a new node on each reboot. Unchanged state is not rewritten; changed state is saved atomically and verified. Automatic profiles add no unlock; encrypted profiles retain their existing unlock. Server expiry and revocation still apply."
+        "Since Rescue Disk 1.0.2, the USB restores its saved Tailscale/Headscale identity before connecting. The enrollment key is used for first registration, not a new node on each reboot. Unchanged state is not rewritten; changed state is saved atomically and verified. Automatic profiles add no unlock; encrypted profiles retain their existing unlock. Server expiry and revocation still apply. LA AGUJA IoT (ESP32 v1.4.0) nodes join your same Tailscale or Headscale tailnet directly over WireGuard/DERP as pocket exit nodes, dynamic upstream subnet routers and DNS relays, controllable remotely via REST API or aguja-iot.py without any LA AGUJA relay."
       ]
     },
     "create": "Step 7 · Prepare, flash and verify",
@@ -133,14 +133,14 @@
       ]
     ],
     "wizard": [
-      "Recorre Imagen, Red, Acceso SSH, IA, Red privada, Discos cifrados y Crear disco. Son siete pasos, no nueve. Perfiles y USB y Actualizaciones están fuera del asistente; al volver se conservan tus ajustes."
+      "Recorre Imagen, Red, Acceso SSH, IA, Red privada, Discos cifrados y Crear disco para USB Rescue (siete pasos), o cambia al modo IoT · MCU en Flash Imager 1.2.0 para el asistente ESP32 de 4 pasos. Perfiles y USB y Actualizaciones quedan fuera; al volver se conservan tus ajustes."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0: descargas, perfiles y configuración USB",
-        "Descarga el EXE Windows o AppImage, DEB o archivo portátil Linux de la release oficial 1.0.0. Ábrelo como usuario normal; las operaciones privilegiadas sobre discos piden UAC/Polkit.",
-        "Perfiles y USB permite guardar y abrir perfiles .aguja cifrados y leer, descifrar y editar el CFG de un USB existente sin regrabar. Comprueba el dispositivo exacto antes de guardar. Se conservan DATA y las generaciones de arranque. Editar un USB antiguo no actualiza su sistema live.",
-        "Actualizaciones del Imager consulta el catálogo firmado y descarga un paquete verificado solo si lo eliges. No sustituye ni ejecuta la aplicación automáticamente."
+        "Flash Imager 1.2.0: descargas, perfiles USB, IoT ESP32 y Agent Skill 1.3.0",
+        "Descarga el EXE portátil de Windows o AppImage, DEB o archivo portátil Linux de la release oficial v1.2.0. Ábrelo como usuario normal; solo las operaciones físicas sobre USB piden UAC/Polkit. La versión Windows incluye esptool.exe oficial y no necesita Python para flashear ESP32.",
+        "En modo USB, Perfiles y USB guarda y abre plantillas .aguja cifradas (incluyendo ajustes ampliados imager-profile-v2 de Wi-Fi, NAS/nube, variables literales y tailnet) y edita el CFG de un USB existente sin regrabar. En modo IoT · MCU, Flash Imager 1.2.0 detecta automáticamente el chip ESP32 por USB, integra 6 firmwares v1.4.0 precompilados para 11 placas, genera particiones NVS v2 de 48 KiB en JS puro (SoftAP desactivado por defecto), verifica el arranque por serie y permite borrar la flash en 1 clic.",
+        "Para automatización sin ventana ni Electron, Agent Skill 1.3.0 ofrece el mismo motor GPT/FAT32 y generador ESP32 NVS v2 (iot-boards, iot-nvs) con Node 22+, deteniéndose en archivos verificados. Actualizaciones del Imager consulta el catálogo firmado y solo descarga cuando tú eliges."
       ],
       "11": [
         "Secretos y perfiles reutilizables",
@@ -164,14 +164,14 @@
         "Necesitas un USB escribible compatible con 1.0, espacio libre en DATA y RAM suficiente. La generación pendiente se conserva como base; los secretos del perfil y el workspace no se copian al sistema. Editar solo CFG no actualiza un USB antiguo."
       ],
       "24": [
-        "Validación de la 1.0 y sus límites",
-        "La release documenta pruebas del Imager Linux/Windows, perfiles cifrados y edición CFG, arranques de USB virtual BIOS/UEFI, generaciones persistentes y rollback. El documento de validación enlazado detalla el alcance ensayado.",
-        "Las capturas mantienen sus versiones históricas indicadas y datos sintéticos de QA. Estas pruebas y la versión de un cliente no demuestran autenticación o inferencia del proveedor, rescates exitosos de clientes, compatibilidad universal ni Secure Boot."
+        "Validación de Rescue 1.1.2, Imager 1.2.0 e IoT ESP32",
+        "La documentación de validación cubre Rescue Disk 1.1.2 (arranques BIOS/UEFI, desbloqueo LUKS, generaciones persistentes, rollback e identidad tailnet), Flash Imager 1.2.0 en Linux y Windows (perfiles USB, edición CFG y flasheo real de ESP32-C6 y ESP32-S3-WROOM-1 N16R8 con esptool.exe sin Python en Windows) y paquetes deterministas de Agent Skill 1.3.0.",
+        "Las capturas conservan sus versiones históricas indicadas y datos sintéticos de QA. Las pruebas físicas IoT cubren Seeed Studio XIAO ESP32-C6 y ESP32-S3-WROOM-1 N16R8; el resto de subfamilias ESP32 incluyen firmwares v1.4.0 compilados y empaquetados pendientes de ensayo físico individual. Estas comprobaciones no garantizan compatibilidad universal de hardware, Secure Boot ni cuentas IA externas."
       ],
       "9": [
         "Paso 5 · Tu Tailscale o Headscale",
         "El acceso remoto es opcional. Activa la red privada y facilita una clave de alta autorizada. Una URL Headscale vacía selecciona Tailscale oficial; de lo contrario usa tu servidor HTTPS. El cliente de acceso debe pertenecer a la misma red y cumplir sus políticas; comprueba una conexión SSH real.",
-        "Desde Rescue Disk 1.0.2, el USB recupera su identidad Tailscale/Headscale guardada antes de conectar. La clave de alta sirve para el primer registro, no para crear un nodo en cada reinicio. El estado idéntico no se reescribe; los cambios se guardan atómicamente y se verifican. El perfil automático no añade desbloqueo; el cifrado conserva el suyo. Siguen aplicándose la caducidad y revocación del servidor."
+        "Desde Rescue Disk 1.0.2, el USB recupera su identidad Tailscale/Headscale guardada antes de conectar. La clave de alta sirve para el primer registro, no para crear un nodo en cada reinicio. El estado idéntico no se reescribe; los cambios se guardan atómicamente y se verifican. El perfil automático no añade desbloqueo; el cifrado conserva el suyo. Siguen aplicándose la caducidad y revocación del servidor. Los nodos LA AGUJA IoT (ESP32 v1.4.0) también se unen a tu mismo Tailscale o Headscale por WireGuard/DERP como exit node de bolsillo, subnet router dinámico y DNS relay, controlables a distancia por API REST o aguja-iot.py sin relay de LA AGUJA."
       ]
     },
     "create": "Paso 7 · Preparar, grabar y verificar",
@@ -227,14 +227,14 @@
       ]
     ],
     "wizard": [
-      "Suivez Image, Réseau, SSH, IA, Réseau privé, Disques chiffrés et Créer le disque : sept étapes, pas neuf. Profils/USB et mises à jour sont hors assistant ; le retour conserve vos réglages."
+      "Suivez les sept étapes USB (Image à Créer le disque) ou basculez en mode IoT · MCU dans Flash Imager 1.2.0 pour l’assistant ESP32 en 4 étapes. Profils/USB et Mises à jour restent hors assistant ; vos réglages sont conservés."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0 : téléchargements, profils et USB",
-        "Téléchargez l’EXE Windows ou l’AppImage, DEB ou archive Linux de la release officielle 1.0.0. Lancez-le en utilisateur normal ; les opérations privilégiées demandent UAC/Polkit.",
-        "Profils/USB enregistre et ouvre les profils .aguja chiffrés et lit, déchiffre et modifie le CFG d’une clé existante sans la réécrire. Vérifiez le périphérique exact ; DATA et les générations sont conservés. Modifier une ancienne clé ne met pas son système live à niveau.",
-        "La mise à jour Imager consulte le catalogue signé et télécharge un paquet vérifié sur demande, sans remplacement ni exécution automatique."
+        "Flash Imager 1.2.0 : téléchargements, profils USB, IoT ESP32 et Agent Skill 1.3.0",
+        "Téléchargez l’EXE Windows ou l’AppImage, DEB ou archive Linux depuis la release officielle v1.2.0. Lancez-le en utilisateur normal ; seules les écritures USB demandent UAC/Polkit. Windows inclut esptool.exe autonome sans Python pour flasher les cartes ESP32.",
+        "En mode USB, Profils/USB gère les modèles chiffrés .aguja (imager-profile-v2) et modifie le CFG sans réécrire DATA. En mode IoT · MCU, Flash Imager 1.2.0 détecte automatiquement la puce ESP32 par USB, embarque 6 firmwares v1.4.0 pour 11 cartes, génère la partition NVS v2 48 Kio en JS pur (SoftAP désactivé par défaut), vérifie le démarrage série et efface la flash en 1 clic.",
+        "Pour l’automatisation sans interface, Agent Skill 1.3.0 expose le même moteur .img et générateur NVS v2 (iot-boards, iot-nvs) sous Node 22+, sans écriture matérielle automatique. Les mises à jour Imager vérifient le catalogue signé à la demande."
       ],
       "11": [
         "Secrets et profils réutilisables",
@@ -258,14 +258,14 @@
         "Clé compatible 1.0 inscriptible, espace DATA et RAM suffisants requis. La génération en attente sert de base ; secrets et workspace ne sont pas copiés. Modifier CFG ne modernise pas une ancienne clé."
       ],
       "24": [
-        "Validation de la 1.0 et limites",
-        "La release documente Imager Linux/Windows, profils chiffrés, édition CFG, démarrages USB virtuels BIOS/UEFI, générations persistantes et rollback. Le document lié précise le périmètre testé.",
-        "Les captures gardent leurs versions historiques et données synthétiques. Ces tests et une version de client ne prouvent pas une authentification/inférence fournisseur, une récupération client réussie, une compatibilité matérielle universelle ou Secure Boot."
+        "Validation de Rescue 1.1.2, Imager 1.2.0 et IoT ESP32",
+        "Les rapports de validation couvrent Rescue Disk 1.1.2 (BIOS/UEFI, LUKS, générations persistantes, rollback et identité tailnet), Flash Imager 1.2.0 sous Linux et Windows (profils USB, édition CFG et flash réel ESP32-C6 / ESP32-S3-WROOM-1 N16R8 sans Python sous Windows) et Agent Skill 1.3.0.",
+        "Les captures gardent leurs versions historiques et données synthétiques. Les essais matériels IoT couvrent XIAO ESP32-C6 et ESP32-S3-WROOM-1 N16R8 ; les autres variantes ESP32 embarquent des firmwares v1.4.0 compilés. Ces tests ne garantissent pas tout matériel, Secure Boot ni les comptes IA tiers."
       ],
       "9": [
         "Étape 5 · Votre Tailscale ou Headscale",
         "L’accès distant est facultatif. Activez le réseau privé, fournissez une clé auth/pre-auth autorisée et éventuellement un nom de nœud. Une URL Headscale vide utilise Tailscale officiel ; sinon indiquez votre serveur HTTPS. Le live s’inscrit au démarrage après réseau et déverrouillage, pas le PC préparateur. Le client doit appartenir au réseau privé autorisé et respecter ses politiques. La clé d’inscription ne remplace pas le mot de passe SSH. Une inscription ne prouve pas les ACL : testez SSH depuis le client autorisé.",
-        "Depuis Rescue Disk 1.0.2, le support restaure son identité Tailscale/Headscale avant la connexion. La clé sert à la première inscription, pas à créer un nœud à chaque redémarrage. Un état identique n’est pas réécrit ; les changements sont enregistrés atomiquement et vérifiés. Le profil automatique n’ajoute aucun déverrouillage ; le profil chiffré conserve le sien. Expiration et révocation du serveur restent applicables."
+        "Depuis Rescue Disk 1.0.2, le support restaure son identité Tailscale/Headscale avant la connexion. La clé sert à la première inscription, pas à créer un nœud à chaque redémarrage. Un état identique n’est pas réécrit ; les changements sont enregistrés atomiquement et vérifiés. Le profil automatique n’ajoute aucun déverrouillage ; le profil chiffré conserve le sien. Expiration et révocation du serveur restent applicables. Les nœuds LA AGUJA IoT (ESP32 v1.4.0) rejoignent aussi votre Tailscale ou Headscale en WireGuard/DERP comme exit node, routeur de sous-réseau dynamique et relais DNS, pilotables à distance via API REST ou aguja-iot.py."
       ]
     },
     "create": "Étape 7 · Préparer, écrire et vérifier",
@@ -321,14 +321,14 @@
       ]
     ],
     "wizard": [
-      "Image, Netzwerk, SSH, KI, Privates Netzwerk, Verschlüsselte Datenträger und Datenträger erstellen: sieben Schritte, nicht neun. Profile/USB und Updates liegen außerhalb; bei Rückkehr bleiben Einstellungen erhalten."
+      "Folge den sieben USB-Schritten (Image bis Datenträger erstellen) oder wechsle in Flash Imager 1.2.0 in den 4-stufigen IoT-·-MCU-Modus für ESP32-Boards. Profile/USB und Updates liegen außerhalb; Einstellungen bleiben erhalten."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0: Downloads, Profile und USB",
-        "Windows-EXE oder Linux-AppImage, DEB oder Archiv aus Release 1.0.0 herunterladen. Als normaler Benutzer öffnen; privilegierte Datenträgeraktionen fragen UAC/Polkit an.",
-        "Profile/USB speichert und öffnet verschlüsselte .aguja-Profile und liest, entschlüsselt und bearbeitet CFG vorhandener Sticks ohne Neuschreiben. Exaktes Gerät prüfen. DATA und Boot-Generationen bleiben erhalten. CFG-Bearbeitung aktualisiert kein altes Live-System.",
-        "Imager-Updates prüft den signierten Katalog und lädt auf Wunsch ein verifiziertes Paket, ohne automatisches Ersetzen oder Ausführen."
+        "Flash Imager 1.2.0: Downloads, USB-Profile, ESP32 IoT und Agent Skill 1.3.0",
+        "Lade Windows-EXE oder Linux-AppImage, DEB oder Archiv aus dem offiziellen Release v1.2.0. Als normaler Benutzer starten; nur USB-Schreibvorgänge fragen UAC/Polkit an. Windows enthält eigenständiges esptool.exe ohne Python.",
+        "Im USB-Modus verwaltet Profile/USB verschlüsselte .aguja-Vorlagen (imager-profile-v2) und bearbeitet CFG ohne DATA zu löschen. Im IoT-·-MCU-Modus erkennt Flash Imager 1.2.0 angeschlossene ESP32-Chips automatisch, bündelt 6 v1.4.0-Firmwares für 11 Boards, erzeugt 48-KiB-NVS-v2-Partitionen in reinem JS (SoftAP standardmäßig aus), prüft den seriellen Start und löscht Flash per Klick.",
+        "Für Headless-Automatisierung ohne Electron bietet Agent Skill 1.3.0 dieselbe .img-Engine und den ESP32-NVS-v2-Generator (iot-boards, iot-nvs) unter Node 22+, ohne automatisches Flashen. Imager-Updates prüfen den signierten Katalog nur auf Wunsch."
       ],
       "11": [
         "Geheimnisse und wiederverwendbare Profile",
@@ -352,14 +352,14 @@
         "Beschreibbarer 1.0-kompatibler USB, freier DATA-Speicher und genug RAM erforderlich. Die ausstehende Generation bleibt Grundlage; Geheimnisse und Workspace werden nicht kopiert. CFG-Bearbeitung aktualisiert keinen alten USB."
       ],
       "24": [
-        "Validierung von 1.0 und Grenzen",
-        "Die Release dokumentiert Linux-/Windows-Imager, verschlüsselte Profile, CFG-Bearbeitung, virtuelle BIOS-/UEFI-USB-Starts, persistente Generationen und Rollback. Das verlinkte Prüfprotokoll nennt den Umfang.",
-        "Aufnahmen behalten ihre historischen Versionen und synthetischen Daten. Tests und Client-Version belegen keine Anbieteranmeldung/Inferenz, erfolgreiche Kundenrettung, universelle Hardware oder Secure Boot."
+        "Validierung von Rescue 1.1.2, Imager 1.2.0 und IoT ESP32",
+        "Die Prüfberichte decken Rescue Disk 1.1.2 (BIOS/UEFI, LUKS, persistente Generationen, Rollback, Tailnet-Identität), Flash Imager 1.2.0 unter Linux und Windows (USB-Profile, CFG-Bearbeitung und echtes Flashen auf ESP32-C6 und ESP32-S3-WROOM-1 N16R8 ohne Python unter Windows) sowie Agent Skill 1.3.0 ab.",
+        "Aufnahmen behalten ihre historischen Versionen und synthetischen Daten. Physische IoT-Tests erfolgten auf XIAO ESP32-C6 und ESP32-S3-WROOM-1 N16R8; weitere ESP32-Varianten enthalten kompilierte v1.4.0-Firmwares. Dies garantiert weder universelle Hardware noch Secure Boot oder Anbieterkonten."
       ],
       "9": [
         "Schritt 5 · Eigenes Tailscale/Headscale",
         "Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC. Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client.",
-        "Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin."
+        "Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin. LA AGUJA IoT-Knoten (ESP32 v1.4.0) treten demselben Tailscale oder Headscale per WireGuard/DERP als Exit-Node, dynamischer Subnetz-Router und DNS-Relay bei, fernsteuerbar per REST-API oder aguja-iot.py."
       ]
     },
     "create": "Schritt 7 · Vorbereiten, schreiben und prüfen",
@@ -415,14 +415,14 @@
       ]
     ],
     "wizard": [
-      "Segue Imagem, Rede, SSH, IA, Rede privada, Discos encriptados e Criar disco: sete passos, não nove. Perfis/USB e atualizações ficam fora do assistente; ao voltar, os ajustes são preservados."
+      "Segue os sete passos USB (Imagem até Criar disco) ou alterna para IoT · MCU no Flash Imager 1.2.0 para o assistente ESP32 de 4 passos. Perfis/USB e Atualizações ficam fora; ao voltar, os ajustes mantêm-se."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0: transferências, perfis e USB",
-        "Obtém EXE Windows ou AppImage, DEB ou arquivo Linux da release oficial 1.0.0. Abre como utilizador normal; operações privilegiadas pedem UAC/Polkit.",
-        "Perfis/USB guarda e abre perfis .aguja encriptados e lê, desencripta e edita CFG de USB existente sem regravar. Confirma o dispositivo exato. DATA e gerações são preservados. Editar CFG não atualiza um live antigo.",
-        "Atualizações do Imager consulta o catálogo assinado e transfere um pacote verificado se escolheres, sem substituição ou execução automática."
+        "Flash Imager 1.2.0: transferências, perfis USB, IoT ESP32 e Agent Skill 1.3.0",
+        "Obtém o EXE portátil Windows ou AppImage, DEB ou arquivo Linux da release oficial v1.2.0. Abre como utilizador normal; apenas operações físicas em USB pedem UAC/Polkit. O Windows inclui esptool.exe autónomo sem Python.",
+        "No modo USB, Perfis/USB guarda e abre modelos cifrados .aguja (imager-profile-v2) e edita o CFG sem regravar DATA. No modo IoT · MCU, o Flash Imager 1.2.0 deteta automaticamente o chip ESP32 por USB, integra 6 firmwares v1.4.0 para 11 placas, gera partições NVS v2 de 48 KiB em JS puro (SoftAP desativado por defeito), verifica o arranque série e apaga flash num clique.",
+        "Para automação sem janela nem Electron, a Agent Skill 1.3.0 fornece o mesmo motor .img e gerador NVS v2 (iot-boards, iot-nvs) com Node 22+, parando em ficheiros verificados. Atualizações do Imager validam o catálogo assinado a pedido."
       ],
       "11": [
         "Segredos e perfis reutilizáveis",
@@ -446,14 +446,14 @@
         "USB gravável compatível com 1.0, espaço DATA e RAM suficientes. A geração pendente é preservada como base; segredos e workspace não são copiados. Editar CFG não atualiza um USB antigo."
       ],
       "24": [
-        "Validação da 1.0 e limites",
-        "A release documenta Imager Linux/Windows, perfis encriptados, edição CFG, USB virtual BIOS/UEFI, gerações persistentes e rollback. A validação ligada descreve o âmbito ensaiado.",
-        "Capturas mantêm versões históricas e dados sintéticos. Testes e versão do cliente não provam autenticação/inferência, recuperação de clientes, hardware universal ou Secure Boot."
+        "Validação de Rescue 1.1.2, Imager 1.2.0 e IoT ESP32",
+        "Os relatórios cobrem Rescue Disk 1.1.2 (arranques BIOS/UEFI, LUKS, gerações persistentes, rollback e identidade tailnet), Flash Imager 1.2.0 em Linux e Windows (perfis USB, edição CFG e gravação real em ESP32-C6 e ESP32-S3-WROOM-1 N16R8 sem Python no Windows) e Agent Skill 1.3.0.",
+        "As capturas preservam versões históricas e dados sintéticos. Testes físicos IoT cobriram XIAO ESP32-C6 e ESP32-S3-WROOM-1 N16R8; as restantes variantes ESP32 levam firmwares v1.4.0 compilados. Não garantem hardware universal, Secure Boot nem contas IA externas."
       ],
       "9": [
         "Passo 5 · Tailscale/Headscale próprio",
         "Acesso opcional: ativa rede privada, fornece chave auth/pre-auth autorizada e nome opcional. URL Headscale vazia usa Tailscale oficial; caso contrário, servidor HTTPS próprio. O live inscreve-se depois de rede e desbloqueio, não o PC preparador. O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real.",
-        "Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se."
+        "Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se. Os nós LA AGUJA IoT (ESP32 v1.4.0) ligam-se ao teu mesmo Tailscale ou Headscale por WireGuard/DERP como exit node, subnet router dinâmico e DNS relay, controláveis remotamente por API REST ou aguja-iot.py."
       ]
     },
     "create": "Passo 7 · Preparar, gravar e verificar",
@@ -509,14 +509,14 @@
       ]
     ],
     "wizard": [
-      "Immagine, Rete, SSH, IA, Rete privata, Dischi cifrati e Crea disco: sette passi, non nove. Profili/USB e aggiornamenti sono esterni alla procedura; tornando, le impostazioni restano."
+      "Segui i sette passaggi USB (da Immagine a Crea disco) oppure passa a IoT · MCU in Flash Imager 1.2.0 per la procedura ESP32 in 4 passaggi. Profili/USB e Aggiornamenti restano esterni; le impostazioni sono preservate."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0: download, profili e USB",
-        "Scarica EXE Windows o AppImage, DEB o archivio Linux dalla release ufficiale 1.0.0. Avvia come utente normale; operazioni privilegiate richiedono UAC/Polkit.",
-        "Profili/USB salva e apre profili .aguja cifrati e legge, decifra e modifica CFG di USB esistenti senza riscrittura. Verifica il dispositivo esatto. DATA e generazioni restano intatti. Modificare CFG non aggiorna un vecchio live.",
-        "Aggiornamenti Imager consulta il catalogo firmato e scarica un pacchetto verificato solo su scelta, senza sostituire o eseguire automaticamente."
+        "Flash Imager 1.2.0: download, profili USB, IoT ESP32 e Agent Skill 1.3.0",
+        "Scarica l’EXE Windows o AppImage, DEB o archivio Linux dalla release ufficiale v1.2.0. Avvialo come utente normale; solo le scritture USB richiedono UAC/Polkit. Windows integra esptool.exe autonomo senza Python.",
+        "In modalità USB, Profili/USB salva/apre modelli cifrati .aguja (imager-profile-v2) e modifica il CFG senza riscrivere DATA. In modalità IoT · MCU, Flash Imager 1.2.0 rileva automaticamente il chip ESP32 via USB, integra 6 firmware v1.4.0 per 11 schede, genera partizioni NVS v2 da 48 KiB in JS puro (SoftAP disattivato), verifica l’avvio seriale e cancella la flash in 1 clic.",
+        "Per automazione headless senza Electron, Agent Skill 1.3.0 offre lo stesso motore .img e generatore NVS v2 (iot-boards, iot-nvs) con Node 22+, fermandosi ai file verificati. Gli aggiornamenti Imager controllano il catalogo firmato su richiesta."
       ],
       "11": [
         "Segreti e profili riutilizzabili",
@@ -540,14 +540,14 @@
         "Servono USB scrivibile compatibile con 1.0, spazio DATA e RAM. La generazione in attesa resta la base; segreti e workspace non vengono copiati. Modificare CFG non aggiorna una vecchia USB."
       ],
       "24": [
-        "Validazione della 1.0 e limiti",
-        "La release documenta Imager Linux/Windows, profili cifrati, modifica CFG, avvii USB virtuali BIOS/UEFI, generazioni persistenti e rollback. Il documento collegato specifica l’ambito testato.",
-        "Le schermate mantengono versioni storiche e dati sintetici. Test e versione del client non provano autenticazione/inferenza, recuperi clienti riusciti, hardware universale o Secure Boot."
+        "Validazione di Rescue 1.1.2, Imager 1.2.0 e IoT ESP32",
+        "I documenti di validazione coprono Rescue Disk 1.1.2 (BIOS/UEFI, LUKS, generazioni persistenti, rollback e identità tailnet), Flash Imager 1.2.0 su Linux e Windows (profili USB, modifica CFG e scrittura reale su ESP32-C6 e ESP32-S3-WROOM-1 N16R8 senza Python su Windows) e Agent Skill 1.3.0.",
+        "Le schermate mantengono versioni storiche e dati sintetici. I test hardware IoT coprono XIAO ESP32-C6 ed ESP32-S3-WROOM-1 N16R8; le altre varianti ESP32 includono firmware v1.4.0 compilati. Non garantiscono hardware universale, Secure Boot o account IA esterni."
       ],
       "9": [
         "Passo 5 · Tailscale/Headscale proprio",
         "Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale.",
-        "Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide."
+        "Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide. Anche i nodi LA AGUJA IoT (ESP32 v1.4.0) entrano nel tuo Tailscale o Headscale via WireGuard/DERP come exit node, subnet router dinamico e DNS relay, controllabili da remoto via API REST o aguja-iot.py."
       ]
     },
     "create": "Passo 7 · Preparare, scrivere e verificare",
@@ -603,14 +603,14 @@
       ]
     ],
     "wizard": [
-      "Image, Netwerk, SSH, AI, Privénetwerk, Versleutelde schijven en Schijf maken: zeven stappen, geen negen. Profielen/USB en updates staan erbuiten; terugkeren bewaart instellingen."
+      "Volg de zeven USB-stappen (Image tot Schijf maken) of schakel in Flash Imager 1.2.0 naar IoT · MCU voor de 4-staps ESP32-wizard. Profielen/USB en Updates staan apart; instellingen blijven behouden."
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0: downloads, profielen en USB",
-        "Download Windows-EXE of Linux-AppImage, DEB of archief uit officiële release 1.0.0. Open als gewone gebruiker; bevoorrechte schijfacties vragen UAC/Polkit.",
-        "Profielen/USB bewaart en opent versleutelde .aguja-profielen en leest, ontsleutelt en bewerkt CFG van bestaande USB zonder herschrijven. Controleer het exacte apparaat. DATA en generaties blijven behouden. CFG bewerken werkt een oud live-systeem niet bij.",
-        "Imager-updates controleert de ondertekende catalogus en downloadt alleen op verzoek een geverifieerd pakket, zonder automatisch vervangen of uitvoeren."
+        "Flash Imager 1.2.0: downloads, USB-profielen, ESP32 IoT en Agent Skill 1.3.0",
+        "Download de Windows EXE of Linux AppImage, DEB of draagbaar archief uit release v1.2.0. Start als gewone gebruiker; alleen fysiek USB-schrijven vraagt UAC/Polkit. Windows bevat zelfstandige esptool.exe zonder Python.",
+        "In USB-modus beheert Profielen/USB versleutelde .aguja-sjablonen (imager-profile-v2) en bewerkt CFG zonder DATA te wissen. In IoT · MCU-modus herkent Flash Imager 1.2.0 ESP32-chips via USB, bundelt 6 v1.4.0-firmwares voor 11 boards, bouwt 48 KiB NVS v2 in pure JS (SoftAP standaard uit), verifieert seriële opstart en wist flash met 1 klik.",
+        "Voor headless automatisering zonder Electron biedt Agent Skill 1.3.0 dezelfde .img-engine en ESP32 NVS v2-generator (iot-boards, iot-nvs) onder Node 22+, zonder automatisch te flashen. Imager-updates controleren de gesigneerde catalogus op verzoek."
       ],
       "11": [
         "Geheimen en herbruikbare profielen",
@@ -634,14 +634,14 @@
         "Schrijfbare 1.0-compatibele USB, vrije DATA-ruimte en voldoende RAM vereist. De wachtende generatie blijft basis; geheimen en workspace worden niet gekopieerd. Alleen CFG bewerken werkt een oude USB niet bij."
       ],
       "24": [
-        "Validatie van 1.0 en grenzen",
-        "De release beschrijft Linux-/Windows-Imager, versleutelde profielen, CFG-bewerking, virtuele BIOS-/UEFI-USB-starts, blijvende generaties en rollback. Het gekoppelde document vermeldt de testomvang.",
-        "Afbeeldingen behouden historische versies en synthetische gegevens. Tests en clientversie bewijzen geen providerlogin/inferentie, geslaagd klantherstel, universele hardware of Secure Boot."
+        "Validatie van Rescue 1.1.2, Imager 1.2.0 en IoT ESP32",
+        "De validatiedocumentatie dekt Rescue Disk 1.1.2 (BIOS/UEFI, LUKS, persistente generaties, rollback en tailnet-identiteit), Flash Imager 1.2.0 op Linux en Windows (USB-profielen, CFG-bewerking en echte ESP32-C6 + ESP32-S3-WROOM-1 N16R8-flash zonder Python op Windows) en Agent Skill 1.3.0.",
+        "Schermafbeeldingen behouden historische versies en synthetische testdata. Fysieke IoT-tests dekken XIAO ESP32-C6 en ESP32-S3-WROOM-1 N16R8; overige ESP32-varianten bevatten gecompileerde v1.4.0-firmwares. Geen universele hardware-, Secure Boot- of providergarantie."
       ],
       "9": [
         "Stap 5 · Eigen Tailscale/Headscale",
         "Optioneel: schakel privénetwerk in, geef toegestane auth/pre-auth-sleutel en optionele nodenaam. Lege Headscale-URL gebruikt officieel Tailscale; anders eigen HTTPS-server. Het live meldt aan na netwerk/ontgrendeling, niet de voorbereidings-pc. Client moet in het toegestane netwerk zitten en beleid volgen. Registratiesleutel is geen SSH-wachtwoord. Aanmelding bewijst geen ACL: test echt SSH.",
-        "Vanaf Rescue Disk 1.0.2 herstelt de USB de opgeslagen Tailscale-/Headscale-identiteit vóór het verbinden. De sleutel dient voor de eerste registratie, niet voor een nieuwe node bij iedere herstart. Ongewijzigde status wordt niet herschreven; wijzigingen worden atomair opgeslagen en gecontroleerd. Automatische profielen vragen geen extra ontgrendeling; versleutelde behouden de bestaande. Verlopen en intrekken op de server blijven gelden."
+        "Vanaf Rescue Disk 1.0.2 herstelt de USB de opgeslagen Tailscale-/Headscale-identiteit vóór het verbinden. De sleutel dient voor de eerste registratie, niet voor een nieuwe node bij iedere herstart. Ongewijzigde status wordt niet herschreven; wijzigingen worden atomair opgeslagen en gecontroleerd. Automatische profielen vragen geen extra ontgrendeling; versleutelde behouden de bestaande. Verlopen en intrekken op de server blijven gelden. LA AGUJA IoT-nodes (ESP32 v1.4.0) verbinden met hetzelfde Tailscale of Headscale via WireGuard/DERP als exit node, dynamische subnetrouter en DNS-relay, op afstand bestuurbaar via REST API of aguja-iot.py."
       ]
     },
     "create": "Stap 7 · Voorbereiden, schrijven en controleren",
@@ -697,14 +697,14 @@
       ]
     ],
     "wizard": [
-      "依次为镜像、网络、SSH、AI、私有网络、加密磁盘和创建磁盘：共七步，不是九步。配置档案/USB 和更新位于向导之外，返回时保留设置。"
+      "按 USB 救援盘的 7 个步骤操作（镜像到创建磁盘），或在 Flash Imager 1.2.0 中切换到 IoT · MCU 模式使用 4 步 ESP32 烧录向导。配置文件/USB 与更新工具独立于向导之外，返回时保留当前设置。"
     ],
     "sections": {
       "4": [
-        "Flash Imager 1.0：下载、配置档案与 USB",
-        "从官方 1.0.0 发行版下载 Windows EXE 或 Linux AppImage、DEB、便携压缩包。以普通用户运行；磁盘特权操作会请求 UAC/Polkit。",
-        "配置档案/USB 可保存和打开加密 .aguja 配置，读取、解密和编辑现有 USB 的 CFG，无需重写镜像。保存前确认具体设备。DATA 和启动系统代保留；编辑 CFG 不会升级旧 live 系统。",
-        "Imager 更新检查签名目录，仅在你选择时下载已验证的软件包，不自动替换或运行应用。"
+        "Flash Imager 1.2.0：下载、USB 配置、ESP32 IoT 与 Agent Skill 1.3.0",
+        "从官方 v1.2.0 发布页下载 Windows 便携 EXE 或 Linux AppImage、DEB、便携压缩包。以普通用户身份运行，仅物理 USB 写入请求 UAC/Polkit。Windows 版本内置独立 esptool.exe，烧录 ESP32 无需安装 Python。",
+        "在 USB 模式下，“配置与 USB”可保存/打开加密 .aguja 模板（支持 imager-profile-v2 扩展项）并直接编辑现有 U 盘 CFG 而不覆盖 DATA。在 IoT · MCU 模式下，Flash Imager 1.2.0 自动识别 USB 连接的 ESP32 芯片，内置覆盖 11 款开发板的 6 套 v1.4.0 固件，纯 JS 生成 48 KiB NVS v2 分区（默认关闭 SoftAP），支持串口启动验证与一键清空闪存。",
+        "如需无界面自动化，Agent Skill 1.3.0 在 Node 22+ 下提供相同的 .img 引擎与 ESP32 NVS v2 生成器（iot-boards、iot-nvs），仅生成校验文件而不自动烧录设备。Imager 更新仅在你选择时校验签名目录并下载。"
       ],
       "11": [
         "机密与可复用配置",
@@ -728,14 +728,14 @@
         "需要兼容 1.0 的可写 USB、足够 DATA 空间及 RAM。保留待启动代作为基础，不复制个人密钥和 workspace。仅编辑 CFG 不会更新旧 USB 系统。"
       ],
       "24": [
-        "1.0 的验证范围与限制",
-        "发行版记录了 Linux/Windows Imager、加密配置、CFG 编辑、虚拟 USB BIOS/UEFI 启动、持久系统代及回滚测试。链接的验证文档列明实际测试范围。",
-        "截图保留标明的历史版本和合成测试数据。测试或客户端版本不证明供应商登录/推理、客户数据恢复成功、通用硬件兼容或 Secure Boot 支持。"
+        "Rescue 1.1.2、Imager 1.2.0 与 IoT ESP32 验证范围",
+        "发布验证文档涵盖 Rescue Disk 1.1.2（BIOS/UEFI 启动、LUKS 解锁、持久化代次、回滚与 tailnet 身份）、Linux 与 Windows 下的 Flash Imager 1.2.0（USB 配置、CFG 编辑以及 ESP32-C6 与 ESP32-S3-WROOM-1 N16R8 实机烧录，Windows 免 Python）以及 Agent Skill 1.3.0 确定性压缩包。",
+        "截图保留其标注的历史版本与合成测试数据。IoT 实机验证覆盖 Seeed Studio XIAO ESP32-C6 与 ESP32-S3-WROOM-1 N16R8，其余 ESP32 子系列随附已编译打包的 v1.4.0 固件。测试结果不代表对所有硬件、Secure Boot 或第三方 AI 账户的通用保证。"
       ],
       "9": [
         "步骤 5 · 自己的 Tailscale/Headscale",
         "远程访问可选。启用私有网络并提供授权 auth/pre-auth 密钥，可选节点名。Headscale URL 留空使用官方 Tailscale，否则填写自己的 HTTPS 服务。Live 在网络可用、配置解锁后注册，不注册准备电脑。客户端必须属于授权网络并满足策略。注册密钥不是 SSH 密码。注册成功不证明 ACL 允许连接，应从授权客户端测试真实 SSH。",
-        "从 Rescue Disk 1.0.2 起，USB 在连接前恢复已保存的 Tailscale/Headscale 身份。注册密钥用于首次注册，不会在每次重启时创建新节点。状态未变则不重复写入，变更会原子保存并校验。自动配置不增加解锁步骤，加密配置保留原有解锁。服务器端到期与撤销仍然有效。"
+        "从 Rescue Disk 1.0.2 起，USB 在连接前恢复已保存的 Tailscale/Headscale 身份。注册密钥用于首次注册，不会在每次重启时创建新节点。状态未变则不重复写入，变更会原子保存并校验。自动配置不增加解锁步骤，加密配置保留原有解锁。服务器端到期与撤销仍然有效。 LA AGUJA IoT（ESP32 v1.4.0）节点同样通过 WireGuard/DERP 直接接入你自己的 Tailscale 或 Headscale，作为口袋级出口节点、动态上游子网路由与 DNS 中继，可通过 REST API 或 aguja-iot.py 远程控制。"
       ]
     },
     "create": "步骤 7 · 准备、写入与验证",

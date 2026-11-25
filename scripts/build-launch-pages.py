@@ -250,22 +250,28 @@ def reviewed(s,c):
 def docs(l,c,b):
  release=RELEASE[l]
  for n,section in release['sections'].items(): b['sections'][int(n)]=section
+ b['sections'][0][0]=c['introTitle']
  b['sections'][13][0]=release['create']
- body=f'<section class="guide-intro"><div class="section-head"><h1>{E(b["docUI"][2])}</h1><span class="version-tag">Rescue {VERSION} · Imager {IMAGER_VERSION}</span></div><p class="lead">{E(current(b["docDescription"]))}</p><p>{E(c["docNote"])}</p><div class="actions"><a class="button" href="#primer-usb">{E(c["ui"]["firstUsb"])} ↓</a><button class="secondary print-guide" type="button" hidden>{E(c["ui"]["print"])}</button></div></section><div class="guide-layout"><aside class="contents"><details open><summary>{E(c["ui"]["contents"])}</summary><div class="search-controls" hidden><label for="doc-search">{E(c["ui"]["search"])}</label><input type="search" id="doc-search" placeholder="SSH, BitLocker, ENOSPC…"><p id="search-status" role="status" aria-live="polite"></p></div><nav aria-label="{E(c["ui"]["contents"])}">'+''.join(f'<a data-doc-link href="#{i}">{n+1:02} · {E(s[0])}</a>' for n,(i,s) in enumerate(zip(IDS,b['sections'])))+'</nav></details></aside><div class="chapters">'
+ body=f'<section class="guide-intro"><div class="section-head"><h1>{E(b["docUI"][2])}</h1><span class="version-tag">Rescue {VERSION} · Imager {IMAGER_VERSION} · IoT v1.4.0 · Skill {SKILL_VERSION}</span></div><p class="lead">{E(current(b["docDescription"]))}</p><p>{E(c["docNote"])}</p><div class="actions"><a class="button" href="#primer-usb">{E(c["ui"]["firstUsb"])} ↓</a><button class="secondary print-guide" type="button" hidden>{E(c["ui"]["print"])}</button></div></section><div class="guide-layout"><aside class="contents"><details open><summary>{E(c["ui"]["contents"])}</summary><div class="search-controls" hidden><label for="doc-search">{E(c["ui"]["search"])}</label><input type="search" id="doc-search" placeholder="SSH, ESP32, BitLocker, ENOSPC…"><p id="search-status" role="status" aria-live="polite"></p></div><nav aria-label="{E(c["ui"]["contents"])}">'+''.join(f'<a data-doc-link href="#{i}">{n+1:02} · {E(s[0])}</a>' for n,(i,s) in enumerate(zip(IDS,b['sections'])))+'</nav></details></aside><div class="chapters">'
  assert len(b['sections'])==26
  for n,(i,s) in enumerate(zip(IDS,b['sections'])):
   ps=[reviewed(p,c) for p in s[1:] if not re.search(r'0\.8\.[01]',p)]
   content=paras(s[1:]) if str(n) in release['sections'] else (reviewed(ES_BODIES[i],c) if l=='es' else paras(ps))
-  if n==0:content=paras(c['intro'])
+  if n==0:content=paras([DECK[l]['lead'],*c['intro']])
   body+=f'<section class="doc-section" id="{i}"><span class="chapter-index">{n+1:02} / 26</span><h2>{E(s[0])}</h2>'+content+paras(c['additions'].get(str(n),[]))
   if n==1:body+=paras(release['wizard'])
+  if n==4:body+='<pre><code>node scripts/imager.cjs doctor\nnode scripts/imager.cjs iot-boards\nnode scripts/imager.cjs iot-nvs &lt; iot-request.json</code></pre>'
+  if n==9:body+='<pre><code>aguja-iot --host TAILNET_IP status\naguja-iot --host TAILNET_IP wifi scan</code></pre>'
   if n==15:
    for name,title in release['updateCaptions'].items():
     url='/assets/docs/101/'+name+'.png'
     body+=f'<figure><a class="zoom-image" href="{url}" aria-label="{E(title)}"><img src="{url}" loading="lazy" decoding="async" width="1280" height="800" alt="{E(title)}"></a><figcaption>{E(title)} · {E(release["captureProvenance"])}</figcaption></figure>'
   if n==15:body+='<pre><code>aguja update menu\naguja update status --json\naguja update check --json\naguja update rollback</code></pre>'
   if n==12:body+='<pre><code>aguja secrets --json\nsudo aguja recovery status --json\nsudo aguja recovery list --json</code></pre>'
-  if n==24:body+=f'<p><a href="{GH}/releases/download/v{VERSION}/VALIDATION-{VERSION}.md">GitHub · {VERSION} · Validation ↗</a> · <a href="{GH}/releases/download/v{VERSION}/UPDATES.md">aguja update · README ↗</a></p>'
+  if n==24:body+=f'<p class="meta-links"><a href="{GH}/releases/download/v{VERSION}/VALIDATION-{VERSION}.md">Rescue {VERSION} · Validation ↗</a> · <a href="{GH}/releases/download/v{VERSION}/UPDATES.md">aguja update · README ↗</a> · <a href="{GH}/blob/main/docs/RELEASE-IMAGER-{IMAGER_VERSION}.md">Flash Imager {IMAGER_VERSION} ↗</a> · <a href="{GH}/blob/main/docs/RELEASE-SKILL-{SKILL_VERSION}.md">Agent Skill {SKILL_VERSION} ↗</a></p>'
+  if n==25:
+   iot_doc='docs/IOT.es.md' if l=='es' else 'docs/IOT.md'
+   body+=f'<p class="meta-links"><a href="{GH}/blob/main/{iot_doc}">LA AGUJA IoT · ESP32 v1.4.0 ↗</a> · <a href="{GH}/blob/main/iot/README.md">iot/README.md ↗</a> · <a href="{GH}/blob/main/skills/flash-imager/references/iot.md">Agent Skill IoT ↗</a> · <a href="{GH}/blob/main/skills/flash-imager/references/harnesses.md">Agent Skill Harnesses ↗</a></p>'
   if n in COMMANDS and (l!='es' or '<pre' not in ES_BODIES[i]):body+='<pre><code>'+E(COMMANDS[n])+'</code></pre>'
   if str(n) in c['prompts']:body+='<div class="prompt"><h3>'+E(c['promptLabel'])+'</h3><pre><code>'+E(c['prompts'][str(n)])+'</code></pre></div>'
   for image in FIGURES.get(n,[]):body+=figure(c,image)
@@ -281,7 +287,19 @@ if __name__=='__main__':
   (PUBLIC/l/'index.html').write_text(home(l,c,b));(PUBLIC/l/'docs.html').write_text(docs(l,c,b))
   guide=ROOT/f'docs/{l}/USER-GUIDE.md'
   text=guide.read_text();chapters=list(re.finditer(r'^## .*$',text,re.M));assert len(chapters)==26
+  repl={}
+  repl[0]='## '+c['introTitle']+'\n\n'+'\n\n'.join([DECK[l]['lead'],*c['intro']])+'\n\n'
+  for idx in (4,9,24):
+   sec=RELEASE[l]['sections'][str(idx)]
+   repl[idx]='## '+sec[0]+'\n\n'+'\n\n'.join(sec[1:])+'\n\n'
   section=RELEASE[l]['sections']['15'];block='## '+section[0]+'\n\n'+'\n\n'.join(section[1:])+'\n\n```sh\naguja update menu\naguja update status --json\naguja update check --json\naguja update rollback\n```\n\n'
   block+='\n\n'.join('!['+title+'](../../server/public/docs-images/101/'+name+'.png)' for name,title in RELEASE[l]['updateCaptions'].items())+'\n\n'+RELEASE[l]['captureProvenance']+'\n\n'
-  guide.write_text(text[:chapters[15].start()]+block+text[chapters[16].start():])
+  repl[15]=block
+  out=[];pos=0
+  for idx,m in enumerate(chapters):
+   if idx in repl:
+    end=chapters[idx+1].start() if idx+1<len(chapters) else len(text)
+    out.append(text[pos:m.start()]);out.append(repl[idx]);pos=end
+  out.append(text[pos:])
+  guide.write_text(''.join(out))
  print('Built launch home + guide pages; routing and other files untouched.')

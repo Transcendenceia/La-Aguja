@@ -53,11 +53,11 @@
   "privacy": "Datenschutz",
   "footer": "Open Source · GPL-3.0-or-later · Dein Netz, kein LA-AGUJA-Relay.",
   "docTitle": "Benutzerhandbuch · LA AGUJA",
-  "docDescription": "Starte unabhängiges Linux vom USB und gib dem KI-Agenten eine Mission: Systeme bauen, Windows vorbereiten, virtuelle Labore erstellen oder erlaubte Rechner koordinieren. Beginne mit der Hardware, nicht dem Zustand des installierten Systems.",
+  "docDescription": "Starte unabhängiges Linux vom USB mit KI-Agenten auf jedem x86-64-PC, flashe ESP32-Tailnet-Knoten mit Flash Imager 1.2.0 oder automatisiere die Vorbereitung mit Agent Skill 1.3.0.",
   "docUI": [
     "Zum Handbuch springen",
     "Inhalt und Suche",
-    "Retten. Verstehen. Entscheiden.",
+    "Betreiben. Bauen. Entscheiden.",
     "In diesem Handbuch suchen",
     "Inhalt durchsuchen oder einen Suchbegriff eingeben.",
     "Drucken / als PDF speichern",

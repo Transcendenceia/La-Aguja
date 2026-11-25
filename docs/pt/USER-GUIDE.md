@@ -3,15 +3,15 @@
 [Website](https://aguja.transcendenceia.net/pt/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Uma plataforma de lançamento, não apenas um salva-vidas.
+## Muito mais do que um disco de resgate: uma base móvel de operações.
+
+LA AGUJA combina Linux arrancável x86-64 em USB, nós ESP32 de bolso para a tua rede privada, gravador multiplataforma e skill para agentes IA — tudo no teu hardware e tailnet própria.
 
 Dê a um agente avançado um objetivo, não apenas um comando de reparo. Ele pode analisar hardware, escolher ferramentas, gerar e executar scripts no escopo autorizado e conferir o resultado. O sistema instalado não precisa iniciar, nem mesmo existir.
 
 A sessão live usa uma camada gravável em RAM sobre a imagem USB somente leitura. É Linux, não firmware, e o USB inteiro não é copiado para RAM. Os discos internos ficam intactos ao iniciar; você decide quando usá-los para gravação.
 
 Inclui clientes de IA com acesso root, SSH, Python, Git, ferramentas de discos, debootstrap e arch-install-scripts. Amplie com pacotes compatíveis: Desde a versão 0.9.11 estão incluídos QEMU x86, qemu-img/qemu-nbd, OVMF e SeaBIOS; use KVM quando disponível ou TCG, mais lento, como alternativa. Motores de contêineres e ferramentas de compilação continuam opcionais; verifique RAM, armazenamento e compatibilidade. Salve os resultados importantes explicitamente; a RAM é temporária. IA na nuvem exige rede e sua conta; não há modelo local incluído.
-
-[↗](https://aguja.transcendenceia.net/pt/docs#que-es)
 
 ## O teu primeiro USB
 
@@ -43,13 +43,13 @@ A gravação substitui o USB. Windows ainda não tem cópia USB integrada: usa f
 
 [↗](https://aguja.transcendenceia.net/pt/docs#preparacion)
 
-## Transferir e abrir o Imager
+## Flash Imager 1.2.0: transferências, perfis USB, IoT ESP32 e Agent Skill 1.3.0
 
-Escolhe EXE Windows 10/11, AppImage, DEB Debian/Ubuntu ou arquivo Linux portátil no site oficial. Verifica SHA-256. Abre a aplicação no PC preparador; EXE/AppImage não são imagens para gravar no USB. Sem conta LA AGUJA.
+Obtém o EXE portátil Windows ou AppImage, DEB ou arquivo Linux da release oficial v1.2.0. Abre como utilizador normal; apenas operações físicas em USB pedem UAC/Polkit. O Windows inclui esptool.exe autónomo sem Python.
 
-O EXE não tem assinatura Authenticode reconhecida. AppImage pode precisar de permissão de execução; o arquivo portátil é alternativa. Escrever dispositivos exige elevação local. Abrir a aplicação não prova um USB preparado ou arrancável.
+No modo USB, Perfis/USB guarda e abre modelos cifrados .aguja (imager-profile-v2) e edita o CFG sem regravar DATA. No modo IoT · MCU, o Flash Imager 1.2.0 deteta automaticamente o chip ESP32 por USB, integra 6 firmwares v1.4.0 para 11 placas, gera partições NVS v2 de 48 KiB em JS puro (SoftAP desativado por defeito), verifica o arranque série e apaga flash num clique.
 
-[↗](https://aguja.transcendenceia.net/pt/docs#descargas)
+Para automação sem janela nem Electron, a Agent Skill 1.3.0 fornece o mesmo motor .img e gerador NVS v2 (iot-boards, iot-nvs) com Node 22+, parando em ficheiros verificados. Atualizações do Imager validam o catálogo assinado a pedido.
 
 ## Passo 1 · Escolher a imagem
 
@@ -89,11 +89,9 @@ Não copia chaveiro inteiro, histórico, hooks ou MCP. Sessões portáteis podem
 
 ## Passo 5 · Tailscale/Headscale próprio
 
-Acesso opcional: ativa rede privada, fornece chave auth/pre-auth autorizada e nome opcional. URL Headscale vazia usa Tailscale oficial; caso contrário, servidor HTTPS próprio. O live inscreve-se depois de rede e desbloqueio, não o PC preparador.
+Acesso opcional: ativa rede privada, fornece chave auth/pre-auth autorizada e nome opcional. URL Headscale vazia usa Tailscale oficial; caso contrário, servidor HTTPS próprio. O live inscreve-se depois de rede e desbloqueio, não o PC preparador. O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real.
 
-O cliente deve pertencer à rede autorizada e cumprir políticas. A chave de inscrição não é palavra-passe SSH. Inscrição não prova ACL: testa uma ligação SSH real. Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se.
-
-[↗](https://aguja.transcendenceia.net/pt/docs#tailnet)
+Desde Rescue Disk 1.0.2, o USB restaura a identidade Tailscale/Headscale guardada antes de ligar. A chave serve para a primeira inscrição, não para criar um nó em cada reinício. Estado idêntico não é reescrito; alterações são guardadas atomicamente e verificadas. O perfil automático não acrescenta desbloqueio; o cifrado mantém o existente. A validade e a revogação no servidor continuam a aplicar-se. Os nós LA AGUJA IoT (ESP32 v1.4.0) ligam-se ao teu mesmo Tailscale ou Headscale por WireGuard/DERP como exit node, subnet router dinâmico e DNS relay, controláveis remotamente por API REST ou aguja-iot.py.
 
 ## OpenSSH não é Tailscale SSH
 
@@ -260,13 +258,11 @@ Remove nós temporários e revoga chaves inúteis. Verifica tokens persistentes 
 
 [↗](https://aguja.transcendenceia.net/pt/docs#terminar)
 
-## O que está verificado
+## Validação de Rescue 1.1.2, Imager 1.2.0 e IoT ESP32
 
-Edição pública sem contas LA AGUJA ou relay proprietário. Testes de preparação, pacotes e VM cobrem percursos específicos, não todos os PCs. Imager 0.9.2 corrige título em sete idiomas; imagem permanece 0.9.0. Capturas antigas mantêm versão/proveniência.
+Os relatórios cobrem Rescue Disk 1.1.2 (arranques BIOS/UEFI, LUKS, gerações persistentes, rollback e identidade tailnet), Flash Imager 1.2.0 em Linux e Windows (perfis USB, edição CFG e gravação real em ESP32-C6 e ESP32-S3-WROOM-1 N16R8 sem Python no Windows) e Agent Skill 1.3.0.
 
-Leitura verificada não é arranque universal. Painel/CLI/sessão portátil não é login IA; inscrição local não prova SSH. Windows não tem cópia USB integrada nem assinatura Authenticode reconhecida. Sem Secure Boot assinado universal.
-
-[↗](https://aguja.transcendenceia.net/pt/docs#validacion)
+As capturas preservam versões históricas e dados sintéticos. Testes físicos IoT cobriram XIAO ESP32-C6 e ESP32-S3-WROOM-1 N16R8; as restantes variantes ESP32 levam firmwares v1.4.0 compilados. Não garantem hardware universal, Secure Boot nem contas IA externas.
 
 ## Referências e próximos passos
 

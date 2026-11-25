@@ -1,9 +1,16 @@
-# LA AGUJA Flash Imager · Windows y Linux 1.1.0
+# LA AGUJA Flash Imager · Windows y Linux 1.2.0
 
-Prepara y graba tu Rescue Disk desde un PC. Conserva Agujita, herramientas IA, red, idioma/teclado, acceso SSH y soporte BitLocker Windows. La nueva conexión remota usa **tu propia Tailscale o Headscale**, no un túnel de nuestra plataforma.
+[English](README.md) · [Guía interactiva](https://aguja.transcendenceia.net/es/docs) · [Descargas](https://aguja.transcendenceia.net/es#application) · [Notas de versión 1.2.0](../docs/RELEASE-IMAGER-1.2.0.md)
 
-[Manual por niveles con capturas, glosario y primer USB](https://aguja.transcendenceia.net/es/docs) · [Copia del manual](../docs/USER-GUIDE.md) · [Aplicación y biblioteca](https://aguja.transcendenceia.net/).
-La web es pública e informativa. Descargar y preparar no requiere registro en LA AGUJA.
+Prepara tanto pendrives arrancables **Rescue Disk 1.1.2** (red, idioma/teclado, SSH, herramientas IA, NAS/nube, recuperación BitLocker/LUKS, Tailscale/Headscale) como microcontroladores **LA AGUJA IoT v1.4.0** (familia ESP32) desde una sola aplicación para Linux y Windows. Sin cuentas ni relay de LA AGUJA.
+
+## Novedades en 1.2.0 · Modo paralelo IoT · MCU (familia ESP32)
+
+- **Selector de modo (`USB · Rescue` / `IoT · MCU`):** mantiene intacto el asistente USB de 7 pasos e incorpora un flujo paralelo de 4 pasos para microcontroladores.
+- **11 placas ESP32 y 6 firmwares `v1.4.0` precompilados integrados:** cubre `ESP32-C6`, `ESP32-S3` (Octal y Estándar), `ESP32-C3`, `ESP32` y `ESP32-S2` con detección real del chip por USB (`esptool`).
+- **Multi-Wi-Fi y SoftAP desactivado por defecto:** hasta 8 redes Wi-Fi con prioridad, alta Tailscale/Headscale (exit node, subnet router dinámico, DNS relay, clave Noise y región DERP) y generación automática de token API.
+- **Generador NVS v2 en JavaScript puro (`iot-nvs.cjs`):** partición determinista de 48 KiB en `0x9000` sin dependencias externas, también disponible en **Agent Skill 1.3.0** (`iot-boards`, `iot-nvs`).
+- **Windows sin Python y mantenimiento:** incluye `esptool.exe` oficial (v5.7.0) y usa `.NET SerialPort` por PowerShell (`windows-iot-serial.ps1`) para detectar puertos COM, verificar el arranque por serie y borrar la flash en 1 clic.
 
 ## Perfiles, USB existente y actualizaciones 1.0
 
@@ -39,9 +46,9 @@ La clave queda dentro de la cápsula. Cifrarla protege secretos en reposo mientr
 
 ## Windows
 
-Flash Imager **1.1.0** es la versión de la aplicación de preparación; Rescue Disk se versiona por separado. Los campos ampliados requieren Rescue **1.1.1** con `imager-profile-v2`. Las comprobaciones finales y las pruebas nativas históricas se detallan en la validación de la publicación.
+Flash Imager **1.2.0** es la versión de la aplicación de preparación (USB Rescue + IoT ESP32); Rescue Disk sigue en **1.1.2** y se versiona por separado. Los campos USB ampliados requieren Rescue **1.1.1+** con `imager-profile-v2`.
 
-Abre `aguja-flash-imager-1.1.0-win-x64.exe` como tu usuario. Es portátil; no necesitas Node.js. No se promete instalador firmado ni ausencia de avisos SmartScreen. La app no necesita ejecutarse como administrador: **UAC eleva únicamente el grabador de USB**, no toda la interfaz Electron.
+Abre `aguja-flash-imager-1.2.0-win-x64.exe` como tu usuario. Es portátil y no necesita Node.js ni Python (empaqueta `esptool.exe` oficial para flashear placas ESP32). No se promete instalador firmado ni ausencia de avisos SmartScreen. La app no necesita ejecutarse como administrador: **UAC eleva únicamente el grabador de USB**, no toda la interfaz Electron.
 
 Tras confirmar el borrado y autorizar UAC, el grabador vuelve a comprobar **serie, capacidad y modelo exactos** del USB y rechaza discos internos, de sistema o de arranque. Conserva abierto el archivo de imagen verificado durante la escritura. El éxito exige grabación completa, sincronización y **lectura SHA-256 de todos los bytes de la imagen desde el USB**; no basta con que el proceso termine sin errores. Cancelar UAC no graba; cerrar la app durante una grabación puede dejar el USB incompleto y obliga a repetirla.
 
@@ -51,7 +58,7 @@ Tras confirmar el borrado y autorizar UAC, el grabador vuelve a comprobar **seri
 
 ## Linux
 
-- AppImage: `chmod +x aguja-flash-imager-1.1.0-x86_64.AppImage`, después ábrelo como tu usuario. Si falta FUSE, usa `--appimage-extract-and-run`; no desactiva el sandbox.
+- AppImage: `chmod +x aguja-flash-imager-1.2.0-x86_64.AppImage`, después ábrelo como tu usuario. Si falta FUSE, usa `--appimage-extract-and-run`; no desactiva el sandbox.
 - DEB: instala el paquete local con tu gestor de paquetes.
 - TAR: extrae la carpeta completa y ejecuta el binario de la aplicación.
 - No necesitas sudo para abrir, configurar o preparar la imagen. Importar Wi-Fi/grabar solicita Polkit.

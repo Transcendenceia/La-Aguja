@@ -1,8 +1,16 @@
-# LA AGUJA Flash Imager · Windows and Linux 1.1.0
+# LA AGUJA Flash Imager · Windows and Linux 1.2.0
 
-[Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application)
+[Español](README.es.md) · [User guide](https://aguja.transcendenceia.net/en/docs) · [Downloads](https://aguja.transcendenceia.net/en#application) · [Release notes 1.2.0](../docs/RELEASE-IMAGER-1.2.0.md)
 
-Prepare a Rescue Disk from a working computer: network, language/keyboard, SSH, AI tools and optional Windows BitLocker recovery keys. Optional remote access uses your own Tailscale/Headscale, not a project tunnel. No LA AGUJA account is required.
+Prepare both **Rescue Disk 1.1.2** bootable USB drives (network, language/keyboard, SSH, AI tools, NAS/cloud, BitLocker/LUKS recovery keys, Tailscale/Headscale) and **LA AGUJA IoT v1.4.0** ESP32-family microcontrollers from a single cross-platform application. Optional remote access uses your own Tailscale/Headscale, never a LA AGUJA relay or account.
+
+## What's new in 1.2.0 · Parallel IoT · MCU mode (ESP32 family)
+
+- **Mode switcher (`USB · Rescue` / `IoT · MCU`):** the 7-step USB Rescue flow remains untouched alongside a dedicated 4-step microcontroller wizard.
+- **11 ESP32-family boards & 6 bundled prebuilt `v1.4.0` firmwares:** covers `ESP32-C6`, `ESP32-S3` (Octal & Standard), `ESP32-C3`, `ESP32` and `ESP32-S2` with real USB silicon auto-detection (`esptool`).
+- **Multi-Wi-Fi & SoftAP off by default:** up to 8 prioritized Wi-Fi networks, Tailscale/Headscale proxy settings (exit node, dynamic upstream subnet router, DNS relay, Noise pubkey, DERP region) and automatic agent API token generation.
+- **Pure-JS ESP-IDF NVS v2 (`iot-nvs.cjs`):** zero external dependencies, deterministic 48 KiB provisioning binary at `0x9000`, also exposed headlessly in **Agent Skill 1.3.0** (`iot-boards`, `iot-nvs`).
+- **Zero-Python Windows flashing & maintenance:** Windows builds bundle official standalone Espressif `esptool.exe` (v5.7.0) and use `.NET SerialPort` via PowerShell (`windows-iot-serial.ps1`) for COM discovery, live boot verification and 1-click full flash erase.
 
 ## 1.0 profiles, existing USBs and updates
 
@@ -64,7 +72,7 @@ Capsule encryption protects locked secrets at rest, not all AGUJA_DATA or secret
 
 ## Windows
 
-Open `aguja-flash-imager-1.1.0-win-x64.exe` as your normal user. It is portable and does not require Node.js. No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
+Open `aguja-flash-imager-1.2.0-win-x64.exe` as your normal user. It is portable and requires neither Node.js nor Python (standalone Espressif `esptool.exe` is bundled for ESP32 IoT flashing). No recognised Authenticode signature or absence of SmartScreen prompts is promised. **UAC elevates only the USB writer**, not the Electron interface.
 
 After consent the writer rechecks exact model, serial and capacity, rejects internal/system/boot disks and holds the verified image open. Success requires full writing, synchronisation and SHA-256 read-back of all image bytes. Cancelling UAC does not write; closing during writing can leave incomplete media.
 

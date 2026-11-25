@@ -3,15 +3,15 @@
 [Website](https://aguja.transcendenceia.net/de/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Eine Startrampe, nicht nur ein Rettungsring.
+## Weit mehr als eine Rettungs-Disk: eine tragbare Einsatzzentrale.
+
+LA AGUJA vereint bootfähiges x86-64-Linux, kompakte ESP32-Tailnet-Knoten, eine plattformübergreifende Imager-App und einen Agent-Skill — vollständig auf eigener Hardware und im eigenen Netz.
 
 Gib einem fortgeschrittenen Agenten ein Ziel, nicht nur einen Reparaturbefehl. Er kann Hardware prüfen, Werkzeuge auswählen, Skripte im erlaubten Rahmen erzeugen und ausführen sowie Ergebnisse kontrollieren. Das installierte System muss weder starten noch überhaupt existieren.
 
 Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.
 
 Enthalten: KI-Clients mit Root-Zugriff, SSH, Python, Git, Speicherwerkzeuge, debootstrap und arch-install-scripts. Erweitere die Sitzung mit kompatiblen Paketen: Seit 0.9.11 sind QEMU x86, qemu-img/qemu-nbd, OVMF und SeaBIOS enthalten; nutze KVM, wenn verfügbar, sonst das langsamere TCG. Container-Engines und Build-Werkzeuge bleiben optionale Ergänzungen; prüfe RAM, Speicher und Kompatibilität. Sichere wichtige Ergebnisse ausdrücklich; RAM-Zustand ist flüchtig. Cloud-KI benötigt Netzwerk und dein Konto; kein lokales Modell ist enthalten.
-
-[↗](https://aguja.transcendenceia.net/de/docs#que-es)
 
 ## Dein erster USB-Stick
 
@@ -43,13 +43,13 @@ Das Schreiben ersetzt den Stickinhalt. Windows hat noch keine integrierte USB-Si
 
 [↗](https://aguja.transcendenceia.net/de/docs#preparacion)
 
-## Flash Imager herunterladen und öffnen
+## Flash Imager 1.2.0: Downloads, USB-Profile, ESP32 IoT und Agent Skill 1.3.0
 
-Wähle auf der offiziellen Seite Windows-10/11-EXE, Linux-AppImage, Debian/Ubuntu-DEB oder portables Archiv. Prüfe SHA-256 und öffne die Anwendung auf dem Vorbereitung-PC. EXE und AppImage gehören nicht als Rettungsabbild auf den Stick. Kein LA AGUJA Konto nötig.
+Lade Windows-EXE oder Linux-AppImage, DEB oder Archiv aus dem offiziellen Release v1.2.0. Als normaler Benutzer starten; nur USB-Schreibvorgänge fragen UAC/Polkit an. Windows enthält eigenständiges esptool.exe ohne Python.
 
-Die EXE hat derzeit keine anerkannte Authenticode-Signatur. AppImages benötigen gegebenenfalls Ausführungsrechte; das portable Archiv ist eine Alternative. Geräteschreiben braucht lokale Rechteerhöhung. Eine gestartete App beweist keine vorbereitete oder bootfähige Rettung.
+Im USB-Modus verwaltet Profile/USB verschlüsselte .aguja-Vorlagen (imager-profile-v2) und bearbeitet CFG ohne DATA zu löschen. Im IoT-·-MCU-Modus erkennt Flash Imager 1.2.0 angeschlossene ESP32-Chips automatisch, bündelt 6 v1.4.0-Firmwares für 11 Boards, erzeugt 48-KiB-NVS-v2-Partitionen in reinem JS (SoftAP standardmäßig aus), prüft den seriellen Start und löscht Flash per Klick.
 
-[↗](https://aguja.transcendenceia.net/de/docs#descargas)
+Für Headless-Automatisierung ohne Electron bietet Agent Skill 1.3.0 dieselbe .img-Engine und den ESP32-NVS-v2-Generator (iot-boards, iot-nvs) unter Node 22+, ohne automatisches Flashen. Imager-Updates prüfen den signierten Katalog nur auf Wunsch.
 
 ## Schritt 1 · Passendes Abbild wählen
 
@@ -89,11 +89,9 @@ Der gesamte Schlüsselbund, Verlauf, Hooks und MCP-Konfiguration werden nicht ko
 
 ## Schritt 5 · Eigenes Tailscale/Headscale
 
-Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC.
+Fernzugriff ist optional. Aktiviere das private Netz, gib einen autorisierten Auth-/Pre-Auth-Schlüssel und optional einen Knotennamen an. Leere Headscale-URL verwendet offizielles Tailscale; sonst deinen HTTPS-Server. Das Live registriert sich nach Netzwerk und Profilentsperrung, nicht der Vorbereitung-PC. Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client.
 
-Der Client muss zum autorisierten Netz gehören und dessen Richtlinien erfüllen. Registrierungsschlüssel sind keine SSH-Passwörter. Anmeldung belegt keine erlaubenden ACLs: teste echtes SSH vom autorisierten Client. Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin.
-
-[↗](https://aguja.transcendenceia.net/de/docs#tailnet)
+Ab Rescue Disk 1.0.2 stellt der USB seine gespeicherte Tailscale-/Headscale-Identität vor der Verbindung wieder her. Der Registrierungsschlüssel dient der ersten Anmeldung, nicht einem neuen Knoten bei jedem Neustart. Unveränderter Zustand wird nicht neu geschrieben; Änderungen werden atomar gespeichert und geprüft. Automatische Profile brauchen keine neue Entsperrung; verschlüsselte behalten ihre bisherige. Ablauf und Widerruf am Server gelten weiterhin. LA AGUJA IoT-Knoten (ESP32 v1.4.0) treten demselben Tailscale oder Headscale per WireGuard/DERP als Exit-Node, dynamischer Subnetz-Router und DNS-Relay bei, fernsteuerbar per REST-API oder aguja-iot.py.
 
 ## OpenSSH ist nicht Tailscale SSH
 
@@ -260,13 +258,11 @@ Entferne temporäre Knoten, widerrufe unnötige Schlüssel und prüfe persistent
 
 [↗](https://aguja.transcendenceia.net/de/docs#terminar)
 
-## Was getestet ist und was daraus nicht folgt
+## Validierung von Rescue 1.1.2, Imager 1.2.0 und IoT ESP32
 
-Die öffentliche Ausgabe entfernt LA AGUJA Konten und proprietäres Relay. Paket-, Vorbereitungs- und VM-Tests belegen bestimmte Abläufe, nicht jeden PC. Imager 0.9.2 korrigiert den Titel in sieben Sprachen; das Rettungsabbild bleibt 0.9.0. Ältere Screenshots behalten ihre echten Versionen.
+Die Prüfberichte decken Rescue Disk 1.1.2 (BIOS/UEFI, LUKS, persistente Generationen, Rollback, Tailnet-Identität), Flash Imager 1.2.0 unter Linux und Windows (USB-Profile, CFG-Bearbeitung und echtes Flashen auf ESP32-C6 und ESP32-S3-WROOM-1 N16R8 ohne Python unter Windows) sowie Agent Skill 1.3.0 ab.
 
-Rücklesen ist keine universelle Bootprüfung; Panel/CLI/portable Sitzung ist keine KI-Anmeldung. Lokale Registrierung belegt keinen erlaubten SSH-Zugriff. Windows hat weder integrierte USB-Sicherung noch anerkannte Authenticode-Signatur. Keine universelle signierte Secure-Boot-Kette.
-
-[↗](https://aguja.transcendenceia.net/de/docs#validacion)
+Aufnahmen behalten ihre historischen Versionen und synthetischen Daten. Physische IoT-Tests erfolgten auf XIAO ESP32-C6 und ESP32-S3-WROOM-1 N16R8; weitere ESP32-Varianten enthalten kompilierte v1.4.0-Firmwares. Dies garantiert weder universelle Hardware noch Secure Boot oder Anbieterkonten.
 
 ## Referenzen und nächste Schritte
 

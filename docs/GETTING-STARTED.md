@@ -1,140 +1,84 @@
-# Getting started · LA AGUJA 0.9.10
+# Getting started · LA AGUJA (Rescue 1.1.2 · Imager 1.2.0 · IoT ESP32 v1.4.0)
 
-[Español](GETTING-STARTED.es.md) · [Documentation](README.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Workflow ideas](SHOWCASE.md)
+[Español](GETTING-STARTED.es.md) · [Documentation](README.md) · [IoT ESP32](IOT.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Workflow ideas](SHOWCASE.md)
 
-**Goal:** prepare a USB, boot the independent Linux and identify the computer, resources and disks before choosing a mission. You can build, configure, experiment, migrate or recover; no AI account is needed for this first milestone. [Explore the platform](PLATFORM.md).
+**Goal:** prepare your portable operations command — either a bootable **Rescue Disk 1.1.2** USB drive for x86-64 PCs, a pocket **ESP32 IoT v1.4.0** tailnet node, or both — using **Flash Imager 1.2.0** (Linux/Windows) or **Agent Skill 1.3.0** (headless). No LA AGUJA account or proprietary relay is needed. [Explore 20 platform missions](PLATFORM.md).
 
 ## 1. Gather the right things
 
-- A working Windows or Linux preparation computer, Internet for downloads and enough free space for the downloaded image, a decompressed base and a new private image. Optional full-USB backups need additional space based on the whole device, not just occupied files.
-- An x86-64 target computer capable of USB boot. BIOS/UEFI support is not universal Secure Boot or hardware certification.
-- A USB whose **actual capacity** exceeds the selected image requirement. Its contents will be replaced when flashed.
-- Permission to examine the target and a **separate healthy recovery destination** if you later copy data. Backing up the rescue USB is not backing up the target computer.
-- The owner's BitLocker/LUKS recovery keys where applicable. LA AGUJA does not bypass encryption.
+- **Preparation PC:** a working Windows 10/11 or Linux computer with Internet for downloads and enough free space for the base image, decompression and private output.
+- **For Rescue Disk USB (x86-64):** an x86-64 PC capable of USB boot (BIOS/UEFI) and a USB drive of **8 GiB+** whose real usable capacity exceeds the image size. Flashing replaces the selected USB.
+- **For LA AGUJA IoT (ESP32):** any of the **11 supported ESP32-family boards** (`ESP32-C6`, `ESP32-S3`, `ESP32-C3`, `ESP32`, `ESP32-S2`), a USB data cable, Wi-Fi credentials and an authorised Tailscale or Headscale pre-auth key.
+- **Permission & backups:** explicit authorisation for the target machine/network, a separate healthy destination before recovering data, and the owner's BitLocker/LUKS keys where applicable. LA AGUJA never bypasses disk encryption.
 
-If the original disk clicks, repeatedly disconnects or contains irreplaceable data, stop repeated scans and consider professional recovery before powering it further. Do not change firmware or encryption settings casually; have recovery keys and the owner's approval.
+## 2. Download Flash Imager 1.2.0 and media
 
-## 2. Download the preparer and image
-
-[Official download page](https://aguja.transcendenceia.net/en) · [Imager 0.9.10 release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v0.9.10)
+[Official download page](https://aguja.transcendenceia.net/en) · [Flash Imager 1.2.0 release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.2.0) · [Rescue Disk 1.1.2 release](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.1.2) · [Agent Skill 1.3.0](https://github.com/Transcendenceia/La-Aguja/releases/tag/flash-imager-skill-v1.3.0)
 
 | File | Purpose |
 | --- | --- |
-| Windows EXE / Linux AppImage, DEB or portable archive | Runs Flash Imager on the preparation PC |
-| Rescue `.img.zst` | Compressed USB image; decompress before manual import |
-| Rescue `.img` | Base image that Imager can personalise and flash |
-| Rescue ISO | Useful for VM/optical-style boot tests; not the configurable IMG preparation flow |
-| `.aguja` | Reusable private configuration profile, not an OS image |
+| `aguja-flash-imager-1.2.0-win-x64.exe` / AppImage / DEB / `.tar.gz` | Runs Flash Imager (both USB Rescue & ESP32 IoT modes; bundles 6 ESP32 v1.4.0 firmwares + Windows `esptool.exe`) |
+| `aguja-1.1.2-amd64.img.zst` | Compressed x86-64 Rescue Disk USB image; decompress before manual import |
+| `aguja-1.1.2-amd64.iso` | BIOS/UEFI ISO for VM/optical boot tests (not a configurable IMG) |
+| `.aguja` | Reusable encrypted configuration profile for USB preparation |
+| `aguja-flash-imager-skill-1.3.0.zip` | Standalone Agent Skills bundle (Node 22+, zero Electron/Python) for headless `.img` & ESP32 NVS v2 generation |
 
-Prefer the Imager's signed catalogue: it verifies an Ed25519 signature, download parts and the complete image hash. For manual downloads use the [0.9.10 image](https://aguja.transcendenceia.net/releases/aguja-0.9.10-amd64.img.zst), [ISO](https://aguja.transcendenceia.net/releases/aguja-0.9.10-amd64.iso) and [published Rescue checksums](https://aguja.transcendenceia.net/releases/SHA256SUMS-rescue-0.9.10.txt). Compare the hash for the exact filename. A self-calculated hash without a trusted reference does not establish origin.
+Prefer Flash Imager's signed catalogue: it verifies the Ed25519 signature, multipart chunks and complete SHA-256 automatically. For manual downloads use [Rescue 1.1.2 `.img.zst`](https://aguja.transcendenceia.net/releases/aguja-1.1.2-amd64.img.zst), [ISO](https://aguja.transcendenceia.net/releases/aguja-1.1.2-amd64.iso) and [GitHub SHA256SUMS](https://github.com/Transcendenceia/La-Aguja/releases/download/v1.1.2/SHA256SUMS).
 
-Launch the Imager as your normal user. USB writing requests local elevation. Windows packages have no recognised Authenticode signature; inspect provenance rather than routinely bypassing warnings. On Linux, grant the AppImage execute permission; use the portable archive or documented extraction route if FUSE is unavailable, not sandbox-disabling flags. See the [Imager implementation guide](../desktop/README.md).
+Launch Flash Imager as your normal user; only physical USB writing (or Linux Wi-Fi import) asks for UAC/Polkit elevation. Windows builds are portable and require zero Node.js or Python. See [desktop/README.md](../desktop/README.md).
 
-![Actual Imager 0.9.9 with English selected](../server/public/docs-images/099/imager-en.png)
+## 3. Path A — Prepare a Rescue Disk 1.1.2 USB
 
-*Real packaged Linux application; some Spanish strings remain. This is not a Windows execution or a USB-write result.*
+Follow the 7-step USB wizard in Flash Imager 1.2.0:
 
-## 3. Configure a deliberately simple first profile
+1. **Image:** select Rescue Disk `1.1.2` from the signed catalogue (or a decompressed local `.img`).
+2. **Network & locale:** set live language, keyboard layout/variant, Ethernet DHCP/static and up to 16 prioritized Wi-Fi networks (`imager-profile-v2`).
+3. **SSH access:** choose a hostname and your own SSH password or public key (never paste a private key). Factory credentials `aguja`/`aguja` should be replaced immediately.
+4. **AI tools & extensions:** optionally configure Codex CLI, Claude Code, Antigravity or OpenCode, portable NAS/cloud destinations (Drive, OneDrive, Dropbox, S3, SFTP, SMB, WebDAV) and literal environment variables.
+5. **Private network (Tailscale / Headscale):** optionally add an authorised auth/pre-auth key and HTTPS Headscale URL (leave empty for official Tailscale). Rescue `1.0.2+` / `1.1.2` persists tailnet identity cleanly across reboots.
+6. **Encrypted disks:** optionally include BitLocker/LUKS recovery keys (in Windows, local BitLocker appears above manual keys).
+7. **Create disk:** choose **Unlock at boot** encryption for any secret-bearing profile, verify the exact USB model/serial/capacity in the native confirmation dialog, and wait for full SHA-256 read-back verification.
 
-1. Select the catalogue image or a decompressed local IMG. Keep the original base unchanged.
-2. Select **live language and keyboard**, independently of the application language. Check the keyboard before typing a new unlock phrase.
-3. Use automatic Ethernet DHCP for the first boot if possible. Saved personal Wi-Fi is optional; corporate authentication and captive portals may need manual NetworkManager setup.
-4. Choose a recognisable hostname and an SSH password unique to this intervention, or the authorised operator's **public** key. Never paste the private key.
-5. Leave AI and private networking unconfigured for the first test if you do not need them yet. The complete 0.9.10 image still contains all four CLIs.
+Outside the wizard, **Profiles and USB** lets you save/reuse encrypted `.aguja` templates or edit an existing USB's `CFG` without reflashing, and **Updates** checks signed Imager releases.
 
-The SSH factory username and public password are both `aguja`. Blank password plus a public key means key-only access; blank password without a key retains factory access. Later, `aguja password` changes and persists it; `sudo passwd aguja` only affects the current session.
+## 4. Boot, unlock and verify your USB
 
-![Networking and independent live language and keyboard settings](../server/public/docs-images/099/imager-network-en.png)
-
-*Actual English-selected UI. The pictured Spanish keyboard selection is a real separate setting, not a translated screenshot. Choose your own layout.*
-
-## 4. Protect secrets before saving
-
-Choose **Unlock at boot** for a profile containing secrets. The initial unlock phrase is publicly known (`aguja`): replace it with your own and keep a recovery copy outside the USB. SSH password, profile phrase, provider API key and disk recovery key are different credentials.
-
-- The encrypted capsule protects its **locked profile**. It does not encrypt all AGUJA_DATA, the entire USB or secrets already loaded and accessible to root.
-- Encrypted profiles force `persistent_home=no` at boot; persistent HOME is an older/plaintext configuration option.
-- `persistent_home=no` discards HOME and session tokens on reboot. `persistent_home=yes` retains them **unencrypted** on the USB.
-- A plaintext `aguja.conf`, private image, profile export or backup can contain sensitive information. Do not attach them to an issue or share them as a public image.
-- Saving an encrypted reusable profile is useful for repeat preparation, but does not make expired sessions or registration keys valid.
-
-![Encrypted profile and USB-writing choices in Imager](../server/public/docs-images/099/imager-protection-en.png)
-
-*Real Linux UI with English selected and some Spanish summary labels. No image or USB is selected in this capture; it demonstrates options, not completion. The backup option shown is Linux-only.*
-
-## 5. Back up and write only the confirmed USB
-
-**Flashing replaces the selected USB's contents.** First make a recoverable backup. Linux offers an optional verified full-device backup, off by default. Windows has **no integrated USB backup**: use an external tool before proceeding.
-
-Compare the physical USB's model, serial and actual capacity with the native confirmation. Cancel if anything is unclear. “Create private image” saves a new file; “Prepare and write USB” also writes the selected device. The agent skill only prepares a file and does not automatically flash.
-
-Wait for writing, synchronisation and complete read-back verification. In 0.9.9 the Imager checks workspace capacity before copying; Windows can choose another work folder if needed. Do not overwrite the base or choose an existing output file as a shortcut. Do not unplug during a write. A failed or interrupted write is not ready-to-boot media.
-
-Read-back proves the written image bytes match; it does **not** certify all firmware. Windows keeps the image's AGUJA_DATA geometry rather than expanding it automatically on larger media. Installing a new Imager does not update an already-flashed USB. Review [USB backup/update procedures](USB.md) before changing existing media.
-
-## 6. Boot, unlock and reach the first milestone
-
-Use the target computer's manufacturer boot menu and select the USB. Do not begin an installation on the internal disk. The cockpit can fall back to text when display support requires it.
-
-From the local console:
+Boot from the USB via your PC's firmware menu, unlock the profile if encrypted, and run:
 
 ```sh
-aguja profile unlock   # encrypted profiles only; enter the phrase interactively
+aguja profile unlock   # encrypted profiles only
 aguja status
 aguja doctor
 lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 findmnt
 ```
 
-Identify **rescue USB, original source and separate destination** using model/serial/size, not a remembered device letter. These commands orient you; a healthy doctor report does not establish that an internal disk is healthy or an AI account works. Do not publish raw serial numbers, fingerprints or personal paths without reviewing them.
+- Start an AI agent with `aguja login codex|claude|antigravity` (or `opencode auth login`) and `aguja agent codex` (Codex Safe uses `workspace-write` sandbox + human tool approval).
+- Manage persistent RAM or USB updates with `aguja update menu` / `aguja update rollback`.
+- Save work cleanly outside RAM before shutdown; use the power menu's verified persist-and-poweroff options when using encrypted global persistence.
 
-**First milestone:** you can see the cockpit, identify the booted version, inspect status and distinguish the disks. No internal repair or cloud login is required. Booting itself does not mount, repair, install or write to internal disks.
+## 5. Path B — Flash your first ESP32 IoT node
 
-0.9.9 local consoles retain up to 10,000 history lines in RAM. Wheel up reviews output; wheel down to the prompt or Esc returns. New consoles do not recover already-lost output, and full-screen tools may have their own navigation. This is not a saved transcript. SSH retains its normal terminal behaviour.
+Switch the sidebar toggle in **Flash Imager 1.2.0** to **IoT · MCU** and follow the 4 steps:
 
-## 7. Optionally connect from another computer
+1. **Board & USB detection:** plug in any supported ESP32 board (`ESP32-C6`, `ESP32-S3`, `ESP32-C3`, `ESP32`, `ESP32-S2`) and click **Auto-detect** — Flash Imager probes the chip over USB (`esptool`), identifies flash/PSRAM and picks the matching prebuilt `v1.4.0` firmware automatically.
+2. **Wi-Fi profiles:** add 1 to 8 prioritized Wi-Fi SSIDs/passwords. **SoftAP is disabled by default** (can be enabled explicitly if you want a local NAT fallback AP).
+3. **Tailscale / Headscale proxy:** enter node hostname, control server (official Tailscale or your Headscale host + 64-hex Noise pubkey + DERP region), auth key, exit-node/subnet-router/DNS-relay toggles and agent API token (auto-generated if blank).
+4. **Flash & verify:** review the exact partition flash map (`0x0`/`0x1000` bootloader, `0x8000` partitions, `0x9000` pure-JS NVS v2, `0x15000` otadata, `0x20000` app), click **Flash board** and watch real-time serial boot verification. Use **Erase flash** anytime to wipe a test board cleanly.
 
-Replace the placeholders with the actual live address and configured port:
+Once the board joins your tailnet, operate it remotely with [iot/cli/aguja-iot.py](../iot/cli/aguja-iot.py) or its Dark Ops Web UI (`http://<node-tailnet-ip>/`). Full details in [IOT.md](IOT.md).
 
-```sh
-ssh aguja@ACTUAL_LIVE_IP
-# If you selected a non-default port:
-ssh -p CONFIGURED_PORT aguja@ACTUAL_LIVE_IP
-```
+## 6. Path C — Headless preparation with Agent Skill 1.3.0
 
-Compare the host fingerprint against the live console before trusting it. `aguja.local` depends on mDNS support, multicast and name collisions; the actual IP is the fallback. The screenshots' `10.0.2.15` is a QEMU test address, not your machine.
-
-Optional **your own Tailscale/Headscale**: configure an authorised auth/pre-auth key, optional node name and your HTTPS Headscale URL (empty selects official Tailscale). The image must support `tailscale-profile-v1`. Registration happens on the live after networking and profile unlock, not on the preparation PC. Your client and ACLs must allow access.
-
-Default access is normal OpenSSH over the private network; Tailscale SSH is separate and needs compatible SSH policies. Tailnet identity lives in RAM and registers again on reboot. A one-use key may be consumed on the first boot; repeat boots need valid, appropriately scoped reusable keys. Remove obsolete nodes and keys afterwards; revoking registration alone does not remove every enrolled node.
-
-## 8. Optionally authorise an AI client
-
-Choose **one** login command for your provider, not all of them:
+Extract `aguja-flash-imager-skill-1.3.0.zip` (Node.js 22+, no Electron or Python):
 
 ```sh
-aguja login codex
-aguja login claude
-aguja login antigravity
-opencode auth login
+node /path/to/flash-imager/scripts/imager.cjs doctor
+node /path/to/flash-imager/scripts/imager.cjs iot-boards
+node /path/to/flash-imager/scripts/imager.cjs iot-nvs < /private/iot-request.json
+node /path/to/flash-imager/scripts/imager.cjs prepare < /private/usb-request.json
 ```
 
-Local supported login opens the official flow in sandboxed Chromium with the original PTY. You grant consent yourself. Copying focuses the console; paste explicitly with Ctrl+Shift+V. Closing returns to the original terminal. OpenCode retains native login; there is no QR in the new local browser flow.
+The skill stops at verified local `.img` / `.bin` artifacts (`device_written: false`) and never flashes physical USB or serial ports automatically. See [harnesses.md](../skills/flash-imager/references/harnesses.md) and [iot.md](../skills/flash-imager/references/iot.md).
 
-SSH/serial/headless sessions use provider-native methods. A callback to remote localhost is not automatically forwarded. API credentials and selective portable-session imports are alternatives; installation or an imported file does not prove authentication. No whole keychain, history, hooks or MCP configuration is copied. Check the provider's account, network, quota, pricing and data policy before using it; offline cloud inference is not promised.
-
-Start the chosen client through the launcher, for example:
-
-```sh
-aguja agent codex
-```
-
-Choose **Safe** for task confirmations; Unsafe/YOLO is explicit. **Both retain unrestricted sudo/root. The released 0.9.9 Safe mode is not a sandbox or forensic write blocker; [0.9.10 adds a Codex sandbox](HARNESSES.md#corrección-de-codex-seguro--2026-10-10).** Start with a [bounded diagnosis prompt](SHOWCASE.md#first-diagnosis), inspect the proposed commands and stop before unapproved writes.
-
-## 9. Verify the result and close the intervention
-
-For a first boot, record the version, verified image source and observed hardware/boot limits. For later recovery, open sample files at the destination and check the agreed result rather than trusting an exit code. Save authorised evidence outside RAM, without secrets. Console history is not a case report.
-
-Finish transfers, unmount recovery volumes cleanly and shut down before disconnecting media. Remove only the temporary access you created, revoke unneeded keys and review persistent HOME for remaining tokens. Preserve originals and backups until the owner accepts the outcome. Never clean up by deleting unrelated access or evidence.
-
-Next: [eight practical workflows](SHOWCASE.md) · [troubleshooting](TROUBLESHOOTING.md) · [current release evidence](RELEASE-0.9.10.md).
+Next: [20 platform missions](PLATFORM.md) · [IoT architecture](IOT.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Imager 1.2.0 notes](RELEASE-IMAGER-1.2.0.md).

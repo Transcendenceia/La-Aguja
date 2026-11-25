@@ -53,11 +53,11 @@
   "privacy": "Privacy",
   "footer": "Open source · GPL-3.0-or-later · Your network, no LA AGUJA relay.",
   "docTitle": "User guide · LA AGUJA",
-  "docDescription": "Boot an independent Linux from USB and give your AI agent a mission: build systems, prepare Windows, create a virtual lab or coordinate authorised machines. Start with the hardware, not the state of the installed OS.",
+  "docDescription": "Boot an independent Linux from USB with AI agents on any x86-64 PC, flash pocket ESP32 tailnet nodes with Flash Imager 1.2.0, or automate preparation with Agent Skill 1.3.0—on your own hardware and private network.",
   "docUI": [
     "Skip to the guide",
     "Contents and search",
-    "Rescue. Understand. Decide.",
+    "Operate. Build. Decide.",
     "Search this guide",
     "Explore the contents or search for a term.",
     "Print / save PDF",

@@ -3,15 +3,15 @@
 [Website](https://aguja.transcendenceia.net/zh/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## 不只是救生圈，更是项目发射台。
+## 远不止救援盘：这是一座便携移动操作台。
+
+LA AGUJA 将可启动的 x86-64 Linux、口袋级 ESP32 Tailnet 节点、跨平台烧录器与无界面 Agent Skill 融为一体——全部运行在你自己的硬件与私有网络中。
 
 给先进智能体一个目标，而不仅是一条修复命令。它可以分析硬件、选择工具、在获准范围内生成并执行脚本，再验证结果。磁盘中的系统不必启动，甚至不必存在。
 
 Live 会话使用 RAM 中的可写叠加层，底层是 USB 上的只读镜像。这是 Linux，不是固件，也不会将整个 USB 复制到 RAM。启动时不改动内部磁盘；是否写入由你决定。
 
 已包含可使用 root 权限的 AI 客户端、SSH、Python、Git、磁盘工具、debootstrap 和 arch-install-scripts。从 0.9.11 起已内置 QEMU x86、qemu-img/qemu-nbd、OVMF 和 SeaBIOS；支持时使用 KVM，否则可使用较慢的 TCG。容器引擎和构建工具仍需按需添加；请检查 RAM、存储和兼容性。请主动保存重要成果；RAM 状态是临时的。云端 AI 需要网络和你自己的账户，并未包含本地模型。
-
-[↗](https://aguja.transcendenceia.net/zh/docs#que-es)
 
 ## 准备第一个 USB
 
@@ -37,11 +37,13 @@ Live 系统无需安装即可启动。可配置 IMG 和启动 ISO 在 Imager 中
 
 [↗](https://aguja.transcendenceia.net/zh/docs#preparacion)
 
-## 下载并打开 Imager
+## Flash Imager 1.2.0：下载、USB 配置、ESP32 IoT 与 Agent Skill 1.3.0
 
-从官网选择 Windows 10/11 EXE、Linux AppImage、Debian/Ubuntu DEB 或便携压缩包。核对 SHA-256，在准备电脑上运行。EXE/AppImage 不是要写入 USB 的救援镜像，无需 LA AGUJA 账户。Windows 包目前没有受认可的 Authenticode 签名；AppImage 可能需要执行权限，便携包是另一选择。设备写入需要本地提权。应用能打开不证明 USB 已准备或能启动。
+从官方 v1.2.0 发布页下载 Windows 便携 EXE 或 Linux AppImage、DEB、便携压缩包。以普通用户身份运行，仅物理 USB 写入请求 UAC/Polkit。Windows 版本内置独立 esptool.exe，烧录 ESP32 无需安装 Python。
 
-[↗](https://aguja.transcendenceia.net/zh/docs#descargas)
+在 USB 模式下，“配置与 USB”可保存/打开加密 .aguja 模板（支持 imager-profile-v2 扩展项）并直接编辑现有 U 盘 CFG 而不覆盖 DATA。在 IoT · MCU 模式下，Flash Imager 1.2.0 自动识别 USB 连接的 ESP32 芯片，内置覆盖 11 款开发板的 6 套 v1.4.0 固件，纯 JS 生成 48 KiB NVS v2 分区（默认关闭 SoftAP），支持串口启动验证与一键清空闪存。
+
+如需无界面自动化，Agent Skill 1.3.0 在 Node 22+ 下提供相同的 .img 引擎与 ESP32 NVS v2 生成器（iot-boards、iot-nvs），仅生成校验文件而不自动烧录设备。Imager 更新仅在你选择时校验签名目录并下载。
 
 ## 步骤 1 · 选择兼容镜像
 
@@ -73,9 +75,9 @@ ssh aguja@IP
 
 ## 步骤 5 · 自己的 Tailscale/Headscale
 
-远程访问可选。启用私有网络并提供授权 auth/pre-auth 密钥，可选节点名。Headscale URL 留空使用官方 Tailscale，否则填写自己的 HTTPS 服务。Live 在网络可用、配置解锁后注册，不注册准备电脑。客户端必须属于授权网络并满足策略。注册密钥不是 SSH 密码。注册成功不证明 ACL 允许连接，应从授权客户端测试真实 SSH。 从 Rescue Disk 1.0.2 起，USB 在连接前恢复已保存的 Tailscale/Headscale 身份。注册密钥用于首次注册，不会在每次重启时创建新节点。状态未变则不重复写入，变更会原子保存并校验。自动配置不增加解锁步骤，加密配置保留原有解锁。服务器端到期与撤销仍然有效。
+远程访问可选。启用私有网络并提供授权 auth/pre-auth 密钥，可选节点名。Headscale URL 留空使用官方 Tailscale，否则填写自己的 HTTPS 服务。Live 在网络可用、配置解锁后注册，不注册准备电脑。客户端必须属于授权网络并满足策略。注册密钥不是 SSH 密码。注册成功不证明 ACL 允许连接，应从授权客户端测试真实 SSH。
 
-[↗](https://aguja.transcendenceia.net/zh/docs#tailnet)
+从 Rescue Disk 1.0.2 起，USB 在连接前恢复已保存的 Tailscale/Headscale 身份。注册密钥用于首次注册，不会在每次重启时创建新节点。状态未变则不重复写入，变更会原子保存并校验。自动配置不增加解锁步骤，加密配置保留原有解锁。服务器端到期与撤销仍然有效。 LA AGUJA IoT（ESP32 v1.4.0）节点同样通过 WireGuard/DERP 直接接入你自己的 Tailscale 或 Headscale，作为口袋级出口节点、动态上游子网路由与 DNS 中继，可通过 REST API 或 aguja-iot.py 远程控制。
 
 ## OpenSSH 与 Tailscale SSH
 
@@ -218,11 +220,11 @@ aguja help
 
 [↗](https://aguja.transcendenceia.net/zh/docs#terminar)
 
-## 已验证范围与限制
+## Rescue 1.1.2、Imager 1.2.0 与 IoT ESP32 验证范围
 
-公开版无 LA AGUJA 账户或专有中继。准备、软件包和 VM 测试覆盖特定路径，不认证每台电脑。Imager 0.9.2 修复七种界面语言标题，救援镜像仍为 0.9.0。历史截图保留真实版本。回读不是通用启动；面板/CLI/便携会话不是 AI 登录；本地注册不证明 SSH 策略。Windows 暂无集成 USB 备份或受认可的 Authenticode 签名，也无通用已签名 Secure Boot。
+发布验证文档涵盖 Rescue Disk 1.1.2（BIOS/UEFI 启动、LUKS 解锁、持久化代次、回滚与 tailnet 身份）、Linux 与 Windows 下的 Flash Imager 1.2.0（USB 配置、CFG 编辑以及 ESP32-C6 与 ESP32-S3-WROOM-1 N16R8 实机烧录，Windows 免 Python）以及 Agent Skill 1.3.0 确定性压缩包。
 
-[↗](https://aguja.transcendenceia.net/zh/docs#validacion)
+截图保留其标注的历史版本与合成测试数据。IoT 实机验证覆盖 Seeed Studio XIAO ESP32-C6 与 ESP32-S3-WROOM-1 N16R8，其余 ESP32 子系列随附已编译打包的 v1.4.0 固件。测试结果不代表对所有硬件、Secure Boot 或第三方 AI 账户的通用保证。
 
 ## 参考与下一步
 

@@ -3,15 +3,15 @@
 [Website](https://aguja.transcendenceia.net/it/docs) · [English](../en/USER-GUIDE.md) · [Español](../es/USER-GUIDE.md)
 
 
-## Una piattaforma di lancio, non solo un salvagente.
+## Molto più di un disco di emergenza: una centrale mobile operativa.
+
+LA AGUJA unisce Linux avviabile x86-64 su USB, nodi ESP32 tascabili per la tua tailnet, un preparatore multipiattaforma e una skill per agenti IA: tutto sul tuo hardware e sulla tua rete privata.
 
 Dai a un agente avanzato un obiettivo, non solo un comando di riparazione. Può analizzare hardware, scegliere strumenti, generare ed eseguire script nel perimetro autorizzato e verificare i risultati. Il sistema installato non deve avviarsi, né necessariamente esistere.
 
 La sessione live usa uno strato scrivibile in RAM sopra l’immagine USB di sola lettura. È Linux, non firmware; l’intera USB non viene copiata in RAM. I dischi interni restano intatti all’avvio; decidi tu quando scriverci.
 
 Include client IA con accesso root, SSH, Python, Git, strumenti per dischi, debootstrap e arch-install-scripts. Aggiungi pacchetti compatibili: Dalla versione 0.9.11 sono inclusi QEMU x86, qemu-img/qemu-nbd, OVMF e SeaBIOS; usa KVM se disponibile oppure TCG, più lento. I motori di container e gli strumenti di compilazione restano aggiunte opzionali; verifica RAM, spazio e compatibilità. Salva esplicitamente i risultati importanti; la RAM è temporanea. L’IA cloud richiede rete e il tuo account; nessun modello locale è incluso.
-
-[↗](https://aguja.transcendenceia.net/it/docs#que-es)
 
 ## La prima USB
 
@@ -37,11 +37,13 @@ Verifica x86-64, USB e firmware. BIOS/UEFI sono previsti; ARM, tutti i chip Wi-F
 
 [↗](https://aguja.transcendenceia.net/it/docs#preparacion)
 
-## Scaricare e aprire Imager
+## Flash Imager 1.2.0: download, profili USB, IoT ESP32 e Agent Skill 1.3.0
 
-Scegli EXE Windows 10/11, AppImage, DEB Debian/Ubuntu o archivio Linux portatile dal sito ufficiale. Verifica SHA-256 e apri sul PC preparatore. Non scrivere EXE/AppImage come immagine USB. Nessun account LA AGUJA. L’EXE non ha firma Authenticode riconosciuta; AppImage può richiedere permessi di esecuzione. La scrittura richiede elevazione locale. Aprire l’applicazione non prova preparazione o avvio della USB.
+Scarica l’EXE Windows o AppImage, DEB o archivio Linux dalla release ufficiale v1.2.0. Avvialo come utente normale; solo le scritture USB richiedono UAC/Polkit. Windows integra esptool.exe autonomo senza Python.
 
-[↗](https://aguja.transcendenceia.net/it/docs#descargas)
+In modalità USB, Profili/USB salva/apre modelli cifrati .aguja (imager-profile-v2) e modifica il CFG senza riscrivere DATA. In modalità IoT · MCU, Flash Imager 1.2.0 rileva automaticamente il chip ESP32 via USB, integra 6 firmware v1.4.0 per 11 schede, genera partizioni NVS v2 da 48 KiB in JS puro (SoftAP disattivato), verifica l’avvio seriale e cancella la flash in 1 clic.
+
+Per automazione headless senza Electron, Agent Skill 1.3.0 offre lo stesso motore .img e generatore NVS v2 (iot-boards, iot-nvs) con Node 22+, fermandosi ai file verificati. Gli aggiornamenti Imager controllano il catalogo firmato su richiesta.
 
 ## Passo 1 · Scegliere l’immagine
 
@@ -73,9 +75,9 @@ Codex CLI, OpenCode, Claude Code e Antigravity: chiave API, importazione seletti
 
 ## Passo 5 · Tailscale/Headscale proprio
 
-Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale. Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide.
+Accesso facoltativo: abilita rete privata, chiave auth/pre-auth autorizzata e nome opzionale. URL Headscale vuota usa Tailscale ufficiale; altrimenti server HTTPS proprio. Si iscrive il live dopo rete e sblocco, non il PC preparatore. Client nella rete autorizzata e politiche compatibili. Chiave d’iscrizione non è password SSH. Iscrizione non prova ACL: verifica SSH reale.
 
-[↗](https://aguja.transcendenceia.net/it/docs#tailnet)
+Da Rescue Disk 1.0.2, la USB ripristina l’identità Tailscale/Headscale salvata prima della connessione. La chiave serve alla prima registrazione, non a creare un nodo a ogni riavvio. Lo stato invariato non viene riscritto; le modifiche sono salvate atomicamente e verificate. Il profilo automatico non aggiunge sblocchi; quello cifrato mantiene lo sblocco esistente. Scadenza e revoca del server restano valide. Anche i nodi LA AGUJA IoT (ESP32 v1.4.0) entrano nel tuo Tailscale o Headscale via WireGuard/DERP come exit node, subnet router dinamico e DNS relay, controllabili da remoto via API REST o aguja-iot.py.
 
 ## OpenSSH e Tailscale SSH
 
@@ -218,11 +220,11 @@ Riassumi osservazioni, cambiamenti e verifiche. Chiudi sessioni, completa scritt
 
 [↗](https://aguja.transcendenceia.net/it/docs#terminar)
 
-## Cosa è verificato
+## Validazione di Rescue 1.1.2, Imager 1.2.0 e IoT ESP32
 
-Edizione pubblica senza account LA AGUJA o relay proprietario. Test di preparazione, pacchetti e VM coprono percorsi specifici, non ogni PC. Imager 0.9.2 corregge il titolo in sette lingue; immagine 0.9.0 invariata. Schermate conservano versioni reali. Rilettura non è avvio universale; pannello/CLI/sessione non è login IA; iscrizione locale non prova SSH. Windows senza backup USB integrato o Authenticode riconosciuto. Nessun Secure Boot firmato universale.
+I documenti di validazione coprono Rescue Disk 1.1.2 (BIOS/UEFI, LUKS, generazioni persistenti, rollback e identità tailnet), Flash Imager 1.2.0 su Linux e Windows (profili USB, modifica CFG e scrittura reale su ESP32-C6 e ESP32-S3-WROOM-1 N16R8 senza Python su Windows) e Agent Skill 1.3.0.
 
-[↗](https://aguja.transcendenceia.net/it/docs#validacion)
+Le schermate mantengono versioni storiche e dati sintetici. I test hardware IoT coprono XIAO ESP32-C6 ed ESP32-S3-WROOM-1 N16R8; le altre varianti ESP32 includono firmware v1.4.0 compilati. Non garantiscono hardware universale, Secure Boot o account IA esterni.
 
 ## Riferimenti e prossimi passi
 

@@ -53,11 +53,11 @@
   "privacy": "Privacy",
   "footer": "Codice aperto · GPL-3.0-or-later · La tua rete, senza relay LA AGUJA.",
   "docTitle": "Guida utente · LA AGUJA",
-  "docDescription": "Avvia Linux indipendente da USB e dai una missione all’agente IA: costruire sistemi, preparare Windows, creare laboratori virtuali o coordinare macchine autorizzate. Parti dall’hardware, non dallo stato del sistema installato.",
+  "docDescription": "Avvia Linux indipendente da USB con agenti IA su qualsiasi PC x86-64, scrivi nodi ESP32 tascabili nella tua tailnet con Flash Imager 1.2.0 o automatizza la preparazione con Agent Skill 1.3.0.",
   "docUI": [
     "Vai alla guida",
     "Indice e ricerca",
-    "Recuperare. Comprendere. Decidere.",
+    "Operare. Costruire. Decidere.",
     "Cerca nella guida",
     "Esplora l’indice o cerca un termine.",
     "Stampa / salva PDF",

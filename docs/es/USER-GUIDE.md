@@ -4,55 +4,15 @@
 
 [Manual navegable con capturas, búsqueda e impresión](https://aguja.transcendenceia.net/es/docs). [PDF del manual](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.0/LA-AGUJA-Manual-usuarios-20261007.pdf). Acceso privado conservado.
 
-## Una entrada pequeña. Control completo.
+## Mucho más que un disco de rescate: un centro móvil de operaciones.
 
-LA AGUJA es un Linux de rescate que arranca desde un USB antes del sistema instalado. Te da una consola, herramientas de recuperación y cuatro arneses de IA para investigar y actuar sobre un equipo que necesita ayuda. **Agujita abre la puerta; tú decides qué se hace detrás.**
+LA AGUJA reúne un Linux arrancable para cualquier PC, nodos ESP32 de bolsillo para tu red privada, un grabador multiplataforma y una skill para agentes IA: todo sobre tu hardware y tu propia tailnet.
 
-Flash Imager prepara ese USB desde Windows o Linux. Rescue Disk es lo que arranca en el equipo. Tu tailnet conecta al técnico o asistente por SSH. No hay cuenta de LA AGUJA: las descargas son públicas en GitHub. Las cuentas IA y la administración de la tailnet son independientes.
+Dale a un agente avanzado un objetivo, no solo un comando de reparación. Puede analizar el hardware disponible, elegir herramientas, generar y ejecutar scripts dentro del alcance que autorices y comprobar el resultado. El sistema del disco no necesita arrancar, ni siquiera existir.
 
-**Tu PC (Flash Imager) → Tu USB (Rescue Disk) ↔ Tu técnico o IA (SSH en tu tailnet)**
+La sesión live usa una capa de escritura en RAM sobre la imagen de solo lectura del USB. Es Linux, no firmware, y no se copia todo el USB a RAM. Los discos internos permanecen intactos al inicio; escribes en ellos cuando decides usarlos.
 
-El sistema live permite operar cuando el sistema interno no inicia. No instala, repara ni monta automáticamente los discos internos al arrancar. La raíz del live está en RAM; el área de datos del USB puede conservar trabajo. Una herramienta disponible no significa que sea seguro ejecutarla contra cualquier disco.
-
-### Potente de verdad, no una demostración sin consecuencias
-
-El usuario `aguja` puede obtener root con `sudo -n`. Los arneses en modo completo pueden modificar discos, redes y sistemas de archivos. No hay un aislamiento que haga inocuo un comando equivocado. Dar al agente un objetivo de «solo lectura» es una instrucción, no una barrera técnica. Antes de escribir, identifica el destino y verifica una copia recuperable.
-
-Actualizado el 8 de octubre de 2026 · versión pública 0.9.0 para Windows/Linux · experimental · código abierto. Las capturas emplean datos sintéticos; los límites y comprobaciones se indican al final.
-
-### ¿Por qué usar LA AGUJA?
-
-Si Windows o Linux no arranca, las herramientas instaladas dentro de ese sistema tampoco están a tu alcance. LA AGUJA arranca **por otro camino**: desde un pendrive, con su propio Linux. Así puedes observar el equipo, buscar el origen del fallo y preparar una recuperación sin depender de que el sistema averiado funcione.
-
-Su diferencia no es «una IA que arregla todo con un clic». Es reunir **herramientas de rescate, agentes de IA, red preparada y acceso remoto** en un entorno que puedes llevar contigo. La IA ayuda a interpretar resultados y construir un procedimiento; las herramientas hacen el trabajo real. Puedes usarlo también sin IA.
-
-EMPIEZO DESDE CERO
-
-### No sé de Linux ni de discos
-
-Sigue la receta mínima y el glosario. Primero aprenderás a arrancar y reconocer lo que ves; no necesitas reparar nada para practicar.
-
-[Mi primer USB →](https://aguja.transcendenceia.net/es/docs#primer-usb)
-
-YA ME DEFIENDO
-
-### Quiero rescatar o dar soporte
-
-Configura IA, SSH y, si hace falta, una red privada. Aprende a formular un objetivo y comprobar el resultado.
-
-[Mi primer diagnóstico →](https://aguja.transcendenceia.net/es/docs#primer-diagnostico)
-
-USO PROFESIONAL
-
-### Necesito un procedimiento reproducible
-
-Identidades de dispositivos, imágenes de trabajo, sesiones persistentes, evidencias y entrega. Las herramientas no sustituyen el criterio técnico.
-
-[Ruta profesional →](https://aguja.transcendenceia.net/es/docs#profesional)
-
-### ¿Cuándo no es la primera herramienta que necesitas?
-
-Si solo quieres instalar una app en un equipo que funciona, utiliza tu sistema habitual. Si necesitas un instalador oficial de Windows, LA AGUJA no incluye Windows ni su licencia. Si el equipo no enciende, hay olor a quemado o el almacenamiento desaparece repetidamente, puede hacer falta asistencia física: un USB no repara componentes electrónicos.
+Incluye clientes IA con acceso root, SSH, Python, Git, herramientas de discos, debootstrap y arch-install-scripts. Amplía la sesión con paquetes compatibles: Desde 0.9.11 se incluyen QEMU x86, qemu-img/qemu-nbd, OVMF y SeaBIOS; usa KVM si está disponible o TCG, más lento, como alternativa. Los motores de contenedores y las herramientas de compilación siguen siendo adicionales; comprueba RAM, almacenamiento y compatibilidad. Guarda los resultados importantes explícitamente; el estado en RAM es temporal. La IA en nube requiere red y tu cuenta, no un modelo local incluido.
 
 ## Tu primer USB, sin complicarte
 
@@ -131,50 +91,13 @@ No necesitas tener instalado el sistema del disco interno para leer sus particio
 
 **Windows:** el respaldo previo integrado todavía no está implementado. La opción no se ofrece y el backend rechaza una solicitud de respaldo antes de escribir. Copia los archivos o haz una imagen con tu herramienta de respaldo antes de grabar. **Linux:** hay respaldo completo opcional con verificación, desmarcado por defecto; exige espacio suficiente y permisos. El respaldo del USB no es un respaldo del disco interno del equipo que vas a rescatar.
 
-## Descargar y abrir Flash Imager
+## Flash Imager 1.2.0: descargas, perfiles USB, IoT ESP32 y Agent Skill 1.3.0
 
-Abre [las descargas para Windows y Linux](https://aguja.transcendenceia.net/#application). Usa el formato de tu plataforma, conserva su nombre y verifica el SHA-256 que acompaña la publicación. Los ejemplos de descarga corresponden a la candidata pública 0.9.0. Comprueba que la release está publicada antes de descargar; las capturas históricas conservan su versión en el pie. Comprueba siempre la publicación que descargas.
+Descarga el EXE portátil de Windows o AppImage, DEB o archivo portátil Linux de la release oficial v1.2.0. Ábrelo como usuario normal; solo las operaciones físicas sobre USB piden UAC/Polkit. La versión Windows incluye esptool.exe oficial y no necesita Python para flashear ESP32.
 
-| Formato | Cómo abrir | Qué tener en cuenta |
-| --- | --- | --- |
-| Windows x64 · EXE portátil | Ejecuta aguja-flash-imager-0.9.0-win-x64.exe. | No necesitas Node.js. UAC se solicita para grabar, no para configurar. No se promete firma de editor ni ausencia de SmartScreen. |
-| Linux · AppImage | Hazlo ejecutable y ábrelo como tu usuario. | FUSE o extracción soportada; no abras la app como root ni desactives el sandbox de Electron. |
-| Debian/Ubuntu · DEB | Instala el paquete local con tu gestor. | La instalación puede necesitar administrador y paquetes del sistema. |
-| Linux · TAR portátil | Extrae la carpeta y ejecuta el binario de la aplicación. | Conserva los archivos de la carpeta; preparar una imagen necesita los helpers del sistema. |
+En modo USB, Perfiles y USB guarda y abre plantillas .aguja cifradas (incluyendo ajustes ampliados imager-profile-v2 de Wi-Fi, NAS/nube, variables literales y tailnet) y edita el CFG de un USB existente sin regrabar. En modo IoT · MCU, Flash Imager 1.2.0 detecta automáticamente el chip ESP32 por USB, integra 6 firmwares v1.4.0 precompilados para 11 placas, genera particiones NVS v2 de 48 KiB en JS puro (SoftAP desactivado por defecto), verifica el arranque por serie y permite borrar la flash en 1 clic.
 
-```
-# Linux, desde la carpeta de descarga
-sha256sum aguja-flash-imager-0.9.0-x86_64.AppImage
-chmod +x aguja-flash-imager-0.9.0-x86_64.AppImage
-./aguja-flash-imager-0.9.0-x86_64.AppImage
-```
-
-```
-# PowerShell, desde la carpeta de descarga
-Get-FileHash .\aguja-flash-imager-0.9.0-win-x64.exe -Algorithm SHA256
-```
-
-Compara el resultado completo, no solo sus primeros caracteres. Un hash calculado te permite comparar bytes; **no prueba por sí solo quién publicó un archivo**. La aplicación verifica el catálogo firmado Ed25519 con una clave incluida en el paquete. Esa firma no convierte en confiable una aplicación obtenida de una fuente desconocida.
-
-La web es pública e informativa. Descargar y preparar no requiere registro en LA AGUJA.
-
-Descarga también las sumas de [Flash Imager Linux 0.8.2](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.0/SHA256SUMS-imager-0.9.0-linux) o [Flash Imager Windows 0.8.2](https://github.com/Transcendenceia/La-Aguja/releases/download/v0.9.0/SHA256SUMS-imager-0.9.0-windows). Guarda el archivo junto al artefacto que descargaste, conservando sus nombres. En Linux:
-
-```
-sha256sum --ignore-missing -c SHA256SUMS-imager-0.9.0-linux
-```
-
-Debe aparecer `OK` para tu archivo. «No se pudo verificar ningún archivo» no significa éxito: comprueba la carpeta y los nombres. En Windows, compara el SHA-256 de `Get-FileHash` con la línea correspondiente del archivo de sumas; no ignores una discrepancia.
-
-### Si AppImage no abre por FUSE
-
-Prueba el modo de extracción y ejecución del propio AppImage. Mantiene el sandbox; no abras la app con `sudo` ni añadas `--no-sandbox` para resolverlo.
-
-```
-./aguja-flash-imager-0.9.0-x86_64.AppImage --appimage-extract-and-run
-```
-
-**Si Windows muestra un aviso:** verifica origen y hash antes de continuar. No desactives globalmente el antivirus o SmartScreen. Las descargas son públicas y no requieren registro en LA AGUJA. Las cuentas y créditos de IA pertenecen al proveedor elegido.
+Para automatización sin ventana ni Electron, Agent Skill 1.3.0 ofrece el mismo motor GPT/FAT32 y generador ESP32 NVS v2 (iot-boards, iot-nvs) con Node 22+, deteniéndose en archivos verificados. Actualizaciones del Imager consulta el catálogo firmado y solo descarga cuando tú eliges.
 
 ## Paso 1 · Elegir una imagen compatible
 
@@ -277,48 +200,11 @@ Paquete Linux real 0.9.0. Las tarjetas muestran comprobación/instalación, modo
 
 No publiques API keys, códigos o URLs de autorización en capturas. La IA en nube necesita Internet y puede enviar al proveedor las instrucciones, resultados y archivos que uses; elige los datos conforme a tu tarea.
 
-## Paso 5 · Tailscale o tu propio Headscale
+## Paso 5 · Tu Tailscale o Headscale
 
-En **Acceso remoto**, activa **Red privada Tailscale / Headscale** solo si la necesitas. Con el interruptor apagado, los nuevos perfiles no llevan la clave de alta; tampoco crean, vinculan ni copian credenciales del túnel propietario anterior.
+El acceso remoto es opcional. Activa la red privada y facilita una clave de alta autorizada. Una URL Headscale vacía selecciona Tailscale oficial; de lo contrario usa tu servidor HTTPS. El cliente de acceso debe pertenecer a la misma red y cumplir sus políticas; comprueba una conexión SSH real.
 
-| Campo | Tailscale oficial | Headscale propio |
-| --- | --- | --- |
-| Clave de alta | Auth key de tu administrador. | Pre-auth key de tu servidor. |
-| URL de Headscale | Déjala vacía. | Origen HTTPS accesible, por ejemplo https://headscale.example.invalid; el dominio de ejemplo no funciona. |
-| Nombre del nodo | Opcional. Vacío utiliza el nombre del equipo; minúsculas, números y guiones. |
-| Tailscale SSH | Desactivado por defecto: OpenSSH normal utiliza contraseña/clave y puerto del paso anterior. |
-| Aceptar rutas | Desactivado por defecto. Solo si necesitas rutas de subred ya anunciadas y aprobadas por tu administrador. |
-
-![Flash Imager: alta privada en Headscale con clave oculta](../server/public/docs-images/linux-04-tailnet.png)
-
-Captura de ejemplo con dominio no resoluble y clave sintética oculta. ① Activar habilita el alta en el disco, no en este PC. ② URL vacía elige Tailscale oficial. ③ SSH normal no requiere marcar Tailscale SSH. No se ha inscrito una cuenta personal para esta captura.
-
-### Ruta A · Tailscale oficial
-
-- En la consola oficial de tu organización, crea una auth key apropiada para el rescate: vigencia suficiente, alcance limitado y requisitos de aprobación según tu política.
-
-- Para reinicios sin nueva intervención necesitas una clave reutilizable; consulta el apartado de reinicios antes de generarla. Si eliges nodos efímeros, entiende también su limpieza.
-
-- Pega la clave en el campo oculto; deja URL vacía y cifra el perfil del USB.
-
-- El equipo de asistencia debe usar esa misma tailnet. Tu administrador debe permitirle llegar a la IP del disco en el puerto de OpenSSH elegido.
-
-### Ruta B · Headscale propio
-
-El administrador obtiene la pre-auth key en su servidor, no en el equipo del cliente. Comprueba la ayuda de tu versión: opciones y representación del usuario pueden cambiar. La guía oficial actual muestra:
-
-```
-# Solo en TU servidor Headscale, con su usuario de administración
-headscale version
-headscale preauthkeys create --help
-headscale preauthkeys create --user
-```
-
-`<USER_ID>` es un marcador: sustitúyelo por el identificador correcto. El último comando crea un secreto y lo muestra al administrador; no lo ejecutes en una sesión grabada ni publiques su salida. La clave predeterminada documentada es de un uso y una hora: para repetir arranques, configura la opción reutilizable y una caducidad adecuada usando la ayuda de tu versión. Pega la clave en el Imager y usa tu URL HTTPS real. [Guía oficial de Headscale](https://headscale.net/stable/usage/getting-started/).
-
-### Sin túnel de LA AGUJA no significa sin infraestructura
-
-El nuevo SSH no usa nuestro servidor como relay de consola. El plano de control Tailscale/Headscale y los DERP necesarios siguen teniendo disponibilidad, políticas, tráfico y posibles costes. Tener Headscale propio no hace que todos los enlaces sean directos ni borra las responsabilidades de su operador.
+Desde Rescue Disk 1.0.2, el USB recupera su identidad Tailscale/Headscale guardada antes de conectar. La clave de alta sirve para el primer registro, no para crear un nodo en cada reinicio. El estado idéntico no se reescribe; los cambios se guardan atómicamente y se verifican. El perfil automático no añade desbloqueo; el cifrado conserva el suyo. Siguen aplicándose la caducidad y revocación del servidor. Los nodos LA AGUJA IoT (ESP32 v1.4.0) también se unen a tu mismo Tailscale o Headscale por WireGuard/DERP como exit node de bolsillo, subnet router dinámico y DNS relay, controlables a distancia por API REST o aguja-iot.py sin relay de LA AGUJA.
 
 ## SSH normal y Tailscale SSH no son lo mismo
 
@@ -927,21 +813,11 @@ sync
 sudo -n systemctl poweroff
 ```
 
-## Qué está comprobado y qué no debes deducir
+## Validación de Rescue 1.1.2, Imager 1.2.0 e IoT ESP32
 
-La edición pública 0.9.0 elimina las cuentas de LA AGUJA y el relay propio. Las cinco capturas de configuración Linux y la de herramientas IA se tomaron del paquete Linux real 0.9.0 con datos sintéticos y estado aislado. La captura de imagen preparada y las tres capturas del live conservan evidencia histórica de 0.8.0; BitLocker conserva su prueba Windows 0.8.1. La candidata pública pasó pruebas del runtime, Electron, siete idiomas, web anónima y arranque UEFI con SSH/root; eso no acredita grabación física de USB ni login/inferencia de proveedores en esta versión.
+La documentación de validación cubre Rescue Disk 1.1.2 (arranques BIOS/UEFI, desbloqueo LUKS, generaciones persistentes, rollback e identidad tailnet), Flash Imager 1.2.0 en Linux y Windows (perfiles USB, edición CFG y flasheo real de ESP32-C6 y ESP32-S3-WROOM-1 N16R8 con esptool.exe sin Python en Windows) y paquetes deterministas de Agent Skill 1.3.0.
 
-La entrega 0.8.1 comprobó BitLocker nativo con UAC sin leer claves ni cambiar protección, cuatro terminales Linux con entrada sintética y preparación/lectura de perfiles normales y cifrados. 0.8.2 cambió el titular en siete idiomas; no repitió instalación nativa Windows. Las pruebas previas del Rescue Disk incluyen ocho arranques KVM (BIOS/UEFI × perfil en claro/cifrado), bloqueo/desbloqueo y registro con OpenSSH en un Headscale aislado. Estas son evidencias de los recorridos ensayados, no certificación universal del hardware ni éxito de rescates de clientes.
-
-| Comprobación | Lo que demuestra | Lo que no demuestra |
-| --- | --- | --- |
-| Validación de esquema/secretos | Opciones y campos admitidos, rechazo de entradas inseguras, datos privados fuera del recibo. | Una cuenta válida, una auth key vigente o la obediencia del agente. |
-| Imagen FAT y lector runtime | El perfil se escribe, se lee y conserva la configuración; la fuente no se altera. | Arranque universal, escritura física de cada marca de USB o soporte de todos los controladores. |
-| UI Electron | Recorrido, controles, secretos ocultos e aislamiento del renderer. | Proveedor real autorizado ni recuperación exitosa de un cliente. |
-| Flujo OAuth sintético | Ventanas, PTY, copiar/foco/pegado y devolución a consola según la prueba. | Login real de cada proveedor, facturación o inferencia real. |
-| Entorno de pruebas de red | La configuración y el proceso de alta pueden verificarse sin usar una tailnet personal. | Que tu organización permita ese nodo o esa conexión concreta. |
-
-El comportamiento de firmware, hardware, red, ACL, servicios IA y cuotas debe verificarse en tu entorno. No publicamos como casos reales rescates que no se han realizado. El producto sigue experimental y el acceso de la web permanece privado; futuras funciones para más usuarios se distinguen de lo disponible hoy.
+Las capturas conservan sus versiones históricas indicadas y datos sintéticos de QA. Las pruebas físicas IoT cubren Seeed Studio XIAO ESP32-C6 y ESP32-S3-WROOM-1 N16R8; el resto de subfamilias ESP32 incluyen firmwares v1.4.0 compilados y empaquetados pendientes de ensayo físico individual. Estas comprobaciones no garantizan compatibilidad universal de hardware, Secure Boot ni cuentas IA externas.
 
 ## Referencias y lectura siguiente
 

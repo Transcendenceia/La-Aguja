@@ -1,8 +1,25 @@
-# LA AGUJA IoT — Nodos Microcontrolador Nativos de Tailnet
+# LA AGUJA IoT — Nodos ESP32 Nativos de Tailnet (v1.4.0)
 
-[English](IOT.md) · [README del módulo IoT](../iot/README.es.md) · [Especificación IoT en Flash Imager](design/iot-imager-integration.md) · [Registro de placas](../iot/boards.json)
+[English](IOT.md) · [README del módulo IoT](../iot/README.es.md) · [Flash Imager 1.2.0](RELEASE-IMAGER-1.2.0.md) · [Referencia IoT Agent Skill](../skills/flash-imager/references/iot.md) · [Registro de placas](../iot/boards.json)
 
-**LA AGUJA IoT** traslada la filosofía de LA AGUJA — entrada pequeña, control real, sin relay propietario — a microcontroladores de bolsillo. Una placa ESP32 compatible se conecta a Wi-Fi, entra directamente en tu **Tailscale o Headscale propio** por WireGuard/DERP y ofrece un centro móvil de operaciones controlable por agentes IA u operadores.
+**LA AGUJA IoT** lleva el puesto de mando portátil de LA AGUJA — entrada pequeña, control real, sin relay propietario — a la **familia de microcontroladores ESP32**. Una placa compatible se conecta a Wi-Fi, entra directamente en tu **Tailscale o Headscale propio** por WireGuard/DERP y ofrece un nodo remoto de operaciones controlable por agentes IA u operadores.
+
+## Placas ESP32 soportadas y Flash Imager 1.2.0
+
+**Flash Imager 1.2.0** (Linux y Windows) incorpora un asistente paralelo **IoT · MCU** de 4 pasos con **6 firmwares genéricos `v1.4.0` precompilados** que cubren **11 perfiles de placa**:
+
+| Familia | Perfil de firmware | Placas soportadas | Estado de verificación |
+| --- | --- | --- | --- |
+| **ESP32-C6** | `esp32c6` | Seeed Studio XIAO ESP32-C6 (switch RF), ESP32-C6-DevKitC-1 | Verificada en XIAO ESP32-C6 física |
+| **ESP32-S3 (Octal PSRAM)** | `esp32s3-oct` | ESP32-S3-WROOM-1 N16R8, Seeed XIAO ESP32-S3, ESP32-S3-DevKitC-1 N8R8 | Verificada en N16R8 física (Linux y Windows 11) |
+| **ESP32-S3 (Std)** | `esp32s3-std` | ESP32-S3 Genérica (N4 / N8 / N8R2 / Zero) | Compilado y empaquetado (`v1.4.0`) |
+| **ESP32-C3** | `esp32c3` | ESP32-C3 SuperMini / XIAO C3, ESP32-C3-DevKitM-1 | Compilado y empaquetado (`v1.4.0`) |
+| **ESP32** | `esp32` | ESP32-WROOM-32 DevKit v1, ESP32-WROVER / LilyGO | Compilado y empaquetado (`v1.4.0`) |
+| **ESP32-S2** | `esp32s2` | Wemos / Lolin S2 Mini | Compilado y empaquetado (`v1.4.0`) |
+
+- **Detección real del chip por USB:** sondea los puertos serie con `esptool`, identifica chip/flash/PSRAM y selecciona automáticamente la placa correspondiente.
+- **Generador ESP-IDF NVS v2 en JavaScript puro (`desktop/iot-nvs.cjs`):** construye la partición de 48 KiB (`0xC000`) en `0x9000` con SoftAP **desactivado por defecto**; también disponible sin interfaz en **Agent Skill 1.3.0** (`iot-boards` e `iot-nvs`).
+- **Windows sin Python:** el instalador Windows empaqueta `esptool.exe` oficial (v5.7.0) y usa `.NET System.IO.Ports.SerialPort` para detectar puertos COM, verificar el arranque y borrar flash en 1 clic.
 
 ## Capacidades de cada nodo
 

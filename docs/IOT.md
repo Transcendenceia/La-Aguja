@@ -1,8 +1,25 @@
-# LA AGUJA IoT — Tailnet-Native Microcontroller Nodes
+# LA AGUJA IoT — Tailnet-Native ESP32 Nodes (v1.4.0)
 
-[Español](IOT.es.md) · [IoT Module README](../iot/README.md) · [Flash Imager IoT Spec](design/iot-imager-integration.md) · [Board Registry](../iot/boards.json)
+[Español](IOT.es.md) · [IoT Module README](../iot/README.md) · [Flash Imager 1.2.0](RELEASE-IMAGER-1.2.0.md) · [Agent Skill IoT Ref](../skills/flash-imager/references/iot.md) · [Board Registry](../iot/boards.json)
 
-**LA AGUJA IoT** brings the LA AGUJA philosophy — small entry point, real control, no proprietary relay — to low-cost microcontrollers. An enrolled ESP32 board connects to Wi-Fi, joins your **Tailscale or self-hosted Headscale tailnet** directly over WireGuard/DERP, and exposes a complete agent-controllable operations center.
+**LA AGUJA IoT** brings the LA AGUJA portable command post philosophy — small entry point, real control, no proprietary relay — to the **ESP32 microcontroller family**. An enrolled board connects to Wi-Fi, joins your **Tailscale or self-hosted Headscale tailnet** directly over WireGuard/DERP, and exposes a complete agent-controllable remote operations node.
+
+## Supported ESP32 boards & Flash Imager 1.2.0
+
+**Flash Imager 1.2.0** (Linux and Windows) ships with a parallel **IoT · MCU** 4-step wizard bundling **6 generic prebuilt `v1.4.0` firmwares** covering **11 board profiles**:
+
+| Family | Firmware profile | Supported boards | Hardware verification |
+| --- | --- | --- | --- |
+| **ESP32-C6** | `esp32c6` | Seeed Studio XIAO ESP32-C6 (RF switch), ESP32-C6-DevKitC-1 | Verified on physical XIAO ESP32-C6 |
+| **ESP32-S3 (Octal PSRAM)** | `esp32s3-oct` | ESP32-S3-WROOM-1 N16R8, Seeed XIAO ESP32-S3, ESP32-S3-DevKitC-1 N8R8 | Verified on physical N16R8 (Linux & Windows 11) |
+| **ESP32-S3 (Std)** | `esp32s3-std` | ESP32-S3 Generic (N4 / N8 / N8R2 / Zero) | Compiled & packaged (`v1.4.0`) |
+| **ESP32-C3** | `esp32c3` | ESP32-C3 SuperMini / XIAO C3, ESP32-C3-DevKitM-1 | Compiled & packaged (`v1.4.0`) |
+| **ESP32** | `esp32` | ESP32-WROOM-32 DevKit v1, ESP32-WROVER / LilyGO | Compiled & packaged (`v1.4.0`) |
+| **ESP32-S2** | `esp32s2` | Wemos / Lolin S2 Mini | Compiled & packaged (`v1.4.0`) |
+
+- **Real USB silicon auto-detection:** probes connected serial ports via `esptool`, identifies chip/flash/PSRAM and selects the matching board automatically.
+- **Pure-JavaScript ESP-IDF NVS v2 generator (`desktop/iot-nvs.cjs`):** builds the 48 KiB (`0xC000`) provisioning partition injected at `0x9000` with SoftAP **disabled by default**; also available headlessly in **Agent Skill 1.3.0** (`iot-boards` and `iot-nvs`).
+- **Zero-Python Windows flashing:** Windows installers bundle standalone Espressif `esptool.exe` (v5.7.0) and use `.NET System.IO.Ports.SerialPort` for COM discovery, boot verification and 1-click flash erase.
 
 ## What an enrolled node provides
 

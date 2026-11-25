@@ -61,7 +61,8 @@
       "usb-config.cjs",
       "profile-extensions.cjs",
       "iot-nvs.cjs",
-      "iot-flash.cjs"
+      "iot-flash.cjs",
+      "windows-iot-serial.ps1"
     ],
     "extraResources": [
       {
@@ -70,8 +71,13 @@
         "filter": [
           "boards.json",
           "scripts/iot-flash.py",
-          "prebuilt/**/*"
+          "prebuilt/**/*",
+          "bin/**/*"
         ]
+      },
+      {
+        "from": "windows-iot-serial.ps1",
+        "to": "aguja/windows-iot-serial.ps1"
       },
       {
         "from": "../scripts",

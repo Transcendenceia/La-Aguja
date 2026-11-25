@@ -26,3 +26,4 @@ dist-global/
 
 # Compiled generic IoT firmware binaries (built locally or shipped in releases)
 iot/prebuilt/
+iot/bin/

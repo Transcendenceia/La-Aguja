@@ -93,6 +93,65 @@ test('listLinuxSerialPorts discovers ttyACM/ttyUSB devices from synthetic sysfs 
   }
 });
 
+test('parseWindowsPortsOutput normalizes COM ports, extracts VID:PID, and matches ESP32 boards', () => {
+  const catalog = iotFlash.loadBoards({ rootDir: path.resolve(__dirname, '../..') });
+  const fakePsJson = JSON.stringify({
+    ok: true,
+    ports: [
+      {
+        path: 'com4',
+        name: 'COM4',
+        byId: 'USB\\VID_1A86&PID_55D3\\5C37214696',
+        vid: '1a86',
+        pid: '55d3',
+        usbId: '1a86:55d3',
+        product: 'USB-Enhanced-SERIAL CH343',
+        manufacturer: 'wch.cn',
+        serial: '5C37214696',
+        accessible: true,
+      },
+      {
+        path: 'COM1',
+        name: 'COM1',
+        byId: '',
+        vid: '',
+        pid: '',
+        usbId: '',
+        product: 'Communications Port',
+        manufacturer: '',
+        serial: '',
+        accessible: true,
+      },
+    ],
+  });
+  const ports = iotFlash.parseWindowsPortsOutput('\ufeff' + fakePsJson + '\r\n', catalog.boards);
+  assert.equal(ports.length, 2);
+  assert.equal(ports[0].path, 'COM4'); // matched ESP32 board sorted first
+  assert.equal(ports[0].usbId, '1a86:55d3');
+  assert.ok(ports[0].matchedBoardIds.includes('esp32s3-wroom-n16r8'));
+  assert.equal(ports[1].path, 'COM1');
+});
+
+test('isValidSerialPort and parseEsptoolChipInfo work for both Linux and Windows', () => {
+  assert.equal(iotFlash.isValidSerialPort('COM3', 'win32'), true);
+  assert.equal(iotFlash.isValidSerialPort('com12', 'win32'), true);
+  assert.equal(iotFlash.isValidSerialPort('COM3; calc.exe', 'win32'), false);
+  assert.equal(iotFlash.isValidSerialPort('/dev/ttyACM0', 'win32'), false);
+  assert.equal(iotFlash.isValidSerialPort('/dev/ttyACM0', 'linux'), true);
+  assert.equal(iotFlash.isValidSerialPort('COM3', 'linux'), false);
+
+  const parsed = iotFlash.parseEsptoolChipInfo([
+    'Chip type:          ESP32-S3 (QFN56) (revision v0.2)',
+    'Features:           Wi-Fi, BT 5 (LE), Dual Core + LP Core, 240MHz, Embedded PSRAM 8MB (AP_3v3)',
+    'MAC:                02:00:00:11:22:33',
+    'Detected flash size: 16MB',
+  ]);
+  assert.equal(parsed.chip_normalized, 'esp32s3');
+  assert.equal(parsed.flash_mb, 16);
+  assert.equal(parsed.psram_mb, 8);
+  assert.equal(parsed.mac, '02:00:00:11:22:33');
+});
+
 test('fetchControlNoiseKey parses mkey: prefix from /key?v=131 and rejects invalid keys', async () => {
   const hex = '0123456789abcdef'.repeat(4);
   const fetched = await iotFlash.fetchControlNoiseKey('https://headscale.example.invalid', {

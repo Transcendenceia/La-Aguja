@@ -38,7 +38,7 @@ const ROOT=app.isPackaged?path.join(process.resourcesPath,'aguja'):path.resolve(
 let win; let selectedImage=null;let prepared=null;let releases=[];let verifiedCatalog=null;let working=false;let approvedImports={};
 // No crash reporter, analytics, renderer remote content, credentials in command arguments or logs.
 function receipt(ok,data={},error=''){return ok?{ok:true,...data}:{ok:false,error};}
-function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada|placa|firmware|esptool|pyserial|Noise|NVS|microcontrolador|SoftAP|DERP|token|IoT|serie|dialout|uucp/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
+function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada|placa|firmware|esptool|pyserial|Noise|NVS|microcontrolador|SoftAP|DERP|token|IoT|serie|dialout|uucp|COM|Windows|PowerShell/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
 function progress(phase,detail={}){const now=Date.now();if(detail.total&&detail.done<detail.total&&phase===lastProgress.phase&&now-lastProgress.time<90)return;lastProgress={time:now,phase};if(win&&!win.isDestroyed())win.webContents.send('progress',{phase,...detail,...(detail.message?{message:translate(detail.message)}:{})});}
 function handle(channel,callback){ipcMain.handle(channel,async(event,...args)=>{
  if(event.sender!==win.webContents || event.senderFrame!==win.webContents.mainFrame)throw new Error('Origen no autorizado.');
@@ -194,7 +194,7 @@ function installIPC(){
  handle('usb-config-disks',async()=>({disks:await usbConfig.devices(process.platform,run)}));
  handle('usb-config-read',async(disk,passphrase='')=>exclusive(async()=>{usbSession=null;if(typeof passphrase!=='string'||passphrase.length>1024)throw Error('Perfil cifrado no válido.');const loaded=await usbConfig.operation({...disk,operation:'read'},{run,root:ROOT});const decoded=capsuleEdit.decode(loaded.files,passphrase);usbSession={disk,files:loaded.files,snapshot:loaded.snapshot,passphrase};return {...decoded,device:disk.device};}));
  handle('usb-config-write',async(input)=>exclusive(async()=>{if(!usbSession)throw Error('Primero lee la configuración del USB.');const session=usbSession;const diskRecovery=recovery.normalizeRecovery([...(input.diskRecovery||[]),...(Array.isArray(input.bitlocker)?input.bitlocker.map(k=>({type:'bitlocker',label:'Windows '+bitlocker.cleanMountPoint(k.mountPoint),identifier:String(k.keyProtectorId||''),key:k.recoveryPassword})):[])]);const files=capsuleEdit.encode({...input,diskRecovery},session.files,session.passphrase);const answer=await showMessageBox(win,{type:'warning',title:'Guardar configuración del USB',message:'Se actualizará solo la configuración del USB seleccionado.',detail:session.disk.model+' · '+session.disk.serial,buttons:['Cancelar','Guardar cambios'],defaultId:0,cancelId:0});if(answer.response!==1)return {canceled:true};const result=await usbConfig.operation({...session.disk,operation:'write',snapshot:session.snapshot,files},{run,root:ROOT});usbSession=null;return {verified:result.verified,backup:result.backup};}));
- handle('info',async()=>({version:app.getVersion(),platform:process.platform,prepareAvailable:isWindows||fs.existsSync(path.join(ROOT,'scripts','platform-profile.py')),bitlockerAvailable:isWindows,iotAvailable:process.platform==='linux'}));
+ handle('info',async()=>({version:app.getVersion(),platform:process.platform,prepareAvailable:isWindows||fs.existsSync(path.join(ROOT,'scripts','platform-profile.py')),bitlockerAvailable:isWindows,iotAvailable:['linux','win32'].includes(process.platform)}));
  handle('i18n-catalog',async()=>({catalog:core.LOCALE_CATALOG,language:uiLanguage,systemLanguage:app.getLocale?.()||'es'}));
  handle('i18n-language',async(value)=>{if(typeof value!=='string'||!['es',...Object.keys(core.LOCALE_CATALOG.translations)].includes(value))throw new Error('Idioma no compatible.');uiLanguage=value;await fs.promises.writeFile(path.join(app.getPath('userData'),'ui-language.json'),JSON.stringify({language:value}),{mode:0o600});return {language:value};});
  handle('cancel-download',async()=>{if(downloadController){downloadController.abort();return {canceled:true};}return {canceled:false};});
@@ -294,7 +294,7 @@ function installIPC(){
  handle('export-profile',async(input)=>{const capsule=core.validateCapsule(input.capsule);capsule.remote={enabled:false};const diskRecovery=recovery.normalizeRecovery([...(input.diskRecovery||[]),...(Array.isArray(input.bitlocker)?input.bitlocker.map(k=>({type:'bitlocker',label:'Windows '+bitlocker.cleanMountPoint(k.mountPoint),identifier:String(k.keyProtectorId||''),key:k.recoveryPassword})):[])]);const encrypted=profileEncrypt(capsule,input.passphrase,diskRecovery);const file=await chooseSave('Guardar perfil cifrado',path.join(app.getPath('documents'),'aguja-perfil.aguja'),['aguja']);if(!file)return {canceled:true};return reusableProfile.save(file,encrypted);});
  handle('import-profile',async(passphrase)=>{const pick=await showOpenDialog(win,{title:'Abrir perfil cifrado',properties:['openFile'],filters:[{name:'Perfil de LA AGUJA',extensions:['aguja']}]});if(pick.canceled)return {canceled:true};const st=await fs.promises.stat(pick.filePaths[0]);if(st.size>1048576)throw new Error('El perfil es demasiado grande.');const capsule=profileDecrypt(JSON.parse(await fs.promises.readFile(pick.filePaths[0],'utf8')),passphrase),diskRecovery=capsule.disk_recovery||[];delete capsule.disk_recovery;return {capsule,diskRecovery};});
  handle('disks',async()=>({disks:await availableDisks()}));
- handle('iot-boards',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {available:process.platform==='linux',...catalog};});
+ handle('iot-boards',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {available:['linux','win32'].includes(process.platform),platform:process.platform,...catalog};});
  handle('iot-select-firmware',async(boardId)=>exclusive(async()=>{
   const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});
   const board=catalog.boards.find(b=>b.id===boardId);
@@ -308,20 +308,20 @@ function installIPC(){
   const updated=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});
   return {selected:bundle.version,boardId:board.id,...updated};
  }));
- handle('iot-ports',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {ports:await iotFlash.listSerialPorts(catalog.boards)};});
+ handle('iot-ports',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {ports:await iotFlash.listSerialPorts(catalog.boards,{rootDir:ROOT})};});
  handle('iot-detect',async()=>exclusive(async()=>iotFlash.autoDetectConnectedBoard({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs,progress})));
  handle('iot-probe',async(port)=>exclusive(async()=>({detected:await iotFlash.probeSerialPort({port,rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs,progress})})));
  handle('iot-fetch-noise-key',async(ctrlHost)=>exclusive(async()=>iotFlash.fetchControlNoiseKey(ctrlHost)));
  handle('iot-generate-token',async()=>({token:iotNvs.generateApiToken()}));
  handle('iot-erase',async(input)=>exclusive(async()=>{
-  if(process.platform!=='linux')throw new Error('La limpieza de flash IoT está disponible primero en Linux.');
+  if(!['linux','win32'].includes(process.platform))throw new Error('La limpieza de flash IoT está disponible en Linux y Windows.');
   const port=String(input?.port||'');
   const answer=await showMessageBox(win,{type:'warning',title:'Borrar memoria flash del microcontrolador',message:'Se borrará completamente la memoria flash en '+port,detail:'Esto elimina firmware actual, redes Wi-Fi guardadas y claves Tailscale/Headscale de la placa. Útil para dejarla limpia de fábrica.',buttons:['Cancelar','Borrar flash'],defaultId:0,cancelId:0});
   if(answer.response!==1)return {canceled:true};
-  return iotFlash.eraseBoard({port,chip:input?.chip||'auto',rootDir:ROOT,progress});
+  return iotFlash.eraseBoard({port,chip:input?.chip||'auto',rootDir:ROOT,userDataDir:app.getPath('userData'),progress});
  }));
  handle('iot-flash',async(input)=>exclusive(async()=>{
-  if(process.platform!=='linux')throw new Error('La grabación IoT está disponible primero en Linux. El soporte de Windows llegará en la siguiente fase.');
+  if(!['linux','win32'].includes(process.platform))throw new Error('La grabación IoT está disponible en Linux y Windows.');
   const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});
   const board=catalog.boards.find(b=>b.id===input?.boardId);
   if(!board)throw new Error('Selecciona una placa de desarrollo compatible.');

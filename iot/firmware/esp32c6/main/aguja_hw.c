@@ -20,12 +20,37 @@
 
 static const char *TAG = "aguja_hw";
 
-/* XIAO ESP32-C6 exposed edge pins */
+/* Target-specific exposed safe GPIO pins */
 static const struct {
     const char *label;
     int gpio;
     const char *func;
-} s_xiao_pins[] = {
+} s_board_pins[] = {
+#if CONFIG_IDF_TARGET_ESP32S3
+    { "IO1",  1,  "ADC1_CH0" },
+    { "IO2",  2,  "ADC1_CH1" },
+    { "IO4",  4,  "ADC1_CH3" },
+    { "IO5",  5,  "ADC1_CH4" },
+    { "IO6",  6,  "ADC1_CH5" },
+    { "IO7",  7,  "ADC1_CH6" },
+    { "IO8",  8,  "I2C_SDA" },
+    { "IO9",  9,  "I2C_SCL" },
+    { "IO10", 10, "SPI_CS" },
+    { "IO11", 11, "SPI_MOSI" },
+    { "IO12", 12, "SPI_SCK" },
+    { "IO13", 13, "SPI_MISO" },
+    { "IO14", 14, "GPIO" },
+    { "IO15", 15, "GPIO" },
+    { "IO16", 16, "GPIO" },
+    { "IO17", 17, "UART_TX" },
+    { "IO18", 18, "UART_RX" },
+    { "IO21", 21, "GPIO" },
+    { "IO38", 38, "GPIO" },
+    { "IO39", 39, "GPIO" },
+    { "IO40", 40, "GPIO" },
+    { "IO41", 41, "GPIO" },
+    { "IO42", 42, "GPIO" },
+#else
     { "D0",  XIAO_PIN_D0,       "ADC1_CH0" },
     { "D1",  XIAO_PIN_D1,       "ADC1_CH1" },
     { "D2",  XIAO_PIN_D2,       "ADC1_CH2" },
@@ -37,6 +62,7 @@ static const struct {
     { "D8",  XIAO_PIN_D8_SCK,   "SPI_SCK" },
     { "D9",  XIAO_PIN_D9_MISO,  "SPI_MISO" },
     { "D10", XIAO_PIN_D10_MOSI, "SPI_MOSI" },
+#endif
 };
 
 static bool s_antenna_external = false;
@@ -45,7 +71,7 @@ static volatile uint8_t s_led_pwm_pct = 50;
 static volatile uint16_t s_led_blink_ms = 500;
 static volatile aguja_net_stage_t s_net_stage = AGUJA_NET_STAGE_BOOT;
 static bool s_led_pwm_active = false;
-static uint16_t s_cpu_mhz = 160;
+static uint16_t s_cpu_mhz = AGUJA_DEFAULT_CPU_MHZ;
 
 static temperature_sensor_handle_t s_tsens = NULL;
 static adc_oneshot_unit_handle_t s_adc1 = NULL;
@@ -53,8 +79,8 @@ static adc_cali_handle_t s_adc_cali = NULL;
 
 static SemaphoreHandle_t s_bus_mtx = NULL;
 static i2c_master_bus_handle_t s_i2c_bus = NULL;
-static int s_i2c_sda = XIAO_PIN_D4_SDA;
-static int s_i2c_scl = XIAO_PIN_D5_SCL;
+static int s_i2c_sda = AGUJA_DEFAULT_I2C_SDA;
+static int s_i2c_scl = AGUJA_DEFAULT_I2C_SCL;
 static uint32_t s_i2c_freq = 100000;
 
 static bool s_uart1_init = false;
@@ -62,23 +88,31 @@ static aguja_rule_alert_cb_t s_alert_cb = NULL;
 static int64_t s_rule_last_fire[AGUJA_MAX_RULES] = {0};
 
 /* Track GPIO output states for telemetry */
-static int8_t s_gpio_out_state[32];
+static int8_t s_gpio_out_state[49];
 
 bool aguja_hw_pin_is_safe(int pin) {
-    for (size_t i = 0; i < sizeof(s_xiao_pins) / sizeof(s_xiao_pins[0]); i++) {
-        if (s_xiao_pins[i].gpio == pin) return true;
+    for (size_t i = 0; i < sizeof(s_board_pins) / sizeof(s_board_pins[0]); i++) {
+        if (s_board_pins[i].gpio == pin) return true;
     }
     return false;
 }
 
 static bool pin_is_forbidden(int pin) {
+#if CONFIG_IDF_TARGET_ESP32S3
+    if (pin < 0 || pin > 48) return true;
+    /* USB D-/D+ (19, 20), Flash/Octal PSRAM (26..37), UART0 (43, 44) */
+    if (pin == 19 || pin == 20 || (pin >= 26 && pin <= 37) || pin == 43 || pin == 44) return true;
+    return false;
+#else
     if (pin < 0 || pin > 30) return true;
     /* USB-Serial/JTAG D-/D+ (12, 13) and internal SPI flash (24..30) */
     if (pin == 12 || pin == 13 || pin >= 24) return true;
     return false;
+#endif
 }
 
 esp_err_t aguja_hw_set_antenna(bool external) {
+#if AGUJA_HAS_RF_SWITCH
     /* XIAO ESP32-C6: GPIO3 LOW activates RF switch; GPIO14 LOW=ceramic, HIGH=uFL */
     gpio_config_t io = {
         .pin_bit_mask = (1ULL << XIAO_PIN_RF_SWITCH_EN) | (1ULL << XIAO_PIN_RF_ANT_SEL),
@@ -93,6 +127,10 @@ esp_err_t aguja_hw_set_antenna(bool external) {
     s_antenna_external = external;
     ESP_LOGI(TAG, "RF antenna switch: %s (GPIO3=0, GPIO14=%d)",
              external ? "EXTERNAL u.FL" : "INTERNAL ceramic", external ? 1 : 0);
+#else
+    (void)external;
+    s_antenna_external = false;
+#endif
     return ESP_OK;
 }
 
@@ -102,13 +140,12 @@ bool aguja_hw_get_antenna_external(void) {
 
 static void led_set_raw(bool on) {
     if (s_led_pwm_active) {
-        ledc_stop(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_5, on ? 0 : 1);
+        ledc_stop(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_5, AGUJA_USER_LED_ACTIVE_LOW ? (on ? 0 : 1) : (on ? 1 : 0));
         s_led_pwm_active = false;
-        gpio_reset_pin(XIAO_PIN_USER_LED);
-        gpio_set_direction(XIAO_PIN_USER_LED, GPIO_MODE_OUTPUT);
+        gpio_reset_pin(AGUJA_USER_LED_PIN);
+        gpio_set_direction(AGUJA_USER_LED_PIN, GPIO_MODE_OUTPUT);
     }
-    /* Active LOW on XIAO ESP32-C6 */
-    gpio_set_level(XIAO_PIN_USER_LED, on ? 0 : 1);
+    gpio_set_level(AGUJA_USER_LED_PIN, AGUJA_USER_LED_ACTIVE_LOW ? (on ? 0 : 1) : (on ? 1 : 0));
 }
 
 static void led_set_pwm_raw(uint8_t pct) {
@@ -123,18 +160,19 @@ static void led_set_pwm_raw(uint8_t pct) {
         };
         ledc_timer_config(&tc);
         ledc_channel_config_t cc = {
-            .gpio_num = XIAO_PIN_USER_LED,
+            .gpio_num = AGUJA_USER_LED_PIN,
             .speed_mode = LEDC_LOW_SPEED_MODE,
             .channel = LEDC_CHANNEL_5,
             .timer_sel = LEDC_TIMER_3,
-            .duty = 1023,
+            .duty = AGUJA_USER_LED_ACTIVE_LOW ? 1023 : 0,
             .hpoint = 0,
         };
         ledc_channel_config(&cc);
         s_led_pwm_active = true;
     }
-    /* Active LOW: 100% brightness = duty 0, 0% = duty 1023 */
-    uint32_t duty = (uint32_t)((100 - pct) * 1023 / 100);
+    uint32_t duty = AGUJA_USER_LED_ACTIVE_LOW
+        ? (uint32_t)((100 - pct) * 1023 / 100)
+        : (uint32_t)(pct * 1023 / 100);
     ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_5, duty);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_5);
 }
@@ -166,11 +204,17 @@ esp_err_t aguja_hw_read_temp_c(float *out_c) {
 }
 
 esp_err_t aguja_hw_set_cpu_mhz(uint16_t mhz) {
+#if CONFIG_IDF_TARGET_ESP32S3
+    if (mhz != 80 && mhz != 160 && mhz != 240) return ESP_ERR_INVALID_ARG;
+    int min_mhz = 80;
+#else
     if (mhz != 40 && mhz != 80 && mhz != 160) return ESP_ERR_INVALID_ARG;
+    int min_mhz = 40;
+#endif
 #if CONFIG_PM_ENABLE
     esp_pm_config_t pm = {
         .max_freq_mhz = mhz,
-        .min_freq_mhz = 40,
+        .min_freq_mhz = min_mhz,
         .light_sleep_enable = false,
     };
     esp_err_t err = esp_pm_configure(&pm);
@@ -230,18 +274,22 @@ esp_err_t aguja_hw_gpio_pulse(int pin, int level, uint32_t duration_ms, bool for
 }
 
 int aguja_hw_gpio_read(int pin) {
+#if CONFIG_IDF_TARGET_ESP32S3
+    if (pin < 0 || pin > 48) return -1;
+#else
     if (pin < 0 || pin > 30) return -1;
+#endif
     return gpio_get_level((gpio_num_t)pin);
 }
 
 cJSON *aguja_hw_gpio_dump_json(void) {
     cJSON *arr = cJSON_CreateArray();
-    for (size_t i = 0; i < sizeof(s_xiao_pins) / sizeof(s_xiao_pins[0]); i++) {
+    for (size_t i = 0; i < sizeof(s_board_pins) / sizeof(s_board_pins[0]); i++) {
         cJSON *o = cJSON_CreateObject();
-        cJSON_AddStringToObject(o, "label", s_xiao_pins[i].label);
-        cJSON_AddNumberToObject(o, "gpio", s_xiao_pins[i].gpio);
-        cJSON_AddStringToObject(o, "func", s_xiao_pins[i].func);
-        cJSON_AddNumberToObject(o, "level", gpio_get_level((gpio_num_t)s_xiao_pins[i].gpio));
+        cJSON_AddStringToObject(o, "label", s_board_pins[i].label);
+        cJSON_AddNumberToObject(o, "gpio", s_board_pins[i].gpio);
+        cJSON_AddStringToObject(o, "func", s_board_pins[i].func);
+        cJSON_AddNumberToObject(o, "level", gpio_get_level((gpio_num_t)s_board_pins[i].gpio));
         cJSON_AddItemToArray(arr, o);
     }
     return arr;
@@ -282,10 +330,15 @@ esp_err_t aguja_hw_pwm_set(int channel, int pin, uint32_t freq_hz, float duty_pc
 }
 
 static int gpio_to_adc_ch(int pin) {
+#if CONFIG_IDF_TARGET_ESP32S3
+    if (pin >= 1 && pin <= 10) return pin - 1;
+    return -1;
+#else
     if (pin == XIAO_PIN_D0) return ADC_CHANNEL_0;
     if (pin == XIAO_PIN_D1) return ADC_CHANNEL_1;
     if (pin == XIAO_PIN_D2) return ADC_CHANNEL_2;
     return -1;
+#endif
 }
 
 esp_err_t aguja_hw_adc_read(int pin, int *raw_out, int *mv_out) {
@@ -313,8 +366,13 @@ esp_err_t aguja_hw_adc_read(int pin, int *raw_out, int *mv_out) {
 
 cJSON *aguja_hw_adc_dump_json(void) {
     cJSON *arr = cJSON_CreateArray();
+#if CONFIG_IDF_TARGET_ESP32S3
+    const int pins[3] = { 1, 2, 4 };
+    const char *lbl[3] = { "IO1", "IO2", "IO4" };
+#else
     const int pins[3] = { XIAO_PIN_D0, XIAO_PIN_D1, XIAO_PIN_D2 };
     const char *lbl[3] = { "D0", "D1", "D2" };
+#endif
     for (int i = 0; i < 3; i++) {
         int raw = 0, mv = 0;
         if (aguja_hw_adc_read(pins[i], &raw, &mv) == ESP_OK) {
@@ -433,7 +491,7 @@ esp_err_t aguja_hw_uart_config(int tx_pin, int rx_pin, int baud) {
 int aguja_hw_uart_tx(const uint8_t *data, size_t len) {
     if (!data || len == 0) return 0;
     if (!s_uart1_init) {
-        if (aguja_hw_uart_config(XIAO_PIN_D6_TX, XIAO_PIN_D7_RX, 115200) != ESP_OK) return -1;
+        if (aguja_hw_uart_config(AGUJA_DEFAULT_UART_TX, AGUJA_DEFAULT_UART_RX, 115200) != ESP_OK) return -1;
     }
     return uart_write_bytes(UART_NUM_1, data, len);
 }
@@ -441,7 +499,7 @@ int aguja_hw_uart_tx(const uint8_t *data, size_t len) {
 int aguja_hw_uart_rx(uint8_t *out, size_t max_len, uint32_t timeout_ms) {
     if (!out || max_len == 0) return 0;
     if (!s_uart1_init) {
-        if (aguja_hw_uart_config(XIAO_PIN_D6_TX, XIAO_PIN_D7_RX, 115200) != ESP_OK) return -1;
+        if (aguja_hw_uart_config(AGUJA_DEFAULT_UART_TX, AGUJA_DEFAULT_UART_RX, 115200) != ESP_OK) return -1;
     }
     if (timeout_ms > 2000) timeout_ms = 2000;
     return uart_read_bytes(UART_NUM_1, out, max_len, pdMS_TO_TICKS(timeout_ms));
@@ -587,7 +645,7 @@ esp_err_t aguja_hw_init(void) {
 
     /* 2. User LED */
     gpio_config_t led_io = {
-        .pin_bit_mask = (1ULL << XIAO_PIN_USER_LED),
+        .pin_bit_mask = (1ULL << AGUJA_USER_LED_PIN),
         .mode = GPIO_MODE_OUTPUT,
         .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
@@ -631,8 +689,9 @@ esp_err_t aguja_hw_init(void) {
         }
     }
 
-    ESP_LOGI(TAG, "XIAO ESP32-C6 hardware ready (ant=%s, cpu=%uMHz)",
-             s_antenna_external ? "uFL" : "ceramic", s_cpu_mhz);
+    ESP_LOGI(TAG, "%s hardware ready (ant=%s, cpu=%uMHz)",
+             AGUJA_BOARD_NAME,
+             AGUJA_HAS_RF_SWITCH ? (s_antenna_external ? "uFL" : "ceramic") : "pcb", s_cpu_mhz);
     return ESP_OK;
 }
 

@@ -1,6 +1,6 @@
 # Flash Imager — IoT Mode Integration Spec
 
-Status: **Design ready · Firmware & board manifest implemented (`iot/`)**
+Status: **Linux Flash Imager IoT Mode implemented & verified · Windows parity next**
 
 ## Goal
 
@@ -33,9 +33,10 @@ Just like Rescue Disk separates the immutable squashfs image from `AGUJA_CFG`, *
 4. **Post-flash live smoke verification**:
    - Hard-reset via RTS, open serial console at 115200 baud for ~20 s, parse structured boot/status output, confirm Wi-Fi IP + Tailnet `CONNECTED` + assigned `100.x.y.z` VPN IP, and display the generated `aguja-iot` CLI snippet + Web UI URL (`http://<hostname>/`) + routes to approve in Headscale/Tailscale.
 
-## Planned Milestones
+## Milestones
 
 1. **Phase 1 (Done):** Verified ESP32-C6 firmware (`v1.2.0`), dual-OTA rollback, full agent REST API, Dark Web UI, `iot/boards.json`, and `iot/cli/aguja-iot.py`.
-2. **Phase 2 (Next):** Add a pure-JSON NVS bootstrap file/partition key (`aguja_cfg/init_json` string key alongside `blob_v1`) so Flash Imager can emit standard ESP-IDF NVS partitions without coupling to C struct padding across architectures.
-3. **Phase 3:** Add the **IoT** tab in `imager-rust/` (using native `espflash` crate) and `desktop/`, auto-fetching Headscale Noise keys from `/key?v=131` and publishing signed generic firmware images in the LA AGUJA catalog.
-4. **Phase 4:** Expand `iot/boards.json` with ESP32-S3 (PSRAM, higher throughput) and Ethernet boards (WT32-ETH01 / W5500).
+2. **Phase 2 (Done):** Pure-JSON NVS bootstrap (`aguja_cfg/init_json` parsed on first boot, persisted to `blob_v1`, and wiped immediately) + multi-target firmware `v1.3.0` supporting both `seeed-xiao-esp32c6` and `esp32s3-wroom-n16r8` (16 MB Flash / 8 MB Octal PSRAM) + zero-dependency pure-JS ESP-IDF NVS v2 binary generator (`desktop/iot-nvs.cjs`) cross-verified byte-for-byte against `nvs_partition_gen.py`.
+3. **Phase 3 — Linux (Done):** Parallel **IoT · MCU** 4-step wizard inside `desktop/` Flash Imager (board catalog, up to 8 prioritized Wi-Fi profiles + SoftAP NAT, Tailscale/Headscale + auto-fetched Noise pubkey + Exit Node / Subnet Router / DNS Relay + Bearer token, Linux sysfs USB-serial detection + `iot/scripts/iot-flash.py` + optional backup + serial boot verification). Verified live end-to-end on physical ESP32-S3-WROOM-1 hardware and Electron Playwright E2E.
+4. **Phase 4 — Windows Parity (Next):** Add Windows COM port discovery (`Win32_SerialPort` / `Get-PnpDevice` VID/PID matching in `desktop/iot-flash.cjs`), bundle/invoke Windows `esptool` / `espflash`, and enable `iotAvailable` on `win32`.
+5. **Phase 5:** Publish signed generic firmware images in the LA AGUJA catalog and add Ethernet boards (`wt32-eth01` / W5500).

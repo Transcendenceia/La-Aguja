@@ -254,8 +254,8 @@ static esp_err_t handle_api_get(httpd_req_t *req) {
         aguja_hw_read_temp_c(&temp_c);
 
         cJSON_AddStringToObject(sys, "hostname", host);
-        cJSON_AddStringToObject(sys, "board", "Seeed Studio XIAO ESP32-C6");
-        cJSON_AddStringToObject(sys, "chip", "ESP32-C6");
+        cJSON_AddStringToObject(sys, "board", AGUJA_BOARD_NAME);
+        cJSON_AddStringToObject(sys, "chip", AGUJA_CHIP_NAME);
         cJSON_AddNumberToObject(sys, "chip_rev", ci.revision);
         cJSON_AddStringToObject(sys, "mac", mac_s);
         cJSON_AddStringToObject(sys, "fw_version", app->version);
@@ -578,8 +578,8 @@ static esp_err_t handle_api_write(httpd_req_t *req) {
 
     /* Hardware: I2C config / xfer */
     if (uri_is(u, "/api/v1/hw/i2c/config")) {
-        int sda = cJSON_IsNumber(cJSON_GetObjectItem(body, "sda")) ? cJSON_GetObjectItem(body, "sda")->valueint : XIAO_PIN_D4_SDA;
-        int scl = cJSON_IsNumber(cJSON_GetObjectItem(body, "scl")) ? cJSON_GetObjectItem(body, "scl")->valueint : XIAO_PIN_D5_SCL;
+        int sda = cJSON_IsNumber(cJSON_GetObjectItem(body, "sda")) ? cJSON_GetObjectItem(body, "sda")->valueint : AGUJA_DEFAULT_I2C_SDA;
+        int scl = cJSON_IsNumber(cJSON_GetObjectItem(body, "scl")) ? cJSON_GetObjectItem(body, "scl")->valueint : AGUJA_DEFAULT_I2C_SCL;
         uint32_t hz = cJSON_IsNumber(cJSON_GetObjectItem(body, "freq_hz")) ? (uint32_t)cJSON_GetObjectItem(body, "freq_hz")->valueint : 100000;
         cJSON_Delete(body);
         esp_err_t err = aguja_hw_i2c_config(sda, scl, hz);
@@ -612,8 +612,8 @@ static esp_err_t handle_api_write(httpd_req_t *req) {
 
     /* Hardware: UART */
     if (uri_is(u, "/api/v1/hw/uart/config")) {
-        int tx = cJSON_IsNumber(cJSON_GetObjectItem(body, "tx")) ? cJSON_GetObjectItem(body, "tx")->valueint : XIAO_PIN_D6_TX;
-        int rx = cJSON_IsNumber(cJSON_GetObjectItem(body, "rx")) ? cJSON_GetObjectItem(body, "rx")->valueint : XIAO_PIN_D7_RX;
+        int tx = cJSON_IsNumber(cJSON_GetObjectItem(body, "tx")) ? cJSON_GetObjectItem(body, "tx")->valueint : AGUJA_DEFAULT_UART_TX;
+        int rx = cJSON_IsNumber(cJSON_GetObjectItem(body, "rx")) ? cJSON_GetObjectItem(body, "rx")->valueint : AGUJA_DEFAULT_UART_RX;
         int baud = cJSON_IsNumber(cJSON_GetObjectItem(body, "baud")) ? cJSON_GetObjectItem(body, "baud")->valueint : 115200;
         cJSON_Delete(body);
         esp_err_t err = aguja_hw_uart_config(tx, rx, baud);
@@ -640,10 +640,10 @@ static esp_err_t handle_api_write(httpd_req_t *req) {
 
     /* Hardware: SPI */
     if (uri_is(u, "/api/v1/hw/spi/xfer")) {
-        int sck = cJSON_IsNumber(cJSON_GetObjectItem(body, "sck")) ? cJSON_GetObjectItem(body, "sck")->valueint : XIAO_PIN_D8_SCK;
-        int miso = cJSON_IsNumber(cJSON_GetObjectItem(body, "miso")) ? cJSON_GetObjectItem(body, "miso")->valueint : XIAO_PIN_D9_MISO;
-        int mosi = cJSON_IsNumber(cJSON_GetObjectItem(body, "mosi")) ? cJSON_GetObjectItem(body, "mosi")->valueint : XIAO_PIN_D10_MOSI;
-        int cs = cJSON_IsNumber(cJSON_GetObjectItem(body, "cs")) ? cJSON_GetObjectItem(body, "cs")->valueint : XIAO_PIN_D3;
+        int sck = cJSON_IsNumber(cJSON_GetObjectItem(body, "sck")) ? cJSON_GetObjectItem(body, "sck")->valueint : AGUJA_DEFAULT_SPI_SCK;
+        int miso = cJSON_IsNumber(cJSON_GetObjectItem(body, "miso")) ? cJSON_GetObjectItem(body, "miso")->valueint : AGUJA_DEFAULT_SPI_MISO;
+        int mosi = cJSON_IsNumber(cJSON_GetObjectItem(body, "mosi")) ? cJSON_GetObjectItem(body, "mosi")->valueint : AGUJA_DEFAULT_SPI_MOSI;
+        int cs = cJSON_IsNumber(cJSON_GetObjectItem(body, "cs")) ? cJSON_GetObjectItem(body, "cs")->valueint : AGUJA_DEFAULT_SPI_CS;
         uint32_t hz = cJSON_IsNumber(cJSON_GetObjectItem(body, "clock_hz")) ? (uint32_t)cJSON_GetObjectItem(body, "clock_hz")->valueint : 1000000;
         uint8_t tx[128], rx[128] = {0};
         const cJSON *jtx = cJSON_GetObjectItem(body, "tx_hex");

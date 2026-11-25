@@ -14,9 +14,11 @@ static const char *TAG = "aguja_cfg";
 #define AGUJA_CFG_MAGIC  0x4147554AUL /* 'AGUJ' */
 #define NVS_NS           "aguja_cfg"
 #define NVS_KEY_BLOB     "blob_v1"
+#define NVS_KEY_INIT     "init_json"
 
 static SemaphoreHandle_t s_mtx = NULL;
 static aguja_config_t s_cfg;
+static esp_err_t apply_json_locked(const cJSON *root, bool *needs_net_restart, bool *needs_tailnet_restart);
 
 static void strlcpy_safe(char *dst, const char *src, size_t dst_sz) {
     if (!dst || dst_sz == 0) return;
@@ -86,7 +88,11 @@ static void populate_defaults(aguja_config_t *c) {
     c->led_mode = 0;             /* status indicator */
     c->led_pwm_pct = 50;
     c->led_blink_ms = 500;
+#if CONFIG_IDF_TARGET_ESP32S3
+    c->cpu_mhz = 240;
+#else
     c->cpu_mhz = 160;
+#endif
     for (int i = 0; i < AGUJA_MAX_BOOT_GPIOS; i++) {
         c->boot_gpios[i].pin = -1;
     }
@@ -121,23 +127,46 @@ esp_err_t aguja_config_init(void) {
     populate_defaults(&s_cfg);
 
     nvs_handle_t h;
-    esp_err_t err = nvs_open(NVS_NS, NVS_READONLY, &h);
+    esp_err_t err = nvs_open(NVS_NS, NVS_READWRITE, &h);
     bool loaded = false;
+    bool bootstrapped = false;
     if (err == ESP_OK) {
-        size_t sz = sizeof(s_cfg);
-        aguja_config_t *tmp = malloc(sizeof(aguja_config_t));
-        if (tmp && nvs_get_blob(h, NVS_KEY_BLOB, tmp, &sz) == ESP_OK &&
-            sz == sizeof(*tmp) && tmp->magic == AGUJA_CFG_MAGIC &&
-            tmp->version == AGUJA_CFG_VERSION) {
-            s_cfg = *tmp;
-            loaded = true;
+        /* 1. Check for Flash Imager pure-JSON bootstrap key first */
+        size_t jlen = 0;
+        if (nvs_get_str(h, NVS_KEY_INIT, NULL, &jlen) == ESP_OK && jlen > 2 && jlen <= 8192) {
+            char *jbuf = malloc(jlen);
+            if (jbuf && nvs_get_str(h, NVS_KEY_INIT, jbuf, &jlen) == ESP_OK) {
+                cJSON *root = cJSON_Parse(jbuf);
+                if (root && cJSON_IsObject(root)) {
+                    apply_json_locked(root, NULL, NULL);
+                    nvs_erase_key(h, NVS_KEY_INIT);
+                    nvs_commit(h);
+                    loaded = true;
+                    bootstrapped = true;
+                    ESP_LOGI(TAG, "Provisioned config from NVS init_json (%u bytes)", (unsigned)jlen);
+                }
+                if (root) cJSON_Delete(root);
+            }
+            free(jbuf);
         }
-        free(tmp);
+
+        /* 2. Otherwise load persisted binary blob_v1 */
+        if (!bootstrapped) {
+            size_t sz = sizeof(s_cfg);
+            aguja_config_t *tmp = malloc(sizeof(aguja_config_t));
+            if (tmp && nvs_get_blob(h, NVS_KEY_BLOB, tmp, &sz) == ESP_OK &&
+                sz == sizeof(*tmp) && tmp->magic == AGUJA_CFG_MAGIC &&
+                tmp->version == AGUJA_CFG_VERSION) {
+                s_cfg = *tmp;
+                loaded = true;
+            }
+            free(tmp);
+        }
         nvs_close(h);
     }
 
     /* If compiled auth_key or token was empty in NVS, backfill from Kconfig */
-    bool dirty = !loaded;
+    bool dirty = !loaded || bootstrapped;
     if (!s_cfg.auth_key[0] && CONFIG_AGUJA_DEFAULT_AUTH_KEY[0]) {
         strlcpy_safe(s_cfg.auth_key, CONFIG_AGUJA_DEFAULT_AUTH_KEY, sizeof(s_cfg.auth_key));
         dirty = true;
@@ -363,11 +392,9 @@ static bool is_redacted(const char *s) {
     return !s || strcmp(s, "***") == 0;
 }
 
-esp_err_t aguja_config_apply_json(const cJSON *root, bool *needs_net_restart, bool *needs_tailnet_restart) {
+static esp_err_t apply_json_locked(const cJSON *root, bool *needs_net_restart, bool *needs_tailnet_restart) {
     if (!cJSON_IsObject(root)) return ESP_ERR_INVALID_ARG;
     bool net_chg = false, tn_chg = false;
-
-    xSemaphoreTake(s_mtx, portMAX_DELAY);
     const cJSON *sec, *j;
 
     /* WiFi */
@@ -509,7 +536,11 @@ esp_err_t aguja_config_apply_json(const cJSON *root, bool *needs_net_restart, bo
         }
         if ((j = cJSON_GetObjectItem(sec, "cpu_mhz")) && cJSON_IsNumber(j)) {
             int m = j->valueint;
+#if CONFIG_IDF_TARGET_ESP32S3
+            if (m == 80 || m == 160 || m == 240) s_cfg.cpu_mhz = (uint16_t)m;
+#else
             if (m == 40 || m == 80 || m == 160) s_cfg.cpu_mhz = (uint16_t)m;
+#endif
         }
         if ((j = cJSON_GetObjectItem(sec, "boot_gpios")) && cJSON_IsArray(j)) {
             for (int i = 0; i < AGUJA_MAX_BOOT_GPIOS; i++) s_cfg.boot_gpios[i].pin = -1;
@@ -553,16 +584,23 @@ esp_err_t aguja_config_apply_json(const cJSON *root, bool *needs_net_restart, bo
         }
     }
 
-    esp_err_t err = save_locked();
+    if (needs_net_restart) *needs_net_restart = net_chg;
+    if (needs_tailnet_restart) *needs_tailnet_restart = tn_chg;
+    return ESP_OK;
+}
+
+esp_err_t aguja_config_apply_json(const cJSON *root, bool *needs_net_restart, bool *needs_tailnet_restart) {
+    if (!cJSON_IsObject(root)) return ESP_ERR_INVALID_ARG;
+    xSemaphoreTake(s_mtx, portMAX_DELAY);
+    esp_err_t err = apply_json_locked(root, needs_net_restart, needs_tailnet_restart);
+    if (err == ESP_OK) err = save_locked();
     xSemaphoreGive(s_mtx);
 
     /* Rules (uses its own lock) */
+    const cJSON *j;
     if ((j = cJSON_GetObjectItem(root, "rules")) && cJSON_IsArray(j)) {
         aguja_config_set_rules_json(j);
     }
-
-    if (needs_net_restart) *needs_net_restart = net_chg;
-    if (needs_tailnet_restart) *needs_tailnet_restart = tn_chg;
     return err;
 }
 

@@ -11,7 +11,9 @@ const recovery=require('./disk-recovery.cjs');
 const imagerUpdates=require('./imager-updates.cjs');
 const usbConfig=require('./usb-config.cjs');
 const capsuleEdit=require('./capsule-edit.cjs');
-let availableImagerUpdate=null,usbSession=null,downloadController=null;let lastProgress={time:0,phase:''};
+const iotNvs=require('./iot-nvs.cjs');
+const iotFlash=require('./iot-flash.cjs');
+let availableImagerUpdate=null,usbSession=null,downloadController=null,iotCustomFirmwareDirs={};let lastProgress={time:0,phase:''};
 const fat32=require('./fat32-writer.cjs');
 const provisioning=require('./provisioning.cjs');
 const nativeImport=require('./windows-native-import.cjs');
@@ -36,7 +38,7 @@ const ROOT=app.isPackaged?path.join(process.resourcesPath,'aguja'):path.resolve(
 let win; let selectedImage=null;let prepared=null;let releases=[];let verifiedCatalog=null;let working=false;let approvedImports={};
 // No crash reporter, analytics, renderer remote content, credentials in command arguments or logs.
 function receipt(ok,data={},error=''){return ok?{ok:true,...data}:{ok:false,error};}
-function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
+function message(e){e=storage.storageError(e);return /signature|SHA|contraseña|clave|nombre|Wi-Fi|puerto|perfil|catálogo|imagen|dirección|servidor|USB|consentimiento|red |sesión|autenticación|cápsula|passphrase|falt|ruta|pendiente|idioma|teclado|variante|capacidad|carpeta|cabe|cambió|grabación|permiso|herramienta|operación|respaldo|backup|cuenta|correo|túnel|navegador|agente|configuración privada|placa|firmware|esptool|pyserial|Noise|NVS|microcontrolador|SoftAP|DERP|token|IoT|serie|dialout|uucp/i.test(e.message||'')?String(e.message).slice(0,300):'No se completó la operación. Revisa los datos e intenta de nuevo.';}
 function progress(phase,detail={}){const now=Date.now();if(detail.total&&detail.done<detail.total&&phase===lastProgress.phase&&now-lastProgress.time<90)return;lastProgress={time:now,phase};if(win&&!win.isDestroyed())win.webContents.send('progress',{phase,...detail,...(detail.message?{message:translate(detail.message)}:{})});}
 function handle(channel,callback){ipcMain.handle(channel,async(event,...args)=>{
  if(event.sender!==win.webContents || event.senderFrame!==win.webContents.mainFrame)throw new Error('Origen no autorizado.');
@@ -192,7 +194,7 @@ function installIPC(){
  handle('usb-config-disks',async()=>({disks:await usbConfig.devices(process.platform,run)}));
  handle('usb-config-read',async(disk,passphrase='')=>exclusive(async()=>{usbSession=null;if(typeof passphrase!=='string'||passphrase.length>1024)throw Error('Perfil cifrado no válido.');const loaded=await usbConfig.operation({...disk,operation:'read'},{run,root:ROOT});const decoded=capsuleEdit.decode(loaded.files,passphrase);usbSession={disk,files:loaded.files,snapshot:loaded.snapshot,passphrase};return {...decoded,device:disk.device};}));
  handle('usb-config-write',async(input)=>exclusive(async()=>{if(!usbSession)throw Error('Primero lee la configuración del USB.');const session=usbSession;const diskRecovery=recovery.normalizeRecovery([...(input.diskRecovery||[]),...(Array.isArray(input.bitlocker)?input.bitlocker.map(k=>({type:'bitlocker',label:'Windows '+bitlocker.cleanMountPoint(k.mountPoint),identifier:String(k.keyProtectorId||''),key:k.recoveryPassword})):[])]);const files=capsuleEdit.encode({...input,diskRecovery},session.files,session.passphrase);const answer=await showMessageBox(win,{type:'warning',title:'Guardar configuración del USB',message:'Se actualizará solo la configuración del USB seleccionado.',detail:session.disk.model+' · '+session.disk.serial,buttons:['Cancelar','Guardar cambios'],defaultId:0,cancelId:0});if(answer.response!==1)return {canceled:true};const result=await usbConfig.operation({...session.disk,operation:'write',snapshot:session.snapshot,files},{run,root:ROOT});usbSession=null;return {verified:result.verified,backup:result.backup};}));
- handle('info',async()=>({version:app.getVersion(),platform:process.platform,prepareAvailable:isWindows||fs.existsSync(path.join(ROOT,'scripts','platform-profile.py')),bitlockerAvailable:isWindows}));
+ handle('info',async()=>({version:app.getVersion(),platform:process.platform,prepareAvailable:isWindows||fs.existsSync(path.join(ROOT,'scripts','platform-profile.py')),bitlockerAvailable:isWindows,iotAvailable:process.platform==='linux'}));
  handle('i18n-catalog',async()=>({catalog:core.LOCALE_CATALOG,language:uiLanguage,systemLanguage:app.getLocale?.()||'es'}));
  handle('i18n-language',async(value)=>{if(typeof value!=='string'||!['es',...Object.keys(core.LOCALE_CATALOG.translations)].includes(value))throw new Error('Idioma no compatible.');uiLanguage=value;await fs.promises.writeFile(path.join(app.getPath('userData'),'ui-language.json'),JSON.stringify({language:value}),{mode:0o600});return {language:value};});
  handle('cancel-download',async()=>{if(downloadController){downloadController.abort();return {canceled:true};}return {canceled:false};});
@@ -292,6 +294,39 @@ function installIPC(){
  handle('export-profile',async(input)=>{const capsule=core.validateCapsule(input.capsule);capsule.remote={enabled:false};const diskRecovery=recovery.normalizeRecovery([...(input.diskRecovery||[]),...(Array.isArray(input.bitlocker)?input.bitlocker.map(k=>({type:'bitlocker',label:'Windows '+bitlocker.cleanMountPoint(k.mountPoint),identifier:String(k.keyProtectorId||''),key:k.recoveryPassword})):[])]);const encrypted=profileEncrypt(capsule,input.passphrase,diskRecovery);const file=await chooseSave('Guardar perfil cifrado',path.join(app.getPath('documents'),'aguja-perfil.aguja'),['aguja']);if(!file)return {canceled:true};return reusableProfile.save(file,encrypted);});
  handle('import-profile',async(passphrase)=>{const pick=await showOpenDialog(win,{title:'Abrir perfil cifrado',properties:['openFile'],filters:[{name:'Perfil de LA AGUJA',extensions:['aguja']}]});if(pick.canceled)return {canceled:true};const st=await fs.promises.stat(pick.filePaths[0]);if(st.size>1048576)throw new Error('El perfil es demasiado grande.');const capsule=profileDecrypt(JSON.parse(await fs.promises.readFile(pick.filePaths[0],'utf8')),passphrase),diskRecovery=capsule.disk_recovery||[];delete capsule.disk_recovery;return {capsule,diskRecovery};});
  handle('disks',async()=>({disks:await availableDisks()}));
+ handle('iot-boards',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {available:process.platform==='linux',...catalog};});
+ handle('iot-select-firmware',async(boardId)=>exclusive(async()=>{
+  const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});
+  const board=catalog.boards.find(b=>b.id===boardId);
+  if(!board)throw new Error('Selecciona una placa de desarrollo compatible.');
+  const pick=await showOpenDialog(win,{title:'Seleccionar carpeta de firmware para '+board.name,properties:['openDirectory'],defaultPath:app.getPath('downloads')});
+  if(pick.canceled)return {canceled:true};
+  const dir=pick.filePaths[0];
+  const bundle=iotFlash.inspectFirmwareDir(dir,board);
+  if(!bundle)throw new Error('La carpeta seleccionada no contiene un firmware válido (manifest.json + binarios para '+board.chip+').');
+  iotCustomFirmwareDirs[board.id]=dir;
+  const updated=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});
+  return {selected:bundle.version,boardId:board.id,...updated};
+ }));
+ handle('iot-ports',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {ports:await iotFlash.listSerialPorts(catalog.boards)};});
+ handle('iot-fetch-noise-key',async(ctrlHost)=>exclusive(async()=>iotFlash.fetchControlNoiseKey(ctrlHost)));
+ handle('iot-generate-token',async()=>({token:iotNvs.generateApiToken()}));
+ handle('iot-flash',async(input)=>exclusive(async()=>{
+  if(process.platform!=='linux')throw new Error('La grabación IoT está disponible primero en Linux. El soporte de Windows llegará en la siguiente fase.');
+  const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});
+  const board=catalog.boards.find(b=>b.id===input?.boardId);
+  if(!board)throw new Error('Selecciona una placa de desarrollo compatible.');
+  const previewCfg=iotNvs.buildInitConfig(input?.config,board);
+  const answer=await showMessageBox(win,{type:'warning',title:'Grabar microcontrolador IoT',message:'Se grabará '+board.name+' en '+String(input?.port||''),detail:`Chip: ${board.chip.toUpperCase()} · Nodo: ${previewCfg.tailnet.hostname} · Redes Wi-Fi: ${previewCfg.wifi.profiles.length} · ${input?.backup?'Con respaldo previo de la flash.':'Se sobrescribirá la memoria flash actual.'}`,buttons:['Cancelar','Grabar placa'],defaultId:0,cancelId:0});
+  if(answer.response!==1)return {canceled:true};
+  let backupPath='';
+  if(input?.backup===true){
+   const dest=await chooseSave('Guardar respaldo de flash del microcontrolador',path.join(app.getPath('downloads'),`${board.id}-backup.bin`),['bin']);
+   if(!dest)return {canceled:true};
+   backupPath=dest;
+  }
+  return iotFlash.flashBoard({boardId:board.id,port:input.port,configInput:input.config,backupPath,verifyBoot:input.verifyBoot!==false,customFirmwareDir:iotCustomFirmwareDirs[board.id]||'',rootDir:ROOT,userDataDir:app.getPath('userData'),progress});
+ }));
  handle('flash',async(input)=>exclusive(async()=>{
   if(isWindows&&input?.backup===true)throw new Error('El respaldo previo de USB aún no está disponible en Windows. No se ha grabado nada.');
   let settings=prepareInput(input,{pendingRemote:true});const disk=await selectedDisk(input);

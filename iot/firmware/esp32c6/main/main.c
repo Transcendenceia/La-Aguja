@@ -25,7 +25,7 @@ void app_main(void) {
 
     const esp_app_desc_t *app = esp_app_get_description();
     const esp_partition_t *part = esp_ota_get_running_partition();
-    ESP_LOGI(TAG, "=== AGUJA-IOT Mobile Ops Center (Seeed XIAO ESP32-C6) ===");
+    ESP_LOGI(TAG, "=== AGUJA-IOT Mobile Ops Center (%s) ===", AGUJA_BOARD_NAME);
     ESP_LOGI(TAG, "FW %s (%s %s) running on partition '%s'",
              app->version, app->date, app->time, part ? part->label : "?");
 

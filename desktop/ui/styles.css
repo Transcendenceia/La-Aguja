@@ -31,3 +31,25 @@ input,select,textarea,.key-box{background:#090b10;border-color:#5b4d64}.card lab
 @media(max-width:850px){.app{grid-template-columns:180px 1fr}.sidebar{width:180px;padding:22px 12px}.brand b{font-size:17px}.brand img{width:36px;height:36px}main{padding:0 20px 24px}.split,.source-grid,.provider-grid,.option-grid,.storage-fields{grid-template-columns:1fr}.intro h1{font-size:38px}.mascot{width:120px;height:120px}.environment-entry{grid-template-columns:1fr}.environment-entry .quiet{justify-self:start}.footer-row{gap:12px;align-items:flex-start;flex-direction:column}}
 @media(max-width:580px){.app{display:block}.sidebar{position:relative;width:100%;padding:18px}.side-label,.sidebar-bottom,.support-button{display:none}#steps{grid-template-columns:1fr 1fr;margin-top:18px}#tools{grid-template-columns:1fr 1fr}main{padding:0 18px 24px}.intro{min-height:220px}.intro h1{font-size:32px}.mascot{width:85px;height:85px}header{height:auto;min-height:88px;gap:14px;flex-wrap:wrap;padding:16px 0}h1{font-size:29px}.card{padding:18px}dialog{max-width:calc(100vw - 28px)}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Parallel IoT · MCU mode switcher and board selection cards */
+.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:18px;padding:4px;background:#090b10;border:1px solid var(--line);border-radius:10px}
+.mode-tab{border:0;background:transparent;color:var(--muted);padding:8px 6px;min-height:34px;border-radius:7px;font-size:11px;font-weight:600;letter-spacing:.2px;text-align:center}
+.mode-tab:hover{color:var(--ink);background:#191d26}
+.mode-tab.active{background:#251e30;color:var(--ink);box-shadow:inset 0 -2px 0 #aa35ff}
+.iot-step{display:flex;align-items:center;gap:11px;border:0;text-align:left;background:none;color:var(--muted);padding:9px 10px;border-radius:9px}
+.iot-step .number{width:25px;height:25px;border:1px solid #64546e;border-radius:50%;display:grid;place-items:center;font-size:11px;flex-shrink:0}
+.iot-step.active{background:#251e30;color:var(--ink)}
+.iot-step.active .number{background:#f7f6f1;color:#11141b;border-color:#f7f6f1}
+.iot-step.done .number{color:var(--cyan);border-color:var(--cyan)}
+.board-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:18px}
+.board-card{background:var(--panel);border:1px solid #5b4d64;border-radius:12px;padding:18px;text-align:left;display:flex;flex-direction:column;gap:10px;color:var(--ink)}
+.board-card:hover:not(:disabled){border-color:#aa35ff;background:#191d26}
+.board-card.selected{background:#251e30;border-color:#aa35ff;box-shadow:inset 3px 0 #aa35ff}
+.board-card.planned{opacity:.6;border-style:dashed}
+.board-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.board-card-head strong{font-size:15px;line-height:1.3}
+.board-specs{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.board-pill{font-size:10px;color:#d2ccd8;background:#090b10;border:1px solid var(--line);border-radius:6px;padding:3px 7px}
+#iot-steps{display:grid;gap:7px}
+@media(max-width:580px){#iot-steps{grid-template-columns:1fr 1fr;margin-top:18px}}

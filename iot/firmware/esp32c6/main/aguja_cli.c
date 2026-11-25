@@ -3,7 +3,12 @@
 #include "aguja_hw.h"
 #include "aguja_net.h"
 #include "aguja_log.h"
+#include "sdkconfig.h"
+#if CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG
 #include "driver/usb_serial_jtag.h"
+#else
+#include "driver/uart.h"
+#endif
 #include "esp_system.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -39,7 +44,9 @@ static void cli_exec(char *line) {
         cJSON_AddNumberToObject(j, "temp_c", tc);
         cJSON_AddNumberToObject(j, "heap_free", esp_get_free_heap_size());
         cJSON_AddNumberToObject(j, "heap_min", esp_get_minimum_free_heap_size());
-        cJSON_AddStringToObject(j, "antenna", aguja_hw_get_antenna_external() ? "ufl" : "ceramic");
+        cJSON_AddStringToObject(j, "antenna", AGUJA_HAS_RF_SWITCH ? (aguja_hw_get_antenna_external() ? "ufl" : "ceramic") : "pcb");
+        cJSON_AddStringToObject(j, "board", AGUJA_BOARD_NAME);
+        cJSON_AddStringToObject(j, "chip", AGUJA_CHIP_NAME);
         char *s = cJSON_PrintUnformatted(j);
         if (s) { printf("%s\n", s); free(s); }
         cJSON_Delete(j);
@@ -108,6 +115,7 @@ static void cli_exec(char *line) {
 
 static void cli_task(void *arg) {
     (void)arg;
+#if CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG
     usb_serial_jtag_driver_config_t cfg = {
         .rx_buffer_size = 512,
         .tx_buffer_size = 512,
@@ -117,12 +125,25 @@ static void cli_task(void *arg) {
         vTaskDelete(NULL);
         return;
     }
+#else
+    if (!uart_is_driver_installed(UART_NUM_0)) {
+        if (uart_driver_install(UART_NUM_0, 512, 0, 0, NULL, 0) != ESP_OK) {
+            ESP_LOGW(TAG, "UART0 CLI driver unavailable");
+            vTaskDelete(NULL);
+            return;
+        }
+    }
+#endif
 
     char line[256];
     size_t pos = 0;
     uint8_t ch;
     while (1) {
+#if CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG
         int n = usb_serial_jtag_read_bytes(&ch, 1, pdMS_TO_TICKS(200));
+#else
+        int n = uart_read_bytes(UART_NUM_0, &ch, 1, pdMS_TO_TICKS(200));
+#endif
         if (n <= 0) continue;
         if (ch == '\r' || ch == '\n') {
             line[pos] = '\0';

@@ -59,9 +59,20 @@
       "reusable-profile.cjs",
       "capsule-edit.cjs",
       "usb-config.cjs",
-      "profile-extensions.cjs"
+      "profile-extensions.cjs",
+      "iot-nvs.cjs",
+      "iot-flash.cjs"
     ],
     "extraResources": [
+      {
+        "from": "../iot",
+        "to": "aguja/iot",
+        "filter": [
+          "boards.json",
+          "scripts/iot-flash.py",
+          "prebuilt/**/*"
+        ]
+      },
       {
         "from": "../scripts",
         "to": "aguja/scripts",

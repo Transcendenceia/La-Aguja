@@ -1,12 +1,16 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "module": "aguja-iot",
   "description": "Machine-readable board and firmware provisioning manifest for LA AGUJA Flash Imager (IoT tab).",
   "nvs_provisioning": {
     "partition_name": "nvs",
+    "offset": "0x9000",
+    "size_bytes": 49152,
     "namespace": "aguja_cfg",
+    "init_json_key": "init_json",
     "blob_key": "blob_v1",
     "struct_version": 1,
+    "max_wifi_profiles": 8,
     "fields": [
       "wifi.profiles[] (up to 8 SSID/password pairs)",
       "ap (enabled, ssid, pass, channel, max_conn)",
@@ -14,12 +18,13 @@
       "hw (antenna_external, led_mode, cpu_mhz, boot_gpios[])",
       "agent (api_token, http_allow_lan, beacon_enabled, beacon_ip, beacon_port, beacon_interval_s)"
     ],
-    "note": "Flash Imager flashes the generic prebuilt firmware once and injects a freshly generated NVS partition at partition_offsets.nvs without requiring ESP-IDF on the user's computer."
+    "note": "Flash Imager flashes generic prebuilt firmware and injects a locally generated 48 KB NVS v2 partition containing aguja_cfg/init_json at 0x9000 without requiring ESP-IDF on the user's computer."
   },
   "boards": [
     {
       "id": "seeed-xiao-esp32c6",
       "name": "Seeed Studio XIAO ESP32-C6",
+      "short_desc": "Ultra-compacta RISC-V · Wi-Fi 6 · selector de antena cerámica / u.FL",
       "status": "verified",
       "chip": "esp32c6",
       "arch": "riscv32",
@@ -28,11 +33,14 @@
       "flash_freq": "80m",
       "sram_kb": 512,
       "psram_mb": 0,
+      "cpu_mhz": 160,
+      "has_rf_switch": true,
       "radios": ["wifi6-2.4ghz", "ble5", "ieee802.15.4"],
       "usb_ids": [
         { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial debug unit" }
       ],
       "firmware_dir": "iot/firmware/esp32c6",
+      "prebuilt_dir": "iot/prebuilt/seeed-xiao-esp32c6",
       "flash_offsets": {
         "bootloader": "0x0",
         "partition_table": "0x8000",
@@ -76,26 +84,77 @@
       ]
     },
     {
-      "id": "esp32s3-generic-n16r8",
-      "name": "ESP32-S3 (16 MB Flash / 8 MB PSRAM)",
-      "status": "planned",
+      "id": "esp32s3-wroom-n16r8",
+      "name": "ESP32-S3-WROOM-1 (N16R8)",
+      "short_desc": "Dual-Core 240 MHz · 16 MB Flash · 8 MB Octal PSRAM · alto rendimiento",
+      "status": "verified",
       "chip": "esp32s3",
       "arch": "xtensa",
       "flash_size": "16MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
       "sram_kb": 512,
       "psram_mb": 8,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
       "radios": ["wifi4-2.4ghz", "ble5"],
       "usb_ids": [
+        { "vid": "1a86", "pid": "55d3", "label": "QinHeng CH343 USB Single Serial" },
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x UART Bridge" },
         { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial debug unit" }
       ],
+      "firmware_dir": "iot/firmware/esp32c6",
+      "prebuilt_dir": "iot/prebuilt/esp32s3-wroom-n16r8",
+      "flash_offsets": {
+        "bootloader": "0x0",
+        "partition_table": "0x8000",
+        "nvs": "0x9000",
+        "otadata": "0x15000",
+        "ota_0": "0x20000",
+        "ota_1": "0x200000"
+      },
+      "hardware_pins": {
+        "user_led": { "gpio": 2, "active": "high" },
+        "boot_button": { "gpio": 0 }
+      },
       "capabilities": [
         "tailnet-headscale",
         "tailnet-tailscale",
         "exit-node",
         "subnet-router-dynamic",
         "softap-nat",
+        "exit-node-dns-relay",
         "dual-ota-rollback",
-        "agent-rest-api"
+        "agent-rest-api",
+        "embedded-web-ui",
+        "usb-serial-cli",
+        "udp-beacon"
+      ]
+    },
+    {
+      "id": "wt32-eth01",
+      "name": "WT32-ETH01 (ESP32 + Ethernet RJ45)",
+      "short_desc": "Ethernet cableado 10/100 + Wi-Fi · ideal como puente fijo en rack",
+      "status": "planned",
+      "chip": "esp32",
+      "arch": "xtensa",
+      "flash_size": "4MB",
+      "flash_mode": "dio",
+      "flash_freq": "40m",
+      "sram_kb": 520,
+      "psram_mb": 0,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
+      "radios": ["ethernet-100m", "wifi4-2.4ghz"],
+      "usb_ids": [
+        { "vid": "1a86", "pid": "7523", "label": "CH340 USB-UART Adapter" },
+        { "vid": "10c4", "pid": "ea60", "label": "CP210x USB-UART Adapter" }
+      ],
+      "capabilities": [
+        "tailnet-headscale",
+        "tailnet-tailscale",
+        "exit-node",
+        "subnet-router-dynamic"
       ]
     }
   ]

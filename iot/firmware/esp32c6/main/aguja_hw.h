@@ -10,6 +10,39 @@
 extern "C" {
 #endif
 
+/* Target-specific Hardware Pin Maps */
+#if CONFIG_IDF_TARGET_ESP32S3
+#define AGUJA_BOARD_NAME        "ESP32-S3-WROOM-1 (N16R8)"
+#define AGUJA_CHIP_NAME         "ESP32-S3"
+#define AGUJA_HAS_RF_SWITCH     0
+#define AGUJA_USER_LED_PIN      2
+#define AGUJA_USER_LED_ACTIVE_LOW 0
+#define AGUJA_DEFAULT_CPU_MHZ   240
+#define AGUJA_DEFAULT_I2C_SDA   8
+#define AGUJA_DEFAULT_I2C_SCL   9
+#define AGUJA_DEFAULT_UART_TX   17
+#define AGUJA_DEFAULT_UART_RX   18
+#define AGUJA_DEFAULT_SPI_SCK   12
+#define AGUJA_DEFAULT_SPI_MISO  13
+#define AGUJA_DEFAULT_SPI_MOSI  11
+#define AGUJA_DEFAULT_SPI_CS    10
+#else
+#define AGUJA_BOARD_NAME        "Seeed Studio XIAO ESP32-C6"
+#define AGUJA_CHIP_NAME         "ESP32-C6"
+#define AGUJA_HAS_RF_SWITCH     1
+#define AGUJA_USER_LED_PIN      15
+#define AGUJA_USER_LED_ACTIVE_LOW 1
+#define AGUJA_DEFAULT_CPU_MHZ   160
+#define AGUJA_DEFAULT_I2C_SDA   22
+#define AGUJA_DEFAULT_I2C_SCL   23
+#define AGUJA_DEFAULT_UART_TX   16
+#define AGUJA_DEFAULT_UART_RX   17
+#define AGUJA_DEFAULT_SPI_SCK   19
+#define AGUJA_DEFAULT_SPI_MISO  20
+#define AGUJA_DEFAULT_SPI_MOSI  18
+#define AGUJA_DEFAULT_SPI_CS    21
+#endif
+
 /* Seeed Studio XIAO ESP32-C6 Hardware Pin Map */
 #define XIAO_PIN_RF_SWITCH_EN   3   /* Active LOW: enable RF switch power */
 #define XIAO_PIN_RF_ANT_SEL     14  /* LOW = internal ceramic, HIGH = external u.FL */

@@ -1,0 +1,13 @@
+build/
+sdkconfig
+sdkconfig.old
+sdkconfig.secrets
+sdkconfig.local
+managed_components/
+dependencies.lock
+backups/
+*.bin
+*.elf
+*.map
+__pycache__/
+.env

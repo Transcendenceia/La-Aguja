@@ -1,0 +1,34 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "aguja_log.c"
+        "aguja_config.c"
+        "aguja_hw.c"
+        "aguja_net.c"
+        "aguja_http.c"
+        "aguja_cli.c"
+    INCLUDE_DIRS "."
+    REQUIRES
+        microlink
+        nvs_flash
+        esp_wifi
+        esp_netif
+        esp_event
+        esp_timer
+        esp_http_server
+        esp_adc
+        esp_pm
+        app_update
+        esp_app_format
+        driver
+        esp_driver_gpio
+        esp_driver_ledc
+        esp_driver_i2c
+        esp_driver_uart
+        esp_driver_spi
+        esp_driver_tsens
+        esp_driver_usb_serial_jtag
+        lwip
+        json
+        mbedtls
+)

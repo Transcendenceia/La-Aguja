@@ -141,9 +141,14 @@ El perfil cifrado fuerza `persistent_home=no` al arrancar; HOME persistente sin 
 | Prompts, herramientas y entregables | [Showcase](docs/SHOWCASE.md) | [Ejemplos](docs/SHOWCASE.es.md) |
 | Diagnóstico por capas | [Troubleshooting](docs/TROUBLESHOOTING.md) | [Solución de problemas](docs/TROUBLESHOOTING.es.md) |
 | Capturas reales | [Gallery](docs/SCREENSHOTS.md) | [Galería](docs/SCREENSHOTS.es.md) |
+| Nodos microcontrolador IoT (experimental) | [LA AGUJA IoT (EN)](docs/IOT.md) | [LA AGUJA IoT](docs/IOT.es.md) |
 | Referencias e historial | [Documentation index](docs/README.md) | [Índice](docs/README.es.md) |
 
 Web y guías operativas: [English](https://aguja.transcendenceia.net/en/docs) · [Español](https://aguja.transcendenceia.net/es/docs) · [Français](https://aguja.transcendenceia.net/fr/docs) · [Deutsch](https://aguja.transcendenceia.net/de/docs) · [Português](https://aguja.transcendenceia.net/pt/docs) · [Italiano](https://aguja.transcendenceia.net/it/docs) · [Nederlands](https://aguja.transcendenceia.net/nl/docs) · [简体中文](https://aguja.transcendenceia.net/zh/docs).
+
+## LA AGUJA IoT (pista experimental)
+
+Junto a **Flash Imager** y **Rescue Disk**, `iot/` incorpora firmware nativo de tailnet para microcontroladores compatibles (comenzando por **Seeed Studio XIAO ESP32-C6**) que se emparejan directamente a tu Tailscale o Headscale propio con exit node, subnet router dinámico, SoftAP NAT, control total de hardware (antena RF, GPIO, PWM, ADC, I2C, UART, SPI), API REST JSON, Web UI oscura, CLI de agente y OTA dual-slot con rollback automático. [Módulo IoT](iot/README.es.md) · [Arquitectura y API](docs/IOT.es.md) · [Diseño de integración en Flash Imager](docs/design/iot-imager-integration.md).
 
 ## Desarrollar y verificar
 

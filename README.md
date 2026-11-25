@@ -142,9 +142,14 @@ Private images and `.aguja` templates may contain credentials. Never publish the
 | Prompts, tools and deliverables | [Showcase](docs/SHOWCASE.md) | [Ejemplos](docs/SHOWCASE.es.md) |
 | Diagnose by layer | [Troubleshooting](docs/TROUBLESHOOTING.md) | [Solución de problemas](docs/TROUBLESHOOTING.es.md) |
 | Real product captures | [Gallery](docs/SCREENSHOTS.md) | [Galería](docs/SCREENSHOTS.es.md) |
+| IoT microcontroller nodes (experimental) | [LA AGUJA IoT](docs/IOT.md) | [LA AGUJA IoT (ES)](docs/IOT.es.md) |
 | All references and history | [Documentation index](docs/README.md) | [Índice](docs/README.es.md) |
 
 Website and operational guides: [English](https://aguja.transcendenceia.net/en/docs) · [Español](https://aguja.transcendenceia.net/es/docs) · [Français](https://aguja.transcendenceia.net/fr/docs) · [Deutsch](https://aguja.transcendenceia.net/de/docs) · [Português](https://aguja.transcendenceia.net/pt/docs) · [Italiano](https://aguja.transcendenceia.net/it/docs) · [Nederlands](https://aguja.transcendenceia.net/nl/docs) · [简体中文](https://aguja.transcendenceia.net/zh/docs).
+
+## LA AGUJA IoT (experimental track)
+
+Alongside **Flash Imager** and **Rescue Disk**, `iot/` adds tailnet-native microcontroller firmware so compatible boards (starting with **Seeed Studio XIAO ESP32-C6**) join your Tailscale or self-hosted Headscale network directly with exit node, dynamic subnet routing, SoftAP NAT, full hardware control (antenna switch, GPIO, PWM, ADC, I2C, UART, SPI), REST JSON API, embedded dark UI, agent CLI, and dual-slot OTA with rollback. [IoT module](iot/README.md) · [Architecture & API](docs/IOT.md) · [Flash Imager IoT integration design](docs/design/iot-imager-integration.md).
 
 ## Develop and verify
 

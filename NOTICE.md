@@ -17,6 +17,7 @@ This does not change the licences of Debian, Linux, firmware, libraries, Electro
 | Codex CLI | Apache-2.0 in the original project; preserve original notices. |
 | OpenCode | Licence of the pinned version in its upstream project; preserve LICENSE. |
 | Tailscale | Client code BSD-3-Clause; preserve notices. Headscale is managed by the user, not hosted by LA AGUJA. |
+| MicroLink & wireguard-lwip (`iot/`) | MicroLink is MIT (`CamM2325/microlink`); bundled `wireguard-lwip` is BSD-3-Clause. ESP-IDF runtime is Apache-2.0. See `iot/THIRD-PARTY-NOTICES.md`. |
 | Hardware firmware | Per-package licences; do not label the entire medium GPL or entirely free software. |
 | Claude Code | Anthropic software, not GPL. Redistribution must be authorised. https://github.com/anthropics/claude-code/blob/main/LICENSE.md |
 | Antigravity | Google software/service under its terms; download availability is not a redistribution grant. https://www.antigravity.google/terms |

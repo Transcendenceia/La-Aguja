@@ -1,0 +1,10 @@
+# Aguja-IoT (Seeed Studio XIAO ESP32-C6, 4 MB Embedded Flash)
+# Dual-OTA layout with automatic rollback + 48KB NVS + 64KB coredump + 64KB storage
+# Name,    Type, SubType,  Offset,   Size,    Flags
+nvs,       data, nvs,      0x9000,   48K,
+otadata,   data, ota,      0x15000,  8K,
+phy_init,  data, phy,      0x17000,  4K,
+ota_0,     app,  ota_0,    0x20000,  1920K,
+ota_1,     app,  ota_1,    0x200000, 1920K,
+coredump,  data, coredump, 0x3E0000, 64K,
+storage,   data, spiffs,   0x3F0000, 64K,

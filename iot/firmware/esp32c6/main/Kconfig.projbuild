@@ -1,0 +1,39 @@
+menu "Aguja-IoT Mobile Ops Center"
+
+    config AGUJA_DEFAULT_WIFI_SSID
+        string "Default WiFi SSID (empty = configure via NVS/CLI/Imager)"
+        default ""
+
+    config AGUJA_DEFAULT_WIFI_PASS
+        string "Default WiFi Password"
+        default ""
+
+    config AGUJA_DEFAULT_HOSTNAME
+        string "Default Tailnet Hostname"
+        default "aguja-iot"
+
+    config AGUJA_DEFAULT_AUTH_KEY
+        string "Default Headscale/Tailscale Pre-Auth Key (set via sdkconfig.secrets)"
+        default ""
+
+    config AGUJA_DEFAULT_API_TOKEN
+        string "Default Agent API Token (empty = auto-generate on first boot)"
+        default ""
+
+    config AGUJA_DEFAULT_AP_SSID
+        string "Default SoftAP SSID"
+        default "aguja-iot-ap"
+
+    config AGUJA_DEFAULT_AP_PASS
+        string "Default SoftAP Password (min 8 chars for WPA2, empty = open)"
+        default ""
+
+    config AGUJA_DEFAULT_BEACON_IP
+        string "Default Agent Beacon Tailnet IP (empty = disabled)"
+        default ""
+
+    config AGUJA_DEFAULT_BEACON_PORT
+        int "Default Agent Beacon UDP Port"
+        default 9420
+
+endmenu

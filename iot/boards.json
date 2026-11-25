@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "module": "aguja-iot",
+  "description": "Machine-readable board and firmware provisioning manifest for LA AGUJA Flash Imager (IoT tab).",
+  "nvs_provisioning": {
+    "partition_name": "nvs",
+    "namespace": "aguja_cfg",
+    "blob_key": "blob_v1",
+    "struct_version": 1,
+    "fields": [
+      "wifi.profiles[] (up to 8 SSID/password pairs)",
+      "ap (enabled, ssid, pass, channel, max_conn)",
+      "tailnet (hostname, ctrl_host, ctrl_noise_pubkey_hex, auth_key, derp_region, exit_node_enabled, advertise_upstream_subnet, advertise_ap_subnet, extra_routes, dns_relay_enabled, dns_upstream)",
+      "hw (antenna_external, led_mode, cpu_mhz, boot_gpios[])",
+      "agent (api_token, http_allow_lan, beacon_enabled, beacon_ip, beacon_port, beacon_interval_s)"
+    ],
+    "note": "Flash Imager flashes the generic prebuilt firmware once and injects a freshly generated NVS partition at partition_offsets.nvs without requiring ESP-IDF on the user's computer."
+  },
+  "boards": [
+    {
+      "id": "seeed-xiao-esp32c6",
+      "name": "Seeed Studio XIAO ESP32-C6",
+      "status": "verified",
+      "chip": "esp32c6",
+      "arch": "riscv32",
+      "flash_size": "4MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 512,
+      "psram_mb": 0,
+      "radios": ["wifi6-2.4ghz", "ble5", "ieee802.15.4"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial debug unit" }
+      ],
+      "firmware_dir": "iot/firmware/esp32c6",
+      "flash_offsets": {
+        "bootloader": "0x0",
+        "partition_table": "0x8000",
+        "nvs": "0x9000",
+        "otadata": "0x15000",
+        "ota_0": "0x20000",
+        "ota_1": "0x200000"
+      },
+      "hardware_pins": {
+        "rf_switch_enable": { "gpio": 3, "active": "low" },
+        "rf_antenna_select": { "gpio": 14, "internal_ceramic": 0, "external_ufl": 1 },
+        "user_led": { "gpio": 15, "active": "low" },
+        "boot_button": { "gpio": 9 },
+        "edge_gpios": {
+          "D0": { "gpio": 0, "func": "ADC1_CH0" },
+          "D1": { "gpio": 1, "func": "ADC1_CH1" },
+          "D2": { "gpio": 2, "func": "ADC1_CH2" },
+          "D3": { "gpio": 21, "func": "GPIO" },
+          "D4": { "gpio": 22, "func": "I2C_SDA" },
+          "D5": { "gpio": 23, "func": "I2C_SCL" },
+          "D6": { "gpio": 16, "func": "UART1_TX" },
+          "D7": { "gpio": 17, "func": "UART1_RX" },
+          "D8": { "gpio": 19, "func": "SPI_SCK" },
+          "D9": { "gpio": 20, "func": "SPI_MISO" },
+          "D10": { "gpio": 18, "func": "SPI_MOSI" }
+        }
+      },
+      "capabilities": [
+        "tailnet-headscale",
+        "tailnet-tailscale",
+        "exit-node",
+        "subnet-router-dynamic",
+        "softap-nat",
+        "exit-node-dns-relay",
+        "dual-ota-rollback",
+        "agent-rest-api",
+        "embedded-web-ui",
+        "usb-serial-cli",
+        "udp-beacon",
+        "rf-antenna-switch"
+      ]
+    },
+    {
+      "id": "esp32s3-generic-n16r8",
+      "name": "ESP32-S3 (16 MB Flash / 8 MB PSRAM)",
+      "status": "planned",
+      "chip": "esp32s3",
+      "arch": "xtensa",
+      "flash_size": "16MB",
+      "sram_kb": 512,
+      "psram_mb": 8,
+      "radios": ["wifi4-2.4ghz", "ble5"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial debug unit" }
+      ],
+      "capabilities": [
+        "tailnet-headscale",
+        "tailnet-tailscale",
+        "exit-node",
+        "subnet-router-dynamic",
+        "softap-nat",
+        "dual-ota-rollback",
+        "agent-rest-api"
+      ]
+    }
+  ]
+}

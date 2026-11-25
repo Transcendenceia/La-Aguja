@@ -8,7 +8,7 @@
 - [Problemas por capas](TROUBLESHOOTING.es.md).
 - [Capturas reales y sus límites](SCREENSHOTS.es.md).
 - [Guía web actual e interactiva](https://aguja.transcendenceia.net/es/docs): 26 capítulos, búsqueda, copiar, zoom e impresión.
-- [Desarrollo y regeneración](DEVELOPMENT.md), [Imager](../desktop/README.es.md), [publicación](PUBLISHING.md).
+- [Desarrollo y regeneración](DEVELOPMENT.md), [Imager](../desktop/README.es.md), [IoT experimental](IOT.es.md) ([diseño Imager IoT](design/iot-imager-integration.md)), [publicación](PUBLISHING.md).
 - Referencias técnicas: [USB](USB.md), [Rescue](RESCUE.md), [instalación](INSTALL.md), [agentes](HARNESSES.md), [actividad](ACTIVITY.md).
 - Evidencia histórica específica: [0.9.9](RELEASE-0.9.9.md), [0.9.8](RELEASE-0.9.8.md), [0.9.7](RELEASE-0.9.7.md), [CLI 0.9.6](RESCUE-REQUIRED-CLIS-0.9.6.md).
 

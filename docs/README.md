@@ -22,6 +22,7 @@ The current [interactive website guides](https://aguja.transcendenceia.net/en/do
 ## Technical references
 
 - [Flash Imager](../desktop/README.md) · [Español](../desktop/README.es.md)
+- [LA AGUJA IoT (Experimental)](IOT.md) · [Español](IOT.es.md) · [Module](../iot/README.md) · [Flash Imager IoT Spec](design/iot-imager-integration.md)
 - [Publishing](PUBLISHING.md)
 - [USB](USB.md), [rescue](RESCUE.md), [installation](INSTALL.md), [AI harnesses](HARNESSES.md) and [activity](ACTIVITY.md): retained technical references in Spanish.
 - [Brand language](BRAND-LANGUAGE.md): preserve LA AGUJA/Aguja and Agujita across all languages.

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-// Harness-neutral interface to the SAME file preparation engine as Flash Imager.
+// Harness-neutral interface to the SAME file preparation and IoT NVS engines as Flash Imager.
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
@@ -12,8 +12,9 @@ const fat = require(path.join(root, 'desktop/fat32-writer.cjs'));
 const recovery = require(path.join(root, 'desktop/disk-recovery.cjs'));
 const engineVersion = JSON.parse(fs.readFileSync(path.join(root,'desktop/package.json'))).version;
 const pin = JSON.parse(fs.readFileSync(path.join(root, 'desktop/resources/release-key.json')));
-const reusableProfile=require(path.join(root,'desktop/reusable-profile.cjs'));
-const VERSION = '1.2.0';
+const reusableProfile = require(path.join(root,'desktop/reusable-profile.cjs'));
+const iotNvs = require(path.join(root, 'desktop/iot-nvs.cjs'));
+const VERSION = '1.3.0';
 function emit(value) { process.stdout.write(JSON.stringify(value) + '\n'); }
 function requireValue(ok) { if (!ok) throw Error('invalid'); }
 function keys(value, allowed) {
@@ -33,13 +34,19 @@ function sourceFile(value) {
   requireValue(s.isFile() && !s.isSymbolicLink());
   return fs.realpathSync(value);
 }
-function destination(value) {
-  requireValue(typeof value === 'string' && path.isAbsolute(value) && path.extname(value).toLowerCase() === '.img');
+function destination(value, ext = '.img') {
+  requireValue(typeof value === 'string' && path.isAbsolute(value) && path.extname(value).toLowerCase() === ext);
   const parent = fs.realpathSync(path.dirname(value));
   requireValue(fs.statSync(parent).isDirectory());
   const result = path.join(parent, path.basename(value));
   try { fs.lstatSync(result); throw Error('exists'); } catch (e) { if (e.code !== 'ENOENT') throw e; }
   return result;
+}
+function loadIotBoards() {
+  const file = path.join(root, 'iot/boards.json');
+  const raw = JSON.parse(fs.readFileSync(file, 'utf8'));
+  requireValue(raw && Array.isArray(raw.boards));
+  return raw;
 }
 async function catalog() {
   return core.verifyManifest(await core.getHTTPS(pin.catalog_url), pin);
@@ -119,16 +126,85 @@ function readSavedProfile(value){
 async function saveProfile(r){
  keys(r,['capsule','disk_recovery','passphrase','output_path']);requireValue(typeof r.output_path==='string'&&path.isAbsolute(r.output_path)&&path.extname(r.output_path)==='.aguja');const parent=fs.realpathSync(path.dirname(r.output_path));requireValue(fs.statSync(parent).isDirectory());const out=path.join(parent,path.basename(r.output_path));const data=reusableProfile.seal(r.capsule,r.passphrase,r.disk_recovery||[]);await fs.promises.writeFile(out,JSON.stringify(data),{flag:'wx',mode:0o600});return {ok:true,output_path:out,protection:'encrypted',secret_values_returned:false};
 }
+async function buildIotNvs(r) {
+  keys(r, ['board_id','output_path','wifi_profiles','ap','tailnet','hw','agent']);
+  const registry = loadIotBoards();
+  const board = registry.boards.find(b => b.id === r.board_id);
+  requireValue(Boolean(board));
+  const out = destination(r.output_path, '.bin');
+  requireValue(Array.isArray(r.wifi_profiles) && r.wifi_profiles.length >= 1 && r.wifi_profiles.length <= 8);
+  for (const w of r.wifi_profiles) keys(w, ['ssid','password']);
+  if (r.ap !== undefined) keys(r.ap, ['enabled','ssid','password','channel']);
+  keys(r.tailnet, ['hostname','ctrl_host','login_server','ctrl_noise_pubkey_hex','auth_key','derp_region','exit_node_enabled','advertise_upstream_subnet','advertise_ap_subnet','extra_routes','dns_relay_enabled','dns_upstream']);
+  if (r.hw !== undefined) keys(r.hw, ['antenna_external']);
+  if (r.agent !== undefined) keys(r.agent, ['api_token','http_allow_lan','beacon_enabled','beacon_ip','beacon_port']);
+  const apiTokenSupplied = Boolean(r.agent?.api_token && String(r.agent.api_token).trim());
+  const built = iotNvs.buildProvisioningNvs({
+    wifiProfiles: r.wifi_profiles.map(w => ({ ssid: w.ssid, password: w.password || '' })),
+    ap: r.ap ? { enabled: Boolean(r.ap.enabled), ssid: r.ap.ssid, password: r.ap.password, channel: r.ap.channel } : { enabled: false },
+    tailnet: {
+      hostname: r.tailnet.hostname,
+      ctrlHost: r.tailnet.ctrl_host || r.tailnet.login_server || '',
+      ctrlNoisePubkeyHex: r.tailnet.ctrl_noise_pubkey_hex || '',
+      authKey: r.tailnet.auth_key,
+      derpRegion: r.tailnet.derp_region,
+      exitNodeEnabled: r.tailnet.exit_node_enabled !== false,
+      advertiseUpstreamSubnet: r.tailnet.advertise_upstream_subnet !== false,
+      advertiseApSubnet: Boolean(r.tailnet.advertise_ap_subnet),
+      extraRoutes: r.tailnet.extra_routes || '',
+      dnsRelayEnabled: r.tailnet.dns_relay_enabled !== false,
+      dnsUpstream: r.tailnet.dns_upstream || '1.1.1.1',
+    },
+    hw: { antennaExternal: Boolean(r.hw?.antenna_external) },
+    agent: {
+      apiToken: r.agent?.api_token || '',
+      httpAllowLan: Boolean(r.agent?.http_allow_lan),
+      beaconEnabled: Boolean(r.agent?.beacon_enabled),
+      beaconIp: r.agent?.beacon_ip || '',
+      beaconPort: r.agent?.beacon_port,
+    },
+  }, board, { sizeBytes: registry.nvs_provisioning?.size_bytes || iotNvs.DEFAULT_PARTITION_SIZE });
+  await fs.promises.writeFile(out, built.partition, { flag: 'wx', mode: 0o600 });
+  return {
+    ok: true,
+    output_path: out,
+    bytes: built.partition.length,
+    sha256: built.sha256,
+    json_bytes: built.jsonBytes,
+    board_id: board.id,
+    chip: board.chip,
+    firmware_profile: board.firmware_profile,
+    nvs_offset: board.flash_offsets?.nvs || registry.nvs_provisioning?.offset || '0x9000',
+    hostname: built.config.tailnet.hostname,
+    ctrl_host: built.config.tailnet.ctrl_host,
+    wifi_count: built.config.wifi.profiles.length,
+    ap_enabled: built.config.ap.enabled,
+    exit_node_enabled: built.config.tailnet.exit_node_enabled,
+    advertise_upstream_subnet: built.config.tailnet.advertise_upstream_subnet,
+    dns_relay_enabled: built.config.tailnet.dns_relay_enabled,
+    api_token_generated: !apiTokenSupplied,
+    secret_values_returned: false,
+    device_written: false,
+  };
+}
 async function main() {
   requireValue(Number(process.versions.node.split('.')[0]) >= 22);
   const [operation, ...extra] = process.argv.slice(2); requireValue(extra.length === 0);
-  if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare','save-profile','profile-info'],input:'JSON stdin for download, inspect, prepare, save-profile and profile-info',usb_writing:false};
-  if (operation === 'doctor') return {ok:true,version:VERSION,imager_version:engineVersion,recovery_types:['bitlocker','luks'],node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32',profile_extensions:['wifi_profiles','environment','storage','tailscale'],extended_profile_feature:'imager-profile-v2',usb_writing:false};
+  if (operation === '--help') return {ok:true,version:VERSION,operations:['doctor','locales','catalog','download','inspect','prepare','save-profile','profile-info','iot-boards','iot-nvs'],input:'JSON stdin for download, inspect, prepare, save-profile, profile-info and iot-nvs',usb_writing:false,serial_flashing:false};
+  if (operation === 'doctor') {
+    const iot = loadIotBoards();
+    return {ok:true,version:VERSION,imager_version:engineVersion,recovery_types:['bitlocker','luks'],node:process.versions.node,platform:process.platform,engine:'Flash Imager GPT/FAT32 + ESP-IDF NVS v2',profile_extensions:['wifi_profiles','environment','storage','tailscale'],extended_profile_feature:'imager-profile-v2',iot_nvs:true,iot_boards_count:iot.boards.length,usb_writing:false,serial_flashing:false};
+  }
   if (operation === 'locales') return {ok:true,languages:core.LOCALE_CATALOG.languages,keyboards:core.LOCALE_CATALOG.keyboards};
   if (operation === 'catalog') return {ok:true,signature_verified:true,releases:await catalog()};
+  if (operation === 'iot-boards') {
+    const iot = loadIotBoards();
+    return {ok:true,schema_version:iot.schema_version,nvs_provisioning:iot.nvs_provisioning,boards:iot.boards};
+  }
   const r = await input();
   if(operation==='save-profile')return saveProfile(r);
   if(operation==='profile-info'){keys(r,['profile_path']);const e=readSavedProfile(r.profile_path);requireValue(e.format==='aguja-profile-aes256gcm'&&e.schema===1);return {ok:true,schema:e.schema,protection:'encrypted',secret_values_returned:false};}
+  if (operation === 'iot-nvs') return buildIotNvs(r);
   if (operation === 'download') {
     keys(r,['version','output_path']);
     const dest = destination(r.output_path), releases = await catalog();
@@ -148,5 +224,5 @@ async function main() {
 }
 if (require.main === module) main().then(emit).catch(() => {
   // Never echo native errors, input, credentials, paths or provider files.
-  emit({ok:false,error:'Operation failed. Check command, JSON schema, image SHA-256, new destination, profile and Node >=22. See references/interface.md.'}); process.exitCode = 1;
+  emit({ok:false,error:'Operation failed. Check command, JSON schema, image SHA-256, new destination, profile/IoT settings and Node >=22. See references/interface.md and references/iot.md.'}); process.exitCode = 1;
 });

@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 
-**Flash Imager 1.1.0 · Rescue Disk 1.1.2 · Experimental · x86-64**
+**Flash Imager 1.2.0 · Rescue Disk 1.1.2 · IoT ESP32 v1.4.0 · Experimental · x86-64 + ESP32**
 English is the primary repository language; [Spanish](README.es.md) is secondary. The website and operational guides remain available in **eight languages**.
 
 **Your computer does not need an installed OS to start its next project.** LA AGUJA boots an independent Linux from USB, including on a machine with a blank disk. Bring **Codex CLI, OpenCode, Claude Code and Antigravity**, root-capable Linux tools and optional SSH to the hardware: install and configure systems, bootstrap a server, build software, extend the session into a virtual lab, migrate storage or recover data. Recovery is one mission, not the whole product.
@@ -62,7 +62,7 @@ Beyond those starting points: physical-to-virtual migration, a PXE lab, custom L
 
 ## Get started
 
-1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.1.0). The EXE/AppImage is the preparer, not the rescue image.
+1. **Prepare on a working Windows or Linux PC.** [Download Flash Imager 1.2.0](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.2.0). The EXE/AppImage is the preparer (both USB Rescue Disk and ESP32 IoT), not the rescue image.
 2. **Select the image.** Use the signed catalogue, or decompress a manually downloaded `.img.zst` before selecting the `.img`. The ISO is useful for VM boot tests.
 3. **Set language, keyboard, networking and SSH.** Replace the public factory SSH password `aguja` with your own password or public key. AI and tailnet preparation are optional.
 4. **Protect the profile.** Use an encrypted capsule for secrets. Replace the public initial unlock phrase `aguja` and keep the new phrase outside the USB. This does not encrypt persistent HOME or all AGUJA_DATA.
@@ -78,15 +78,19 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 [Detailed first-boot guide](docs/GETTING-STARTED.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)
 
-### Let an agent prepare the image
+### Let an agent prepare the image or ESP32 IoT NVS
 
-**Flash Imager Agent Skill 1.2.0** packages the real file-image preparation engine without Electron. A file/shell-capable agent with **Node.js 22+** can configure language, ordered Wi-Fi networks, SSH, NAS/cloud, literal environment values and optional AI/advanced tailnet profiles, verify the profile and hashes, and leave the base image unchanged. It does **not** automatically flash a USB or rebuild the distribution.
+**Flash Imager Agent Skill 1.3.0** packages the real file-image and ESP32 IoT NVS v2 preparation engines without Electron or Python. A file/shell-capable agent with **Node.js 22+** can configure language, ordered Wi-Fi networks, SSH, NAS/cloud, literal environment values, optional AI/advanced tailnet profiles, or generate 48 KiB ESP32 IoT NVS provisioning binaries (`iot-boards`, `iot-nvs`), verify hashes, and leave base images unchanged. It does **not** automatically flash a USB, write a serial port, or rebuild the distribution.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/SHA256SUMS-flash-imager-skill-1.2.0) · [Install for your harness](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.3.0/aguja-flash-imager-skill-1.3.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.3.0/aguja-flash-imager-skill-1.3.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.3.0/SHA256SUMS-flash-imager-skill-1.3.0) · [Install for your harness](skills/flash-imager/references/harnesses.md)
 
-Extended profiles require `imager-profile-v2` (public Rescue 1.1.1); the bundled engine is Imager 1.1.0. The bundle also includes reference copies of the updated live skills; this does not update an existing boot image.
+Extended USB profiles require `imager-profile-v2` (public Rescue 1.1.1 / 1.1.2); the bundled engine is Imager 1.2.0. The bundle also includes reference copies of the live skills and the `aguja-iot.py` remote CLI; this does not update an existing boot image or microcontroller.
 
 Installation guidance covers Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw and manual loading. Portable format support does not certify every harness or OS.
+
+### LA AGUJA IoT · ESP32 family (new in Flash Imager 1.2.0)
+
+Flash Imager **1.2.0** adds a parallel **IoT · MCU** mode for the **ESP32 family** (11 board profiles across **ESP32-C6, ESP32-S3, ESP32-C3, ESP32 and ESP32-S2**) with 6 bundled prebuilt generic `v1.4.0` Tailscale/Headscale proxy firmwares, automatic USB chip detection, prioritized multi-Wi-Fi (SoftAP disabled by default), exit node + dynamic upstream subnet routing + DNS relay, pure-JS NVS v2 provisioning, serial boot verification, 1-click flash erase, and zero-Python Windows flashing via bundled Espressif `esptool.exe`. See [iot/README.md](iot/README.md) and [Flash Imager 1.2.0 release notes](docs/RELEASE-IMAGER-1.2.0.md).
 
 ## A workbench, not a one-click promise
 

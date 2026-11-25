@@ -4,7 +4,7 @@
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 
-**Flash Imager 1.1.0 · Rescue Disk 1.1.2 · Experimental · x86-64**
+**Flash Imager 1.2.0 · Rescue Disk 1.1.2 · IoT ESP32 v1.4.0 · Experimental · x86-64 + ESP32**
 
 El inglés es el idioma principal del repositorio y el español, el secundario. La web y las guías operativas siguen disponibles en **ocho idiomas**.
 
@@ -63,7 +63,7 @@ Más allá: migración físico→virtual, laboratorio PXE, imágenes Linux propi
 
 ## Primeros pasos
 
-1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.1.0). El EXE/AppImage es el preparador, no la imagen de rescate.
+1. **Prepara desde un PC Windows o Linux operativo.** [Descarga Flash Imager 1.2.0](https://github.com/Transcendenceia/La-Aguja/releases/tag/v1.2.0). El EXE/AppImage es el preparador (USB Rescue Disk e IoT ESP32), no la imagen de rescate.
 2. **Selecciona la imagen.** Usa el catálogo firmado o descomprime el `.img.zst` descargado manualmente antes de elegir el `.img`. La ISO sirve para pruebas de arranque en VM.
 3. **Configura idioma, teclado, red y SSH.** Sustituye la contraseña SSH pública de fábrica `aguja` por una propia o una clave pública. IA y tailnet son opcionales.
 4. **Protege el perfil.** Cifra la cápsula si contiene secretos. Cambia la frase inicial pública `aguja` y guarda la nueva fuera del USB. Esto no cifra HOME persistente ni todo AGUJA_DATA.
@@ -79,15 +79,19 @@ lsblk -o NAME,SIZE,MODEL,SERIAL,FSTYPE,LABEL,MOUNTPOINTS
 
 [Guía detallada del primer arranque](docs/GETTING-STARTED.es.md) · [Solución de problemas](docs/TROUBLESHOOTING.es.md)
 
-### Deja que un agente prepare la imagen
+### Deja que un agente prepare la imagen o el NVS IoT ESP32
 
-**Flash Imager Agent Skill 1.2.0** empaqueta el motor real de preparación de imágenes sin Electron. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, varias redes Wi-Fi ordenadas, SSH, NAS/cloud, variables literales y perfiles opcionales IA/tailnet ampliada, verificar perfil y hashes y conservar intacta la imagen base. **No** graba automáticamente un USB ni reconstruye la distribución.
+**Flash Imager Agent Skill 1.3.0** empaqueta los motores reales de preparación de imágenes USB y NVS v2 para ESP32 sin Electron ni Python. Un agente con acceso a archivos/terminal y **Node.js 22+** puede configurar idioma, varias redes Wi-Fi ordenadas, SSH, NAS/cloud, variables literales, perfiles opcionales IA/tailnet ampliada, o generar particiones NVS v2 de 48 KiB para placas ESP32 (`iot-boards`, `iot-nvs`), verificar hashes y conservar intacta la imagen base. **No** graba automáticamente un USB, no flashea puertos serie ni reconstruye la distribución.
 
-[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/aguja-flash-imager-skill-1.2.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.2.0/SHA256SUMS-flash-imager-skill-1.2.0) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
+[ZIP](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.3.0/aguja-flash-imager-skill-1.3.0.zip) · [tar.gz](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.3.0/aguja-flash-imager-skill-1.3.0.tar.gz) · [SHA-256](https://github.com/Transcendenceia/La-Aguja/releases/download/flash-imager-skill-v1.3.0/SHA256SUMS-flash-imager-skill-1.3.0) · [Instalación por arnés](skills/flash-imager/references/harnesses.md)
 
-Los perfiles ampliados requieren `imager-profile-v2` (Rescue público 1.1.1); el motor incluido es Imager 1.1.0. El paquete lleva copias de referencia de las skills del live: no actualiza una imagen de arranque existente.
+Los perfiles USB ampliados requieren `imager-profile-v2` (Rescue público 1.1.1 / 1.1.2); el motor incluido es Imager 1.2.0. El paquete lleva copias de referencia de las skills del live y la CLI remota `aguja-iot.py`: no actualiza una imagen ni un microcontrolador existente.
 
 Hay instrucciones para Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual. Un formato portátil no certifica todos los arneses o sistemas operativos.
+
+### LA AGUJA IoT · Familia ESP32 (nuevo en Flash Imager 1.2.0)
+
+Flash Imager **1.2.0** incorpora un modo paralelo **IoT · MCU** para la familia **ESP32** (11 perfiles de placas entre **ESP32-C6, ESP32-S3, ESP32-C3, ESP32 y ESP32-S2**) con 6 firmwares genéricos `v1.4.0` precompilados, detección automática del chip por USB, varias redes Wi-Fi con prioridad (**SoftAP desactivado por defecto**), exit node + subnet router dinámico + DNS relay sobre tu Tailscale/Headscale, generador NVS v2 en JavaScript puro, verificación serie tras flashear, borrado completo en 1 clic y flasheo en Windows sin Python con `esptool.exe` integrado. Consulta [iot/README.md](iot/README.md) y las [notas de Flash Imager 1.2.0](docs/RELEASE-IMAGER-1.2.0.md).
 
 ## Un taller, no una promesa de un clic
 

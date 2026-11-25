@@ -317,14 +317,14 @@
   ],
   "imagerSkill": {
     "title": "Lass deinen KI-Agenten La Aguja vorbereiten",
-    "text": "Bitte deinen Agenten um eine personalisierte .img-Datei mit Sprache, Netzwerk, SSH und optionalen KI- oder Tailnet-Einstellungen. Der Skill nutzt dieselbe Flash-Imager-Engine, ohne das Desktopfenster.",
+    "text": "Bitte deinen Agenten um eine personalisierte .img-Datei (Sprache, Netzwerk, SSH, KI, Tailnet) oder eine 48-KiB-ESP32-IoT-NVS-Partition (iot-boards, iot-nvs). Der Skill nutzt dieselbe Flash-Imager-1.2.0-Engine ohne Desktopfenster.",
     "links": [
       "Skill herunterladen (.zip)",
       "Skill herunterladen (.tar.gz)",
       "Installation und Agenten",
       "SHA-256-Prüfsummen"
     ],
-    "note": "Offenes Agent-Skills-Format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw und manuelles Laden in anderen Agenten. Erfordert Node 22+ und Datei-/Terminalzugriff. Erstellt die Imagedatei; schreibt nicht automatisch auf einen USB-Stick. Formatkompatibilität zertifiziert nicht jeden Agenten oder jedes Betriebssystem."
+    "note": "Offenes Agent-Skills-Format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw und manuelles Laden in anderen Agenten. Erfordert Node 22+ und Datei-/Terminalzugriff. Erstellt nur Dateien; schreibt weder USB-Sticks noch serielle Ports automatisch. Formatkompatibilität zertifiziert nicht jeden Agenten oder jedes Betriebssystem."
   },
   "donation": {
     "title": "LA AGUJA unterstützen",

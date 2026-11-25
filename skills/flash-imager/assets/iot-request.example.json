@@ -1,0 +1,39 @@
+{
+  "board_id": "seeed-xiao-esp32c6",
+  "output_path": "/REPLACE/WITH/PRIVATE/DIRECTORY/aguja-iot-nvs.bin",
+  "wifi_profiles": [
+    {
+      "ssid": "REPLACE-WITH-YOUR-WIFI-SSID",
+      "password": "REPLACE-WITH-YOUR-WIFI-PASSWORD"
+    }
+  ],
+  "ap": {
+    "enabled": false,
+    "ssid": "Aguja-IoT-AP",
+    "password": "",
+    "channel": 6
+  },
+  "tailnet": {
+    "hostname": "aguja-iot-node",
+    "ctrl_host": "headscale.example",
+    "ctrl_noise_pubkey_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+    "auth_key": "REPLACE-WITH-AUTHORISED-PREAUTH-KEY",
+    "derp_region": 999,
+    "exit_node_enabled": true,
+    "advertise_upstream_subnet": true,
+    "advertise_ap_subnet": false,
+    "extra_routes": "",
+    "dns_relay_enabled": true,
+    "dns_upstream": "1.1.1.1"
+  },
+  "hw": {
+    "antenna_external": false
+  },
+  "agent": {
+    "api_token": "REPLACE-WITH-PRIVATE-AGENT-API-TOKEN",
+    "http_allow_lan": false,
+    "beacon_enabled": false,
+    "beacon_ip": "",
+    "beacon_port": 9420
+  }
+}

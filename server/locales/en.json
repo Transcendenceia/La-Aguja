@@ -317,14 +317,14 @@
   ],
   "imagerSkill": {
     "title": "Let your AI agent prepare La Aguja",
-    "text": "Ask your agent to create a personalised .img with your language, network, SSH and optional AI or tailnet settings. The skill uses the same Flash Imager engine, without its desktop window.",
+    "text": "Ask your agent to create a personalised .img (language, network, SSH, AI, tailnet) or a verified 48 KiB ESP32 IoT NVS binary (iot-boards, iot-nvs). The skill uses the same Flash Imager 1.2.0 engine, without its desktop window.",
     "links": [
       "Download skill (.zip)",
       "Download skill (.tar.gz)",
       "Installation and harnesses",
       "SHA-256 checksums"
     ],
-    "note": "Open Agent Skills format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw, and manual loading in other agents. Requires Node 22+ and file/terminal access. Creates the image file; it does not write a USB automatically. Format compatibility is not certification of every harness or operating system."
+    "note": "Open Agent Skills format: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw, and manual loading in other agents. Requires Node 22+ and file/terminal access. Creates image/NVS files only; it does not write a USB or flash a serial port automatically. Format compatibility is not certification of every harness or operating system."
   },
   "donation": {
     "title": "Support LA AGUJA",

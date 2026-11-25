@@ -1,10 +1,10 @@
-# File-image interface · 1.2.0
+# File-image interface · 1.3.0
 
-Use Node.js >=22. The downloadable ZIP is self-contained; no npm install, Electron, root, mtools or mounts are required. From the source checkout install the existing Imager dependency with `npm ci --prefix desktop`. Preparation uses its pure-JavaScript GPT/FAT32 engine on regular `.img` files. The output parent must already exist and be private. Existing files, symlinks and device sources are refused; the factory image is preserved. Keep enough space for a full copy.
+Use Node.js >=22. The downloadable ZIP is self-contained; no npm install, Electron, root, Python, mtools or mounts are required. From the source checkout install the existing Imager dependency with `npm ci --prefix desktop`. Preparation uses its pure-JavaScript GPT/FAT32 engine on regular `.img` files and its pure-JavaScript ESP-IDF NVS v2 generator on `.bin` files. The output parent must already exist and be private. Existing files, symlinks and device sources are refused; the factory image is preserved. Keep enough space for a full copy.
 
 ## Commands
 
-`node <skill-dir>/scripts/imager.cjs --help`, `doctor`, `locales`, `catalog` take no JSON. `download`, `inspect`, `prepare`, `save-profile`, `profile-info` read one JSON object from stdin (8 MiB maximum). Output is JSON lines; progress records have `type:progress`, the final record has `ok`. Any failure exits nonzero and uses a credential-free generic message. Do not log stdin. `inspect` never reads profile contents into output.
+`node <skill-dir>/scripts/imager.cjs --help`, `doctor`, `locales`, `catalog`, `iot-boards` take no JSON. `download`, `inspect`, `prepare`, `save-profile`, `profile-info`, `iot-nvs` read one JSON object from stdin (8 MiB maximum). Output is JSON lines; progress records have `type:progress`, the final record has `ok`. Any failure exits nonzero and uses a credential-free generic message. Do not log stdin. `inspect` never reads profile contents into output. See [iot.md](iot.md) for `iot-boards` and `iot-nvs`.
 
 Pass a JSON file on POSIX/cmd with stdin redirection:
 
@@ -49,12 +49,12 @@ See `../assets/request.example.json`. Absolute Windows paths work too; escape ba
 - `providers`: any subset of `codex`, `claude`, `antigravity`, `opencode`. Each has `mode` (`none`, `api`, `import`), optional `api_key`, `base_url` (HTTPS without embedded credentials/query), `model`. Custom OpenCode API endpoints need a model. Auth imports are read only after explicit selection; prefer native login after boot when portability is unavailable.
 - `tailscale`: `{enabled:false}` or `{enabled:true,auth_key:"...",login_server:"https://headscale.example",hostname:"my-aguja",ssh:false,accept_routes:false}`. Key required when enabled; omit `login_server` for Tailscale. Do not enrol the preparation host, change ACLs or enable Tailscale SSH/routes by default. Registration occurs on live boot after network/profile unlock, not during file creation. Base needs `tailscale-profile-v1`.
 
-### Extended settings · engine 1.1.0 / Rescue 1.1.1
+### Extended settings · engine 1.2.0 / Rescue 1.1.2
 
 Put these inside `capsule.extensions`, not at the request root. Check `inspect`
-for `imager-profile-v2` on the exact image first. Public Rescue 1.1.1 includes it;
+for `imager-profile-v2` on the exact image first. Public Rescue 1.1.1 and 1.1.2 include it;
 older images lacking it reject nonempty extensions without discarding settings.
-The skill version is 1.2.0, not the selected image or engine version.
+The skill version is 1.3.0, not the selected image or engine version.
 
 - `wifi_profiles`: ordered array, at most 16 unique SSIDs. Each item uses the same
   `ssid/password/security/country/hidden` fields as `network.wifi`. The first item

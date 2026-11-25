@@ -185,14 +185,14 @@
   ],
   "imagerSkill": {
     "title": "Pídele a tu agente que prepare La Aguja",
-    "text": "Pídele que cree una imagen .img personalizada con tu idioma, red, SSH y ajustes opcionales de IA o tailnet. La skill utiliza el mismo motor del Flash Imager, sin necesitar su ventana de escritorio.",
+    "text": "Pídele que cree una imagen .img personalizada (idioma, red, SSH, IA, tailnet) o una partición NVS v2 de 48 KiB para ESP32 IoT (iot-boards, iot-nvs). La skill utiliza el mismo motor de Flash Imager 1.2.0, sin necesitar su ventana de escritorio.",
     "links": [
       "Descargar skill (.zip)",
       "Descargar skill (.tar.gz)",
       "Instalación y arneses",
       "Sumas SHA-256"
     ],
-    "note": "Formato abierto Agent Skills: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita Node 22+ y acceso a archivos/terminal. Crea el archivo de imagen; no graba un USB automáticamente. La compatibilidad de formato no certifica todos los arneses ni sistemas operativos."
+    "note": "Formato abierto Agent Skills: Codex, Claude Code, OpenCode, Gemini CLI, Cursor, OpenClaw y carga manual en otros agentes. Necesita Node 22+ y acceso a archivos/terminal. Crea archivos .img/.bin; no graba un USB ni flashea puertos serie automáticamente. La compatibilidad de formato no certifica todos los arneses ni sistemas operativos."
   },
   "donation": {
     "title": "Apoyar LA AGUJA",

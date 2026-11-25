@@ -24,8 +24,10 @@ const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex
 function request(source,output) {
   return {image_path:source,output_path:output,image_sha256:hash(source),capsule:{schema:1,hostname:'agent-fixture',locale:{language:'es_ES.UTF-8',keyboard:'es',variant:''},network:{ethernet:{method:'auto'}},ssh:{password:'',public_key:'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAITestFixtureOnly',port:22},providers:{},tailscale:{enabled:false}},protection:{mode:'plain'},import_providers:[]};
 }
-test('agent help, doctor and locale discovery do not need a GUI or stdin',()=>{
-  for(const op of ['--help','doctor','locales']){const r=call(op);assert.equal(r.status,0);assert.equal(r.result.ok,true);}
+test('agent help, doctor, locale and IoT board discovery do not need a GUI or stdin',()=>{
+  for(const op of ['--help','doctor','locales','iot-boards']){const r=call(op);assert.equal(r.status,0,r.stdout);assert.equal(r.result.ok,true);}
+  const doc=call('doctor').result;assert.equal(doc.iot_nvs,true);assert.equal(doc.iot_boards_count,11);assert.equal(doc.serial_flashing,false);
+  const boards=call('iot-boards').result;assert.equal(boards.boards.length,11);assert(boards.boards.some(b=>b.id==='seeed-xiao-esp32c6'));assert(boards.boards.some(b=>b.id==='esp32s3-wroom-n16r8'));
 });
 test('malformed input and unknown operation fail without leaking input',()=>{
   const sentinel='SYNTHETIC-SECRET-NOT-FOR-OUTPUT';
@@ -61,6 +63,11 @@ test('standalone distributable prepares an image without checkout or npm install
     const skillVersion=fs.readFileSync(path.join(extracted,'flash-imager/SKILL.md'),'utf8').match(/^  version: "([^"]+)"$/m)[1];
     assert.equal(doctor.result.version,manifest.skill_version);assert.equal(manifest.skill_version,skillVersion);assert.equal(doctor.result.imager_version,manifest.imager_version);
     assert(fs.existsSync(path.join(extracted,'flash-imager/scripts/lib/desktop/profile-extensions.cjs')));
+    assert(fs.existsSync(path.join(extracted,'flash-imager/scripts/lib/desktop/iot-nvs.cjs')));
+    assert(fs.existsSync(path.join(extracted,'flash-imager/scripts/lib/iot/boards.json')));
+    assert(fs.existsSync(path.join(extracted,'flash-imager/references/iot.md')));
+    assert(fs.existsSync(path.join(extracted,'flash-imager/references/iot/aguja-iot.py')));
+    verifyIotNvs(dir,script);
     for(const [name,expected] of Object.entries(manifest.files)){assert.equal(hash(path.join(extracted,name)),expected,name);}
     const source=synthetic(dir),r=request(source,path.join(dir,'standalone-private.img'));
     r.disk_recovery=[{type:'bitlocker',label:'Other Windows',identifier:'',key:Array(8).fill('000011').join('-')}];
@@ -90,6 +97,38 @@ function verifyExtended(dir,script=cli){
   const plain={...r,output_path:path.join(dir,'extended-explicit-plain.img'),protection:{mode:'plain'},allow_plain_secrets:true};const allowed=call('prepare',plain,script);assert.equal(allowed.status,0,allowed.stdout);assert.equal(allowed.result.protection,'plain');
   const old=path.join(dir,'old.img');fs.copyFileSync(source,old);fat.writeFat32File(old,'AGUJA_CFG','release.json',JSON.stringify({version:'1.1.0',features:['platform-profile-v1','locale-profile-v1']}));const rejected=call('prepare',{...r,image_path:old,image_sha256:hash(old),output_path:path.join(dir,'old-rejected.img')},script);assert.equal(rejected.status,1);assert(!fs.existsSync(path.join(dir,'old-rejected.img')));assert.equal(hash(source),before);
 }
+function verifyIotNvs(dir,script=cli){
+  const out=path.join(dir,'aguja-iot-test-nvs.bin');
+  const secretPass='SYNTHETIC-IOT-WIFI-PASS',secretAuth='SYNTHETIC-IOT-AUTH-KEY',secretToken='SYNTHETIC-IOT-API-TOKEN';
+  const req={
+    board_id:'esp32s3-wroom-n16r8',
+    output_path:out,
+    wifi_profiles:[{ssid:'Lab-Fixture',password:secretPass}],
+    tailnet:{hostname:'fixture-s3',ctrl_host:'headscale.example',ctrl_noise_pubkey_hex:'a'.repeat(64),auth_key:secretAuth,derp_region:999,exit_node_enabled:true,advertise_upstream_subnet:true,dns_relay_enabled:true},
+    agent:{api_token:secretToken},
+  };
+  const r=call('iot-nvs',req,script);
+  assert.equal(r.status,0,r.stdout);
+  assert.equal(r.result.ok,true);
+  assert.equal(r.result.bytes,49152);
+  assert.equal(r.result.board_id,'esp32s3-wroom-n16r8');
+  assert.equal(r.result.chip,'esp32s3');
+  assert.equal(r.result.firmware_profile,'esp32s3-oct');
+  assert.equal(r.result.ap_enabled,false);
+  assert.equal(r.result.secret_values_returned,false);
+  assert.equal(r.result.device_written,false);
+  assert.equal(hash(out),r.result.sha256);
+  if(process.platform!=='win32')assert.equal(fs.statSync(out).mode&0o777,0o600);
+  for(const s of [secretPass,secretAuth,secretToken])assert(!r.stdout.includes(s));
+  assert.equal(r.stderr,'');
+  // Refuse overwrite and refuse unknown board without leaking secrets.
+  assert.equal(call('iot-nvs',req,script).status,1);
+  const bad=call('iot-nvs',{...req,board_id:'unknown-mcu',output_path:path.join(dir,'bad-nvs.bin')},script);
+  assert.equal(bad.status,1);assert(!bad.stdout.includes(secretAuth));assert(!fs.existsSync(path.join(dir,'bad-nvs.bin')));
+}
 test('extended profile CLI preserves literal settings and enforces private protection', {skip:process.platform==='win32'},()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-agent-extended-'));try{verifyExtended(dir);}finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('IoT NVS CLI builds verified 48 KiB NVS v2 partition without leaking secrets',()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'aguja-agent-iot-'));try{verifyIotNvs(dir);}finally{fs.rmSync(dir,{recursive:true,force:true});}
 });

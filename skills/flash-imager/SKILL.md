@@ -1,18 +1,20 @@
 ---
 name: flash-imager
-description: Prepare a personalised La Aguja bootable disk image on request, using the Flash Imager engine without its GUI. Use for Linux live USB image configuration, network, language, SSH and optional AI or tailnet profiles; not for generating pictures or operating an already booted machine.
+description: Prepare a personalised La Aguja bootable Linux disk image or ESP32-family IoT NVS provisioning binary on request, using the Flash Imager engine without its GUI. Use for Linux live USB image configuration (network, language, SSH, optional AI/tailnet/recovery profiles) and ESP32 IoT tailnet node NVS generation; not for generating pictures or flashing physical USB/serial devices automatically.
 license: GPL-3.0-or-later
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Flash Imager for AI agents
 
-Create the requested **file image**, not a physical disk write. Work through the harness's available file and shell tools; the procedure does not depend on a model, provider, MCP server or UI. Reply in the user's language.
+Create the requested **file image** (`.img`) or **ESP32 IoT NVS provisioning binary** (`.bin`), not a physical disk or serial flash write. Work through the harness's available file and shell tools; the procedure does not depend on a model, provider, MCP server or UI. Reply in the user's language.
 
-Requires Node.js 22+, file/shell access and space for both images. Network is needed for downloads, not local preparation. No root or Electron is needed.
+Requires Node.js 22+, file/shell access and space for images. Network is needed for downloads, not local preparation. No root, Python or Electron is needed.
 
-The skill version, bundled Imager engine version and selected live image version are separate. Use `doctor`, `BUNDLE-MANIFEST.json` when installed from a bundle, and `catalog` to identify them; do not infer image capabilities from the skill number. QEMU and optional-tool guidance belong to the live environment, not this image-preparation interface.
+The skill version, bundled Imager engine version and selected live/IoT image version are separate. Use `doctor`, `BUNDLE-MANIFEST.json` when installed from a bundle, `catalog` and `iot-boards` to identify them; do not infer image capabilities from the skill number. QEMU and optional-tool guidance belong to the live environment, not this image-preparation interface.
+
+## Live USB image preparation
 
 1. Locate this skill directory and run `node <skill-dir>/scripts/imager.cjs doctor`. The release ZIP includes the engine; in a repository checkout run `npm ci --prefix desktop` if its dependency is missing. For discovery paths and manual loading in other harnesses read [references/harnesses.md](references/harnesses.md). Without execution/file access, provide the configuration plan, not a claim of a created image.
 2. Translate the request into supported settings: hostname, locale/keyboard, DHCP or static Ethernet, ordered Wi-Fi networks, SSH public key/password, optional provider or Tailscale/Headscale configuration, portable NAS/cloud destinations and literal custom environment values, and explicitly supplied BitLocker/LUKS recovery entries for another computer. Read [references/recovery.md](references/recovery.md) for private key transport. Read [references/interface.md](references/interface.md) for the input contract; run `locales` for valid language/keyboard values. Use the caller's authorised settings and ask only for essentials that are missing, such as an SSH public key. Leave optional authentication off unless requested. A preparer harness and the agents inside the live image are different: the image currently supports Codex, Claude, Antigravity and OpenCode profiles, not arbitrary additional harness installations.
@@ -21,16 +23,25 @@ The skill version, bundled Imager engine version and selected live image version
 5. Feed the JSON request to `node <skill-dir>/scripts/imager.cjs prepare` through stdin, using the harness's process API or the shell-specific pipe in the interface reference. Require exit code zero and final JSON with `ok`, `profile_verified`, `recovery_verified`, `source_unchanged` and `device_written:false`. Return the output path, SHA-256, bytes, profile protection and any remaining boot verification. Do not expose the capsule. Keep the private image and unlock phrase out of public releases. Remove only task-owned secret request files using the environment's approved secure handling.
 6. **Stop at the file unless USB writing was explicitly requested.** Before any later physical write, identify the exact model, capacity, path and serial, establish a recoverable backup and obtain confirmation covering that device's erasure. Use the desktop Imager or the repository's existing guarded writer, not an improvised `dd`. A successful image build is not proof of USB readback, BIOS/UEFI boot, login or network connectivity: report these separately and test them only within the authorised scope.
 
-## Imager 1.1 / Rescue 1.1.1 coordination
+## ESP32 IoT provisioning (Imager 1.2.0)
 
-Reusable profiles can be saved with `save-profile` using a private JSON stdin request. `prepare` may load `profile_path`/`profile_passphrase` internally instead of a plaintext capsule; it never prints decrypted credentials. `profile-info` reports format only. Saving a profile does not copy imported OAuth sessions; request their approved import again.
+Flash Imager 1.2.0 adds a parallel **IoT · MCU** workflow for the ESP32 family (11 supported board profiles across ESP32-C6, ESP32-S3, ESP32-C3, ESP32 and ESP32-S2) with prebuilt generic `v1.4.0` Tailscale/Headscale proxy firmwares, automatic USB silicon detection and zero-Python flashing on Windows.
 
-The standalone skill bundles Imager engine 1.1.0. Extended settings use `capsule.extensions` and require the image capability `imager-profile-v2`, present in public Rescue 1.1.1. Run `inspect` on the actual base; older images reject extended settings rather than silently dropping them. Read the full shape and limits in the interface reference and use [assets/request.extended.example.json](assets/request.extended.example.json) only as a credential-free template. Secret-bearing secondary Wi-Fi networks, storage destinations and custom environment values require encryption unless the owner explicitly chooses plain storage. The JSON CLI accepts already structured literal values; desktop-only `.env`/rclone import UI and Windows native account discovery are not CLI operations.
+1. Run `node <skill-dir>/scripts/imager.cjs iot-boards` to inspect the supported ESP32 board registry, flash offsets, PSRAM/RF-switch capabilities and NVS layout (`0x9000`, 48 KiB).
+2. Read [references/iot.md](references/iot.md) and use [assets/iot-request.example.json](assets/iot-request.example.json) as a credential-free skeleton to build a private JSON request with up to 8 prioritized Wi-Fi profiles, Tailscale/Headscale auth key and control host (plus Noise pubkey hex for Headscale), exit-node/subnet-router/DNS-relay options, and an API token (auto-generated if omitted). SoftAP stays **disabled by default** (`ap.enabled: false`).
+3. Pipe the private JSON request via stdin to `node <skill-dir>/scripts/imager.cjs iot-nvs`. It builds the verified 48 KiB ESP-IDF NVS v2 binary (`0o600` on POSIX, never overwrites existing files, never echoes credentials) and returns `ok:true`, `output_path`, `bytes:49152`, `sha256` and `device_written:false`.
+4. **Stop at the NVS file.** Physical serial flashing (bootloader, partition table, prebuilt firmware and NVS) and flash erase belong to the desktop Flash Imager IoT wizard or an explicitly authorised `esptool` / `iot-flash.py` command on a confirmed serial port. Once the flashed node joins the owner's tailnet, see `references/iot/aguja-iot.py` and `references/iot/README.md` for remote REST/CLI control.
 
-The desktop has a dedicated Encrypted disks section, signed Imager update checks/downloads and an identity-bound CFG editor. Editing an existing physical USB is a separate explicit owner task: use its guarded UI/helper and exact identity; never reflash it to change settings or rewrite DATA. Old stored configuration is retained for rollback with its original protection. Read the USB again after a concurrent change.
+## Imager 1.2 / Rescue 1.1.2 coordination
+
+Reusable USB profiles can be saved with `save-profile` using a private JSON stdin request. `prepare` may load `profile_path`/`profile_passphrase` internally instead of a plaintext capsule; it never prints decrypted credentials. `profile-info` reports format only. Saving a profile does not copy imported OAuth sessions; request their approved import again.
+
+The standalone skill bundles Imager engine 1.2.0. Extended USB settings use `capsule.extensions` and require the image capability `imager-profile-v2`, present in public Rescue 1.1.1 and 1.1.2. Run `inspect` on the actual base; older images reject extended settings rather than silently dropping them. Read the full shape and limits in the interface reference and use [assets/request.extended.example.json](assets/request.extended.example.json) only as a credential-free template. Secret-bearing secondary Wi-Fi networks, storage destinations and custom environment values require encryption unless the owner explicitly chooses plain storage. The JSON CLI accepts already structured literal values; desktop-only `.env`/rclone import UI and Windows native account discovery are not CLI operations.
+
+The desktop has a dedicated Encrypted disks section, signed Imager update checks/downloads, an identity-bound CFG editor, and the parallel IoT · MCU mode for ESP32 boards. Editing an existing physical USB is a separate explicit owner task: use its guarded UI/helper and exact identity; never reflash it to change settings or rewrite DATA. Old stored configuration is retained for rollback with its original protection. Read the USB again after a concurrent change.
 
 The preparation password protects an AES-GCM capsule, not a LUKS container or DATA. Creating/converting a LUKS profile vault is a separate authorized live action. Reusing one phrase for SSH, saved profile and output encryption is an explicit request choice, not automatic password synchronization. Wi-Fi/provider/remote credentials stay distinct.
 
 After boot, use `/usr/share/aguja/skills/live-updates/SKILL.md` for persistent OS/harness/live updates. File preparation does not run those updates, reboot a computer or initialize a physical USB. Skills, Imager, generation and factory versions are independent.
 
-The bundle includes [live guidance](references/live/AGENT-CONTEXT.md), [persistence guidance](references/live/UPDATES.md) and the two live skills under `references/live/skills/` as reference documents. Read the installed live guides first and compare commands/capabilities. These documents do not install or update anything inside an existing live image.
+The bundle includes [live guidance](references/live/AGENT-CONTEXT.md), [persistence guidance](references/live/UPDATES.md), the two live skills under `references/live/skills/`, and IoT documentation/CLI references under `references/iot/`. Read the installed live guides first and compare commands/capabilities. These documents do not install or update anything inside an existing live image or microcontroller.

@@ -1,6 +1,6 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk con nuestra mascota Agujita"></p>
 
-<p align="center"><strong>Una pequeña entrada. Grandes posibilidades.</strong><br>Un taller Linux arrancable para construir, configurar, experimentar y recuperar.</p>
+<p align="center"><strong>Tu puesto de mando cabe en un bolsillo.</strong><br>Linux arrancable x86-64 + agentes IA en USB y nodos ESP32 de bolsillo en tu propia tailnet, sin cuentas ajenas.</p>
 
 <p align="center"><a href="https://aguja.transcendenceia.net/es">Descargar</a> · <a href="docs/GETTING-STARTED.es.md">Primeros pasos</a> · <a href="docs/PLATFORM.es.md">Explorar misiones</a> · <a href="docs/README.es.md">Documentación</a> · <a href="README.md">English</a></p>
 

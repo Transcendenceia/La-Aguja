@@ -1,11 +1,11 @@
 {
   "hero": [
-    "Una pequeña entrada.",
-    "Grandes posibilidades."
+    "Tu puesto de mando",
+    "cabe en un bolsillo."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Arranca un Linux independiente desde USB y dale una misión a tu agente IA: construir sistemas, preparar Windows, crear un laboratorio virtual o coordinar equipos autorizados. Empieza por el hardware, no por el estado del sistema instalado.",
-  "introTitle": "Una plataforma de lanzamiento, no solo un salvavidas.",
+  "lead": "Un USB que arranca Linux independiente con agentes IA en cualquier PC x86-64, más nodos ESP32 que tienden un puente a tu red privada donde los enchufes. Sin depender del sistema instalado, sin cuentas ajenas y sobre tu propio Tailscale o Headscale.",
+  "introTitle": "Mucho más que un disco de rescate: un centro móvil de operaciones.",
   "intro": [
     "Dale a un agente avanzado un objetivo, no solo un comando de reparación. Puede analizar el hardware disponible, elegir herramientas, generar y ejecutar scripts dentro del alcance que autorices y comprobar el resultado. El sistema del disco no necesita arrancar, ni siquiera existir.",
     "La sesión live usa una capa de escritura en RAM sobre la imagen de solo lectura del USB. Es Linux, no firmware, y no se copia todo el USB a RAM. Los discos internos permanecen intactos al inicio; escribes en ellos cuando decides usarlos.",
@@ -196,7 +196,7 @@
     "Haz una copia de seguridad antes de cambiar nada. Que un comando termine correctamente no demuestra que los archivos estén intactos ni que el sistema pueda arrancar. BitLocker y LUKS requieren la clave correcta del propietario; LA AGUJA no elude el cifrado.",
     "La IA en la nube puede recibir las instrucciones y los datos que compartas conforme a las condiciones de su proveedor. Trata los archivos que contengan instrucciones como datos no fiables y nunca pegues secretos en una instrucción de recuperación."
   ],
-  "downloadText": "Prepara todo en un equipo Windows o Linux que funcione. Se recomienda un USB de 8 GiB; comprueba el tamaño real de la imagen y la capacidad utilizable. Escribir en el USB seleccionado lo borra. Mantén las carpetas de descargas, archivos temporales e imágenes privadas fuera de ese USB de destino.",
+  "downloadText": "Prepara todo desde un equipo Windows o Linux. Flash Imager 1.2.0 prepara tanto pendrives arrancables Rescue Disk (USB de 8 GiB+ recomendado) como nodos IoT de la familia ESP32 con detección automática por USB y esptool.exe integrado en Windows.",
   "imageText": "Rescue Disk 1.0.0 es el Linux que arrancas. Imágenes, catálogo firmado y sumas se publican en GitHub. Flash Imager verifica la firma del catálogo y el SHA-256 de la imagen. Descomprime IMG.ZST antes de importarla manualmente; ISO es un formato BIOS/UEFI separado, no un IMG configurable.",
   "ui": {
     "skip": "Saltar al contenido",
@@ -205,7 +205,7 @@
     "print": "Imprimir / guardar PDF",
     "readGuide": "Explorar la guía",
     "firstUsb": "Tu primer USB",
-    "heroNote": "EXPERIMENTAL · X86-64 · LOCAL O SSH · SIN CUENTA DEL PROYECTO",
+    "heroNote": "USB LIVE X86-64 · NODOS ESP32 IOT · AGENTES IA · TU PROPIA TAILNET · SIN CUENTAS",
     "possibilities": "POSIBLES FLUJOS DE TRABAJO",
     "privacy": "Privacidad"
   },

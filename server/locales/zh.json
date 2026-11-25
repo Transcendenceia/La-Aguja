@@ -14,14 +14,14 @@
   ],
   "lead": "LA AGUJA 从 U 盘启动，即使 Windows 或 Linux 无法启动，也能在电脑上开展工作。它把诊断、恢复工具与能协助使用这些工具的 AI 智能体放在一起。",
   "actions": [
-    "准备 U 盘",
+    "下载 Flash Imager",
     "阅读指南"
   ],
   "note": "实验性 LIVE LINUX · X86-64 电脑 · 本地或 SSH 操作",
   "mascotAlt": "Agujita：有琥珀色眼睛和卷曲胡须的镀铬针形吉祥物",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "不只是救生圈，更是项目发射台。",
+    "可启动 USB Linux + AI，加口袋级 ESP32 私有网络节点。",
     "救援是起点，不是唯一可能的用途。"
   ],
   "steps": [
@@ -38,7 +38,7 @@
       "从 USB 启动独立 Linux，让 AI 智能体参与工作：安装系统、配置服务器、搭建虚拟实验室或恢复数据。不必依赖正常运行的已安装系统，照样开启下一个项目。"
     ]
   ],
-  "imagerTitle": "使用 Flash Imager 准备 U 盘",
+  "imagerTitle": "使用 Flash Imager 准备 U 盘与 ESP32 节点",
   "imagerText": "LA AGUJA 1.0 带来可复用配置、无需重写镜像的 USB 配置编辑，以及持久化 live 更新。工作环境随时准备好迎接下一台电脑。 向导在 07 · 创建磁盘结束。配置档案/USB 和 Imager 更新是独立工具。",
   "portable": "Linux 便携版",
   "imagesTitle": "下载 La Aguja 镜像",

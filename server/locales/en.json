@@ -14,14 +14,14 @@
   ],
   "lead": "LA AGUJA boots from a USB drive so you can work on a computer even when Windows or Linux won’t start. It brings diagnosis and recovery tools together with AI agents that can use them with you.",
   "actions": [
-    "Prepare my USB",
+    "Download Flash Imager",
     "Read the guide"
   ],
   "note": "EXPERIMENTAL LIVE LINUX · X86-64 COMPUTERS · LOCAL OR SSH ACCESS",
   "mascotAlt": "Agujita, the chrome needle with amber eyes and a curled moustache",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "A launchpad, not just a lifeboat.",
+    "Bootable Linux + AI on USB, plus pocket ESP32 tailnet nodes.",
     "Rescue is the starting point, not the only possible use."
   ],
   "steps": [
@@ -38,7 +38,7 @@
       "Boot an independent Linux from USB and put AI agents to work: install systems, configure servers, build a virtual lab or recover data. A working installed OS is optional. Your next project is not."
     ]
   ],
-  "imagerTitle": "Prepare your USB with Flash Imager",
+  "imagerTitle": "Prepare USB drives & ESP32 nodes with Flash Imager",
   "imagerText": "LA AGUJA 1.0 brings reusable profiles, configuration editing without reflashing, and persistent live updates. Keep your working environment ready for the next computer. The wizard ends at 07 · Create disk. Profiles and USB configuration, and Imager updates, are separate tools.",
   "portable": "Portable Linux",
   "imagesTitle": "Download the La Aguja image",

@@ -14,14 +14,14 @@
   ],
   "lead": "LA AGUJA startet vom USB-Stick. So kannst du am Rechner arbeiten, auch wenn Windows oder Linux nicht mehr starten. Diagnose- und Rettungswerkzeuge treffen auf KI-Agenten, die sie mit dir einsetzen können.",
   "actions": [
-    "USB vorbereiten",
+    "Flash Imager laden",
     "Anleitung lesen"
   ],
   "note": "EXPERIMENTELLES LIVE-LINUX · X86-64 · LOKAL ODER PER SSH",
   "mascotAlt": "Agujita, die verchromte Nadel mit bernsteinfarbenen Augen und geschwungenem Schnurrbart",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Eine Startrampe, nicht nur ein Rettungsring.",
+    "Live-Linux + KI auf USB und kompakte ESP32-Knoten im eigenen Tailnet.",
     "Rettung ist der Ausgangspunkt, nicht der einzige mögliche Einsatz."
   ],
   "steps": [
@@ -38,7 +38,7 @@
       "Starte ein unabhängiges Linux vom USB-Stick und lass KI-Agenten arbeiten: Systeme installieren, Server konfigurieren, ein virtuelles Labor aufbauen oder Daten retten. Ein funktionierendes installiertes System ist optional. Dein nächstes Projekt nicht."
     ]
   ],
-  "imagerTitle": "USB mit Flash Imager vorbereiten",
+  "imagerTitle": "USB-Sticks und ESP32-Knoten mit Flash Imager vorbereiten",
   "imagerText": "LA AGUJA 1.0 bietet wiederverwendbare Profile, Konfigurationsänderungen ohne erneutes Schreiben und dauerhafte Live-Updates. Deine Umgebung bleibt für den nächsten Rechner bereit. Der Assistent endet bei 07 · Datenträger erstellen. Profile/USB und Imager-Updates sind getrennte Werkzeuge.",
   "portable": "Portables Linux-Paket",
   "imagesTitle": "La-Aguja-Image herunterladen",

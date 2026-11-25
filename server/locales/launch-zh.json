@@ -1,11 +1,11 @@
 {
   "hero": [
-    "小小入口。",
-    "开启更多可能。"
+    "你的移动指挥站，",
+    "装进口袋就能出发。"
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "从 USB 启动独立 Linux，给 AI 智能体一个任务：构建系统、准备 Windows、创建虚拟实验室或协调获准电脑。从硬件出发，不依赖已安装系统的状态。",
-  "introTitle": "不只是救生圈，更是项目发射台。",
+  "lead": "一支可在任意 x86-64 电脑上启动独立 Linux 与 AI 代理的 U 盘，加上随插即连私有网络的 ESP32 节点。不依赖已装系统，无需项目账户，完全运行在你自己的 Tailscale 或 Headscale 之上。",
+  "introTitle": "远不止救援盘：这是一座便携移动操作台。",
   "intro": [
     "给先进智能体一个目标，而不仅是一条修复命令。它可以分析硬件、选择工具、在获准范围内生成并执行脚本，再验证结果。磁盘中的系统不必启动，甚至不必存在。",
     "Live 会话使用 RAM 中的可写叠加层，底层是 USB 上的只读镜像。这是 Linux，不是固件，也不会将整个 USB 复制到 RAM。启动时不改动内部磁盘；是否写入由你决定。",
@@ -196,7 +196,7 @@
     "更改任何内容之前先备份。命令执行成功，并不能证明文件完好无损或系统能够启动。BitLocker 和 LUKS 需要所有者提供正确的密钥；LA AGUJA 不会绕过加密。",
     "云端 AI 可能按照服务商条款接收你分享的提示词和数据。应将包含指令的文件视为不可信数据，绝不要将秘密信息粘贴到恢复提示词中。"
   ],
-  "downloadText": "请在一台正常工作的 Windows 或 Linux 计算机上进行准备。建议使用 8 GiB 的 USB；请检查镜像的实际大小和设备的可用容量。写入所选 USB 会清空其中内容。下载文件夹、临时文件夹和私有镜像文件夹都应放在该目标 USB 之外。",
+  "downloadText": "在正常工作的 Windows 或 Linux 电脑上完成准备。Flash Imager 1.2.0 同时支持制作可启动 Rescue Disk U 盘（建议 8 GiB 以上）与预配置 ESP32 系列 IoT 节点，内置 USB 芯片自动识别与 Windows 免 Python 烧录。",
   "imageText": "Rescue Disk 1.0.0 是启动运行的 Linux。镜像、签名目录与校验和在 GitHub 发布。Imager 验证签名与 SHA-256。手动导入前解压 IMG.ZST；BIOS/UEFI ISO 并非可配置 IMG。",
   "ui": {
     "skip": "跳转到正文",
@@ -205,7 +205,7 @@
     "print": "打印 / 保存 PDF",
     "readGuide": "浏览指南",
     "firstUsb": "你的第一个 USB",
-    "heroNote": "实验性 · X86-64 · 本地或 SSH · 无需项目账户",
+    "heroNote": "X86-64 LIVE USB · ESP32 IOT 节点 · AI 代理 · 自有 TAILNET · 无需账户",
     "possibilities": "可选工作流程",
     "privacy": "隐私"
   },

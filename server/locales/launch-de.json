@@ -1,11 +1,11 @@
 {
   "hero": [
-    "Ein kleiner Zugang.",
-    "Große Möglichkeiten."
+    "Dein Leitstand",
+    "passt in die Tasche."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Starte unabhängiges Linux vom USB und gib dem KI-Agenten eine Mission: Systeme bauen, Windows vorbereiten, virtuelle Labore erstellen oder erlaubte Rechner koordinieren. Beginne mit der Hardware, nicht dem Zustand des installierten Systems.",
-  "introTitle": "Eine Startrampe, nicht nur ein Rettungsring.",
+  "lead": "Ein USB-Stick, der unabhängiges Linux mit KI-Agenten auf jedem x86-64-PC startet, plus ESP32-Knoten, die dein privates Netz überall einbinden. Unabhängig vom installierten System, ohne Projektkonto, in deinem eigenen Tailscale oder Headscale.",
+  "introTitle": "Weit mehr als eine Rettungs-Disk: eine tragbare Einsatzzentrale.",
   "intro": [
     "Gib einem fortgeschrittenen Agenten ein Ziel, nicht nur einen Reparaturbefehl. Er kann Hardware prüfen, Werkzeuge auswählen, Skripte im erlaubten Rahmen erzeugen und ausführen sowie Ergebnisse kontrollieren. Das installierte System muss weder starten noch überhaupt existieren.",
     "Die Live-Sitzung verwendet eine beschreibbare RAM-Schicht über dem schreibgeschützten USB-Abbild. Das ist Linux, keine Firmware; der gesamte USB-Stick wird nicht in den RAM kopiert. Interne Datenträger bleiben beim Start unverändert; du entscheidest über spätere Schreibzugriffe.",
@@ -196,7 +196,7 @@
     "Erstelle eine Sicherung, bevor du etwas änderst. Ein erfolgreich ausgeführter Befehl beweist weder die Unversehrtheit von Dateien noch die Startfähigkeit eines Systems. BitLocker und LUKS benötigen den richtigen Schlüssel des Eigentümers; LA AGUJA umgeht keine Verschlüsselung.",
     "Cloud-KI kann die Prompts und Daten erhalten, die du gemäß den Bedingungen ihres Anbieters teilst. Behandle Dateien mit Anweisungen als nicht vertrauenswürdige Daten und füge niemals Geheimnisse in einen Wiederherstellungs-Prompt ein."
   ],
-  "downloadText": "Bereite alles auf einem funktionierenden Windows- oder Linux-Computer vor. Empfohlen wird ein USB-Stick mit 8 GiB; prüfe die tatsächliche Abbildgröße und die nutzbare Kapazität. Beim Beschreiben des ausgewählten USB-Sticks wird sein Inhalt gelöscht. Halte Download-Ordner, temporäre Ordner und Ordner für private Abbilder von diesem Ziel-USB-Stick fern.",
+  "downloadText": "Bereite alles auf einem Windows- oder Linux-PC vor. Flash Imager 1.2.0 erstellt sowohl bootfähige Rescue-Disk-Sticks (ab 8 GiB empfohlen) als auch vorkonfigurierte ESP32-IoT-Knoten mit USB-Autoerkennung und integriertem esptool.exe unter Windows.",
   "imageText": "Rescue Disk 1.0.0 ist das gestartete Linux. Images, signierter Katalog und Prüfsummen liegen auf GitHub. Imager prüft Signatur und SHA-256. IMG.ZST vor manuellem Import entpacken; die BIOS-/UEFI-ISO ist keine konfigurierbare IMG.",
   "ui": {
     "skip": "Zum Inhalt springen",
@@ -205,7 +205,7 @@
     "print": "Drucken / als PDF speichern",
     "readGuide": "Anleitung erkunden",
     "firstUsb": "Dein erster USB-Stick",
-    "heroNote": "EXPERIMENTELL · X86-64 · LOKAL ODER SSH · KEIN PROJEKTKONTO",
+    "heroNote": "X86-64 LIVE-USB · ESP32-IOT-KNOTEN · KI-AGENTEN · EIGENES TAILNET · OHNE KONTO",
     "possibilities": "MÖGLICHE ARBEITSABLÄUFE",
     "privacy": "Datenschutz"
   },

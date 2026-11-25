@@ -1,11 +1,11 @@
 {
   "hero": [
-    "Un piccolo ingresso.",
-    "Grandi possibilità."
+    "Il tuo posto di comando",
+    "sta in una tasca."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Avvia Linux indipendente da USB e dai una missione all’agente IA: costruire sistemi, preparare Windows, creare laboratori virtuali o coordinare macchine autorizzate. Parti dall’hardware, non dallo stato del sistema installato.",
-  "introTitle": "Una piattaforma di lancio, non solo un salvagente.",
+  "lead": "Una USB che avvia Linux indipendente con agenti IA su qualsiasi PC x86-64, più nodi ESP32 che collegano la tua rete privata ovunque li alimenti. Senza dipendere dal sistema installato, senza account del progetto, sul tuo Tailscale o Headscale.",
+  "introTitle": "Molto più di un disco di emergenza: una centrale mobile operativa.",
   "intro": [
     "Dai a un agente avanzato un obiettivo, non solo un comando di riparazione. Può analizzare hardware, scegliere strumenti, generare ed eseguire script nel perimetro autorizzato e verificare i risultati. Il sistema installato non deve avviarsi, né necessariamente esistere.",
     "La sessione live usa uno strato scrivibile in RAM sopra l’immagine USB di sola lettura. È Linux, non firmware; l’intera USB non viene copiata in RAM. I dischi interni restano intatti all’avvio; decidi tu quando scriverci.",
@@ -196,7 +196,7 @@
     "Esegui un backup prima di modificare qualsiasi cosa. Un comando riuscito non dimostra che i file siano integri o che il sistema sia avviabile. BitLocker e LUKS richiedono la chiave corretta del proprietario; LA AGUJA non aggira la cifratura.",
     "L'IA nel cloud può ricevere le richieste e i dati che condividi secondo le condizioni del fornitore. Tratta i file contenenti istruzioni come dati non attendibili e non incollare mai segreti in una richiesta di recupero."
   ],
-  "downloadText": "Prepara tutto su un computer Windows o Linux funzionante. Si consiglia una USB da 8 GiB; controlla la dimensione effettiva dell'immagine e la capacità utilizzabile. Scrivere sulla USB selezionata ne cancella il contenuto. Tieni le cartelle dei download, dei file temporanei e delle immagini private fuori da quella USB di destinazione.",
+  "downloadText": "Prepara tutto da un PC Windows o Linux. Flash Imager 1.2.0 prepara sia le USB avviabili Rescue Disk (8 GiB+ consigliati) sia i nodi IoT della famiglia ESP32 con rilevamento USB automatico ed esptool.exe integrato su Windows.",
   "imageText": "Rescue Disk 1.0.0 è il Linux avviabile. Immagini, catalogo firmato e checksum sono su GitHub. Imager verifica firma e SHA-256. Decomprimi IMG.ZST per importazione manuale; ISO BIOS/UEFI non è una IMG configurabile.",
   "ui": {
     "skip": "Vai al contenuto",
@@ -205,7 +205,7 @@
     "print": "Stampa / salva PDF",
     "readGuide": "Esplora la guida",
     "firstUsb": "La tua prima USB",
-    "heroNote": "SPERIMENTALE · X86-64 · LOCALE O SSH · NESSUN ACCOUNT DEL PROGETTO",
+    "heroNote": "USB LIVE X86-64 · NODI ESP32 IOT · AGENTI IA · TUA TAILNET · NESSUN ACCOUNT",
     "possibilities": "POSSIBILI FLUSSI DI LAVORO",
     "privacy": "Riservatezza"
   },

@@ -1,11 +1,11 @@
 {
   "hero": [
-    "Een kleine ingang.",
-    "Grote mogelijkheden."
+    "Je commandopost",
+    "past in je zak."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Start onafhankelijk Linux vanaf USB en geef de AI-agent een missie: systemen bouwen, Windows voorbereiden, virtuele labs maken of toegestane machines coördineren. Begin met hardware, niet de toestand van het geïnstalleerde systeem.",
-  "introTitle": "Een lanceerplatform, niet alleen een reddingsboei.",
+  "lead": "Eén USB-stick die onafhankelijke Linux met AI-agents op elke x86-64 pc start, plus ESP32-nodes die je privénetwerk overal verbinden. Onafhankelijk van het geïnstalleerde systeem, zonder projectaccount, op je eigen Tailscale of Headscale.",
+  "introTitle": "Veel meer dan een herstelschijf: een mobiele operatiebasis.",
   "intro": [
     "Geef een geavanceerde agent een doel, niet alleen een reparatiecommando. Hij kan hardware analyseren, tools kiezen, scripts maken en uitvoeren binnen je toestemming en resultaten controleren. Het geïnstalleerde systeem hoeft niet te starten of zelfs te bestaan.",
     "De live-sessie gebruikt een schrijfbare RAM-laag boven het alleen-lezen USB-image. Dit is Linux, geen firmware; niet de hele USB wordt naar RAM gekopieerd. Interne schijven blijven bij het starten onaangeroerd; jij kiest wanneer je erop schrijft.",
@@ -196,7 +196,7 @@
     "Maak een back-up voordat je iets wijzigt. Een geslaagde opdracht bewijst niet dat bestanden intact zijn of dat een systeem kan opstarten. BitLocker en LUKS vereisen de juiste sleutel van de eigenaar; LA AGUJA omzeilt geen versleuteling.",
     "AI in de cloud kan de instructies en gegevens ontvangen die je deelt, onder de voorwaarden van de aanbieder. Behandel bestanden met instructies als niet-vertrouwde gegevens en plak nooit geheimen in een herstelinstructie."
   ],
-  "downloadText": "Bereid alles voor op een werkende Windows- of Linux-computer. Een USB-stick van 8 GiB wordt aanbevolen; controleer de werkelijke grootte van de image en de bruikbare capaciteit. Het beschrijven van de geselecteerde USB-stick wist de inhoud. Bewaar downloadmappen, tijdelijke mappen en mappen met privé-images niet op die doel-USB-stick.",
+  "downloadText": "Bereid alles voor op een Windows- of Linux-pc. Flash Imager 1.2.0 maakt zowel opstartbare Rescue Disk USB-sticks (8 GiB+ aanbevolen) als vooraf ingestelde ESP32 IoT-nodes met USB-herkenning en ingebouwde esptool.exe op Windows.",
   "imageText": "Rescue Disk 1.0.0 is het opstartbare Linux. Images, ondertekende catalogus en checksums staan op GitHub. Imager controleert handtekening en SHA-256. Pak IMG.ZST uit voor handmatige import; BIOS-/UEFI-ISO is geen configureerbare IMG.",
   "ui": {
     "skip": "Naar de inhoud",
@@ -205,7 +205,7 @@
     "print": "Afdrukken / opslaan als PDF",
     "readGuide": "Verken de handleiding",
     "firstUsb": "Je eerste USB-stick",
-    "heroNote": "EXPERIMENTEEL · X86-64 · LOKAAL OF VIA SSH · GEEN PROJECTACCOUNT",
+    "heroNote": "X86-64 LIVE USB · ESP32 IOT-NODES · AI-AGENTS · EIGEN TAILNET · GEEN ACCOUNT",
     "possibilities": "MOGELIJKE WERKWIJZEN",
     "privacy": "Privacy"
   },

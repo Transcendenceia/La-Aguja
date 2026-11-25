@@ -1,11 +1,11 @@
 {
   "hero": [
-    "Une petite entrée.",
-    "De grandes possibilités."
+    "Votre poste de commande",
+    "tient dans la poche."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Démarrez un Linux indépendant depuis USB et donnez une mission à l’agent IA : construire des systèmes, préparer Windows, créer un laboratoire virtuel ou coordonner des machines autorisées. Partez du matériel, pas de l’état du système installé.",
-  "introTitle": "Une rampe de lancement, pas seulement une bouée.",
+  "lead": "Une clé USB qui démarre un Linux indépendant avec agents IA sur tout PC x86-64, plus des nœuds ESP32 qui relient votre réseau privé partout où vous les branchez. Sans dépendre du système installé, sans compte projet, sur votre Tailscale ou Headscale.",
+  "introTitle": "Bien plus qu’un disque de secours : une base mobile d’opérations.",
   "intro": [
     "Donnez à un agent avancé un objectif, pas seulement une commande de réparation. Il peut analyser le matériel, choisir des outils, générer et exécuter des scripts dans le périmètre autorisé et vérifier le résultat. Le système installé n’a pas besoin de démarrer, ni même d’exister.",
     "La session live utilise une couche inscriptible en RAM sur l’image USB en lecture seule. Il s’agit de Linux, pas du firmware ; toute la clé USB n’est pas copiée en RAM. Les disques internes restent intacts au démarrage ; vous choisissez ensuite de les utiliser.",
@@ -196,7 +196,7 @@
     "Sauvegardez avant toute modification. Une commande réussie ne prouve ni l’intégrité des fichiers ni la capacité du système à démarrer. BitLocker et LUKS exigent la bonne clé du propriétaire ; LA AGUJA ne contourne pas le chiffrement.",
     "Les services d’IA infonuagiques peuvent recevoir les consignes et les données que vous partagez, selon les conditions de leur fournisseur. Traitez les fichiers contenant des instructions comme des données non fiables et ne collez jamais de secrets dans une consigne de récupération."
   ],
-  "downloadText": "Effectuez la préparation sur un ordinateur Windows ou Linux fonctionnel. Une clé USB de 8 GiB est recommandée ; vérifiez la taille réelle de l’image et la capacité utilisable. L’écriture sur la clé USB sélectionnée l’efface. Placez les dossiers de téléchargement, temporaires et d’images privées hors de cette clé USB cible.",
+  "downloadText": "Préparez tout sur un ordinateur Windows ou Linux. Flash Imager 1.2.0 prépare à la fois les clés USB Rescue Disk (8 GiB+ recommandés) et les nœuds IoT ESP32 avec détection USB automatique et esptool.exe inclus sous Windows.",
   "imageText": "Rescue Disk 1.0.0 est le Linux qui démarre. Images, catalogue signé et sommes sont publiés sur GitHub. Imager vérifie la signature et le SHA-256. Décompressez IMG.ZST avant import manuel ; l’ISO BIOS/UEFI est distincte d’une IMG configurable.",
   "ui": {
     "skip": "Aller au contenu",
@@ -205,7 +205,7 @@
     "print": "Imprimer / enregistrer en PDF",
     "readGuide": "Explorer le guide",
     "firstUsb": "Votre première clé USB",
-    "heroNote": "EXPÉRIMENTAL · X86-64 · EN LOCAL OU PAR SSH · SANS COMPTE POUR LE PROJET",
+    "heroNote": "USB LIVE X86-64 · NŒUDS ESP32 IOT · AGENTS IA · VOTRE TAILNET · SANS COMPTE",
     "possibilities": "MÉTHODES DE TRAVAIL POSSIBLES",
     "privacy": "Confidentialité"
   },

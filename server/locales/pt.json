@@ -14,14 +14,14 @@
   ],
   "lead": "LA AGUJA inicia a partir de um USB para trabalhar no computador mesmo quando Windows ou Linux não arrancam. Reúne ferramentas de diagnóstico e recuperação com agentes de IA que podem usá-las consigo.",
   "actions": [
-    "Preparar o USB",
+    "Descarregar Flash Imager",
     "Ler o guia"
   ],
   "note": "LINUX LIVE EXPERIMENTAL · COMPUTADORES X86-64 · LOCAL OU SSH",
   "mascotAlt": "Agujita, a agulha cromada de olhos âmbar e bigode encaracolado",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Uma plataforma de lançamento, não apenas um salva-vidas.",
+    "Linux + IA em USB e nós ESP32 de bolso na tua tailnet.",
     "O resgate é o ponto de partida, não o único uso possível."
   ],
   "steps": [
@@ -38,7 +38,7 @@
       "Inicie um Linux independente pelo USB e coloque agentes de IA para trabalhar: instalar sistemas, configurar servidores, criar um laboratório virtual ou recuperar dados. Um sistema instalado funcionando é opcional. Seu próximo projeto, não."
     ]
   ],
-  "imagerTitle": "Prepare o USB com Flash Imager",
+  "imagerTitle": "Prepara USBs e nós ESP32 com Flash Imager",
   "imagerText": "LA AGUJA 1.0 traz perfis reutilizáveis, edição da configuração sem regravar e atualizações persistentes do live. O teu ambiente fica pronto para o próximo computador. O assistente termina em 07 · Criar disco. Perfis/USB e atualizações do Imager são ferramentas separadas.",
   "portable": "Linux portátil",
   "imagesTitle": "Descarregue a imagem de La Aguja",

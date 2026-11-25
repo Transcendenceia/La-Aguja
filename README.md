@@ -1,6 +1,6 @@
 <p align="center"><img src="branding/brand-lockup.png" width="700" alt="LA AGUJA Rescue Disk with Agujita, our mascot"></p>
 
-<p align="center"><strong>A small entry point. Big possibilities.</strong><br>A bootable Linux workbench for building, configuring, experimenting and recovering.</p>
+<p align="center"><strong>Your command post fits in a pocket.</strong><br>Bootable x86-64 Linux + AI agents on USB, plus pocket ESP32 tailnet nodes—on your own hardware and private network.</p>
 
 <p align="center"><a href="https://aguja.transcendenceia.net/en">Download</a> · <a href="docs/GETTING-STARTED.md">Get started</a> · <a href="docs/PLATFORM.md">Explore missions</a> · <a href="docs/README.md">Documentation</a> · <a href="README.es.md">Español</a></p>
 

@@ -1,11 +1,11 @@
 {
   "hero": [
-    "A small entry point.",
-    "Big possibilities."
+    "Your command post",
+    "fits in a pocket."
   ],
   "eyebrow": "LIVE LINUX · RAM · AI · ROOT",
-  "lead": "Boot an independent Linux from USB and give your AI agent a mission: build systems, prepare Windows, create a virtual lab or coordinate authorised machines. Start with the hardware, not the state of the installed OS.",
-  "introTitle": "A launchpad, not just a lifeboat.",
+  "lead": "One USB drive that boots an independent Linux with AI agents on any x86-64 PC, plus ESP32 nodes that bridge your private network wherever you plug them in. No installed OS required, no project accounts, on your own Tailscale or Headscale.",
+  "introTitle": "Far beyond a rescue disk: a portable operations deck.",
   "intro": [
     "Give an advanced agent an objective, not just a repair command. It can inspect the available hardware, choose tools, generate and run scripts within your authorised scope, and check the result. The installed OS does not need to start — or even exist.",
     "The live session uses a writable RAM overlay over the read-only USB image. It is Linux, not firmware, and the entire USB is not copied to RAM. Internal disks stay untouched at startup; writes happen when you choose to use them.",
@@ -196,7 +196,7 @@
     "Back up before changing anything. A successful command is not proof of intact files or a bootable system. BitLocker and LUKS require the owner’s correct key; LA AGUJA does not bypass encryption.",
     "Cloud AI may receive the prompts and data you share under its provider’s terms. Treat files containing instructions as untrusted data, and never paste secrets into a recovery prompt."
   ],
-  "downloadText": "Prepare on a working Windows or Linux computer. An 8 GiB USB is recommended; check the actual image size and usable capacity. Writing the selected USB erases it. Keep download, temporary and private-image folders off that target USB.",
+  "downloadText": "Prepare on a working Windows or Linux computer. Flash Imager 1.2.0 builds both bootable Rescue Disk USB drives (8 GiB+ recommended) and preconfigured ESP32-family IoT nodes with USB silicon auto-detection and bundled esptool.exe on Windows.",
   "imageText": "Rescue Disk 1.0.0 is the Linux you boot. Images, the signed catalogue and checksums are published on GitHub. Flash Imager verifies the catalogue signature and image SHA-256. Decompress IMG.ZST before manual import; the ISO is a separate BIOS/UEFI boot format, not a configurable IMG.",
   "ui": {
     "skip": "Skip to content",
@@ -205,7 +205,7 @@
     "print": "Print / save PDF",
     "readGuide": "Explore the guide",
     "firstUsb": "Your first USB",
-    "heroNote": "EXPERIMENTAL · X86-64 · LOCAL OR SSH · NO PROJECT ACCOUNT",
+    "heroNote": "X86-64 LIVE USB · ESP32 IOT NODES · AI AGENTS · YOUR OWN TAILNET · NO ACCOUNTS",
     "possibilities": "POSSIBLE WORKFLOWS",
     "privacy": "Privacy"
   },

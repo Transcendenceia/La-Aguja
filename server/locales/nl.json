@@ -14,14 +14,14 @@
   ],
   "lead": "LA AGUJA start vanaf USB, zodat je aan een computer kunt werken als Windows of Linux niet meer opstart. Diagnose- en hersteltools komen samen met AI-agenten die ze met je kunnen gebruiken.",
   "actions": [
-    "Mijn USB voorbereiden",
+    "Download Flash Imager",
     "De handleiding lezen"
   ],
   "note": "EXPERIMENTELE LIVE-LINUX · X86-64 · LOKAAL OF VIA SSH",
   "mascotAlt": "Agujita, de verchroomde naald met amberkleurige ogen en gekrulde snor",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Een lanceerplatform, niet alleen een reddingsboei.",
+    "Live Linux + AI op USB en ESP32-nodes in zakformaat op je tailnet.",
     "Herstel is het beginpunt, niet de enige mogelijke toepassing."
   ],
   "steps": [
@@ -38,7 +38,7 @@
       "Start een onafhankelijk Linux vanaf USB en zet AI-agenten aan het werk: systemen installeren, servers configureren, een virtueel lab bouwen of gegevens herstellen. Een werkend geïnstalleerd systeem is optioneel. Je volgende project niet."
     ]
   ],
-  "imagerTitle": "Bereid je USB voor met Flash Imager",
+  "imagerTitle": "Bereid USB’s en ESP32-nodes voor met Flash Imager",
   "imagerText": "LA AGUJA 1.0 biedt herbruikbare profielen, configuratiebewerking zonder opnieuw schrijven en blijvende live-updates. Je omgeving staat klaar voor de volgende computer. De wizard eindigt bij 07 · Schijf maken. Profielen/USB en Imager-updates zijn aparte hulpmiddelen.",
   "portable": "Draagbaar Linux-pakket",
   "imagesTitle": "Download het La Aguja-image",

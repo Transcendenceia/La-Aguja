@@ -14,14 +14,14 @@
   ],
   "lead": "LA AGUJA démarre depuis une clé USB pour travailler sur un ordinateur même si Windows ou Linux ne démarre plus. Elle réunit des outils de diagnostic et de récupération avec des agents IA capables de les utiliser avec vous.",
   "actions": [
-    "Préparer ma clé USB",
+    "Télécharger Flash Imager",
     "Lire le guide"
   ],
   "note": "LINUX LIVE EXPÉRIMENTAL · ORDINATEURS X86-64 · EN LOCAL OU PAR SSH",
   "mascotAlt": "Agujita, l’aiguille chromée aux yeux ambrés et à la moustache bouclée",
   "caption": [
     "LA AGUJA / RESCUE DISK",
-    "Une rampe de lancement, pas seulement une bouée.",
+    "Linux + IA sur USB et nœuds ESP32 de poche dans votre tailnet.",
     "Le secours est le point de départ, pas le seul usage possible."
   ],
   "steps": [
@@ -38,7 +38,7 @@
       "Démarrez un Linux indépendant depuis une clé USB et faites travailler vos agents IA : installer des systèmes, configurer des serveurs, créer un laboratoire virtuel ou récupérer des données. Un système installé fonctionnel est facultatif. Votre prochain projet, non."
     ]
   ],
-  "imagerTitle": "Préparez votre clé USB avec Flash Imager",
+  "imagerTitle": "Préparez vos clés USB et nœuds ESP32 avec Flash Imager",
   "imagerText": "LA AGUJA 1.0 ajoute des profils réutilisables, la modification de configuration sans réécriture et des mises à jour persistantes du live. Votre environnement reste prêt pour le prochain ordinateur. L’assistant se termine à 07 · Créer le disque. Profils/USB et mises à jour Imager sont des outils séparés.",
   "portable": "Linux portable",
   "imagesTitle": "Téléchargez l’image de La Aguja",

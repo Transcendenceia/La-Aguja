@@ -33,18 +33,23 @@ function resolveIotRoot(rootDir) {
 
 function candidateFirmwareDirs(board, { rootDir, userDataDir, customDir } = {}) {
   const dirs = [];
+  const profile = board.firmware_profile || board.id;
   if (customDir && typeof customDir === 'string') dirs.push(customDir);
   if (process.env.AGUJA_IOT_PREBUILT_DIR) {
+    dirs.push(path.join(process.env.AGUJA_IOT_PREBUILT_DIR, profile));
     dirs.push(path.join(process.env.AGUJA_IOT_PREBUILT_DIR, board.id));
   }
   const iotRoot = resolveIotRoot(rootDir || path.resolve(__dirname, '..'));
   if (board.prebuilt_dir) {
     dirs.push(path.resolve(path.dirname(iotRoot), board.prebuilt_dir));
   }
+  dirs.push(path.join(iotRoot, 'prebuilt', profile));
   dirs.push(path.join(iotRoot, 'prebuilt', board.id));
   if (userDataDir) {
+    dirs.push(path.join(userDataDir, 'iot-firmware', profile));
     dirs.push(path.join(userDataDir, 'iot-firmware', board.id));
   }
+  dirs.push(path.join(os.homedir(), '.local', 'share', 'aguja-iot', 'prebuilt', profile));
   dirs.push(path.join(os.homedir(), '.local', 'share', 'aguja-iot', 'prebuilt', board.id));
   return [...new Set(dirs)];
 }
@@ -112,12 +117,70 @@ function loadBoards({ rootDir, userDataDir, customFirmwareDirs = {} } = {}) {
       firmwareReady: Boolean(bundle),
       firmwareVersion: bundle?.version || null,
       firmwareDir: bundle?.dir || null,
+      firmwareSegments: bundle
+        ? [
+            ...bundle.segments.map((s) => ({
+              offset: s.offset,
+              name: s.name,
+              bytes: s.bytes,
+              sha256Short: s.sha256 ? s.sha256.slice(0, 12) : '',
+            })),
+            {
+              offset: bundle.nvs_offset,
+              name: 'nvs_private.bin (generada al vuelo)',
+              bytes: bundle.nvs_size,
+              sha256Short: 'dinámica',
+            },
+          ].sort((a, b) => parseInt(a.offset, 16) - parseInt(b.offset, 16))
+        : [],
     };
   });
+  const families = [...new Set(boards.map((b) => b.family).filter(Boolean))];
   return {
     schemaVersion: raw.schema_version || 1,
     nvsProvisioning: raw.nvs_provisioning || {},
+    families,
     boards,
+  };
+}
+
+function matchBoardFromProbe(probeInfo, portMeta, boards) {
+  const chip = String(probeInfo?.chip_normalized || '').toLowerCase();
+  if (!chip) return null;
+  const flashMb = Number(probeInfo?.flash_mb || 0);
+  const hasPsram = Number(probeInfo?.psram_mb || 0) > 0;
+  const vid = String(portMeta?.vid || '').toLowerCase();
+
+  let best = null;
+  let bestScore = -1;
+  for (const board of boards) {
+    if (board.status === 'planned') continue;
+    if (String(board.chip || '').toLowerCase() !== chip) continue;
+    const rule = board.auto_match || {};
+    let score = Number(rule.priority || 50);
+    if (typeof rule.psram === 'boolean') {
+      score += rule.psram === hasPsram ? 40 : -35;
+    }
+    if (Array.isArray(rule.flash_mb) && flashMb > 0) {
+      score += rule.flash_mb.includes(flashMb) ? 30 : -10;
+    }
+    if (rule.vid && vid) {
+      score += String(rule.vid).toLowerCase() === vid ? 25 : -10;
+    } else if (vid && Array.isArray(board.usb_ids) && board.usb_ids.some((u) => String(u.vid).toLowerCase() === vid)) {
+      score += 10;
+    }
+    if (board.firmwareReady) score += 5;
+    if (score > bestScore) {
+      bestScore = score;
+      best = board;
+    }
+  }
+  if (!best) return null;
+  return {
+    boardId: best.id,
+    boardName: best.name,
+    family: best.family || best.chip.toUpperCase(),
+    firmwareReady: Boolean(best.firmwareReady),
   };
 }
 
@@ -453,13 +516,121 @@ async function flashBoard({
   }
 }
 
+async function probeSerialPort({
+  port,
+  rootDir,
+  userDataDir,
+  customFirmwareDirs = {},
+  progress = () => {},
+  pythonBin = null,
+} = {}) {
+  if (process.platform !== 'linux') {
+    fail('La detección directa por puerto serie está disponible primero en Linux.');
+  }
+  if (typeof port !== 'string' || !/^\/dev\/tty(ACM|USB)\d+$/.test(port)) {
+    fail('Puerto serie no válido para sondear.');
+  }
+  try {
+    fs.accessSync(port, fs.constants.R_OK | fs.constants.W_OK);
+  } catch {
+    fail(`Sin permisos en ${port}. Añade tu usuario al grupo uucp/dialout.`);
+  }
+  const catalog = loadBoards({ rootDir, userDataDir, customFirmwareDirs });
+  const ports = await listSerialPorts(catalog.boards);
+  const portMeta = ports.find((p) => p.path === port) || { path: port };
+  const iotRoot = resolveIotRoot(rootDir || path.resolve(__dirname, '..'));
+  const scriptPath = path.join(iotRoot, 'scripts', 'iot-flash.py');
+  const py = pythonBin || findPythonWithEsptool();
+  const receipt = await runIotHelper(py, scriptPath, { op: 'probe', port }, { progress, timeoutMs: 25000 });
+  const matched = matchBoardFromProbe(receipt, portMeta, catalog.boards);
+  return {
+    port,
+    usbId: portMeta.usbId || '',
+    product: portMeta.product || '',
+    chip: receipt.chip || '',
+    chipNormalized: receipt.chip_normalized || '',
+    features: receipt.features || '',
+    mac: receipt.mac || '',
+    flashSize: receipt.flash_size || '',
+    flashMb: receipt.flash_mb || 0,
+    psramMb: receipt.psram_mb || 0,
+    matchedBoardId: matched?.boardId || '',
+    matchedBoardName: matched?.boardName || '',
+    matchedFamily: matched?.family || '',
+  };
+}
+
+async function autoDetectConnectedBoard({
+  rootDir,
+  userDataDir,
+  customFirmwareDirs = {},
+  progress = () => {},
+  pythonBin = null,
+} = {}) {
+  const catalog = loadBoards({ rootDir, userDataDir, customFirmwareDirs });
+  const ports = await listSerialPorts(catalog.boards);
+  const candidates = ports.filter((p) => p.accessible);
+  if (!candidates.length) {
+    return { ports, detected: null, warning: ports.length ? 'Se detectó un puerto USB serie sin permisos de acceso (grupo uucp/dialout).' : '' };
+  }
+  const preferred = candidates.find((p) => p.matchedBoardIds.length > 0) || candidates[0];
+  try {
+    const detected = await probeSerialPort({
+      port: preferred.path,
+      rootDir,
+      userDataDir,
+      customFirmwareDirs,
+      progress,
+      pythonBin,
+    });
+    return { ports, detected, warning: '' };
+  } catch (err) {
+    return { ports, detected: null, warning: err.message };
+  }
+}
+
+async function eraseBoard({
+  port,
+  chip = 'auto',
+  rootDir,
+  progress = () => {},
+  pythonBin = null,
+} = {}) {
+  if (process.platform !== 'linux') {
+    fail('La limpieza de flash IoT está disponible primero en Linux.');
+  }
+  if (typeof port !== 'string' || !/^\/dev\/tty(ACM|USB)\d+$/.test(port)) {
+    fail('Selecciona un puerto USB serie válido (/dev/ttyACM* o /dev/ttyUSB*).');
+  }
+  try {
+    fs.accessSync(port, fs.constants.R_OK | fs.constants.W_OK);
+  } catch {
+    fail(`Sin permisos de lectura/escritura en ${port}. Añade tu usuario al grupo dialout/uucp.`);
+  }
+  const iotRoot = resolveIotRoot(rootDir || path.resolve(__dirname, '..'));
+  const scriptPath = path.join(iotRoot, 'scripts', 'iot-flash.py');
+  const py = pythonBin || findPythonWithEsptool();
+  const receipt = await runIotHelper(py, scriptPath, { op: 'erase', port, chip }, { progress, timeoutMs: 120000 });
+  return {
+    erased: true,
+    port,
+    chip: receipt.chip || chip,
+    mac: receipt.mac || '',
+    flashSize: receipt.flash_size || '',
+  };
+}
+
 module.exports = {
   resolveIotRoot,
   inspectFirmwareDir,
   loadBoards,
+  matchBoardFromProbe,
   listLinuxSerialPorts,
   listSerialPorts,
   fetchControlNoiseKey,
   findPythonWithEsptool,
+  probeSerialPort,
+  autoDetectConnectedBoard,
+  eraseBoard,
   flashBoard,
 };

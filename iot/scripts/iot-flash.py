@@ -111,18 +111,49 @@ def run_esptool(argv, stage, label):
     return cap.lines
 
 
+def normalize_chip(raw_chip):
+    s = str(raw_chip or "").upper()
+    for key in ("ESP32-S3", "ESP32-C6", "ESP32-C3", "ESP32-S2", "ESP32-C2", "ESP32-H2"):
+        if key in s:
+            return key.replace("-", "").lower()
+    if "ESP32" in s:
+        return "esp32"
+    return ""
+
+
 def parse_chip_info(lines):
-    info = {"chip": "", "mac": "", "flash_size": ""}
+    info = {
+        "chip": "",
+        "chip_normalized": "",
+        "features": "",
+        "mac": "",
+        "flash_size": "",
+        "flash_mb": 0,
+        "psram_mb": 0,
+    }
     for line in lines:
         m = re.search(r"Chip type:\s*(.+)$", line)
         if m:
             info["chip"] = m.group(1).strip()
+            info["chip_normalized"] = normalize_chip(info["chip"])
+        m = re.search(r"Features:\s*(.+)$", line)
+        if m:
+            feat = m.group(1).strip()
+            info["features"] = feat
+            mp = re.search(r"PSRAM\s*(\d+)\s*MB", feat, re.I)
+            if mp:
+                info["psram_mb"] = int(mp.group(1))
+            elif "PSRAM" in feat.upper():
+                info["psram_mb"] = 2
         m = re.search(r"MAC:\s*([0-9a-fA-F:]{17})", line)
         if m:
             info["mac"] = m.group(1).lower()
         m = re.search(r"Detected flash size:\s*(\S+)", line)
         if m:
             info["flash_size"] = m.group(1).strip()
+            mf = re.match(r"^(\d+)\s*MB$", info["flash_size"], re.I)
+            if mf:
+                info["flash_mb"] = int(mf.group(1))
     return info
 
 
@@ -241,10 +272,27 @@ def handle_probe(job):
     port = job.get("port")
     if not port:
         fail("Falta el puerto serie para comprobar la placa.")
-    progress("probe", "Detectando chip en " + port + "…", 20)
-    lines = run_esptool(["--port", port, "flash_id"], "probe", "Detectando chip")
+    progress("probe", "Sondeando silicio en " + port + "…", 25)
+    lines = run_esptool(["--port", port, "flash_id"], "probe", "Sondeando chip")
     info = parse_chip_info(lines)
+    progress("probe", f"Detectado {info.get('chip') or 'ESP32'} ({info.get('flash_size') or '?'})", 100)
     emit({"ok": True, "port": port, **info})
+
+
+def handle_erase(job):
+    port = job.get("port")
+    chip = job.get("chip", "auto")
+    if not port:
+        fail("Selecciona un puerto serie USB válido para limpiar la flash.")
+    progress("erase", "Conectando para borrar la memoria flash…", 15)
+    cmd = ["--port", port]
+    if chip and chip != "auto":
+        cmd.extend(["--chip", chip])
+    cmd.append("erase_flash")
+    lines = run_esptool(cmd, "erase", "Borrando memoria flash")
+    info = parse_chip_info(lines)
+    progress("erase", "Memoria flash borrada completamente.", 100)
+    emit({"ok": True, "erased": True, "port": port, **info})
 
 
 def handle_flash(job):
@@ -359,6 +407,8 @@ def main():
     try:
         if op == "probe":
             handle_probe(job)
+        elif op == "erase":
+            handle_erase(job)
         elif op == "flash":
             handle_flash(job)
         else:

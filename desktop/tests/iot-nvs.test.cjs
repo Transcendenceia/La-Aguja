@@ -46,6 +46,18 @@ test('buildInitConfig normalizes Wi-Fi, Headscale/Tailscale proxy defaults, and 
   assert.match(cfg.agent.api_token, /^agj_[0-9a-f]{48}$/);
 });
 
+test('buildInitConfig disables SoftAP and AP subnet by default', () => {
+  const cfg = iotNvs.buildInitConfig({
+    wifiProfiles: [{ ssid: 'FieldNet', password: 'synthetic-wifi-pass' }],
+    tailnet: { authKey: 'synthetic-key-123' },
+  });
+  assert.equal(cfg.ap.enabled, false);
+  assert.equal(cfg.tailnet.advertise_ap_subnet, false);
+  assert.equal(cfg.tailnet.exit_node_enabled, true);
+  assert.equal(cfg.tailnet.advertise_upstream_subnet, true);
+  assert.equal(cfg.tailnet.dns_relay_enabled, true);
+});
+
 test('buildInitConfig rejects missing Wi-Fi, missing auth key, non-HTTPS control server, and short SoftAP password', () => {
   assert.throws(() => iotNvs.buildInitConfig({ wifiProfiles: [], tailnet: { authKey: 'k' } }), /al menos una red Wi-Fi/);
   assert.throws(() => iotNvs.buildInitConfig({ wifiProfiles: [{ ssid: 'Net' }], tailnet: { authKey: '' } }), /clave de alta/);

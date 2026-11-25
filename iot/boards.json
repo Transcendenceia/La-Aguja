@@ -1,7 +1,7 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "module": "aguja-iot",
-  "description": "Machine-readable board and firmware provisioning manifest for LA AGUJA Flash Imager (IoT tab).",
+  "description": "ESP32-family development board registry, hardware fingerprint matcher, and prebuilt firmware manifest for LA AGUJA Flash Imager.",
   "nvs_provisioning": {
     "partition_name": "nvs",
     "offset": "0x9000",
@@ -11,20 +11,21 @@
     "blob_key": "blob_v1",
     "struct_version": 1,
     "max_wifi_profiles": 8,
+    "softap_default_enabled": false,
     "fields": [
-      "wifi.profiles[] (up to 8 SSID/password pairs)",
-      "ap (enabled, ssid, pass, channel, max_conn)",
+      "wifi.profiles[] (up to 8 prioritized SSID/password pairs)",
+      "ap (enabled=false default, ssid, pass, channel, max_conn)",
       "tailnet (hostname, ctrl_host, ctrl_noise_pubkey_hex, auth_key, derp_region, exit_node_enabled, advertise_upstream_subnet, advertise_ap_subnet, extra_routes, dns_relay_enabled, dns_upstream)",
       "hw (antenna_external, led_mode, cpu_mhz, boot_gpios[])",
       "agent (api_token, http_allow_lan, beacon_enabled, beacon_ip, beacon_port, beacon_interval_s)"
-    ],
-    "note": "Flash Imager flashes generic prebuilt firmware and injects a locally generated 48 KB NVS v2 partition containing aguja_cfg/init_json at 0x9000 without requiring ESP-IDF on the user's computer."
+    ]
   },
   "boards": [
     {
       "id": "seeed-xiao-esp32c6",
       "name": "Seeed Studio XIAO ESP32-C6",
-      "short_desc": "Ultra-compacta RISC-V · Wi-Fi 6 · selector de antena cerámica / u.FL",
+      "family": "ESP32-C6",
+      "short_desc": "Ultra-compacta RISC-V · Wi-Fi 6 · switch físico de antena cerámica / u.FL",
       "status": "verified",
       "chip": "esp32c6",
       "arch": "riscv32",
@@ -35,58 +36,46 @@
       "psram_mb": 0,
       "cpu_mhz": 160,
       "has_rf_switch": true,
-      "radios": ["wifi6-2.4ghz", "ble5", "ieee802.15.4"],
+      "firmware_profile": "esp32c6",
+      "radios": ["Wi-Fi 6", "BLE 5", "Zigbee/Thread"],
       "usb_ids": [
-        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial debug unit" }
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" }
       ],
-      "firmware_dir": "iot/firmware/esp32c6",
-      "prebuilt_dir": "iot/prebuilt/seeed-xiao-esp32c6",
-      "flash_offsets": {
-        "bootloader": "0x0",
-        "partition_table": "0x8000",
-        "nvs": "0x9000",
-        "otadata": "0x15000",
-        "ota_0": "0x20000",
-        "ota_1": "0x200000"
-      },
-      "hardware_pins": {
-        "rf_switch_enable": { "gpio": 3, "active": "low" },
-        "rf_antenna_select": { "gpio": 14, "internal_ceramic": 0, "external_ufl": 1 },
-        "user_led": { "gpio": 15, "active": "low" },
-        "boot_button": { "gpio": 9 },
-        "edge_gpios": {
-          "D0": { "gpio": 0, "func": "ADC1_CH0" },
-          "D1": { "gpio": 1, "func": "ADC1_CH1" },
-          "D2": { "gpio": 2, "func": "ADC1_CH2" },
-          "D3": { "gpio": 21, "func": "GPIO" },
-          "D4": { "gpio": 22, "func": "I2C_SDA" },
-          "D5": { "gpio": 23, "func": "I2C_SCL" },
-          "D6": { "gpio": 16, "func": "UART1_TX" },
-          "D7": { "gpio": 17, "func": "UART1_RX" },
-          "D8": { "gpio": 19, "func": "SPI_SCK" },
-          "D9": { "gpio": 20, "func": "SPI_MISO" },
-          "D10": { "gpio": 18, "func": "SPI_MOSI" }
-        }
-      },
-      "capabilities": [
-        "tailnet-headscale",
-        "tailnet-tailscale",
-        "exit-node",
-        "subnet-router-dynamic",
-        "softap-nat",
-        "exit-node-dns-relay",
-        "dual-ota-rollback",
-        "agent-rest-api",
-        "embedded-web-ui",
-        "usb-serial-cli",
-        "udp-beacon",
-        "rf-antenna-switch"
-      ]
+      "auto_match": { "chip": "esp32c6", "flash_mb": [4], "psram": false, "priority": 100 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api", "rf-antenna-switch"]
+    },
+    {
+      "id": "esp32c6-devkitc-1",
+      "name": "ESP32-C6-DevKitC-1 / Genérica C6",
+      "family": "ESP32-C6",
+      "short_desc": "Placa estándar ESP32-C6 (4–8 MB Flash) · Wi-Fi 6 · USB-C nativo o CP210x",
+      "status": "ready",
+      "chip": "esp32c6",
+      "arch": "riscv32",
+      "flash_size": "8MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 512,
+      "psram_mb": 0,
+      "cpu_mhz": 160,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32c6",
+      "radios": ["Wi-Fi 6", "BLE 5", "Zigbee/Thread"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" },
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x" },
+        { "vid": "1a86", "pid": "55d3", "label": "QinHeng CH343" }
+      ],
+      "auto_match": { "chip": "esp32c6", "flash_mb": [8, 16], "psram": false, "priority": 80 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
     },
     {
       "id": "esp32s3-wroom-n16r8",
-      "name": "ESP32-S3-WROOM-1 (N16R8)",
-      "short_desc": "Dual-Core 240 MHz · 16 MB Flash · 8 MB Octal PSRAM · alto rendimiento",
+      "name": "ESP32-S3-WROOM-1 (N16R8 · 16M/8M)",
+      "family": "ESP32-S3",
+      "short_desc": "Dual-Core 240 MHz · 16 MB Flash · 8 MB Octal PSRAM · alto throughput proxy",
       "status": "verified",
       "chip": "esp32s3",
       "arch": "xtensa",
@@ -97,45 +86,150 @@
       "psram_mb": 8,
       "cpu_mhz": 240,
       "has_rf_switch": false,
-      "radios": ["wifi4-2.4ghz", "ble5"],
+      "firmware_profile": "esp32s3-oct",
+      "radios": ["Wi-Fi 4", "BLE 5"],
       "usb_ids": [
         { "vid": "1a86", "pid": "55d3", "label": "QinHeng CH343 USB Single Serial" },
-        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x UART Bridge" },
-        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial debug unit" }
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x" },
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" }
       ],
-      "firmware_dir": "iot/firmware/esp32c6",
-      "prebuilt_dir": "iot/prebuilt/esp32s3-wroom-n16r8",
-      "flash_offsets": {
-        "bootloader": "0x0",
-        "partition_table": "0x8000",
-        "nvs": "0x9000",
-        "otadata": "0x15000",
-        "ota_0": "0x20000",
-        "ota_1": "0x200000"
-      },
-      "hardware_pins": {
-        "user_led": { "gpio": 2, "active": "high" },
-        "boot_button": { "gpio": 0 }
-      },
-      "capabilities": [
-        "tailnet-headscale",
-        "tailnet-tailscale",
-        "exit-node",
-        "subnet-router-dynamic",
-        "softap-nat",
-        "exit-node-dns-relay",
-        "dual-ota-rollback",
-        "agent-rest-api",
-        "embedded-web-ui",
-        "usb-serial-cli",
-        "udp-beacon"
-      ]
+      "auto_match": { "chip": "esp32s3", "flash_mb": [16], "psram": true, "priority": 100 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
     },
     {
-      "id": "wt32-eth01",
-      "name": "WT32-ETH01 (ESP32 + Ethernet RJ45)",
-      "short_desc": "Ethernet cableado 10/100 + Wi-Fi · ideal como puente fijo en rack",
-      "status": "planned",
+      "id": "seeed-xiao-esp32s3",
+      "name": "Seeed Studio XIAO ESP32-S3",
+      "family": "ESP32-S3",
+      "short_desc": "Formato miniatura XIAO · 8 MB Flash · 8 MB Octal PSRAM · USB-C nativo",
+      "status": "ready",
+      "chip": "esp32s3",
+      "arch": "xtensa",
+      "flash_size": "8MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 512,
+      "psram_mb": 8,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32s3-oct",
+      "radios": ["Wi-Fi 4", "BLE 5"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" }
+      ],
+      "auto_match": { "chip": "esp32s3", "flash_mb": [8], "psram": true, "vid": "303a", "priority": 95 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32s3-wroom-n8r8",
+      "name": "ESP32-S3-DevKitC-1 (N8R8 · 8M/8M)",
+      "family": "ESP32-S3",
+      "short_desc": "DevKit estándar con 8 MB Flash + 8 MB Octal PSRAM · CH343 / CP210x / USB",
+      "status": "ready",
+      "chip": "esp32s3",
+      "arch": "xtensa",
+      "flash_size": "8MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 512,
+      "psram_mb": 8,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32s3-oct",
+      "radios": ["Wi-Fi 4", "BLE 5"],
+      "usb_ids": [
+        { "vid": "1a86", "pid": "55d3", "label": "QinHeng CH343" },
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x" },
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" }
+      ],
+      "auto_match": { "chip": "esp32s3", "flash_mb": [8], "psram": true, "priority": 85 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32s3-devkit-std",
+      "name": "ESP32-S3 Genérica (N4 / N8 / N8R2 / Zero)",
+      "family": "ESP32-S3",
+      "short_desc": "ESP32-S3 sin PSRAM o con 2 MB Quad PSRAM · Waveshare S3-Zero, DevKit N8",
+      "status": "ready",
+      "chip": "esp32s3",
+      "arch": "xtensa",
+      "flash_size": "4MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 512,
+      "psram_mb": 2,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32s3-std",
+      "radios": ["Wi-Fi 4", "BLE 5"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" },
+        { "vid": "1a86", "pid": "55d3", "label": "QinHeng CH343" },
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x" }
+      ],
+      "auto_match": { "chip": "esp32s3", "flash_mb": [4, 8, 16], "psram": false, "priority": 75 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32c3-supermini",
+      "name": "ESP32-C3 SuperMini / XIAO ESP32-C3",
+      "family": "ESP32-C3",
+      "short_desc": "Ultra-económica RISC-V 160 MHz · 4 MB Flash · USB-C nativo · bajo consumo",
+      "status": "ready",
+      "chip": "esp32c3",
+      "arch": "riscv32",
+      "flash_size": "4MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 400,
+      "psram_mb": 0,
+      "cpu_mhz": 160,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32c3",
+      "radios": ["Wi-Fi 4", "BLE 5"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" }
+      ],
+      "auto_match": { "chip": "esp32c3", "flash_mb": [4], "vid": "303a", "priority": 95 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32c3-devkitm-1",
+      "name": "ESP32-C3-DevKitM-1 / Genérica C3",
+      "family": "ESP32-C3",
+      "short_desc": "Placas ESP32-C3 con puente UART CP210x / CH340 / CH343 · 4 MB Flash",
+      "status": "ready",
+      "chip": "esp32c3",
+      "arch": "riscv32",
+      "flash_size": "4MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 400,
+      "psram_mb": 0,
+      "cpu_mhz": 160,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32c3",
+      "radios": ["Wi-Fi 4", "BLE 5"],
+      "usb_ids": [
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x" },
+        { "vid": "1a86", "pid": "7523", "label": "QinHeng CH340" },
+        { "vid": "1a86", "pid": "55d3", "label": "QinHeng CH343" },
+        { "vid": "303a", "pid": "1001", "label": "Espressif USB JTAG/serial" }
+      ],
+      "auto_match": { "chip": "esp32c3", "flash_mb": [4, 8], "priority": 80 },
+      "flash_offsets": { "bootloader": "0x0", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32-devkit-v1",
+      "name": "ESP32-WROOM-32 DevKit v1 / NodeMCU-32S",
+      "family": "ESP32",
+      "short_desc": "El clásico ESP32 Dual-Core 240 MHz · 4 MB Flash · CP2102 / CH340 / FTDI",
+      "status": "ready",
       "chip": "esp32",
       "arch": "xtensa",
       "flash_size": "4MB",
@@ -145,17 +239,69 @@
       "psram_mb": 0,
       "cpu_mhz": 240,
       "has_rf_switch": false,
-      "radios": ["ethernet-100m", "wifi4-2.4ghz"],
+      "firmware_profile": "esp32",
+      "radios": ["Wi-Fi 4", "BT Classic + BLE"],
       "usb_ids": [
-        { "vid": "1a86", "pid": "7523", "label": "CH340 USB-UART Adapter" },
-        { "vid": "10c4", "pid": "ea60", "label": "CP210x USB-UART Adapter" }
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP2102" },
+        { "vid": "1a86", "pid": "7523", "label": "QinHeng CH340" },
+        { "vid": "1a86", "pid": "55d4", "label": "QinHeng CH9102" },
+        { "vid": "0403", "pid": "6001", "label": "FTDI FT232R" }
       ],
-      "capabilities": [
-        "tailnet-headscale",
-        "tailnet-tailscale",
-        "exit-node",
-        "subnet-router-dynamic"
-      ]
+      "auto_match": { "chip": "esp32", "flash_mb": [4, 8, 16], "psram": false, "priority": 90 },
+      "flash_offsets": { "bootloader": "0x1000", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32-wrover-dev",
+      "name": "ESP32-WROVER / LilyGO / TTGO (PSRAM)",
+      "family": "ESP32",
+      "short_desc": "Placas ESP32 con PSRAM integrada (4–16 MB Flash · 4–8 MB PSRAM)",
+      "status": "ready",
+      "chip": "esp32",
+      "arch": "xtensa",
+      "flash_size": "8MB",
+      "flash_mode": "dio",
+      "flash_freq": "40m",
+      "sram_kb": 520,
+      "psram_mb": 4,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32",
+      "radios": ["Wi-Fi 4", "BT Classic + BLE"],
+      "usb_ids": [
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP2104" },
+        { "vid": "1a86", "pid": "55d4", "label": "QinHeng CH9102" },
+        { "vid": "1a86", "pid": "7523", "label": "QinHeng CH340" }
+      ],
+      "auto_match": { "chip": "esp32", "flash_mb": [4, 8, 16], "psram": true, "priority": 95 },
+      "flash_offsets": { "bootloader": "0x1000", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
+    },
+    {
+      "id": "esp32s2-mini",
+      "name": "Wemos / Lolin S2 Mini · ESP32-S2",
+      "family": "ESP32-S2",
+      "short_desc": "Single-Core 240 MHz · 4 MB Flash · 2 MB PSRAM · USB-OTG nativo",
+      "status": "ready",
+      "chip": "esp32s2",
+      "arch": "xtensa",
+      "flash_size": "4MB",
+      "flash_mode": "dio",
+      "flash_freq": "80m",
+      "sram_kb": 320,
+      "psram_mb": 2,
+      "cpu_mhz": 240,
+      "has_rf_switch": false,
+      "firmware_profile": "esp32s2",
+      "radios": ["Wi-Fi 4"],
+      "usb_ids": [
+        { "vid": "303a", "pid": "0002", "label": "Espressif ESP32-S2 USB-CDC" },
+        { "vid": "10c4", "pid": "ea60", "label": "Silicon Labs CP210x" },
+        { "vid": "1a86", "pid": "7523", "label": "QinHeng CH340" }
+      ],
+      "auto_match": { "chip": "esp32s2", "flash_mb": [4, 8], "priority": 90 },
+      "flash_offsets": { "bootloader": "0x1000", "partition_table": "0x8000", "nvs": "0x9000", "otadata": "0x15000", "ota_0": "0x20000", "ota_1": "0x200000" },
+      "capabilities": ["tailnet-headscale", "tailnet-tailscale", "exit-node", "subnet-router-dynamic", "exit-node-dns-relay", "softap-nat", "dual-ota-rollback", "agent-rest-api"]
     }
   ]
 }

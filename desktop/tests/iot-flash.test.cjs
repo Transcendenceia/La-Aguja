@@ -6,13 +6,57 @@ const os = require('node:os');
 const path = require('node:path');
 const iotFlash = require('../iot-flash.cjs');
 
-test('loadBoards loads iot/boards.json including ESP32-C6 and ESP32-S3-WROOM-1', () => {
+test('loadBoards loads full ESP32-family board catalog and families', () => {
   const catalog = iotFlash.loadBoards({ rootDir: path.resolve(__dirname, '../..') });
   assert.ok(Array.isArray(catalog.boards));
+  assert.ok(catalog.boards.length >= 10, `expected >=10 ESP32 boards, got ${catalog.boards.length}`);
   const ids = catalog.boards.map((b) => b.id);
-  assert.ok(ids.includes('seeed-xiao-esp32c6'));
-  assert.ok(ids.includes('esp32s3-wroom-n16r8'));
+  for (const id of ['seeed-xiao-esp32c6', 'esp32s3-wroom-n16r8', 'seeed-xiao-esp32s3', 'esp32c3-supermini', 'esp32-devkit-v1', 'esp32s2-mini']) {
+    assert.ok(ids.includes(id), `missing board ${id}`);
+  }
+  for (const fam of ['ESP32-C6', 'ESP32-S3', 'ESP32-C3', 'ESP32', 'ESP32-S2']) {
+    assert.ok(catalog.families.includes(fam), `missing family ${fam}`);
+  }
   assert.equal(catalog.nvsProvisioning.init_json_key, 'init_json');
+  assert.equal(catalog.nvsProvisioning.softap_default_enabled, false);
+});
+
+test('matchBoardFromProbe identifies exact board from real silicon telemetry', () => {
+  const catalog = iotFlash.loadBoards({ rootDir: path.resolve(__dirname, '../..') });
+  const mS3 = iotFlash.matchBoardFromProbe(
+    { chip_normalized: 'esp32s3', flash_mb: 16, psram_mb: 8 },
+    { vid: '1a86', pid: '55d3' },
+    catalog.boards,
+  );
+  assert.equal(mS3?.boardId, 'esp32s3-wroom-n16r8');
+
+  const mXiaoS3 = iotFlash.matchBoardFromProbe(
+    { chip_normalized: 'esp32s3', flash_mb: 8, psram_mb: 8 },
+    { vid: '303a', pid: '1001' },
+    catalog.boards,
+  );
+  assert.equal(mXiaoS3?.boardId, 'seeed-xiao-esp32s3');
+
+  const mC6 = iotFlash.matchBoardFromProbe(
+    { chip_normalized: 'esp32c6', flash_mb: 4, psram_mb: 0 },
+    { vid: '303a', pid: '1001' },
+    catalog.boards,
+  );
+  assert.equal(mC6?.boardId, 'seeed-xiao-esp32c6');
+
+  const mC3 = iotFlash.matchBoardFromProbe(
+    { chip_normalized: 'esp32c3', flash_mb: 4, psram_mb: 0 },
+    { vid: '303a', pid: '1001' },
+    catalog.boards,
+  );
+  assert.equal(mC3?.boardId, 'esp32c3-supermini');
+
+  const mEsp32 = iotFlash.matchBoardFromProbe(
+    { chip_normalized: 'esp32', flash_mb: 4, psram_mb: 0 },
+    { vid: '10c4', pid: 'ea60' },
+    catalog.boards,
+  );
+  assert.equal(mEsp32?.boardId, 'esp32-devkit-v1');
 });
 
 test('listLinuxSerialPorts discovers ttyACM/ttyUSB devices from synthetic sysfs and matches board VID:PID', () => {

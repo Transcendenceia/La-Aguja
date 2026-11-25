@@ -1,8 +1,11 @@
 #include "aguja_hw.h"
 #include "aguja_config.h"
+#include "soc/soc_caps.h"
 #include "driver/gpio.h"
 #include "driver/ledc.h"
+#if SOC_TEMP_SENSOR_SUPPORTED
 #include "driver/temperature_sensor.h"
+#endif
 #include "driver/i2c_master.h"
 #include "driver/uart.h"
 #include "driver/spi_master.h"
@@ -50,6 +53,69 @@ static const struct {
     { "IO40", 40, "GPIO" },
     { "IO41", 41, "GPIO" },
     { "IO42", 42, "GPIO" },
+#elif CONFIG_IDF_TARGET_ESP32C3
+    { "IO0",  0,  "ADC1_CH0" },
+    { "IO1",  1,  "ADC1_CH1" },
+    { "IO2",  2,  "ADC1_CH2" },
+    { "IO3",  3,  "ADC1_CH3" },
+    { "IO4",  4,  "ADC1_CH4" },
+    { "IO5",  5,  "SPI_MISO" },
+    { "IO6",  6,  "SPI_MOSI" },
+    { "IO7",  7,  "SPI_CS" },
+    { "IO8",  8,  "I2C_SDA" },
+    { "IO9",  9,  "I2C_SCL" },
+    { "IO10", 10, "GPIO" },
+    { "IO20", 20, "UART_RX" },
+    { "IO21", 21, "UART_TX" },
+#elif CONFIG_IDF_TARGET_ESP32S2
+    { "IO1",  1,  "ADC1_CH0" },
+    { "IO2",  2,  "ADC1_CH1" },
+    { "IO3",  3,  "ADC1_CH2" },
+    { "IO4",  4,  "ADC1_CH3" },
+    { "IO5",  5,  "ADC1_CH4" },
+    { "IO6",  6,  "ADC1_CH5" },
+    { "IO7",  7,  "SPI_SCK" },
+    { "IO8",  8,  "I2C_SDA" },
+    { "IO9",  9,  "I2C_SCL" },
+    { "IO10", 10, "ADC1_CH9" },
+    { "IO11", 11, "SPI_MOSI" },
+    { "IO12", 12, "SPI_CS" },
+    { "IO13", 13, "GPIO" },
+    { "IO14", 14, "GPIO" },
+    { "IO15", 15, "GPIO" },
+    { "IO16", 16, "GPIO" },
+    { "IO17", 17, "UART_TX" },
+    { "IO18", 18, "UART_RX" },
+    { "IO21", 21, "GPIO" },
+    { "IO33", 33, "GPIO" },
+    { "IO34", 34, "GPIO" },
+    { "IO35", 35, "GPIO" },
+    { "IO36", 36, "GPIO" },
+    { "IO37", 37, "GPIO" },
+    { "IO38", 38, "GPIO" },
+    { "IO39", 39, "GPIO" },
+    { "IO40", 40, "GPIO" },
+#elif CONFIG_IDF_TARGET_ESP32
+    { "IO2",  2,  "GPIO" },
+    { "IO4",  4,  "GPIO" },
+    { "IO5",  5,  "SPI_CS" },
+    { "IO13", 13, "GPIO" },
+    { "IO14", 14, "GPIO" },
+    { "IO15", 15, "GPIO" },
+    { "IO16", 16, "UART_RX" },
+    { "IO17", 17, "UART_TX" },
+    { "IO18", 18, "SPI_SCK" },
+    { "IO19", 19, "SPI_MISO" },
+    { "IO21", 21, "I2C_SDA" },
+    { "IO22", 22, "I2C_SCL" },
+    { "IO23", 23, "SPI_MOSI" },
+    { "IO25", 25, "GPIO" },
+    { "IO26", 26, "GPIO" },
+    { "IO27", 27, "GPIO" },
+    { "IO32", 32, "ADC1_CH4" },
+    { "IO33", 33, "ADC1_CH5" },
+    { "IO34", 34, "ADC1_CH6" },
+    { "IO35", 35, "ADC1_CH7" },
 #else
     { "D0",  XIAO_PIN_D0,       "ADC1_CH0" },
     { "D1",  XIAO_PIN_D1,       "ADC1_CH1" },
@@ -73,7 +139,9 @@ static volatile aguja_net_stage_t s_net_stage = AGUJA_NET_STAGE_BOOT;
 static bool s_led_pwm_active = false;
 static uint16_t s_cpu_mhz = AGUJA_DEFAULT_CPU_MHZ;
 
+#if SOC_TEMP_SENSOR_SUPPORTED
 static temperature_sensor_handle_t s_tsens = NULL;
+#endif
 static adc_oneshot_unit_handle_t s_adc1 = NULL;
 static adc_cali_handle_t s_adc_cali = NULL;
 
@@ -102,6 +170,21 @@ static bool pin_is_forbidden(int pin) {
     if (pin < 0 || pin > 48) return true;
     /* USB D-/D+ (19, 20), Flash/Octal PSRAM (26..37), UART0 (43, 44) */
     if (pin == 19 || pin == 20 || (pin >= 26 && pin <= 37) || pin == 43 || pin == 44) return true;
+    return false;
+#elif CONFIG_IDF_TARGET_ESP32C3
+    if (pin < 0 || pin > 21) return true;
+    /* SPI Flash (11..17), USB-Serial/JTAG (18, 19) */
+    if ((pin >= 11 && pin <= 19)) return true;
+    return false;
+#elif CONFIG_IDF_TARGET_ESP32S2
+    if (pin < 0 || pin > 46) return true;
+    /* USB (19, 20), Flash/PSRAM (26..32), UART0 (43, 44) */
+    if (pin == 19 || pin == 20 || (pin >= 26 && pin <= 32) || pin == 43 || pin == 44) return true;
+    return false;
+#elif CONFIG_IDF_TARGET_ESP32
+    if (pin < 0 || pin > 39) return true;
+    /* UART0 (1, 3), SPI Flash (6..11), non-existent (20, 24, 28..31) */
+    if (pin == 1 || pin == 3 || (pin >= 6 && pin <= 11) || pin == 20 || pin == 24 || (pin >= 28 && pin <= 31)) return true;
     return false;
 #else
     if (pin < 0 || pin > 30) return true;
@@ -199,12 +282,17 @@ void aguja_hw_set_net_stage(aguja_net_stage_t stage) {
 
 esp_err_t aguja_hw_read_temp_c(float *out_c) {
     if (!out_c) return ESP_ERR_INVALID_ARG;
+#if SOC_TEMP_SENSOR_SUPPORTED
     if (!s_tsens) return ESP_ERR_INVALID_STATE;
     return temperature_sensor_get_celsius(s_tsens, out_c);
+#else
+    *out_c = 0.0f;
+    return ESP_ERR_NOT_SUPPORTED;
+#endif
 }
 
 esp_err_t aguja_hw_set_cpu_mhz(uint16_t mhz) {
-#if CONFIG_IDF_TARGET_ESP32S3
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32
     if (mhz != 80 && mhz != 160 && mhz != 240) return ESP_ERR_INVALID_ARG;
     int min_mhz = 80;
 #else
@@ -276,6 +364,12 @@ esp_err_t aguja_hw_gpio_pulse(int pin, int level, uint32_t duration_ms, bool for
 int aguja_hw_gpio_read(int pin) {
 #if CONFIG_IDF_TARGET_ESP32S3
     if (pin < 0 || pin > 48) return -1;
+#elif CONFIG_IDF_TARGET_ESP32S2
+    if (pin < 0 || pin > 46) return -1;
+#elif CONFIG_IDF_TARGET_ESP32
+    if (pin < 0 || pin > 39) return -1;
+#elif CONFIG_IDF_TARGET_ESP32C3
+    if (pin < 0 || pin > 21) return -1;
 #else
     if (pin < 0 || pin > 30) return -1;
 #endif
@@ -330,8 +424,19 @@ esp_err_t aguja_hw_pwm_set(int channel, int pin, uint32_t freq_hz, float duty_pc
 }
 
 static int gpio_to_adc_ch(int pin) {
-#if CONFIG_IDF_TARGET_ESP32S3
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32S2
     if (pin >= 1 && pin <= 10) return pin - 1;
+    return -1;
+#elif CONFIG_IDF_TARGET_ESP32C3
+    if (pin >= 0 && pin <= 4) return pin;
+    return -1;
+#elif CONFIG_IDF_TARGET_ESP32
+    if (pin == 32) return ADC_CHANNEL_4;
+    if (pin == 33) return ADC_CHANNEL_5;
+    if (pin == 34) return ADC_CHANNEL_6;
+    if (pin == 35) return ADC_CHANNEL_7;
+    if (pin == 36) return ADC_CHANNEL_0;
+    if (pin == 39) return ADC_CHANNEL_3;
     return -1;
 #else
     if (pin == XIAO_PIN_D0) return ADC_CHANNEL_0;
@@ -366,9 +471,15 @@ esp_err_t aguja_hw_adc_read(int pin, int *raw_out, int *mv_out) {
 
 cJSON *aguja_hw_adc_dump_json(void) {
     cJSON *arr = cJSON_CreateArray();
-#if CONFIG_IDF_TARGET_ESP32S3
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32S2
     const int pins[3] = { 1, 2, 4 };
     const char *lbl[3] = { "IO1", "IO2", "IO4" };
+#elif CONFIG_IDF_TARGET_ESP32C3
+    const int pins[3] = { 0, 1, 2 };
+    const char *lbl[3] = { "IO0", "IO1", "IO2" };
+#elif CONFIG_IDF_TARGET_ESP32
+    const int pins[3] = { 32, 33, 34 };
+    const char *lbl[3] = { "IO32", "IO33", "IO34" };
 #else
     const int pins[3] = { XIAO_PIN_D0, XIAO_PIN_D1, XIAO_PIN_D2 };
     const char *lbl[3] = { "D0", "D1", "D2" };
@@ -654,11 +765,13 @@ esp_err_t aguja_hw_init(void) {
     gpio_config(&led_io);
     aguja_hw_set_led((aguja_led_mode_t)cfg.led_mode, cfg.led_pwm_pct, cfg.led_blink_ms);
 
-    /* 3. Internal temperature sensor */
+    /* 3. Internal temperature sensor (when supported by SoC) */
+#if SOC_TEMP_SENSOR_SUPPORTED
     temperature_sensor_config_t tcfg = TEMPERATURE_SENSOR_CONFIG_DEFAULT(-10, 80);
     if (temperature_sensor_install(&tcfg, &s_tsens) == ESP_OK) {
         temperature_sensor_enable(s_tsens);
     }
+#endif
 
     /* 4. ADC1 oneshot + curve-fitting calibration */
     adc_oneshot_unit_init_cfg_t adc_cfg = {

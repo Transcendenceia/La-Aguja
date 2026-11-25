@@ -309,8 +309,17 @@ function installIPC(){
   return {selected:bundle.version,boardId:board.id,...updated};
  }));
  handle('iot-ports',async()=>{const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});return {ports:await iotFlash.listSerialPorts(catalog.boards)};});
+ handle('iot-detect',async()=>exclusive(async()=>iotFlash.autoDetectConnectedBoard({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs,progress})));
+ handle('iot-probe',async(port)=>exclusive(async()=>({detected:await iotFlash.probeSerialPort({port,rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs,progress})})));
  handle('iot-fetch-noise-key',async(ctrlHost)=>exclusive(async()=>iotFlash.fetchControlNoiseKey(ctrlHost)));
  handle('iot-generate-token',async()=>({token:iotNvs.generateApiToken()}));
+ handle('iot-erase',async(input)=>exclusive(async()=>{
+  if(process.platform!=='linux')throw new Error('La limpieza de flash IoT está disponible primero en Linux.');
+  const port=String(input?.port||'');
+  const answer=await showMessageBox(win,{type:'warning',title:'Borrar memoria flash del microcontrolador',message:'Se borrará completamente la memoria flash en '+port,detail:'Esto elimina firmware actual, redes Wi-Fi guardadas y claves Tailscale/Headscale de la placa. Útil para dejarla limpia de fábrica.',buttons:['Cancelar','Borrar flash'],defaultId:0,cancelId:0});
+  if(answer.response!==1)return {canceled:true};
+  return iotFlash.eraseBoard({port,chip:input?.chip||'auto',rootDir:ROOT,progress});
+ }));
  handle('iot-flash',async(input)=>exclusive(async()=>{
   if(process.platform!=='linux')throw new Error('La grabación IoT está disponible primero en Linux. El soporte de Windows llegará en la siguiente fase.');
   const catalog=iotFlash.loadBoards({rootDir:ROOT,userDataDir:app.getPath('userData'),customFirmwareDirs:iotCustomFirmwareDirs});

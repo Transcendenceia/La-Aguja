@@ -60,8 +60,8 @@ static void populate_defaults(aguja_config_t *c) {
     c->wifi_tx_power_dbm = 20;
     c->wifi_ps_mode = 0; /* WIFI_PS_NONE for responsive Tailnet/API */
 
-    /* SoftAP NAT gateway */
-    c->ap_enabled = true;
+    /* SoftAP NAT gateway (disabled by default; enable from Imager/API/CLI when needed) */
+    c->ap_enabled = false;
     strlcpy_safe(c->ap_ssid, CONFIG_AGUJA_DEFAULT_AP_SSID, sizeof(c->ap_ssid));
     strlcpy_safe(c->ap_pass, CONFIG_AGUJA_DEFAULT_AP_PASS, sizeof(c->ap_pass));
     c->ap_channel = 6;
@@ -78,7 +78,7 @@ static void populate_defaults(aguja_config_t *c) {
     strlcpy_safe(c->priority_peer_ip, CONFIG_ML_PRIORITY_PEER_IP, sizeof(c->priority_peer_ip));
     c->exit_node_enabled = true;
     c->advertise_upstream_subnet = true;
-    c->advertise_ap_subnet = true;
+    c->advertise_ap_subnet = false;
     c->extra_routes[0] = '\0';
     c->dns_relay_enabled = true;
     strlcpy_safe(c->dns_upstream, "1.1.1.1", sizeof(c->dns_upstream));
@@ -88,7 +88,7 @@ static void populate_defaults(aguja_config_t *c) {
     c->led_mode = 0;             /* status indicator */
     c->led_pwm_pct = 50;
     c->led_blink_ms = 500;
-#if CONFIG_IDF_TARGET_ESP32S3
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32
     c->cpu_mhz = 240;
 #else
     c->cpu_mhz = 160;
@@ -536,7 +536,7 @@ static esp_err_t apply_json_locked(const cJSON *root, bool *needs_net_restart, b
         }
         if ((j = cJSON_GetObjectItem(sec, "cpu_mhz")) && cJSON_IsNumber(j)) {
             int m = j->valueint;
-#if CONFIG_IDF_TARGET_ESP32S3
+#if CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32
             if (m == 80 || m == 160 || m == 240) s_cfg.cpu_mhz = (uint16_t)m;
 #else
             if (m == 40 || m == 80 || m == 160) s_cfg.cpu_mhz = (uint16_t)m;

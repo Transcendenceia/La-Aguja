@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('aguja',Object.freeze({
  importSettings:invoke('import-settings'),generatePassword:invoke('generate-password'),importWifi:invoke('import-wifi'),importLocale:invoke('import-locale'),providerStatus:invoke('provider-status'),providerInstall:invoke('provider-install'),providerDocs:invoke('provider-docs'),providerLogin:invoke('provider-login'),
  importProvider:invoke('import-provider'),prepare:invoke('prepare'),invalidatePrepared:invoke('invalidate-prepared'),exportProfile:invoke('export-profile'),importProfile:invoke('import-profile'),
  disks:invoke('disks'),flash:invoke('flash'),
- iotBoards:invoke('iot-boards'),iotSelectFirmware:invoke('iot-select-firmware'),iotPorts:invoke('iot-ports'),iotFetchNoiseKey:invoke('iot-fetch-noise-key'),iotGenerateToken:invoke('iot-generate-token'),iotFlash:invoke('iot-flash'),
+ iotBoards:invoke('iot-boards'),iotSelectFirmware:invoke('iot-select-firmware'),iotPorts:invoke('iot-ports'),iotDetect:invoke('iot-detect'),iotProbe:invoke('iot-probe'),iotFetchNoiseKey:invoke('iot-fetch-noise-key'),iotGenerateToken:invoke('iot-generate-token'),iotErase:invoke('iot-erase'),iotFlash:invoke('iot-flash'),
  bitlockerStatus:invoke('bitlocker-status'),bitlockerSuspend:invoke('bitlocker-suspend'),bitlockerResume:invoke('bitlocker-resume'),bitlockerKey:invoke('bitlocker-key'),bitlockerExportText:invoke('bitlocker-export-text'),
  onProgress:(callback)=>{const listener=(_,value)=>callback(value);ipcRenderer.on('progress',listener);return()=>ipcRenderer.removeListener('progress',listener);}
 }));

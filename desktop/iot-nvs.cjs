@@ -102,9 +102,9 @@ function buildInitConfig(input, board = null) {
     fail('Añade al menos una red Wi-Fi para que el microcontrolador pueda conectarse.');
   }
 
-  // 2. SoftAP bridge / fallback
+  // 2. SoftAP bridge / fallback (disabled by default)
   const apIn = input.ap || {};
-  const apEnabled = apIn.enabled !== false;
+  const apEnabled = Boolean(apIn.enabled);
   const apSsid = cleanStr(apIn.ssid || 'Aguja-IoT-AP', 32, 'nombre del SoftAP') || 'Aguja-IoT-AP';
   const apPass = cleanSecret(apIn.password ?? apIn.pass ?? '', 64, 'contraseña del SoftAP');
   if (apEnabled && apPass.length > 0 && apPass.length < 8) {
@@ -173,7 +173,7 @@ function buildInitConfig(input, board = null) {
       derp_region: derpRegion,
       exit_node_enabled: tnIn.exitNodeEnabled !== false,
       advertise_upstream_subnet: tnIn.advertiseUpstreamSubnet !== false,
-      advertise_ap_subnet: tnIn.advertiseApSubnet !== false,
+      advertise_ap_subnet: apEnabled && Boolean(tnIn.advertiseApSubnet),
       extra_routes: extraRoutes,
       dns_relay_enabled: tnIn.dnsRelayEnabled !== false,
       dns_upstream: dnsUpstream,
